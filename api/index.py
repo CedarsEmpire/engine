@@ -1,16 +1,9 @@
-from http.server import BaseHTTPRequestHandler
-import json
-
-class handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-        data = {
-            "status": "live",
-            "company": "99.9% Robotic Company",
-            "engine": "engine-five",
-            "message": "Engine deployed. First daily income not yet dropped."
-        }
-        self.wfile.write(json.dumps(data).encode())
-        return
+<!DOCTYPE html>
+<html>
+<head><title>Engine Five - Live</title></head>
+<body style="background:#000;color:#fff;font-family:sans-serif;text-align:center;padding:50px">
+<h1>Engine Five is LIVE</h1>
+<p>99.9% Robotic Company</p>
+<p>Status: Deployed. First daily income not yet dropped.</p>
+</body>
+</html>
