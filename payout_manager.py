@@ -9,6 +9,7 @@ class PayoutManager:
         self.batch_payouts = []
         self.batch_threshold = 100  # Batch payouts above $100
         self.batch_window = timedelta(hours=24)  # Batch payouts every 24 hours
+        self.payout_tracking = {}  # Track payouts
 
     def add_to_batch(self, req: PayoutRequest):
         self.batch_payouts.append(req)
@@ -25,7 +26,8 @@ class PayoutManager:
                 task_id="batch",
                 idempotency_key=f"batch-{datetime.now().isoformat()}"
             )
-            self.payout_service.request_payout(batch_req)
+            result = self.payout_service.request_payout(batch_req)
+            self.track_payout(batch_req, result)
             self.batch_payouts = []
 
     def process_ai_payout(self, task_id, amount, currency):
@@ -40,7 +42,9 @@ class PayoutManager:
         if amount >= self.batch_threshold:
             self.add_to_batch(req)
         else:
-            return self.payout_service.request_payout(req)
+            result = self.payout_service.request_payout(req)
+            self.track_payout(req, result)
+            return result
 
     def process_human_payout(self, human_verifier: HumanVerifier):
         # Create payout request for human verifier
@@ -54,7 +58,22 @@ class PayoutManager:
         if human_verifier.earnings >= self.batch_threshold:
             self.add_to_batch(req)
         else:
-            return self.payout_service.request_payout(req)
+            result = self.payout_service.request_payout(req)
+            self.track_payout(req, result)
+            return result
+
+    def track_payout(self, req: PayoutRequest, result):
+        # Track payout in payout_tracking dictionary
+        self.payout_tracking[req.task_id] = {
+            "amount": req.amount_cents / 100,
+            "currency": req.currency,
+            "destination": req.destination,
+            "status": result["status"] if result else "failed"
+        }
+
+    def get_payout_report(self):
+        # Generate payout report
+        return self.payout_tracking
 
 # Example usage
 payout_service = PayoutService(provider=StripePayoutProvider())
@@ -67,3 +86,23 @@ payout_manager.process_ai_payout(task_id="123", amount=10.87, currency="USD")
 verifier = HumanVerifier(task_id="123", ai_decision="approve")
 verifier.complete_verification(human_decision="approve")
 payout_manager.process_human_payout(verifier)
+
+# Get payout report
+print(payout_manager.get_payout_report())
+
+
+Cryptocurrency Integration
+To integrate with cryptocurrencies, update api_integrations.py to include crypto payout providers (e.g., Coinbase, Binance).
+
+
+# engine/api_integrations.py
+class CryptoPayoutProvider(PayoutProvider):
+    def __init__(self, api_key, api_secret):
+        self.api_key = api_key
+        self.api_secret = api_secret
+        self.base_url = "https://api.coinbase.com/v2"
+
+    def create_payout(self, req: PayoutRequest) -> dict:
+        # Implement crypto payout logic using Coinbase API
+        # ...
+        pass
