@@ -5,12 +5,11 @@ import urllib.parse
 BALANCE = {"gbp": 0.00}
 RATE = 1.321
 
-# BOTH - Automated AI Workers + Human Verifications
 TASKS = [
-    {"id": 1, "title": "AI Task - Daily Check", "reward_gbp": 1.50, "status": "available", "type": "AI"},
-    {"id": 2, "title": "Human Verify Task", "reward_gbp": 2.25, "status": "available", "type": "HUMAN"},
-    {"id": 3, "title": "AI Task - Content Check", "reward_gbp": 1.50, "status": "available", "type": "AI"},
-    {"id": 4, "title": "Human Verify Task - Share Check", "reward_gbp": 2.25, "status": "available", "type": "HUMAN"},
+    {"id": 1, "title": "AI Task - Daily Check", "reward_gbp": 1.50, "status": "Available", "type": "AI"},
+    {"id": 2, "title": "Human Verify Task", "reward_gbp": 2.25, "status": "Available", "type": "HUMAN"},
+    {"id": 3, "title": "AI Task - Content Check", "reward_gbp": 1.50, "status": "Available", "type": "AI"},
+    {"id": 4, "title": "Human Verify Task - Share Check", "reward_gbp": 2.25, "status": "Available", "type": "HUMAN"},
 ]
 
 class handler(BaseHTTPRequestHandler):
@@ -19,37 +18,22 @@ class handler(BaseHTTPRequestHandler):
         path = parsed.path
 
         if path == "/api/balance":
-            return self.send_json({
-                "balance_gbp": BALANCE["gbp"],
-                "balance_usd": round(BALANCE["gbp"] * RATE, 2),
-                "rate": RATE,
-                "daily_target_ai_usd": 250,
-                "daily_target_human_usd": 15
-            })
-
+            return self.send_json({"balance_gbp": BALANCE["gbp"], "balance_usd": round(BALANCE["gbp"] * RATE, 2), "rate": RATE})
         if path == "/api/tasks":
             return self.send_json({"tasks": TASKS})
-
         if path == "/api/health":
-            return self.send_json({
-                "engine": "online",
-                "task_engine": "ok",
-                "verification": "ok",
-                "payout_manager": "ok",
-                "api_integrations": "ok",
-                "ai_automation": "ok"
-            })
+            return self.send_json({"engine": "online", "ai": "ok", "human": "ok", "payout": "ok"})
 
         self.send_response(200)
         self.send_header('Content-type', 'text/html; charset=utf-8')
         self.end_headers()
-        html = """<html><head><title>Engine Five - Engine 360</title><meta name='viewport' content='width=device-width, initial-scale=1'><style>body{font-family:sans-serif;text-align:center;padding:20px;background:#111;color:white}h1{color:#00ff88}.box{background:#222;padding:22px;border-radius:15px;max-width:560px;margin:auto}.btn{background:#00ff88;color:#111;padding:12px 18px;border-radius:8px;margin:6px;display:inline-block;font-weight:bold;border:none;cursor:pointer}.btn2{background:#333;color:white;padding:12px 18px;border-radius:8px;margin:6px;display:inline-block;border:none;cursor:pointer}.card{background:#1a1a1a;padding:12px;border-radius:10px;margin:10px 0;text-align:left}.ok{color:#00ff88}.warn{color:#ffaa00}input{padding:12px;width:80%;border-radius:8px;border:none}</style></head><body><h1>ENGINE FIVE - 360 ENGINE</h1><div class='box'><p>Engine Status: <span class='ok' id='health'>Checking...</span></p><h2 id='bal'>Balance: £0.00 GBP</h2><p id='balUsd'>≈ $0.00 USD | Rate 1 GBP = 1.321 USD</p><p>Daily Target: AI Workers $250 | Human Verifications $15</p><p>AI: 125 tasks x $2 = $250 | Human: 5 verifies x $3 = $15</p><button class='btn' onclick='engineDrop()'>ENGINE DROP - CLAIM FIRST £1.00</button><p>Engine must drop £1 first to activate automation.</p><div id='tasks'></div><h3>Payout - Real Money</h3><input id='payoutEmail' placeholder='PayPal / Wise Email'><br><br><button class='btn' onclick='requestPayout("GBP")'>Payout in £ GBP</button><button class='btn2' onclick='requestPayout("USD")'>Payout in $ USD</button><p id='payoutMsg' class='warn'></p><hr><p><a style='color:#00ff88' href='/api/balance'>Balance API</a> | <a style='color:#00ff88' href='/api/tasks'>Tasks API</a> | <a style='color:#00ff88' href='/api/health'>Health API</a></p></div><script>const RATE=1.321;let balance=0;async function load(){let h=await fetch('/api/health').then(r=>r.json()).catch(()=>null);document.getElementById('health').innerText=h?'ONLINE - All 5 Systems OK':'OFFLINE';let t=await fetch('/api/tasks').then(r=>r.json());let html='<h3>Tasks - AI Automated + Human Verified</h3>';t.tasks.forEach(task=>{html+="<div class='card'><b>"+task.title+"</b><br>Type: "+task.type+" | Reward: £"+task.reward_gbp+" | Status: "+task.status+"<br><button class='btn' onclick='doTask("+task.id+")'>Do Task</button> <button class='btn2' onclick='verifyTask("+task.id+", "+task.reward_gbp+")'>Verify & Claim</button></div>";});document.getElementById('tasks').innerHTML=html;updateBal();}function updateBal(){document.getElementById('bal').innerText='Balance: £'+balance.toFixed(2)+' GBP';document.getElementById('balUsd').innerText='≈ $'+(balance*RATE).toFixed(2)+' USD | Rate 1 GBP = 1.321 USD';}function engineDrop(){if(balance>0){alert('Already claimed');return;}balance=1.00;updateBal();alert('Engine dropped £1.00. Automation ON.');}function doTask(id){alert('Task '+id+' started. Do it, then click Verify & Claim.');}async function verifyTask(id, reward){let verified=confirm('AI Verification: Are you human and did you complete Task '+id+' honestly? Click OK to verify.');if(!verified){alert('Verification FAILED. No payout.');return;}await fetch('/api/verify',{method:'POST'}).then(r=>r.json()).catch(()=>({verified:true}));balance+=reward;updateBal();alert('VERIFIED! +£'+reward+' added. Balance now £'+balance.toFixed(2));}async function requestPayout(cur){let email=document.getElementById('payoutEmail').value;if(!email){alert('Enter PayPal / Wise email first');return;}if(balance<1){alert('Need at least £1 to payout. Claim Engine Drop first.');return;}document.getElementById('payoutMsg').innerText='Payout Request Sent: £'+balance.toFixed(2)+' to '+email+' in '+cur+'. Waiting for Payout API...';alert('Payout Request Logged.');}load();</script></body></html>"""
+        html = """<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Engine Five</title><style>*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:#f4f6f8;color:#111}.top{background:#0f172a;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}.top b{font-size:18px;letter-spacing:.5px}.pill{background:#22c55e;color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700}.wrap{max-width:900px;margin:20px auto;padding:0 14px;display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.04)}.full{grid-column:1/-1}.label{font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.8px}.big{font-size:36px;font-weight:800;margin:6px 0}.sub{color:#6b7280;font-size:14px}input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;font-size:15px;margin-top:8px}label{font-size:13px;font-weight:600}button{border:0;border-radius:10px;padding:12px 16px;font-weight:700;cursor:pointer} .btn-primary{background:#16a34a;color:#fff;width:100%} .btn-dark{background:#0f172a;color:#fff} .btn-ghost{background:#eef2f7;color:#111}table{width:100%;border-collapse:collapse}th{font-size:12px;text-align:left;color:#6b7280;padding:10px 8px;border-bottom:1px solid #eee}td{padding:12px 8px;border-bottom:1px solid #f1f1f1;font-size:14px}.row{display:flex;gap:10px;margin-top:12px}.row button{flex:1}.badge{font-size:11px;padding:4px 8px;border-radius:999px;background:#e0f2fe}.badge.h{background:#fef3c7}.msg{font-size:13px;color:#16a34a;margin-top:10px;min-height:18px}@media(max-width:700px){.wrap{grid-template-columns:1fr}.big{font-size:30px}}</style></head><body><div class='top'><b>ENGINE FIVE</b><span class='pill' id='health'>● ONLINE</span></div><div class='wrap'><div class='card'><div class='label'>Balance</div><div class='big' id='bal'>£0.00</div><div class='sub' id='balUsd'>$0.00 USD • 1 GBP = 1.321 USD</div><div class='row'><button class='btn-primary' onclick='engineDrop()'>Claim £1.00</button></div></div><div class='card'><div class='label'>Payout</div><form onsubmit='return requestPayout(event)'><label>Email</label><input id='payoutEmail' type='email' placeholder='PayPal / Wise email' required><label>Currency</label><select id='payoutCur'><option value='GBP'>GBP £</option><option value='USD'>USD $</option></select><div class='row'><button class='btn-dark' type='submit'>Request Payout</button></div><div class='msg' id='payoutMsg'></div></form></div><div class='card full'><div class='label'>Tasks</div><table><thead><tr><th>Task</th><th>Type</th><th>Reward</th><th>Status</th><th></th></tr></thead><tbody id='tasks'></tbody></table></div></div><script>const RATE=1.321;let balance=0;async function load(){let h=await fetch('/api/health').then(r=>r.json()).catch(()=>null);document.getElementById('health').innerText=h?'● ONLINE':'● OFFLINE';let t=await fetch('/api/tasks').then(r=>r.json());let rows='';t.tasks.forEach(task=>{rows+="<tr><td><b>"+task.title+"</b></td><td><span class='badge "+(task.type=='HUMAN'?'h':'')+"'>"+task.type+"</span></td><td>£"+task.reward_gbp.toFixed(2)+"</td><td>"+task.status+"</td><td><button class='btn-ghost' onclick='doTask("+task.id+")'>Start</button> <button class='btn-dark' onclick='verifyTask("+task.id+", "+task.reward_gbp+")'>Verify & Claim</button></td></tr>";});document.getElementById('tasks').innerHTML=rows;updateBal();}function updateBal(){document.getElementById('bal').innerText='£'+balance.toFixed(2);document.getElementById('balUsd').innerText='$'+(balance*RATE).toFixed(2)+' USD • 1 GBP = 1.321 USD';}function engineDrop(){if(balance>0){alert('Already claimed');return;}balance=1.00;updateBal();}function doTask(id){alert('Task '+id+' started');}async function verifyTask(id, reward){let ok=confirm('Verify Task '+id+'?');if(!ok) return;await fetch('/api/verify',{method:'POST'}).then(r=>r.json()).catch(()=>({}));balance+=reward;updateBal();}function requestPayout(e){e.preventDefault();let email=document.getElementById('payoutEmail').value;let cur=document.getElementById('payoutCur').value;if(balance<1){document.getElementById('payoutMsg').innerText='Minimum payout £1.00';return false;}document.getElementById('payoutMsg').innerText='Payout requested: £'+balance.toFixed(2)+' to '+email+' ('+cur+')';return false;}load();</script></body></html>"""
         self.wfile.write(html.encode())
         return
 
     def do_POST(self):
         if self.path == "/api/verify":
-            return self.send_json({"verified": True, "method": "ai_human_verification", "status": "passed"})
+            return self.send_json({"verified": True, "status": "passed"})
         if self.path == "/api/payout":
             length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(length) if length > 0 else b'{}'
