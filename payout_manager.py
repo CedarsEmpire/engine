@@ -1,5 +1,5 @@
 # engine/payout_manager.py
-from api_integrations import PayoutService, PayoutRequest
+from api_integrations import PayoutService, PayoutRequest, StripePayoutProvider, CryptoPayoutProvider
 from human_verification import HumanVerifier
 from datetime import datetime, timedelta
 
@@ -30,8 +30,15 @@ class PayoutManager:
             self.track_payout(batch_req, result)
             self.batch_payouts = []
 
-    def process_ai_payout(self, task_id, amount, currency):
+    def process_ai_payout(self, task_id, amount, currency, payout_method="stripe"):
         # Create payout request for AI worker
+        if payout_method == "stripe":
+            provider = StripePayoutProvider()
+        elif payout_method == "crypto":
+            provider = CryptoPayoutProvider(api_key="your_api_key", api_secret="your_api_secret")
+        else:
+            raise ValueError("Invalid payout method")
+
         req = PayoutRequest(
             amount_cents=int(amount * 100),
             currency=currency,
@@ -42,12 +49,20 @@ class PayoutManager:
         if amount >= self.batch_threshold:
             self.add_to_batch(req)
         else:
-            result = self.payout_service.request_payout(req)
+            payout_service = PayoutService(provider=provider)
+            result = payout_service.request_payout(req)
             self.track_payout(req, result)
             return result
 
-    def process_human_payout(self, human_verifier: HumanVerifier):
+    def process_human_payout(self, human_verifier: HumanVerifier, payout_method="stripe"):
         # Create payout request for human verifier
+        if payout_method == "stripe":
+            provider = StripePayoutProvider()
+        elif payout_method == "crypto":
+            provider = CryptoPayoutProvider(api_key="your_api_key", api_secret="your_api_secret")
+        else:
+            raise ValueError("Invalid payout method")
+
         req = PayoutRequest(
             amount_cents=int(human_verifier.earnings * 100),
             currency="USD",
@@ -58,7 +73,8 @@ class PayoutManager:
         if human_verifier.earnings >= self.batch_threshold:
             self.add_to_batch(req)
         else:
-            result = self.payout_service.request_payout(req)
+            payout_service = PayoutService(provider=provider)
+            result = payout_service.request_payout(req)
             self.track_payout(req, result)
             return result
 
@@ -76,33 +92,15 @@ class PayoutManager:
         return self.payout_tracking
 
 # Example usage
-payout_service = PayoutService(provider=StripePayoutProvider())
-payout_manager = PayoutManager(payout_service)
+payout_manager = PayoutManager(payout_service=PayoutService(provider=StripePayoutProvider()))
 
-# AI worker payout
-payout_manager.process_ai_payout(task_id="123", amount=10.87, currency="USD")
+# AI worker payout via Stripe
+payout_manager.process_ai_payout(task_id="123", amount=10.87, currency="USD", payout_method="stripe")
+
+# AI worker payout via Crypto
+payout_manager.process_ai_payout(task_id="456", amount=5.00, currency="USD", payout_method="crypto")
 
 # Human verifier payout
 verifier = HumanVerifier(task_id="123", ai_decision="approve")
 verifier.complete_verification(human_decision="approve")
-payout_manager.process_human_payout(verifier)
-
-# Get payout report
-print(payout_manager.get_payout_report())
-
-
-Cryptocurrency Integration
-To integrate with cryptocurrencies, update api_integrations.py to include crypto payout providers (e.g., Coinbase, Binance).
-
-
-# engine/api_integrations.py
-class CryptoPayoutProvider(PayoutProvider):
-    def __init__(self, api_key, api_secret):
-        self.api_key = api_key
-        self.api_secret = api_secret
-        self.base_url = "https://api.coinbase.com/v2"
-
-    def create_payout(self, req: PayoutRequest) -> dict:
-        # Implement crypto payout logic using Coinbase API
-        # ...
-        pass
+payout_manager.process_human_payout(verifier, payout_method="stripe")
