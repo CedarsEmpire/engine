@@ -1,6 +1,6 @@
-from flask import Flask
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "Engine Five is LIVE - minimal test OK"
+def handler(request):
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "text/html"},
+        "body": "<h1>Engine Five is LIVE</h1>"
+    }
