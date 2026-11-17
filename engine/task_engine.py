@@ -1,34 +1,18 @@
-# engine/task_engine.py
-import targets
-import human_verification
-import ai_workers
+# engine/payout_logic.py
+import pounds_to_crypto
 
-class TaskEngine:
-    def __init__(self, region):
-        self.region = region
-        self.targets = targets.Targets(region)
-        self.tasks = []
+class PayoutLogic:
+    def __init__(self, worker):
+        self.worker = worker
+        self.balance = 0
 
-    def create_task(self, task_type, client):
-        # Real task from a real client
-        if self.targets.enabled:
-            task = {
-                'type': task_type,
-                'client': client,
-                'status': 'pending'
-            }
-            self.tasks.append(task)
-            return task
-        return None
+    def update_balance(self, amount):
+        self.balance += amount
 
-    def assign_ai(self, task):
-        # AI does pre-labelling
-        ai_workers.process(task)
-
-    def assign_human(self, task):
-        # Human does final check
-        human_verification.check(task)
-        # €15 reward if QA passes
-        if task['status'] == 'verified':
-            return targets.Targets.HUMAN_VERIFICATION_REWARD
+    def payout_crypto(self):
+        if self.balance > 0:
+            crypto_amount = pounds_to_crypto.convert(self.balance)
+            # Crypto payout logic here
+            self.balance = 0
+            return crypto_amount
         return 0
