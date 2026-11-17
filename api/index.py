@@ -1,34 +1,42 @@
-# api/index.py
-# DOORS ONLY - Calls engine, no logic here
-# Engine Five - Global
+from flask import Flask, request, jsonify
 
-from engine.task_engine import ai_work_motor
-from engine.human_verification import create_human_list, expire_human_lists
-import os
+app = Flask(__name__)
 
-def api_run_task(task_id: str, task_type: str):
-    """API: Run task via AI Motor"""
-    return ai_work_motor(supabase, task_id, task_type)
+# Try to import your engine, but don't crash if supabase is missing
+try:
+    from engine.task_engine import ai_work_motor
+    from engine.human_verification import create_human_list, expire_human_lists
+    from engine.db import supabase
+    ENGINE_OK = True
+except Exception as e:
+    print("Engine import failed:", e)
+    ENGINE_OK = False
+    supabase = None
 
-def api_get_human_list(verifier_id: str):
-    """API: Get human short list"""
-    return create_human_list(supabase, verifier_id)
+@app.route('/')
+def home():
+    return "Engine Five is LIVE"
 
-def api_expire_human_lists():
-    """API: Expire human lists every minute"""
-    return expire_human_lists(supabase)
+@app.route('/run-task')
+def run_task():
+    task_id = request.args.get("task_id")
+    task_type = request.args.get("task_type")
+    if not ENGINE_OK:
+        return jsonify({"error": "engine not loaded"}), 500
+    result = ai_work_motor(supabase, task_id, task_type)
+    return jsonify({"ok": True, "result": str(result)})
 
-# Vercel handler
-def main(request):
-    path = request.path
-    if path == "/run-task":
-        task_id = request.query_params.get("task_id")
-        task_type = request.query_params.get("task_type")
-        return api_run_task(task_id, task_type)
-    elif path == "/get-human-list":
-        verifier_id = request.query_params.get("verifier_id")
-        return api_get_human_list(verifier_id)
-    elif path == "/expire-human":
-        return api_expire_human_lists()
-    else:
-        return {"error": "invalid path"}
+@app.route('/get-human-list')
+def get_human_list():
+    verifier_id = request.args.get("verifier_id")
+    if not ENGINE_OK:
+        return jsonify({"error": "engine not loaded"}), 500
+    result = create_human_list(supabase, verifier_id)
+    return jsonify({"ok": True, "result": str(result)})
+
+@app.route('/expire-human')
+def expire_human():
+    if not ENGINE_OK:
+        return jsonify({"error": "engine not loaded"}), 500
+    result = expire_human_lists(supabase)
+    return jsonify({"ok": True, "result": str(result)})
