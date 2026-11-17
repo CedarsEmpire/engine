@@ -1,19 +1,33 @@
-# payout_logic.py
-import nowpayments
+# engine/payout_logic.py
+import pounds_to_crypto
+import targets
 
-def process_payout(user_id, amount):
-    # Get user wallet
-    wallet = get_user_wallet(user_id)
-    # Call NOWPayments API
-    payout = nowpayments.create_payout(
-        address=wallet['address'],
-        currency='usdtbsc',
-        amount=amount,
-        ipn_callback_url='https://enginefive.com/webhook'
-    )
-    return payout['id']
+class PayoutLogic:
+    def __init__(self, worker):
+        self.worker = worker
+        self.balance = 0
+        self.ai_target = targets.Targets.AI_DAILY_TARGET  # €2500 daily
 
-def webhook_handler(data):
-    # NOWPayments callback
-    if data['status'] == 'finished':
-        update_payout_status(data['payout_id'], 'confirmed')
+    def update_balance(self, amount):
+        self.balance += amount
+
+    def check_ai_payout(self):
+        if self.worker.type == 'AI' and self.balance >= self.ai_target:
+            # Payout €2500 (or balance if less)
+            payout_amount = min(self.balance, self.ai_target)
+            crypto_amount = pounds_to_crypto.convert(payout_amount)
+            # Crypto payout logic here
+            self.balance -= payout_amount
+            return crypto_amount
+        return 0
+
+    def payout_crypto(self):
+        if self.balance > 0:
+            # Human €15 payout + AI target payout
+            if self.worker.type == 'human':
+                crypto_amount = pounds_to_crypto.convert(self.balance)
+                self.balance = 0
+                return crypto_amount
+            elif self.worker.type == 'AI':
+                return self.check_ai_payout()
+        return 0
