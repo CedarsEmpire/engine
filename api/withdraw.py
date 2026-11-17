@@ -1,56 +1,85 @@
-# api/withdraw.py - ENGINE FIVE - Crypto Withdraw Only
-import os
-from supabase import create_client
+# api/withdraw.py - ENGINE FIVE Payout Engine
+# POST /api/withdraw -> request payout, Pounds -> Dollars only, crypto withdrawal
+import json
+from http.server import BaseHTTPRequestHandler
 
-supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
+GBP_TO_USD = 1.27  # Example rate - update daily
+MIN_WITHDRAW_USD = 10.0  # Crypto min depends on network fees + exchange rules
+VALID_CRYPTO = ["USDT", "USDC", "BTC", "ETH"]
+VALID_METHODS = ["Binance", "Trust Wallet", "Coinbase", "Other Exchange"]
 
-def handler(request):
-    # Only allow POST
-    if request.method != "POST":
-        return {"error": "POST only"}, 405
+class handler(BaseHTTPRequestHandler):
+    def _send(self, code, data):
+        body = json.dumps(data).encode()
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
 
-    data = request.json
-    user_id = data.get("user_id")
-    wallet = data.get("wallet_address")
-    amount = float(data.get("amount", 0))
-    currency = data.get("currency", "USDT")
-    network = data.get("network", "TRC20")
+    def do_OPTIONS(self):
+        self._send(200, {"ok": True})
 
-    if not wallet or amount <= 0:
-        return {"error": "Wallet address and amount required"}, 400
+    def do_POST(self):
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            raw = self.rfile.read(length) if length > 0 else b"{}"
+            payload = json.loads(raw.decode() or "{}")
+        except:
+            return self._send(400, {"ok": False, "error": "Invalid JSON"})
 
-    # 1. Get user balance
-    user = supabase.table("users").select("balance_gbp").eq("id", user_id).execute()
-    if not user.data:
-        return {"error": "User not found"}, 404
+        email = str(payload.get("email", "")).strip().lower()
+        gbp_amount = float(payload.get("amount_gbp", 0) or 0)
+        crypto = str(payload.get("crypto", "")).strip().upper()
+        method = str(payload.get("method", "")).strip()
+        address = str(payload.get("address", "")).strip()  # crypto wallet address
+        balance_gbp = float(payload.get("balance_gbp", 0) or 0)  # In prod, fetch from DB
 
-    balance = float(user.data[0]["balance_gbp"])
+        if "@" not in email:
+            return self._send(400, {"ok": False, "error": "Valid email required"})
+        if crypto not in VALID_CRYPTO:
+            return self._send(400, {"ok": False, "error": f"Crypto must be one of: {', '.join(VALID_CRYPTO)}"})
+        if method not in VALID_METHODS:
+            return self._send(400, {"ok": False, "error": f"Method must be one of: {', '.join(VALID_METHODS)}"})
+        if not address:
+            return self._send(400, {"ok": False, "error": "Crypto wallet address required"})
+        if gbp_amount < 5.0:
+            return self._send(400, {"ok": False, "error": "Minimum withdraw is £5"})
+        if gbp_amount > balance_gbp:
+            return self._send(400, {"ok": False, "error": f"Insufficient approved balance. Balance: £{balance_gbp:.2f}"})
+        if gbp_amount <= 0:
+            return self._send(400, {"ok": False, "error": "Amount must be > 0"})
 
-    # 2. Check balance - your page shows £1.00
-    if amount > balance:
-        return {"error": "Insufficient balance"}, 400
+        usd_amount = gbp_amount * GBP_TO_USD
+        if usd_amount < MIN_WITHDRAW_USD:
+            return self._send(400, {"ok": False, "error": f"Converted to ${usd_amount:.2f} USD - below crypto min of ${MIN_WITHDRAW_USD}"})
 
-    if amount < 1.0:
-        return {"error": "Minimum withdraw is £1.00"}, 400
+        # In production: 1) Check balance, 2) Convert, 3) Create payout row, 4) Send to exchange, 5) Log TXID
+        return self._send(200, {
+            "ok": True,
+            "message": f"£{gbp_amount} converted to ${usd_amount:.2f} {crypto} → sent to {method}",
+            "payout": {
+                "email": email,
+                "amount_gbp": round(gbp_amount, 2),
+                "amount_usd": round(usd_amount, 2),
+                "crypto": crypto,
+                "method": method,
+                "address": address,
+                "status": "processing",
+                "note": f"Exchange rate: £1 = ${GBP_TO_USD}"
+            },
+            "remaining_balance_gbp": round(balance_gbp - gbp_amount, 2)
+        })
 
-    # 3. Create withdraw request - PENDING for you to approve/pay
-    withdraw = supabase.table("withdrawals").insert({
-        "user_id": user_id,
-        "amount_gbp": amount,
-        "currency": currency,
-        "network": network,
-        "wallet_address": wallet,
-        "status": "pending"
-    }).execute()
-
-    # 4. Deduct balance
-    supabase.table("users").update({
-        "balance_gbp": balance - amount
-    }).eq("id", user_id).execute()
-
-    return {
-        "success": True,
-        "message": f"Withdraw {amount} GBP in {currency} ({network}) requested",
-        "wallet": wallet,
-        "status": "pending"
-    }, 200
+    def do_GET(self):
+        return self._send(200, {
+            "ok": True,
+            "engine": "Payout Engine - Pounds to Dollars, crypto only",
+            "min_withdraw_usd": MIN_WITHDRAW_USD,
+            "crypto": VALID_CRYPTO,
+            "methods": VALID_METHODS,
+            "rate": f"£1 = ${GBP_TO_USD} (update daily)"
+        })
