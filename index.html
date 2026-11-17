@@ -1,122 +1,140 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ENGINE FIVE - Dashboard</title>
-  <style>
-    body {
-      background: #0f0f0f;
-      color: #fff;
-      font-family: Arial;
-      padding: 20px;
-      margin: 0
-    }
-    h1 {
-      letter-spacing: 3px
-    }
-    .live {
-      color: #4ade80;
-      font-size: 16px
-    }
-    .cards {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap
-    }
-    .card {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 20px;
-      flex: 1;
-      min-width: 140px
-    }
-    .card b {
-      font-size: 26px
-    }
-    .regions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 10px
-    }
-    .region {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      min-width: 160px;
-      flex: 1
-    }
-    button {
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: bold;
-      cursor: pointer
-    }
-    .on {
-      background: #22c55e;
-      color: #fff
-    }
-    .off {
-      background: #555;
-      color: #fff
-    }
-    table {
-      width: 100%;
-      background: #1a1a1a;
-      border-collapse: collapse;
-      margin-top: 15px
-    }
-    td, th {
-      padding: 10px;
-      border-bottom: 1px solid #333;
-      text-align: left;
-      font-size: 14px
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEDARS EMPIRE - Live</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f1f3f6;margin:0;padding:16px;color:#0f1e2e}
+.top{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:14px 18px;border-radius:14px}
+.top h1{margin:0;font-size:22px;letter-spacing:1px}
+.live{color:#0a9d6e;font-size:14px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.actions button{background:#fff;border:1px solid #ddd;padding:12px 18px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:15px}
+.actions button.green{background:#0a9d6e;color:#fff;border:none}
+.stats{display:flex;gap:12px;flex-wrap:wrap}
+.stat{flex:1;min-width:140px;background:#fff;padding:16px;border-radius:14px}
+.stat b{font-size:28px}
+.card{background:#fff;padding:18px;border-radius:14px;margin-top:14px}
+.big{text-align:center}
+.big .gear{font-size:60px}
+.engines{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.eng{flex:1;min-width:150px;background:#fff;padding:14px;border-radius:12px}
+.on{color:#fff;background:#0a9d6e;border:none;padding:5px 12px;border-radius:20px;font-weight:bold}
+.off{color:#fff;background:#999;border:none;padding:5px 12px;border-radius:20px;font-weight:bold}
+.grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.grid .card{flex:1;min-width:280px;margin-top:0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
+.pill{background:#d6f5e8;color:#0a7a55;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold}
+.bar{height:8px;background:#e5e7eb;border-radius:5px;overflow:hidden;margin-top:8px}
+.fill{height:100%;background:#0a9d6e;width:12%}
+.dot{width:9px;height:9px;background:#00c853;border-radius:50%;display:inline-block}
+</style>
 </head>
 <body>
-  <h1>ENGINE FIVE <span class="live">● Live • Active</span></h1>
 
-  <div class="cards">
-    <div class="card">AI Target<br><b>€2500 / 24h</b></div>
-    <div class="card">Human Reward<br><b>€15 per task</b></div>
-    <div class="card">Payouts<br><b>Crypto Only</b></div>
-  </div>
+<div class="top"><h1>CEDARS EMPIRE <span class="live">● Live</span></h1><div>👤 Admin ▼</div></div>
 
-  <h2>Regions</h2>
-  <div class="regions" id="regions"></div>
+<div class="actions">
+<button onclick="alert('Register - Coming in next step with Supabase')">👤 Register</button>
+<button class="green" id="depositBtn" onclick="toggleDeposit()">🏦 Deposit <span id="depositState">ON</span></button>
+<button onclick="document.getElementById('taskSection').scrollIntoView()">☰ Task</button>
+<button onclick="alert('Withdraw - Balance €'+earned.toFixed(2))">↗ Withdraw</button>
+<button onclick="alert('Your Referral Link: https://cedarsempire.com/register?ref=CEDARS123')">👥 Referral</button>
+</div>
 
-  <h2>Task Activity</h2>
-  <table>
-    <tr><th>Task ID</th><th>User</th><th>Region</th><th>Status</th><th>Reward</th></tr>
-    <tr><td>T-10284</td><td>user_8472</td><td>Region 1</td><td>Completed</td><td>+€15</td></tr>
-    <tr><td>T-10283</td><td>user_3319</td><td>Region 4</td><td>In Progress</td><td>-</td></tr>
-    <tr><td>T-10282</td><td>user_5104</td><td>Region 2</td><td>Completed</td><td>+€15</td></tr>
-  </table>
+<div class="stats">
+<div class="stat">🤖 AI Workers Online<br><b id="workerCount">100</b><br><small>Online now</small></div>
+<div class="stat">💶 Earned Today<br><b id="earned">€0.00</b><br><small id="earnedSub">Live updating</small></div>
+<div class="stat">🎯 AI Target €2500<br><b id="pct">0%</b><div class="bar"><div class="fill" id="barFill"></div></div></div>
+</div>
 
-  <script>
-    let status = {1: true, 2: true, 3: false, 4: true, 5: false};
-    function render() {
-      document.getElementById('regions').innerHTML = '';
-      for (let i = 1; i <= 5; i++) {
-        let div = document.createElement('div');
-        div.className = 'region';
-        div.innerHTML = `<span>Region ${i}</span> <button class="${status[i] ? 'on' : 'off'}" onclick="toggle(${i})">${status[i] ? 'ON' : 'OFF'}</button>`;
-        document.getElementById('regions').appendChild(div);
-      }
-    }
-    function toggle(i) {
-      status[i] = !status[i];
-      render();
-    }
-    render();
-  </script>
+<div class="card big">
+<h2 style="margin:0">CEDARS BIG ENGINE</h2><div style="color:#0a9d6e;font-weight:bold">MASTER ENGINE • <span id="masterStatus">RUNNING</span></div>
+<div class="gear">⚙️</div><p>100 AI Workers Total • Core processing optimal</p>
+</div>
+
+<div class="engines" id="engines"></div>
+
+<div class="grid">
+<div class="card">
+<h3>AI Workers Live <small>100 total • Active now</small></h3>
+<div id="workersLive"></div>
+<p style="color:#0a7a55">+95 more workers working...</p>
+</div>
+<div class="card" id="taskSection">
+<h3>Task Activity <small>by region</small></h3>
+<table><thead><tr><th>Region</th><th>Tasks</th><th>Status</th><th>Last</th></tr></thead><tbody id="taskTable"></tbody></table>
+<div style="display:flex;gap:10px;margin-top:14px">
+<div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Deposit Balance<br><b id="depBal">€0</b></div>
+<div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Referral Earnings<br><b>€0</b></div>
+<div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Withdraw Available<br><b id="withdrawBal">€0</b></div>
+</div>
+</div>
+</div>
+
+<script>
+// CEDARS EMPIRE - LIVE ENGINE - 100 WORKERS, 20 PER SUB-ENGINE
+let earned = 0, totalTasks = 0;
+let depositOn = true;
+let engines = [
+  {id:1, name:"Africa", on:true, tasks:32},
+  {id:2, name:"Asia", on:true, tasks:28},
+  {id:3, name:"America", on:false, tasks:0},
+  {id:4, name:"Europe", on:true, tasks:19},
+  {id:5, name:"Oceania", on:false, tasks:0},
+];
+let workerNames = ["Vision Worker","Transcription Worker","Rating Worker","Data Worker","Text Worker"];
+
+function toggleDeposit(){
+  depositOn = !depositOn;
+  document.getElementById('depositState').innerText = depositOn ? "ON" : "OFF";
+  document.getElementById('depositBtn').style.background = depositOn ? "#0a9d6e" : "#999";
+  alert("Deposit is now " + (depositOn ? "ON" : "OFF"));
+}
+function toggleEngine(id){
+  let e = engines.find(x=>x.id===id);
+  e.on = !e.on;
+  renderEngines();
+}
+function renderEngines(){
+  document.getElementById('engines').innerHTML = engines.map(e=>`
+    <div class="eng"><div style="display:flex;justify-content:space-between">Sub-Engine ${e.id} <button class="${e.on?'on':'off'}" onclick="toggleEngine(${e.id})">${e.on?'ON':'OFF'}</button></div>
+    <b style="font-size:18px">${e.name} Engine</b><br><small>20 AI Workers</small><br>
+    <small>${e.on?'Workers Active':'Workers Paused'}</small><div class="bar"><div class="fill" style="width:${e.on?'70%':'10%'}"></div></div></div>
+  `).join('');
+  let active = engines.filter(e=>e.on).length;
+  document.getElementById('masterStatus').innerText = active>0 ? "RUNNING" : "PAUSED";
+  document.getElementById('workerCount').innerText = active*20;
+}
+function runCycle(){
+  // Only ON engines work
+  let activeEngines = engines.filter(e=>e.on);
+  if(activeEngines.length===0) return;
+  let e = activeEngines[Math.floor(Math.random()*activeEngines.length)];
+  let w = workerNames[Math.floor(Math.random()*workerNames.length)];
+  let reward = (Math.random()*0.5+0.3).toFixed(2);
+  earned += parseFloat(reward); totalTasks++; e.tasks++;
+  document.getElementById('earned').innerText = "€"+earned.toFixed(2);
+  document.getElementById('withdrawBal').innerText = "€"+earned.toFixed(2);
+  let pct = Math.min(100, (earned/2500*100));
+  document.getElementById('pct').innerText = pct.toFixed(1)+"%";
+  document.getElementById('barFill').style.width = pct+"%";
+  document.getElementById('workersLive').innerHTML = `
+    <div><span class="dot"></span> Worker #${String(totalTasks).padStart(3,'0')} - ${w} - ${e.name} - Working</div>
+    <div><span class="dot"></span> Worker #${String(totalTasks+1).padStart(3,'0')} - ${workerNames[1]} - ${e.name} - Active</div>
+    <div><span class="dot"></span> Worker #${String(totalTasks+2).padStart(3,'0')} - ${workerNames[2]} - ${e.name} - Processing</div>
+    <div style="margin-top:8px;color:#0a9d6e">✅ Last: ${w} in ${e.name} completed +€${reward} - ${new Date().toLocaleTimeString()}</div>
+  `;
+  document.getElementById('taskTable').innerHTML = engines.map(en=>`
+    <tr><td>${en.name}</td><td>${en.tasks} tasks</td><td><span class="pill">${en.on?'Active':'Idle'}</span></td><td>Just now</td></tr>
+  `).join('');
+}
+renderEngines();
+runCycle();
+setInterval(runCycle, 3000);
+</script>
 </body>
 </html>
