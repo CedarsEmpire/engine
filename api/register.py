@@ -1,111 +1,89 @@
-from http.server import BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
+# api/register.py - ENGINE FIVE Worker Engine
+# POST /api/register -> creates worker, returns qualification test
 import json
-from engine.secure_api import hash_password, validate_email, check_password
-from engine.db import connect_db
-import re
+from http.server import BaseHTTPRequestHandler
+
+# In production, replace this with a real database (Supabase / Postgres)
+# This is in-memory for Vercel demo, data resets on redeploy
+WORKERS = {}
+
+VALID_CONTINENTS = ["Africa", "North America", "South America", "Europe", "Asia", "Oceania"]
 
 class handler(BaseHTTPRequestHandler):
-    def do_POST(self):
-        path = urlparse(self.path).path
-        if path == "/api/register":
-            length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(length).decode('utf-8')
-            data = json.loads(body)
-
-            # Required fields
-            name = data.get('name')
-            country_code = data.get('country_code')  # e.g., "Ug +256"
-            phone_number = data.get('phone_number')
-            email = data.get('email')
-            password = data.get('password')
-            role = data.get('role')  # worker, client, verifier
-            human_signup = data.get('human_signup')  # true for human only
-
-            if not name or not country_code or not phone_number or not email or not password or not role or not human_signup:
-                self.send_response(400)
-                self.end_headers()
-                self.wfile.write(json.dumps({'error': 'Missing fields'}).encode('utf-8'))
-                return
-
-            # Validate email
-            if not validate_email(email):
-                self.send_response(400)
-                self.end_headers()
-                self.wfile.write(json.dumps({'error': 'Invalid email'}).encode('utf-8'))
-                return
-
-            # Validate phone (simple check)
-            full_phone = country_code.split('+')[1] + phone_number
-            if not re.match(r'^\d{5,15}$', phone_number):
-                self.send_response(400)
-                self.end_headers()
-                self.wfile.write(json.dumps({'error': 'Invalid phone number'}).encode('utf-8'))
-                return
-
-            # Check human_signup is true
-            if human_signup != 'true' and human_signup is not True:
-                self.send_response(400)
-                self.end_headers()
-                self.wfile.write(json.dumps({'error': 'Only human signups allowed'}).encode('utf-8'))
-                return
-
-            db = connect_db()
-            cursor = db.cursor()
-            cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
-            if cursor.fetchone():
-                self.send_response(400)
-                self.end_headers()
-                self.wfile.write(json.dumps({'error': 'Email exists'}).encode('utf-8'))
-                return
-
-            hashed = hash_password(password)
-            cursor.execute("INSERT INTO users (name, country_code, phone_number, email, password, role, consign_agreement) VALUES (%s, %s, %s, %s, %s, %s, true)", (name, country_code, full_phone, email, hashed, role))
-            db.commit()
-
-            self.send_response(200)
-            self.end_headers()
-            self.wfile.write(json.dumps({'success': True, 'message': 'Registered'}).encode('utf-8'))
-            return
-
-        elif path == "/api/login":
-            length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(length).decode('utf-8')
-            data = json.loads(body)
-
-            email = data.get('email')
-            password = data.get('password')
-            save_password = data.get('save_password')  # optional
-
-            if not email or not password:
-                self.send_response(400)
-                self.end_headers()
-                self.wfile.write(json.dumps({'error': 'Missing fields'}).encode('utf-8'))
-                return
-
-            db = connect_db()
-            cursor = db.cursor()
-            cursor.execute("SELECT password FROM users WHERE email=%s", (email,))
-            user = cursor.fetchone()
-            if not user:
-                self.send_response(401)
-                self.end_headers()
-                self.wfile.write(json.dumps({'error': 'No user'}).encode('utf-8'))
-                return
-
-            if not check_password(password, user[0]):
-                self.send_response(401)
-                self.end_headers()
-                self.wfile.write(json.dumps({'error': 'Wrong password'}).encode('utf-8'))
-                return
-
-            # return token
-            self.send_response(200)
-            self.end_headers()
-            self.wfile.write(json.dumps({'success': True, 'token': 'example-token', 'save_password': save_password}).encode('utf-8'))
-            return
-
-        self.send_response(404)
+    def _send(self, code, data):
+        body = json.dumps(data).encode()
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Content-Length", str(len(body)))
         self.end_headers()
-        self.wfile.write(json.dumps({'error': 'Not found'}).encode('utf-8'))
-        return
+        self.wfile.write(body)
+
+    def do_OPTIONS(self):
+        self._send(200, {"ok": True})
+
+    def do_POST(self):
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            raw = self.rfile.read(length) if length > 0 else b"{}"
+            payload = json.loads(raw.decode() or "{}")
+        except:
+            return self._send(400, {"ok": False, "error": "Invalid JSON"})
+
+        name = str(payload.get("name", "")).strip()
+        email = str(payload.get("email", "")).strip().lower()
+        continent = str(payload.get("continent", "")).strip()
+        whatsapp = str(payload.get("whatsapp", "")).strip()
+
+        # Real validation - no fake users
+        if len(name) < 2:
+            return self._send(400, {"ok": False, "error": "Name required"})
+        if "@" not in email or "." not in email:
+            return self._send(400, {"ok": False, "error": "Valid email required"})
+        if continent not in VALID_CONTINENTS:
+            return self._send(400, {"ok": False, "error": "Valid continent required"})
+
+        if email in WORKERS:
+            return self._send(400, {"ok": False, "error": "Worker already registered"})
+
+        # Create worker - starts UNQUALIFIED, must pass test to earn
+        worker = {
+            "name": name,
+            "email": email,
+            "continent": continent,
+            "whatsapp": whatsapp,
+            "status": "pending_qualification",
+            "accuracy": 0,
+            "level": "Beginner",
+            "balance_eur": 0.0,
+            "completed_tasks": 0,
+            "daily_earned_eur": 0.0,
+            "daily_target_eur": 15.0
+        }
+        WORKERS[email] = worker
+
+        # Qualification test - 5 sample tasks, need 70% to unlock
+        # In production, load from DB. These are real gold tasks.
+        qualification = [
+            {"id": "Q1", "question": "Image shows a shop selling phones. Label it:", "options": ["Shop", "Car", "Animal"], "answer": "Shop"},
+            {"id": "Q2", "question": "AI answer: 'Paris is in Germany'. Is this correct?", "options": ["Correct", "Wrong"], "answer": "Wrong"},
+            {"id": "Q3", "question": "Transcribe: 'Hello, how are you?'", "options": ["Hello, how are you?", "Goodbye"], "answer": "Hello, how are you?"},
+            {"id": "Q4", "question": "Photo is blurry and unreadable. What to do?", "options": ["Guess", "Flag as Bad Quality"], "answer": "Flag as Bad Quality"},
+            {"id": "Q5", "question": "Task pays €3. Client escrow is €0. Should you do it?", "options": ["Yes", "No - No escrow = No work"], "answer": "No - No escrow = No work"},
+        ]
+        # Don't send answers to frontend in real app - this is for testing
+        # For now we send questions without answers
+        public_test = [{"id": q["id"], "question": q["question"], "options": q["options"]} for q in qualification]
+
+        return self._send(200, {
+            "ok": True,
+            "message": "Registered. Pass qualification to unlock paid work.",
+            "worker": worker,
+            "qualification_test": public_test,
+            "pass_mark": "70% (4/5 correct)"
+        })
+
+    def do_GET(self):
+        return self._send(200, {"ok": True, "engine": "Worker Engine - POST to register"})
