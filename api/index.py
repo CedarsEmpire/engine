@@ -1,34 +1,53 @@
-from http.server import BaseHTTPRequestHandler
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Engine Five Dashboard</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    .region { margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>Engine Five Dashboard</h1>
+  
+  <div>
+    <h2>AI Workers</h2>
+    <p>Target: €2500 / 24h</p>
+    <p>Status: <span id="ai-status">Idle</span></p>
+  </div>
+  
+  <div>
+    <h2>Human Tasks</h2>
+    <p>Reward: €15 per task</p>
+    <p>Pending: <span id="human-pending">0</span></p>
+  </div>
+  
+  <div>
+    <h2>Regions</h2>
+    <div class="region">Region 1: <button id="r1-btn">Enable</button></div>
+    <div class="region">Region 2: <button id="r2-btn">Enable</button></div>
+    <div class="region">Region 3: <button id="r3-btn">Enable</button></div>
+    <div class="region">Region 4: <button id="r4-btn">Enable</button></div>
+    <div class="region">Region 5: <button id="r5-btn">Enable</button></div>
+  </div>
+  
+  <div>
+    <h2>Payouts (Crypto only)</h2>
+    <p>Status: <span id="payout-status">No pending payouts</span></p>
+  </div>
 
-class handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html; charset=utf-8')
-        self.end_headers()
-        html = """
-        <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-        body{margin:0;font-family:Arial,sans-serif;background:#0a0a0a;color:white;text-align:center}
-        .hero{padding:80px 20px;background:linear-gradient(135deg,#111,#2b1055,#7597de)}
-        h1{font-size:48px;margin:0;letter-spacing:2px} p{font-size:18px;opacity:.9;max-width:600px;margin:20px auto;line-height:1.5}
-        .btn{display:inline-block;background:white;color:black;padding:14px 28px;border-radius:30px;text-decoration:none;font-weight:bold;margin-top:10px}
-        .box{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;padding:40px 20px}
-        .card{background:#1a1a1a;padding:25px;border-radius:15px;width:250px}
-        .card h3{font-size:22px;margin:0 0 10px 0}
-        </style></head>
-        <body>
-        <div class="hero">
-        <h1>ENGINE FIVE</h1>
-        <p>We build bold ideas into real products. Fast, clean, and made to last.</p>
-        <a class="btn" href="#">Start Your Project</a>
-        </div>
-        <div class="box">
-        <div class="card"><h3>01 - BUILD</h3><p>Websites and apps that launch fast.</p></div>
-        <div class="card"><h3>02 - DESIGN</h3><p>Clean design that people remember.</p></div>
-        <div class="card"><h3>03 - GROW</h3><p>Systems that help your business grow.</p></div>
-        </div>
-        <p style="padding-bottom:40px">(c) 2026 Engine Five</p>
-        </body></html>
-        """
-        self.wfile.write(html.encode('utf-8'))
-        return
+  <script>
+    // Basic JS to connect to your engine/
+    const regions = [1,2,3,4,5];
+    regions.forEach(r => {
+      document.getElementById(`r${r}-btn`).onclick = () => {
+        // Call engine/central_hub.py to toggle region
+        fetch(`/api/toggle-region/${r}`)
+          .then(res => res.json())
+          .then(data => alert(`Region ${r} ${data.enabled ? 'Enabled' : 'Disabled'}`));
+      };
+    });
+  </script>
+</body>
+</html>
