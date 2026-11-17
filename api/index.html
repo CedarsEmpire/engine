@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ENGINE FIVE - Dashboard</title>
+  <style>
+    body {
+      background: #0f0f0f;
+      color: #fff;
+      font-family: Arial;
+      padding: 20px;
+      margin: 0
+    }
+    h1 {
+      letter-spacing: 3px
+    }
+    .live {
+      color: #4ade80;
+      font-size: 16px
+    }
+    .cards {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap
+    }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 20px;
+      flex: 1;
+      min-width: 140px
+    }
+    .card b {
+      font-size: 26px
+    }
+    .regions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px
+    }
+    .region {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-width: 160px;
+      flex: 1
+    }
+    button {
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer
+    }
+    .on {
+      background: #22c55e;
+      color: #fff
+    }
+    .off {
+      background: #555;
+      color: #fff
+    }
+    table {
+      width: 100%;
+      background: #1a1a1a;
+      border-collapse: collapse;
+      margin-top: 15px
+    }
+    td, th {
+      padding: 10px;
+      border-bottom: 1px solid #333;
+      text-align: left;
+      font-size: 14px
+    }
+  </style>
+</head>
+<body>
+  <h1>ENGINE FIVE <span class="live">● Live • Active</span></h1>
+
+  <div class="cards">
+    <div class="card">AI Target<br><b>€2500 / 24h</b></div>
+    <div class="card">Human Reward<br><b>€15 per task</b></div>
+    <div class="card">Payouts<br><b>Crypto Only</b></div>
+  </div>
+
+  <h2>Regions</h2>
+  <div class="regions" id="regions"></div>
+
+  <h2>Task Activity</h2>
+  <table>
+    <tr><th>Task ID</th><th>User</th><th>Region</th><th>Status</th><th>Reward</th></tr>
+    <tr><td>T-10284</td><td>user_8472</td><td>Region 1</td><td>Completed</td><td>+€15</td></tr>
+    <tr><td>T-10283</td><td>user_3319</td><td>Region 4</td><td>In Progress</td><td>-</td></tr>
+    <tr><td>T-10282</td><td>user_5104</td><td>Region 2</td><td>Completed</td><td>+€15</td></tr>
+  </table>
+
+  <script>
+    let status = {1: true, 2: true, 3: false, 4: true, 5: false};
+    function render() {
+      document.getElementById('regions').innerHTML = '';
+      for (let i = 1; i <= 5; i++) {
+        let div = document.createElement('div');
+        div.className = 'region';
+        div.innerHTML = `<span>Region ${i}</span> <button class="${status[i] ? 'on' : 'off'}" onclick="toggle(${i})">${status[i] ? 'ON' : 'OFF'}</button>`;
+        document.getElementById('regions').appendChild(div);
+      }
+    }
+    function toggle(i) {
+      status[i] = !status[i];
+      render();
+    }
+    render();
+  </script>
+</body>
+</html>
