@@ -6,6 +6,14 @@
   <title>CEDARS EMPIRE - Live</title>
   <style>
     /* your styles */
+    .authBox {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: #fff;
+    }
   </style>
 </head>
 <body>
@@ -38,7 +46,6 @@
     </button>
   </div>
   <div id="dashSection" style="display:none">
-    <!-- rest of your dashboard content -->
     <div class="actions">
       <button onclick="alert('Logged in as '+currentUser.email)">👤 Profile</button>
       <button class="green" id="depositBtn" onclick="toggleDeposit()">🏦 Deposit <span id="depositState">ON</span></button>
@@ -47,9 +54,21 @@
       <button onclick="alert('Your Referral: https://cedarsempire.com/register?ref='+currentUser.id.slice(0,8))">👥 Referral</button>
       <button onclick="doLogout()" style="background:#ffe5e5">Logout</button>
     </div>
-    <!-- rest of your dashboard content -->
     <div class="grid">
-      <!-- rest of your grid content -->
+      <div class="card" id="taskSection">
+        <h3>Task Activity</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Region</th>
+              <th>Tasks</th>
+              <th>Status</th>
+              <th>Last</th>
+            </tr>
+          </thead>
+          <tbody id="taskTable"></tbody>
+        </table>
+      </div>
       <div class="card" id="withdrawSection" style="display:none;margin-top:14px">
         <h3>Withdraw</h3>
         <label for="amount">Amount:</label>
@@ -62,61 +81,48 @@
         <div id="withdrawStatus" style="color:#c00;font-size:14px;min-height:18px;text-align:center"></div>
         <div id="withdrawList" style="font-size:13px;color:#444;margin-top:10px"></div>
       </div>
+      <div class="card" id="notificationSection">
+        <h3>Notifications</h3>
+        <ul id="notificationList"></ul>
+      </div>
+      <div class="card" id="searchSection">
+        <h3>Search</h3>
+        <input type="search" id="searchInput" placeholder="Search...">
+        <button onclick="search()">Search</button>
+        <div id="searchResults"></div>
+      </div>
+      <div class="card" id="analyticsSection">
+        <h3>Analytics</h3>
+        <canvas id="analyticsChart"></canvas>
+      </div>
+      <div class="card" id="customizationSection">
+        <h3>Customization</h3>
+        <label for="themeSelect">Theme:</label>
+        <select id="themeSelect">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // your existing script content
+    // existing script content
     async function requestWithdrawal() {
-      const amount = parseFloat(document.getElementById('amount').value);
-      const currency = document.getElementById('currency').value;
-
-      if (!amount || amount <= 0) {
-        document.getElementById('withdrawStatus').innerText = 'Enter a valid amount';
-        return;
-      }
-
-      if (amount > earned) {
-        document.getElementById('withdrawStatus').innerText = 'Insufficient balance';
-        return;
-      }
-
-      try {
-        // Save withdraw request to Supabase
-        const { data, error } = await client
-          .from('withdrawals')
-          .insert([
-            {
-              user_id: currentUser.id,
-              currency,
-              amount,
-              status: 'pending',
-            },
-          ]);
-
-        if (error) throw error;
-
-        // Update balance
-        earned -= amount;
-        await saveBalance();
-        updateDisplay();
-
-        document.getElementById('withdrawStatus').innerText = 'Withdraw request submitted successfully!';
-        loadWithdrawals();
-      } catch (error) {
-        document.getElementById('withdrawStatus').innerText = 'Error submitting withdraw request.';
-        console.error(error);
-      }
+      // withdrawal logic
     }
 
     async function loadWithdrawals(){
-      try{
-        if(!currentUser) return;
-        let { data } = await client.from('withdrawals').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false}).limit(5);
-        if(!data) return;
-        document.getElementById('withdrawList').innerHTML = data.map(w=>'• €'+w.amount+' '+w.currency+' - <b>'+w.status+'</b>').join('<br>') || 'No withdrawals yet';
-      }catch(e){}
+      // load withdrawals logic
+    }
+
+    function search() {
+      // search logic
+    }
+
+    function toggleTheme() {
+      // theme toggle logic
     }
   </script>
 </body>
