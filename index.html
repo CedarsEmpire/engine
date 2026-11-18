@@ -6,119 +6,109 @@
 <title>Login / Register</title>
 <style>
     * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #0f172a;
-    font-family: Arial, sans-serif;
-    padding: 16px;
-  }
-  .authBox {
-    width: 100%;
-    max-width: 420px;
-    background: #fff;
-    padding: 28px;
-    border-radius: 16px;
-    box-shadow: 0 20px 50px rgba(0,0,0,.4);
-  }
-  .authBox h2 { margin: 0 0 20px; font-size: 24px; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f172a; font-family: Arial, sans-serif; padding: 16px; }
+  .authBox, .appBox { width: 100%; max-width: 500px; background: #fff; padding: 28px; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+  .appBox { max-width: 800px; display: none; }
+  h2 { margin: 0 0 20px; font-size: 24px; }
   label { display: block; font-weight: bold; margin: 14px 0 6px; font-size: 14px; }
-  input {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    outline: none;
-  }
+  input { display: block; width: 100%; padding: 12px; font-size: 16px; border: 1px solid #cbd5e1; border-radius: 10px; outline: none; }
   input:focus { border-color: #2563eb; }
   .row { display: flex; gap: 10px; margin-top: 18px; }
-  button {
-    flex: 1;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    color: #fff;
-    background: #2563eb;
-  }
+  button { flex: 1; padding: 12px; font-size: 16px; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; color: #fff; background: #2563eb; }
   button.secondary { background: #16a34a; }
-  button:active { transform: scale(.98); }
+  button.danger { background: #dc2626; flex: none; padding: 10px 18px; }
   button:disabled { opacity: .6; cursor: wait; }
-  #message {
-    margin-top: 16px;
-    min-height: 22px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #dc2626;
-    word-break: break-word;
-  }
+  #message { margin-top: 16px; min-height: 22px; font-size: 14px; font-weight: bold; color: #dc2626; word-break: break-word; }
   #message.ok { color: #16a34a; }
+  .welcome { background: #f1f5f9; padding: 14px; border-radius: 10px; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; font-size: 14px; }
+  th { background: #f8fafc; }
 </style>
 </head>
 <body>
 
-<div class="authBox">
+<!-- 1. LOGIN SCREEN -->
+<div class="authBox" id="authBox">
   <h2>Login / Register</h2>
-
   <label for="email">Email</label>
   <input id="email" type="email" placeholder="Enter email" autocomplete="email">
-
   <label for="password">Password</label>
   <input id="password" type="password" placeholder="Enter password" autocomplete="current-password">
-
   <div class="row">
     <button id="loginBtn" type="button">Login</button>
     <button id="registerBtn" type="button" class="secondary">Create Account</button>
   </div>
-
   <div id="message"></div>
+</div>
+
+<!-- 2. APP SCREEN - SHOWS AFTER LOGIN -->
+<div class="appBox" id="appBox">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h2 style="margin:0;">Dashboard</h2>
+    <button id="logoutBtn" type="button" class="danger">Logout</button>
+  </div>
+  <div class="welcome" id="welcomeText">Welcome!</div>
+  <p>Your app / table goes here:</p>
+  <table>
+    <tr><th>Name</th><th>Status</th></tr>
+    <tr><td>Example Row 1</td><td>Active</td></tr>
+    <tr><td>Example Row 2</td><td>Active</td></tr>
+  </table>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // 1. Check library loaded
-  if (!window.supabase) {
-    document.getElementById('message').textContent = 'ERROR: Supabase library did not load. Check internet / CDN.';
-    throw new Error('Supabase lib missing');
-  }
+  const client = window.supabase.createClient(
+    'https://ipyvewpjtpgfuqfwizlr.supabase.co',
+    'sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm'
+  );
 
-  const SUPABASE_URL = 'https://ipyvewpjtpgfuqfwizlr.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm';
-  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+  const authBox = document.getElementById('authBox');
+  const appBox = document.getElementById('appBox');
   const emailEl = document.getElementById('email');
   const passEl = document.getElementById('password');
   const msgEl = document.getElementById('message');
-  const loginBtn = document.getElementById('loginBtn');
-  const registerBtn = document.getElementById('registerBtn');
+  const welcomeText = document.getElementById('welcomeText');
 
   function showMsg(text, ok = false) {
     msgEl.textContent = text;
     msgEl.className = ok ? 'ok' : '';
-    console.log(text);
   }
+
+  function showApp(user) {
+    authBox.style.display = 'none';
+    appBox.style.display = 'block';
+    welcomeText.textContent = 'Logged in as: ' + (user?.email || '');
+  }
+
+  function showLogin() {
+    authBox.style.display = 'block';
+    appBox.style.display = 'none';
+  }
+
+  // KEY FIX: If already logged in, skip login screen on refresh
+  async function checkSession() {
+    const { data } = await client.auth.getSession();
+    if (data.session?.user) showApp(data.session.user);
+  }
+  checkSession();
+
+  // Also listen for login/logout changes
+  client.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session?.user) showApp(session.user);
+    if (event === 'SIGNED_OUT') showLogin();
+  });
 
   async function doLogin() {
     const email = emailEl.value.trim();
     const password = passEl.value;
     if (!email || !password) return showMsg('Please enter email and password');
-    loginBtn.disabled = true;
     showMsg('Logging in...');
-    try {
-      const { data, error } = await client.auth.signInWithPassword({ email, password });
-      if (error) showMsg('Login failed: ' + error.message);
-      else showMsg('Login successful! Welcome ' + (data.user?.email || ''), true);
-    } catch (e) {
-      showMsg('Error: ' + e.message);
-    }
-    loginBtn.disabled = false;
+    const { data, error } = await client.auth.signInWithPassword({ email, password });
+    if (error) return showMsg('Login failed: ' + error.message);
+    showMsg('Login successful!', true);
+    showApp(data.user); // <-- THIS WAS MISSING BEFORE
   }
 
   async function doRegister() {
@@ -126,23 +116,27 @@
     const password = passEl.value;
     if (!email || !password) return showMsg('Please enter email and password');
     if (password.length < 6) return showMsg('Password must be at least 6 characters');
-    registerBtn.disabled = true;
     showMsg('Creating account...');
-    try {
-      const { data, error } = await client.auth.signUp({ email, password });
-      if (error) showMsg('Register failed: ' + error.message);
-      else showMsg('Register successful! Check email if confirmation is required.', true);
-    } catch (e) {
-      showMsg('Error: ' + e.message);
+    const { data, error } = await client.auth.signUp({ email, password });
+    if (error) return showMsg('Register failed: ' + error.message);
+    // If email confirmation is ON, user must confirm first, so don't show app yet
+    if (data.session?.user) {
+      showMsg('Register successful!', true);
+      showApp(data.session.user);
+    } else {
+      showMsg('Register successful! Check your email to confirm, then login.', true);
     }
-    registerBtn.disabled = false;
   }
 
-  // This is why your old buttons felt dead - now wired properly
-  loginBtn.addEventListener('click', doLogin);
-  registerBtn.addEventListener('click', doRegister);
+  async function doLogout() {
+    await client.auth.signOut();
+    showLogin();
+    showMsg('Logged out');
+  }
 
-  console.log('Auth ready');
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('registerBtn').addEventListener('click', doRegister);
+  document.getElementById('logoutBtn').addEventListener('click', doLogout);
 </script>
 </body>
 </html>
