@@ -2,15 +2,14 @@ import tkinter as tk
 from tkinter import messagebox
 
 class HumanVerificationInterface:
-    def __init__(self, task_data):
-        self.task_data = task_data
+    def __init__(self, task):
+        self.task = task
         self.root = tk.Tk()
         self.root.title("Human Verification Interface")
 
-        # Task display
+        # Display task
         tk.Label(self.root, text="Task:").pack()
-        tk.Label(self.root, text=self.task_data['task_type']).pack()
-        tk.Label(self.root, text=self.task_data['data']).pack()
+        tk.Label(self.root, text=self.task['data']).pack()
 
         # Verification buttons
         tk.Button(self.root, text="Verify", command=self.verify_task).pack()
