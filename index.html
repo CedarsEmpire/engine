@@ -5,28 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CEDARS EMPIRE - Live</title>
     <style>
-        /* Your styles here */
-    </style>
-</head>
-<body>
-    <!-- Your HTML content here -->
-    <script>
-        // Your JavaScript code here
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</body>
-</html>
-```
-
-Here's the complete code with your existing HTML, CSS, and JavaScript:
-```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEDARS EMPIRE - Live</title>
-    <style>
         *{box-sizing:border-box;font-family:Arial,sans-serif}
         body{background:#f1f3f6;margin:0;padding:16px;color:#0f1e2e}
         .top{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:14px 18px;border-radius:14px}
@@ -61,7 +39,7 @@ Here's the complete code with your existing HTML, CSS, and JavaScript:
         <button>👤 Register</button>
         <button class="green" id="depositBtn" onclick="toggleDeposit()">🏦 Deposit <span id="depositState">ON</span></button>
         <button onclick="document.getElementById('taskSection').scrollIntoView()">☰ Task</button>
-        <button onclick="alert('Withdraw - Balance €'+earned.toFixed(2))">↗ Withdraw</button>
+        <button onclick="alert('Withdraw - Balance €'+earned.toFixed(2))">↗️ Withdraw</button>
         <button onclick="alert('Your Referral Link: https://cedarsempire.com/register?ref=CEDARS123')">👥 Referral</button>
     </div>
     <div class="stats">
@@ -86,10 +64,14 @@ Here's the complete code with your existing HTML, CSS, and JavaScript:
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // FIX: Real persistent balance - never starts at 0 if saved before
-        let earned = parseFloat(localStorage.getItem('cedars_central_earned') || '0');
-        let totalTasks = parseInt(localStorage.getItem('cedars_total_tasks') || '0');
+        const supabaseUrl = 'YOUR_SUPABASE_URL';
+        const supabaseKey = 'YOUR_SUPABASE_KEY';
+        const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
+
+        let earned = 0;
+        let totalTasks = 0;
         let depositOn = true;
         let engines = [
             {id:1,name:"Africa",on:true,tasks:32},
@@ -99,9 +81,44 @@ Here's the complete code with your existing HTML, CSS, and JavaScript:
             {id:5,name:"Oceania",on:false,tasks:0},
         ];
         let workerNames = ["Vision Worker","Transcription Worker","Rating Worker","Data Worker","Text Worker"];
-        function saveBalance(){
-            try{ localStorage.setItem('cedars_central_earned', earned.toString()); localStorage.setItem('cedars_total_tasks', totalTasks.toString()); }catch(e){}
+
+        async function getBalance() {
+            const { data, error } = await supabase
+                .from('balances')
+                .select('amount')
+                .eq('id', 1);
+
+            if (error) {
+                console.error(error);
+            } else if (data.length > 0) {
+                earned = data[0].amount;
+                updateDisplay();
+            } else {
+                const { data, error } = await supabase
+                    .from('balances')
+                    .insert([{ id: 1, amount: 0 }]);
+
+                if (error) {
+                    console.error(error);
+                }
+            }
         }
+
+        async function updateBalance(amount) {
+            const { data, error } = await supabase
+                .from('balances')
+                .update({ amount: amount })
+                .eq('id', 1);
+
+            if (error) {
+                console.error(error);
+            }
+        }
+
+        function saveBalance(){
+            updateBalance(earned);
+        }
+
         function updateDisplay(){
             document.getElementById('earned').innerText = "€"+earned.toFixed(2);
             document.getElementById('withdrawBal').innerText = "€"+earned.toFixed(2);
@@ -109,16 +126,18 @@ Here's the complete code with your existing HTML, CSS, and JavaScript:
             document.getElementById('pct').innerText = pct.toFixed(1)+"%";
             document.getElementById('barFill').style.width = pct+"%";
         }
+
         function toggleDeposit(){
             depositOn = !depositOn;
             document.getElementById('depositState').innerText = depositOn ? "ON" : "OFF";
             document.getElementById('depositBtn').style.background = depositOn ? "#0a9d6e" : "#999";
         }
+
         function toggleEngine(id){
             let e = engines.find(x=>x.id===id); e.on = !e.on; renderEngines();
         }
+
         function renderEngines(){
             document.getElementById('engines').innerHTML = engines.map(e=>`
             <div class="eng"><div style="display:flex;justify-content:space-between">Sub-Engine ${e.id} <button class="${e.on?'on':'off'}" onclick="toggleEngine(${e.id})">${e.on?'ON':'OFF'}</button></div>
-            <b style="font-size:18px">${e.name} Engine</b><br><small>20 AI Workers</small><br>
-            <small>${e.on?'Workers Active':'Workers Paused'}</small></div>`).join
+            <b style="font-size:18px">${e.name} Engine</b><br
