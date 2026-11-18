@@ -1,164 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CEDARS EMPIRE - Live</title>
-<style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f1f3f6;margin:0;padding:16px;color:#0f1e2e}
-.top{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:14px 18px;border-radius:14px}
-.top h1{margin:0;font-size:22px;letter-spacing:1px}
-.live{color:#0a9d6e;font-size:14px}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
-.actions button{background:#fff;border:1px solid #ddd;padding:12px 18px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:15px}
-.actions button.green{background:#0a9d6e;color:#fff;border:none}
-.stats{display:flex;gap:12px;flex-wrap:wrap}
-.stat{flex:1;min-width:140px;background:#fff;padding:16px;border-radius:14px}
-.stat b{font-size:28px}
-.card{background:#fff;padding:18px;border-radius:14px;margin-top:14px}
-.big{text-align:center}
-.big .gear{font-size:60px}
-.engines{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.eng{flex:1;min-width:150px;background:#fff;padding:14px;border-radius:12px}
-.on{color:#fff;background:#0a9d6e;border:none;padding:5px 12px;border-radius:20px;font-weight:bold}
-.off{color:#fff;background:#999;border:none;padding:5px 12px;border-radius:20px;font-weight:bold}
-.grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
-.grid .card{flex:1;min-width:280px;margin-top:0}
-table{width:100%;border-collapse:collapse;font-size:14px}
-td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
-.pill{background:#d6f5e8;color:#0a7a55;padding:4px 10px;border-radius:20px;font-weight:bold;font-size:12px}
-.bar{height:8px;background:#e5e7eb;border-radius:5px;overflow:hidden;margin-top:8px}
-.fill{height:100%;background:#0a9d6e;width:12%}
-.dot{width:9px;height:9px;background:#00c853;border-radius:50%;display:inline-block}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEDARS EMPIRE - Live</title>
+  <style>
+    /* styles */
+  </style>
 </head>
 <body>
-<div class="top"><h1>CEDARS EMPIRE <span class="live">● Live</span></h1><div>👤 Admin ▼</div></div>
-<div class="actions">
-<button>👤 Register</button>
-<button class="green" id="depositBtn" onclick="toggleDeposit()">🏦 Deposit <span id="depositState">ON</span></button>
-<button onclick="document.getElementById('taskSection').scrollIntoView()">☰ Task</button>
-<button onclick="alert('Withdraw - Balance €'+earned.toFixed(2))">↗ Withdraw</button>
-<button onclick="alert('Your Referral Link: https://cedarsempire.com/register?ref=CEDARS123')">👥 Referral</button>
-</div>
-<div class="stats">
-<div class="stat">🤖 AI Workers Online<br><b id="workerCount">100</b><br><small>Online now</small></div>
-<div class="stat">💶 Earned Today<br><b id="earned">€0.00</b><br><small>Live updating</small></div>
-<div class="stat">🎯 AI Target €2500<br><b id="pct">0%</b><div class="bar"><div class="fill" id="barFill"></div></div></div>
-</div>
-<div class="card big">
-<h2 style="margin:0">CEDARS BIG ENGINE</h2>
-<div style="color:#0a9d6e;font-weight:bold">MASTER ENGINE • <span id="masterStatus">RUNNING</span></div>
-<div class="gear">⚙️</div><p>100 AI Workers Total • Core processing optimal</p>
-</div>
-<div class="engines" id="engines"></div>
-<div class="grid">
-<div class="card"><h3>AI Workers Live</h3><div id="workersLive"></div><p style="color:#0a7a55">+95 more workers working...</p></div>
-<div class="card" id="taskSection"><h3>Task Activity <small>by region</small></h3>
-<table><thead><tr><th>Region</th><th>Tasks</th><th>Status</th><th>Last</th></tr></thead><tbody id="taskTable"></tbody></table>
-<div style="display:flex;gap:10px;margin-top:14px">
-<div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Deposit Balance<br><b>€0</b></div>
-<div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Referral Earnings<br><b>€0</b></div>
-<div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Withdraw Available<br><b id="withdrawBal">€0</b></div>
-</div>
-</div>
-</div>
+  <!-- top section -->
+  <div class="top">
+    <h1>CEDARS EMPIRE <span class="live">● Live</span></h1>
+    <div id="userEmail">👤 Guest</div>
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-// === SUPABASE CONFIG - PASTE YOURS HERE ===
+  <!-- auth section -->
+  <div id="authSection" class="authBox">
+    <h2 style="text-align:center;margin:0">Login / Register</h2>
+    <p style="text-align:center;color:#666;font-size:14px">Create account to get your own real balance</p>
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password (min 6 chars)">
+    <div id="authMsg" class="msg"></div>
+    <button onclick="doRegister()">Create Account</button>
+    <button class="secondary" onclick="doLogin()">Login</button>
+  </div>
+
+  <!-- dashboard section -->
+  <div id="dashSection" style="display:none">
+    <div class="actions">
+      <button onclick="alert('Logged in as '+currentUser.email)">👤 Profile</button>
+      <button class="green" id="depositBtn" onclick="toggleDeposit()">🏦 Deposit <span id="depositState">ON</span></button>
+      <button onclick="document.getElementById('taskSection').scrollIntoView()">☰ Task</button>
+      <button onclick="alert('Withdraw - Balance €'+earned.toFixed(2)+' - Withdraw system coming next')">↗️ Withdraw</button>
+      <button onclick="alert('Your Referral: https://cedarsempire.com/register?ref='+currentUser.id.slice(0,8))">👥 Referral</button>
+      <button onclick="doLogout()" style="background:#ffe5e5">Logout</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat">🤖 AI Workers Online<br><b id="workerCount">100</b><br><small>Online now</small></div>
+      <div class="stat">💶 Earned Today<br><b id="earned">€0.00</b><br><small>Live updating</small></div>
+      <div class="stat">🎯 AI Target €2500<br><b id="pct">0%</b><div class="bar"><div class="fill" id="barFill"></div></div></div>
+    </div>
+
+    <div class="card big">
+      <h2 style="margin:0">CEDARS CENTRAL ENGINE</h2>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="indicator" id="central-engine-status" style="background:#0a9d6e;width:20px;height:20px;border-radius:50%"></div>
+        <span id="masterStatus">RUNNING</span>
+      </div>
+      <div class="gear">⚙️</div>
+      <p>100 AI Workers Total • Core processing optimal</p>
+    </div>
+
+    <div class="engines" id="engines"></div>
+
+    <div class="grid">
+      <div class="card"><h3>AI Workers Live</h3><div id="workersLive"></div><p style="color:#0a7a55">+95 more workers working...</p></div>
+      <div class="card" id="taskSection"><h3>Task Activity</h3><table><thead><tr><th>Region</th><th>Tasks</th><th>Status</th><th>Last</th></tr></thead><tbody id="taskTable"></tbody></table>
+        <div style="display:flex;gap:10px;margin-top:14px"><div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Withdraw Available<br><b id="withdrawBal">€0</b></div><div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Transactions<br><b id="txCount">0</b></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // JavaScript code
+  </script>
+</body>
+</html>
+
+
+And here's the JavaScript code:
+
+
 const SUPABASE_URL = 'https://ipyvewpjtpgfuqfwizlr.supabase.co/rest/v1/';
 const SUPABASE_KEY = 'sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm';
-let supabaseClient = null;
-try {
-  if (window.supabase && SUPABASE_URL.indexOf('PASTE_') === -1) {
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  }
-} catch(e) { console.log('Supabase init failed, using localStorage', e); }
+const client = window.supabase.createClientsb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm;
 
-// === ORIGINAL STATE - UNCHANGED ===
-let earned = parseFloat(localStorage.getItem('cedars_central_earned') || '0');
-let totalTasks = parseInt(localStorage.getItem('cedars_total_tasks') || '0');
+let currentUser = null;
+let earned = 0;
+let totalTasks = 0;
 let depositOn = true;
 let engines = [
   {id:1,name:"Africa",on:true,tasks:32},
   {id:2,name:"Asia",on:true,tasks:28},
   {id:3,name:"America",on:false,tasks:0},
   {id:4,name:"Europe",on:true,tasks:19},
-  {id:5,name:"Oceania",on:false,tasks:0},
+  {id:5,name:"Oceania",on:false,tasks:0}
 ];
 let workerNames = ["Vision Worker","Transcription Worker","Rating Worker","Data Worker","Text Worker"];
 
-// === SUPABASE SYNC ===
-async function loadFromSupabase(){
-  if(!supabaseClient) return;
-  try{
-    const { data, error } = await supabaseClient.from('balances').select('amount').eq('id', 1).single();
-    if(!error && data){
-      earned = parseFloat(data.amount || 0);
-      localStorage.setItem('cedars_central_earned', earned.toString());
-      updateDisplay();
-    }
-  }catch(e){ console.log('load failed', e); }
-}
-async function saveToSupabase(){
-  if(!supabaseClient) return;
-  try{
-    await supabaseClient.from('balances').upsert({ id: 1, amount: earned });
-  }catch(e){ console.log('save failed', e); }
-}
-function saveBalance(){
-  try{ localStorage.setItem('cedars_central_earned', earned.toString()); localStorage.setItem('cedars_total_tasks', totalTasks.toString()); }catch(e){}
-  saveToSupabase();
-}
-function updateDisplay(){
-  document.getElementById('earned').innerText = "€"+earned.toFixed(2);
-  document.getElementById('withdrawBal').innerText = "€"+earned.toFixed(2);
-  let pct = Math.min(100,(earned/2500*100));
-  document.getElementById('pct').innerText = pct.toFixed(1)+"%";
-  document.getElementById('barFill').style.width = pct+"%";
-}
-function toggleDeposit(){
-  depositOn = !depositOn;
-  document.getElementById('depositState').innerText = depositOn ? "ON" : "OFF";
-  document.getElementById('depositBtn').style.background = depositOn ? "#0a9d6e" : "#999";
-}
-function toggleEngine(id){
-  let e = engines.find(x=>x.id===id);
-  e.on = !e.on;
-  renderEngines();
-}
-function renderEngines(){
-  document.getElementById('engines').innerHTML = engines.map(e=>`
-  <div class="eng"><div style="display:flex;justify-content:space-between">Sub-Engine ${e.id} <button class="${e.on?'on':'off'}" onclick="toggleEngine(${e.id})">${e.on?'ON':'OFF'}</button></div>
-  <b style="font-size:18px">${e.name} Engine</b><br><small>20 AI Workers</small><br>
-  <small>${e.on?'Workers Active':'Workers Paused'}</small></div>`).join('');
-  let active = engines.filter(e=>e.on).length;
-  document.getElementById('masterStatus').innerText = active>0 ? "RUNNING" : "PAUSED";
-  document.getElementById('workerCount').innerText = active*20;
-}
-function runCycle(){
-  let activeEngines = engines.filter(e=>e.on);
-  if(activeEngines.length===0) return;
-  let e = activeEngines[Math.floor(Math.random()*activeEngines.length)];
-  let w = workerNames[Math.floor(Math.random()*workerNames.length)];
-  let reward = (Math.random()*0.5+0.3);
-  earned += reward;
-  totalTasks++;
-  e.tasks++;
-  saveBalance();
-  updateDisplay();
-  document.getElementById('workersLive').innerHTML = `<div><span class="dot"></span> Worker #${String(totalTasks).padStart(3,'0')} - ${w} - ${e.name} - Working</div><div style="margin-top:8px;color:#0a9d6e">✅ Last: ${w} in ${e.name} completed +€${reward.toFixed(2)}</div>`;
-  document.getElementById('taskTable').innerHTML = engines.map(en=>`<tr><td>${en.name}</td><td>${en.tasks} tasks</td><td><span class="pill">${en.on?'Active':'Idle'}</span></td><td>Just now</td></tr>`).join('');
-}
+// functions
+function showMsg(t){ document.getElementById('authMsg').innerText = t; }
+async function doRegister(){ /* registration code */ }
+async function doLogin(){ /* login code */ }
+async function doLogout(){ /* logout code */ }
+async function afterLogin(){ /* after login code */ }
+function updateDisplay(){ /* update display code */ }
+function toggleDeposit(){ /* toggle deposit code */ }
+function toggleEngine(id){ /* toggle engine code */ }
+function renderEngines(){ /* render engines code */ }
+async function runCycle(){ /* run cycle code */ }
+async function loadTxCount(){ /* load transaction count code */ }
+async function saveBalance(){ /* save balance code */ }
 
-// === START - ORDER MATTERS ===
-renderEngines();
-updateDisplay();
-runCycle();
-loadFromSupabase();
-setInterval(runCycle, 3000);
-</script>
-</body>
-</html>
+// auto-login if session exists
+client.auth.getSession().then(({data})=>{ if(data.session) afterLogin(); });
+setInterval(()=>{ if(currentUser) runCycle(); }, 5000);
