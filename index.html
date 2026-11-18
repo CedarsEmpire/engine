@@ -9,21 +9,36 @@
   </style>
 </head>
 <body>
-  <!-- your HTML content -->
   <div class="top">
     <h1>CEDARS EMPIRE <span class="live">● Live</span></h1>
     <div id="userEmail">👤 Guest</div>
   </div>
   <div id="authSection" class="authBox">
-    <h2 style="text-align:center;margin:0">Login / Register</h2>
-    <p style="text-align:center;color:#666;font-size:14px">Create account to get your own real balance</p>
-    <input id="email" type="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password (min 6 chars)">
-    <div id="authMsg" class="msg"></div>
-    <button id="registerBtn" onclick="doRegister()">Create Account</button>
-    <button id="loginBtn" class="secondary" onclick="doLogin()">Login</button>
+    <h2 style="text-align:center;margin:0;font-size:24px">Login / Register</h2>
+    <p style="text-align:center;color:#666;font-size:16px;margin-bottom:20px">Access your account to manage your tasks</p>
+    
+    <div style="margin-bottom:15px">
+      <label style="display:block;margin-bottom:8px;font-weight:500">Email</label>
+      <input id="email" type="email" placeholder="Enter your email" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:16px">
+    </div>
+    
+    <div style="margin-bottom:20px">
+      <label style="display:block;margin-bottom:8px;font-weight:500">Password</label>
+      <input id="password" type="password" placeholder="Enter your password" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:16px">
+    </div>
+    
+    <div id="authMsg" style="color:#c00;font-size:14px;min-height:18px;text-align:center;margin-bottom:15px"></div>
+    
+    <button id="loginBtn" onclick="doLogin()" style="width:100%;padding:14px;border:none;border-radius:8px;background:#0a9d6e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer">
+      Login
+    </button>
+    
+    <button id="registerBtn" onclick="doRegister()" style="width:100%;padding:14px;border:none;border-radius:8px;background:#0f1e2e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;margin-top:10px">
+      Create Account
+    </button>
   </div>
   <div id="dashSection" style="display:none">
+    <!-- rest of your dashboard content -->
     <div class="actions">
       <button onclick="alert('Logged in as '+currentUser.email)">👤 Profile</button>
       <button class="green" id="depositBtn" onclick="toggleDeposit()">🏦 Deposit <span id="depositState">ON</span></button>
@@ -32,7 +47,7 @@
       <button onclick="alert('Your Referral: https://cedarsempire.com/register?ref='+currentUser.id.slice(0,8))">👥 Referral</button>
       <button onclick="doLogout()" style="background:#ffe5e5">Logout</button>
     </div>
-    <!-- rest of your HTML content -->
+    <!-- rest of your dashboard content -->
     <div class="grid">
       <!-- rest of your grid content -->
       <div class="card" id="withdrawSection" style="display:none;margin-top:14px">
