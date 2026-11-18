@@ -24,26 +24,23 @@
   <div id="authSection" class="authBox">
     <h2 style="text-align:center;margin:0;font-size:24px">Login / Register</h2>
     <p style="text-align:center;color:#666;font-size:16px;margin-bottom:20px">Access your account to manage your tasks</p>
-    
     <div style="margin-bottom:15px">
       <label style="display:block;margin-bottom:8px;font-weight:500">Email</label>
       <input id="email" type="email" placeholder="Enter your email" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:16px">
     </div>
-    
     <div style="margin-bottom:20px">
       <label style="display:block;margin-bottom:8px;font-weight:500">Password</label>
       <input id="password" type="password" placeholder="Enter your password" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:16px">
     </div>
-    
+    <div id="rememberMeContainer" style="margin-bottom:20px">
+      <label style="display:flex;align-items:center;gap:8px">
+        <input type="checkbox" id="rememberMe" />
+        <span>Remember me</span>
+      </label>
+    </div>
     <div id="authMsg" style="color:#c00;font-size:14px;min-height:18px;text-align:center;margin-bottom:15px"></div>
-    
-    <button id="loginBtn" onclick="doLogin()" style="width:100%;padding:14px;border:none;border-radius:8px;background:#0a9d6e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer">
-      Login
-    </button>
-    
-    <button id="registerBtn" onclick="doRegister()" style="width:100%;padding:14px;border:none;border-radius:8px;background:#0f1e2e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;margin-top:10px">
-      Create Account
-    </button>
+    <button id="loginBtn" onclick="doLogin()" style="width:100%;padding:14px;border:none;border-radius:8px;background:#0a9d6e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer"> Login </button>
+    <button id="registerBtn" onclick="doRegister()" style="width:100%;padding:14px;border:none;border-radius:8px;background:#0f1e2e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;margin-top:10px"> Create Account </button>
   </div>
   <div id="dashSection" style="display:none">
     <div class="actions">
@@ -105,25 +102,82 @@
       </div>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // existing script content
-    async function requestWithdrawal() {
-      // withdrawal logic
+    const SUPABASE_URL = 'https://ipyvewpjtpgfuqfwizlr.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm';
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let currentUser = null;
+    let earned = 0;
+    let totalTasks = 0;
+    let depositOn = true;
+    let engines = [{id:1,name:"Africa",on:true,tasks:32},{id:2,name:"Asia",on:true,tasks:28},{id:3,name:"America",on:false,tasks:0},{id:4,name:"Europe",on:true,tasks:19},{id:5,name:"Oceania",on:false,tasks:0}];
+    let workerNames = ["Vision Worker","Transcription Worker","Rating Worker","Data Worker","Text Worker"];
+    let targetEnd = new Date(); targetEnd.setHours(24,0,0,0);
+
+    // Populate email field if remember me is enabled
+    if (localStorage.getItem('rememberMe')) {
+      document.getElementById('email').value = localStorage.getItem('email');
+      document.getElementById('rememberMe').checked = true;
     }
 
-    async function loadWithdrawals(){
-      // load withdrawals logic
+    async function doLogin() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const remember = document.getElementById('rememberMe').checked;
+
+      if (!email || !password) {
+        showMsg('Enter email and password');
+        return;
+      }
+
+      try {
+        const { data, error } = await client.auth.signInWithPassword({ email, password });
+        if (error) {
+          showMsg('LOGIN FAILED: ' + error.message);
+          return;
+        }
+
+        if (remember) {
+          localStorage.setItem('rememberMe', true);
+          localStorage.setItem('email', email);
+        } else {
+          localStorage.removeItem('rememberMe');
+          localStorage.removeItem('email');
+        }
+
+        await afterLogin();
+      } catch (e) {
+        showMsg('Error: ' + e.message);
+      }
     }
 
-    function search() {
-      // search logic
+    async function doRegister() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!email || password.length < 6) {
+        showMsg('Enter valid email and password min 6 chars');
+        return;
+      }
+
+      try {
+        const { data, error } = await client.auth.signUp({ email, password });
+        if (error) {
+          showMsg('SIGNUP FAILED: ' + error.message);
+          return;
+        }
+
+        if (data.user && !data.session) {
+          showMsg('Account created! Check email to confirm, then click Login.');
+          return;
+        }
+
+        await afterLogin();
+      } catch (e) {
+        showMsg('Error: ' + e.message);
+      }
     }
 
-    function toggleTheme() {
-      // theme toggle logic
-    }
-  </script>
-</body>
-</html>
+    async function afterLogin() {
+      const { data } = await client.auth.get
