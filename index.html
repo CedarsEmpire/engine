@@ -42,11 +42,14 @@
       try {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
+          console.error('Login error:', error);
           document.getElementById('message').innerText = 'Login failed: ' + error.message;
         } else {
+          console.log('Login successful:', data);
           document.getElementById('message').innerText = 'Login successful!';
         }
       } catch (error) {
+        console.error('Error:', error);
         document.getElementById('message').innerText = 'Error: ' + error.message;
       }
     }
@@ -57,11 +60,14 @@
       try {
         const { data, error } = await supabase.auth.signUp({ email, password });
         if (error) {
-          document.getElementById('message').innerText = 'Registration failed: ' + error.message;
+          console.error('Register error:', error);
+          document.getElementById('message').innerText = 'Register failed: ' + error.message;
         } else {
-          document.getElementById('message').innerText = 'Registration successful!';
+          console.log('Register successful:', data);
+          document.getElementById('message').innerText = 'Register successful!';
         }
       } catch (error) {
+        console.error('Error:', error);
         document.getElementById('message').innerText = 'Error: ' + error.message;
       }
     }
