@@ -1,9 +1,6 @@
 {
-  "cleanUrls": true,
   "rewrites": [
-    { "source": "/command-center", "destination": "/index.html" },
-    { "source": "/command-center.html", "destination": "/index.html" },
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/app.py" }
+    { "source": "/command-center", "destination": "/admin.html" },
+    { "source": "/(.*)", "destination": "/dashboard.py" }
   ]
 }
