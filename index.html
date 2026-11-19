@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CEDARS EMPIRE - Shareholder</title>
+    <style>
+        /* Add your styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+        }
+        /* Add more styles as needed */
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CEDARS EMPIRE</h1>
+    </div>
+    <nav>
+        <button onclick="show('home')">Home</button>
+        <button onclick="show('buy')">Buy Share</button>
+        <button onclick="show('balance')">Balance</button>
+        <button onclick="show('withdraw')">Withdraw</button>
+        <button onclick="show('referral')">Referral</button>
+        <button onclick="show('support')">Support</button>
+    </nav>
+    <div id="home" class="page">
+        <h2>Welcome to Cedars Empire</h2>
+        <p>Your shareholder dashboard.</p>
+        <div class="card">
+            <h2>Your Balance</h2>
+            <p>Available: €<span id="balance">27.05</span></p>
+            <p>Earned: €135.23</p>
+        </div>
+    </div>
+    <div id="buy" class="page" style="display:none">
+        <h2>Buy Share</h2>
+        <p>Buy a share to grow your earnings.</p>
+        <input type="number" placeholder="Amount">
+        <button>Deposit / Buy Share</button>
+    </div>
+    <div id="balance" class="page" style="display:none">
+        <h2>Balance Table</h2>
+        <table>
+            <tr>
+                <td>Available Balance</td>
+                <td>€<span id="available-balance">27.05</span></td>
+            </tr>
+            <tr>
+                <td>Reserved Balance</td>
+                <td>€0.00</td>
+            </tr>
+            <tr>
+                <td>Earned Balance</td>
+                <td>€135.23</td>
+            </tr>
+        </table>
+    </div>
+    <div id="withdraw" class="page" style="display:none">
+        <h2>Withdraw</h2>
+        <p>Available: €<span id="available-balance-withdraw">27.05</span> | Minimum withdrawal: $100</p>
+        <select id="currency">
+            <option value="USD">US Dollars ($)</option>
+            <option value="GBP">British Pounds (£)</option>
+        </select>
+        <input id="amount" type="number" placeholder="Amount to withdraw">
+        <input id="details" type="text" placeholder="Your wallet / bank details">
+        <button onclick="withdraw()">Request Withdrawal</button>
+        <p style="color:#64748b;font-size:12px">Withdrawal fee: 20%</p>
+    </div>
+    <div id="referral" class="page" style="display:none">
+        <h2>Referral</h2>
+        <p>Share your link and earn.</p>
+        <input value="https://cedarsempire.vercel.app/?ref=ogwal" readonly>
+        <button>Copy Link</button>
+    </div>
+    <div id="support" class="page" style="display:none">
+        <h2>Live Support</h2>
+        <p>Need help? Contact support.</p>
+        <button>Chat on WhatsApp</button>
+    </div>
+
+    <script>
+        function show(page) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById(page).style.display = 'block';
+        }
+
+        function withdraw() {
+            let amount = parseFloat(document.getElementById('amount').value);
+            let currency = document.getElementById('currency').value;
+            let details = document.getElementById('details').value;
+
+            if (amount < 100) {
+                alert('Minimum withdrawal is $100');
+                return;
+            }
+
+            // Calculate withdrawal fee
+            let fee = amount * 0.2;
+            let netAmount = amount - fee;
+
+            // Update balance
+            let balance = parseFloat(document.getElementById('balance').textContent);
+            balance -= amount / (currency === 'USD' ? 1.1 : 0.85); // Assuming 1 EUR = 1.1 USD and 1 EUR = 0.85 GBP
+            document.getElementById('balance').textContent = balance.toFixed(2);
+
+            alert(`Withdrawal request sent! Fee: ${fee.toFixed(2)} ${currency}, Net amount: ${netAmount.toFixed(2)} ${currency}`);
+        }
+    </script>
+</body>
+</html>
