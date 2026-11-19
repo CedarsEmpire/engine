@@ -5,35 +5,40 @@
 <title>CEDARS EMPIRE - Shareholder</title>
 <style>
 *{box-sizing:border-box}
-body{font-family:Arial,sans-serif;margin:0;background:#f1f5f9;color:#0f172a}
-header{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;padding:16px 18px;display:flex;justify-content:space-between;align-items:center}
-header b{font-size:22px}header b span{color:#facc15}
-.u{background:rgba(255,255,255,.18);padding:7px 12px;border-radius:20px;font-size:12px}
-nav{background:#fff;padding:12px;display:flex;gap:8px;overflow-x:auto;box-shadow:0 2px 10px rgba(0,0,0,.08);position:sticky;top:0;z-index:10}
-nav button{border:none;background:#f1f5f9;padding:10px 16px;border-radius:25px;font-weight:800;font-size:13px;white-space:nowrap;cursor:pointer}
-nav button.active{background:#0f172a;color:#fff}
+body{font-family:Arial,sans-serif;margin:0;background:#ffffff;color:#0f2a1a}
+header{background:#0B7A3E;color:#fff;padding:16px 18px;display:flex;justify-content:space-between;align-items:center}
+header b{font-size:22px;letter-spacing:.5px}header b span{color:#fff}
+.u{background:rgba(255,255,255,.22);padding:7px 12px;border-radius:20px;font-size:12px;font-weight:800}
+nav{background:#fff;padding:12px;display:flex;gap:8px;overflow-x:auto;border-bottom:2px solid #e6f4ec;position:sticky;top:0;z-index:10}
+nav button{border:1px solid #d1e7d8;background:#f0faf3;padding:10px 16px;border-radius:25px;font-weight:800;font-size:13px;white-space:nowrap;cursor:pointer;color:#0B7A3E}
+nav button.active{background:#0B7A3E;color:#fff;border-color:#0B7A3E}
 .wrap{padding:16px;max-width:950px;margin:auto}
-.hero{background:linear-gradient(135deg,#facc15,#f59e0b);border-radius:20px;padding:22px;color:#0f172a;box-shadow:0 10px 25px rgba(245,158,11,.3)}
-.hero small{font-weight:800;letter-spacing:1px;opacity:.7}
+.hero{background:#0B7A3E;border-radius:20px;padding:22px;color:#fff}
+.hero small{font-weight:800;letter-spacing:1px;opacity:.9}
 .hero h1{margin:5px 0;font-size:38px}
+.plan{background:#f0faf3;border:2px solid #0B7A3E;border-radius:20px;padding:18px;margin-top:15px}
+.plan h2{margin:0;color:#0B7A3E}
+.progress{background:#d9eadf;height:10px;border-radius:10px;margin:10px 0;overflow:hidden}
+.progress div{background:#0B7A3E;height:10px;width:27%}
 .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:15px}
 @media(max-width:650px){.grid{grid-template-columns:1fr}}
-.card{background:#fff;padding:18px;border-radius:18px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-top:15px}
-.card small{color:#64748b;font-weight:800}
-.card h2{margin:6px 0;font-size:24px}
-.btn{background:#0f172a;color:#fff;border:none;padding:13px;border-radius:12px;font-weight:800;width:100%;cursor:pointer;margin-top:10px}
-.btn-gold{background:#facc15;color:#0f172a}
-input,select{width:100%;padding:13px;margin:8px 0;border-radius:12px;border:1px solid #e2e8f0;background:#fff}
-.badge{display:inline-block;background:#dcfce7;color:#166534;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:800;margin-top:8px}
-.warn{background:#fef3c7;color:#92400e;padding:12px;border-radius:12px;font-size:13px;font-weight:700}
-.success{background:#dcfce7;color:#166534;padding:12px;border-radius:12px;display:none;font-weight:700}
+.card{background:#fff;padding:18px;border-radius:18px;border:1px solid #e6f4ec;box-shadow:0 2px 10px rgba(11,122,62,.06);margin-top:15px}
+.card small{color:#5a7a68;font-weight:800}
+.card h2{margin:6px 0;font-size:24px;color:#0B7A3E}
+.btn{background:#0B7A3E;color:#fff;border:none;padding:13px;border-radius:12px;font-weight:800;width:100%;cursor:pointer;margin-top:10px}
+.btn-outline{background:#fff;color:#0B7A3E;border:2px solid #0B7A3E}
+input,select{width:100%;padding:13px;margin:8px 0;border-radius:12px;border:1px solid #cfe8d8;background:#fff}
+.badge{display:inline-block;background:#fff;color:#0B7A3E;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:800;margin-top:8px}
+.warn{background:#f0faf3;border:1px solid #0B7A3E;padding:12px;border-radius:12px;font-size:13px;font-weight:700;color:#0B7A3E}
+.success{background:#dcfce7;color:#166534;padding:12px;border-radius:12px;display:none;font-weight:700;border:1px solid #0B7A3E}
 .page{display:none}.page.show{display:block}
-table{width:100%;border-collapse:collapse}td{padding:12px 0;border-bottom:1px solid #eee}
-.fee-box{background:#f8fafc;border:1px dashed #cbd5e1;padding:12px;border-radius:12px;font-size:13px;margin-top:10px}
+table{width:100%;border-collapse:collapse}td{padding:12px 0;border-bottom:1px solid #e6f4ec}
+.fee-box{background:#f0faf3;border:1px dashed #0B7A3E;padding:12px;border-radius:12px;font-size:13px;margin-top:10px}
+.code-box{background:#0B7A3E;color:#fff;padding:14px;border-radius:12px;text-align:center;font-weight:900;letter-spacing:1px;font-size:16px;margin:10px 0}
 </style>
 </head>
 <body>
-<header><b>CEDARS <span>EMPIRE</span> <span style="color:#22c55e;font-size:11px">● Live</span></b><span class="u">ogwal.bemmanuel@gmail.com</span></header>
+<header><b>CEDARS EMPIRE</b><span class="u">● Live</span></header>
 <nav>
 <button onclick="show('home',this)" class="active">🏠 Home</button>
 <button onclick="show('buy',this)">💰 Buy Share</button>
@@ -45,24 +50,37 @@ table{width:100%;border-collapse:collapse}td{padding:12px 0;border-bottom:1px so
 <div class="wrap">
 
 <div id="home" class="page show">
-<div class="hero"><small>WELCOME BACK, SHAREHOLDER</small><h1>$<span id="bal1">27.05</span></h1><p>Available Balance • Earned $135.23</p><span class="badge">✓ Verified Shareholder</span></div>
+<div class="hero"><small>WELCOME BACK, SHAREHOLDER</small><h1>$<span id="bal1">27.05</span></h1><p>Available Balance • Earned $135.23</p><span class="badge">✓ Verified Shareholder • ID: CED-8841</span></div>
+
+<div class="plan">
+<h2>🌿 Your Shareholder Plan - STARTER</h2>
+<p style="margin:6px 0;color:#333">You own <b>1 Share</b> • Daily Return <b>2.5%</b> • Next Payout <b>Tomorrow 09:00</b></p>
+<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:800"><span>Progress to GROWTH Plan ($100)</span><span>27%</span></div>
+<div class="progress"><div></div></div>
+<p style="font-size:13px;margin:0">Buy 3 more shares to unlock <b>GROWTH Plan - 4% daily + Priority Withdraw</b></p>
+<button class="btn" onclick="show('buy',null)">Upgrade Plan → Buy Share</button>
+</div>
+
 <div class="grid">
 <div class="card"><small>AVAILABLE</small><h2>$<span class="bal">27.05</span></h2><p>Ready to withdraw</p></div>
 <div class="card"><small>EARNED</small><h2>$135.23</h2><p>Total ever earned</p></div>
 <div class="card"><small>RESERVED</small><h2>$0.00</h2><p>Held for pending</p></div>
 </div>
-<div class="card"><h2>Withdraw Info</h2><p>Withdraw in <b>Dollars ($) and Pounds (£) only</b>. Minimum <b>$100 / £100</b>. Fee <b>20%</b> - you receive 80%.</p><button class="btn btn-gold" onclick="show('withdraw',null)">Withdraw Now →</button></div>
+<div class="card"><h2>Withdraw Info</h2><p>Withdraw in <b>Dollars ($) and Pounds (£) only</b>. Minimum <b>$100 / £100</b>. Fee <b>20%</b> - you receive 80%.</p><button class="btn" onclick="show('withdraw',null)">Withdraw Now →</button></div>
 <div class="card"><h2>Recent Withdrawals</h2><div id="historyHome">No withdrawals yet.</div></div>
 </div>
 
-<div id="buy" class="page"><div class="card"><h2>💰 Buy Share</h2><p>Buy a share to grow your earnings and reach $100 withdrawal.</p><input id="buyAmt" type="number" placeholder="Amount e.g. 100"><button class="btn btn-gold" onclick="buyShare()">Deposit / Buy Share</button></div></div>
+<div id="buy" class="page">
+<div class="card"><h2>💰 Buy Share - Upgrade Your Plan</h2>
+<p><b>STARTER:</b> $25 - 1 Share - 2.5% daily<br><b>GROWTH:</b> $100 - 4 Shares - 4% daily<br><b>EMPIRE:</b> $500 - 20 Shares - 6% daily</p>
+<input id="buyAmt" type="number" placeholder="Amount e.g. 100"><button class="btn" onclick="buyShare()">Deposit / Buy Share</button></div></div>
 
-<div id="balance" class="page"><div class="card"><h2>💳 Balance Table</h2><table><tr><td>Available Balance</td><td style="text-align:right"><b>$<span class="bal">27.05</span></b></td></tr><tr><td>Reserved Balance</td><td style="text-align:right"><b>$0.00</b></td></tr><tr><td>Earned Balance</td><td style="text-align:right"><b>$135.23</b></td></tr></table><button class="btn" onclick="show('withdraw',null)">Withdraw Now</button></div></div>
+<div id="balance" class="page"><div class="card"><h2>💳 Balance Table</h2><table><tr><td>Available Balance</td><td style="text-align:right"><b>$<span class="bal">27.05</span></b></td></tr><tr><td>Reserved Balance</td><td style="text-align:right"><b>$0.00</b></td></tr><tr><td>Earned Balance</td><td style="text-align:right"><b>$135.23</b></td></tr><tr><td>Current Plan</td><td style="text-align:right"><b>STARTER</b></td></tr></table><button class="btn" onclick="show('withdraw',null)">Withdraw Now</button></div></div>
 
 <div id="withdraw" class="page">
 <div class="card"><h2>↗ Withdraw</h2>
 <p>Available: <b>$<span class="bal">27.05</span></b></p>
-<div class="warn">⚠️ Withdraw ONLY in $ and £ • Minimum $100 / £100 • Fee 20% - You receive 80%</div>
+<div class="warn">Withdraw ONLY in $ and £ • Minimum $100 / £100 • Fee 20% - You receive 80%</div>
 <div id="wSuccess" class="success">✅ Withdrawal request sent! Admin will approve soon.</div>
 <label style="font-size:12px;font-weight:800">CURRENCY</label>
 <select id="wCurr"><option value="$">US Dollars ($) - Minimum $100</option><option value="£">British Pounds (£) - Minimum £100</option></select>
@@ -71,13 +89,13 @@ table{width:100%;border-collapse:collapse}td{padding:12px 0;border-bottom:1px so
 <div class="fee-box" id="feeBox">Enter amount to see fee. Fee = 20%, You receive = 80%</div>
 <label style="font-size:12px;font-weight:800">YOUR DETAILS</label>
 <input id="wDetails" type="text" placeholder="Phone / Bank / Wallet for $ or £">
-<button class="btn btn-gold" onclick="doWithdraw()">Request Withdrawal</button>
+<button class="btn" onclick="doWithdraw()">Request Withdrawal</button>
 </div>
 <div class="card"><h2>Withdrawal History</h2><div id="history">No withdrawals yet.</div></div>
 </div>
 
-<div id="referral" class="page"><div class="card"><h2>👥 Referral</h2><p>Invite friends and earn bonus.</p><input value="https://task-nine-psi-88.vercel.app/?ref=ogwal" readonly><button class="btn" onclick="alert('Link copied!')">Copy Referral Link</button></div></div>
-<div id="support" class="page"><div class="card"><h2>💬 Live Support</h2><button class="btn btn-gold">Chat on WhatsApp</button><button class="btn">Email Support</button></div></div>
+<div id="referral" class="page"><div class="card"><h2>👥 Referral - Private Code</h2><p>Share your code. Your name is <b>NOT</b> shown.</p><p style="font-size:13px;color:#555">Your Private Referral Link:</p><div class="code-box">https://cedarsempire/task/ref=CED-X7K9P2</div><p style="font-size:13px">Your Code: <b>CED-X7K9P2</b> • Earn 5% from every friend who joins</p><button class="btn" onclick="navigator.clipboard.writeText('https://cedarsempire/task/ref=CED-X7K9P2');alert('Link copied!')">Copy Private Link</button><button class="btn btn-outline" onclick="alert('Share via WhatsApp: https://cedarsempire/task/ref=CED-X7K9P2')">Share on WhatsApp</button></div></div>
+<div id="support" class="page"><div class="card"><h2>💬 Live Support</h2><button class="btn">Chat on WhatsApp</button><button class="btn btn-outline">Email Support</button></div></div>
 
 </div>
 <script>
@@ -86,7 +104,7 @@ let history=JSON.parse(localStorage.getItem('cedars_hist')||'[]');
 function render(){
 document.querySelectorAll('.bal').forEach(e=>e.textContent=balance.toFixed(2));
 document.getElementById('bal1').textContent=balance.toFixed(2);
-let h=history.length?history.map(x=>`<div style="padding:8px 0;border-bottom:1px solid #eee">${x.cur}${x.amt} - Fee ${x.cur}${x.fee} - You get ${x.cur}${x.net} - <b>${x.status}</b><br><small>${x.date} • ${x.method}</small></div>`).join(''):'No withdrawals yet.';
+let h=history.length?history.map(x=>`<div style="padding:8px 0;border-bottom:1px solid #e6f4ec">${x.cur}${x.amt} - Fee ${x.cur}${x.fee} - You get ${x.cur}${x.net} - <b>${x.status}</b><br><small>${x.date} • ${x.method}</small></div>`).join(''):'No withdrawals yet.';
 document.getElementById('history').innerHTML=h;document.getElementById('historyHome').innerHTML=h;
 }
 function show(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));document.getElementById(id).classList.add('show');if(btn){document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}window.scrollTo(0,0);}
