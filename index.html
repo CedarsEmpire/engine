@@ -2,123 +2,165 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CEDARS EMPIRE - Shareholder</title>
+<title>CEDARS EMPIRE, Global Operations</title>
 <style>
 *{box-sizing:border-box}
-body{font-family:Arial,sans-serif;margin:0;background:#ffffff;color:#0f2a1a}
-header{background:#0B7A3E;color:#fff;padding:16px 18px;display:flex;justify-content:space-between;align-items:center}
-header b{font-size:22px;letter-spacing:.5px}header b span{color:#fff}
-.u{background:rgba(255,255,255,.22);padding:7px 12px;border-radius:20px;font-size:12px;font-weight:800}
-nav{background:#fff;padding:12px;display:flex;gap:8px;overflow-x:auto;border-bottom:2px solid #e6f4ec;position:sticky;top:0;z-index:10}
-nav button{border:1px solid #d1e7d8;background:#f0faf3;padding:10px 16px;border-radius:25px;font-weight:800;font-size:13px;white-space:nowrap;cursor:pointer;color:#0B7A3E}
-nav button.active{background:#0B7A3E;color:#fff;border-color:#0B7A3E}
-.wrap{padding:16px;max-width:950px;margin:auto}
-.hero{background:#0B7A3E;border-radius:20px;padding:22px;color:#fff}
-.hero small{font-weight:800;letter-spacing:1px;opacity:.9}
-.hero h1{margin:5px 0;font-size:38px}
-.plan{background:#f0faf3;border:2px solid #0B7A3E;border-radius:20px;padding:18px;margin-top:15px}
-.plan h2{margin:0;color:#0B7A3E}
-.progress{background:#d9eadf;height:10px;border-radius:10px;margin:10px 0;overflow:hidden}
-.progress div{background:#0B7A3E;height:10px;width:27%}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:15px}
-@media(max-width:650px){.grid{grid-template-columns:1fr}}
-.card{background:#fff;padding:18px;border-radius:18px;border:1px solid #e6f4ec;box-shadow:0 2px 10px rgba(11,122,62,.06);margin-top:15px}
-.card small{color:#5a7a68;font-weight:800}
-.card h2{margin:6px 0;font-size:24px;color:#0B7A3E}
+body{font-family:Arial,sans-serif;margin:0;background:#fff;color:#111}
+header{background:#fff;border-bottom:3px solid #0B7A3E;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
+header b{font-size:19px}header b span{color:#0B7A3E}.live{color:#0B7A3E;font-size:12px;font-weight:900}
+nav{background:#fff;padding:12px;display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid #e5e7eb;position:sticky;top:57px;z-index:19}
+nav button{border:1px solid #d1e7d8;background:#f0faf3;padding:10px 14px;border-radius:20px;font-weight:800;font-size:13px;white-space:nowrap;cursor:pointer;color:#0B7A3E}
+nav button.active,nav button.green{background:#0B7A3E;color:#fff;border-color:#0B7A3E}
+.wrap{padding:16px;max-width:1100px;margin:auto}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:700px){.grid3{grid-template-columns:1fr}}
+.card{background:#fff;padding:18px;border-radius:16px;border:1px solid #e5e7eb;box-shadow:0 2px 10px rgba(0,0,0,.05);margin-top:14px}
+.card h2{margin:0 0 8px;color:#0B7A3E}
+.card small{color:#666;font-weight:800}
+.card h1{font-size:32px;margin:5px 0}
 .btn{background:#0B7A3E;color:#fff;border:none;padding:13px;border-radius:12px;font-weight:800;width:100%;cursor:pointer;margin-top:10px}
 .btn-outline{background:#fff;color:#0B7A3E;border:2px solid #0B7A3E}
-input,select{width:100%;padding:13px;margin:8px 0;border-radius:12px;border:1px solid #cfe8d8;background:#fff}
-.badge{display:inline-block;background:#fff;color:#0B7A3E;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:800;margin-top:8px}
+input,select{width:100%;padding:13px;margin:8px 0;border-radius:12px;border:1px solid #cfe8d8}
+.badge{display:inline-block;background:#dcfce7;color:#0B7A3E;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:800}
 .warn{background:#f0faf3;border:1px solid #0B7A3E;padding:12px;border-radius:12px;font-size:13px;font-weight:700;color:#0B7A3E}
-.success{background:#dcfce7;color:#166534;padding:12px;border-radius:12px;display:none;font-weight:700;border:1px solid #0B7A3E}
+.success{background:#dcfce7;color:#166534;padding:12px;border-radius:12px;display:none;font-weight:700}
 .page{display:none}.page.show{display:block}
-table{width:100%;border-collapse:collapse}td{padding:12px 0;border-bottom:1px solid #e6f4ec}
-.fee-box{background:#f0faf3;border:1px dashed #0B7A3E;padding:12px;border-radius:12px;font-size:13px;margin-top:10px}
-.code-box{background:#0B7A3E;color:#fff;padding:14px;border-radius:12px;text-align:center;font-weight:900;letter-spacing:1px;font-size:16px;margin:10px 0}
+table{width:100%;border-collapse:collapse}td,th{padding:11px 0;border-bottom:1px solid #eee;text-align:left;font-size:14px}
+.fee-box{background:#f0faf3;border:1px dashed #0B7A3E;padding:12px;border-radius:12px;font-size:13px}
+.code-box{background:#0B7A3E;color:#fff;padding:14px;border-radius:12px;text-align:center;font-weight:900;font-size:15px;margin:10px 0;word-break:break-all}
+.progress{background:#d9eadf;height:10px;border-radius:10px;overflow:hidden}.progress div{background:#0B7A3E;height:10px}
+/* 47 CRYPTO GRIDS */
+.crypto-head{background:#0B7A3E;color:#fff;border-radius:18px;padding:16px;margin-top:14px;display:flex;justify-content:space-between;align-items:center}
+.crypto-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:12px}
+@media(max-width:800px){.crypto-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:450px){.crypto-grid{grid-template-columns:repeat(2,1fr)}}
+.cbox{background:#fff;border:2px solid #0B7A3E;border-radius:14px;padding:10px;text-align:center;position:relative;overflow:hidden;box-shadow:0 0 12px rgba(11,122,62,.25);cursor:pointer}
+.cbox:hover{transform:scale(1.03)}
+.cbox .dot{width:10px;height:10px;border-radius:50%;background:#22c55e;position:absolute;top:8px;right:8px;box-shadow:0 0 10px #22c55e;animation:blink 1s infinite}
+.cbox .dot.red{background:#f59e0b;box-shadow:0 0 10px #f59e0b}
+@keyframes blink{50%{opacity:.2}}
+.cbox .sym{font-size:20px}.cbox .name{font-size:11px;font-weight:900;color:#0B7A3E}.cbox .price{font-size:13px;font-weight:800}.cbox .chg{font-size:11px;font-weight:800;color:#0B7A3E}.cbox .chg.down{color:#dc2626}
+.cbox .bar{height:4px;background:#d9eadf;border-radius:10px;margin-top:6px;overflow:hidden}.cbox .bar div{height:4px;background:#0B7A3E}
+footer{background:#0B7A3E;color:#fff;padding:28px 18px;margin-top:20px}
+footer a{color:#fff}
 </style>
 </head>
 <body>
-<header><b>CEDARS EMPIRE</b><span class="u">● Live</span></header>
+<header><b>CEDARS EMPIRE, <span>Global Operations</span> <span class="live">● Live</span></b><span style="font-size:12px;font-weight:800">ID: CED-8841 • Global</span></header>
 <nav>
-<button onclick="show('home',this)" class="active">🏠 Home</button>
-<button onclick="show('buy',this)">💰 Buy Share</button>
-<button onclick="show('balance',this)">💳 Balance</button>
+<button onclick="show('home',this)" class="active">👤 Profile</button>
+<button onclick="show('buy',this)" class="green">💰 Deposit ON</button>
+<button onclick="show('task',this)">☰ Task</button>
 <button onclick="show('withdraw',this)">↗ Withdraw</button>
+<button onclick="show('p2p',this)">🤝 P2P</button>
 <button onclick="show('referral',this)">👥 Referral</button>
-<button onclick="show('support',this)">💬 Support</button>
+<button onclick="show('about',this)">🌍 About Us</button>
+<button onclick="alert('Logged out')">Logout</button>
 </nav>
 <div class="wrap">
 
 <div id="home" class="page show">
-<div class="hero"><small>WELCOME BACK, SHAREHOLDER</small><h1>$<span id="bal1">27.05</span></h1><p>Available Balance • Earned $135.23</p><span class="badge">✓ Verified Shareholder • ID: CED-8841</span></div>
-
-<div class="plan">
-<h2>🌿 Your Shareholder Plan - STARTER</h2>
-<p style="margin:6px 0;color:#333">You own <b>1 Share</b> • Daily Return <b>2.5%</b> • Next Payout <b>Tomorrow 09:00</b></p>
-<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:800"><span>Progress to GROWTH Plan ($100)</span><span>27%</span></div>
-<div class="progress"><div></div></div>
-<p style="font-size:13px;margin:0">Buy 3 more shares to unlock <b>GROWTH Plan - 4% daily + Priority Withdraw</b></p>
-<button class="btn" onclick="show('buy',null)">Upgrade Plan → Buy Share</button>
+<div class="grid3">
+<div class="card"><small>🤖 AI Workers Online</small><h1>100</h1><p>Online now • All Grids Live</p><span class="badge">● 47 GRIDS RUNNING</span></div>
+<div class="card"><small>💰 Total Earned - Never Resets</small><h1>$<span id="earned">262.32</span></h1><p>Live updating • Keeps accumulating</p></div>
+<div class="card"><small>🎯 AI Target $2500</small><h1>10.5%</h1><p>Next cycle in <b id="timer">17:06:54</b></p><div class="progress"><div style="width:10.5%"></div></div></div>
 </div>
 
-<div class="grid">
-<div class="card"><small>AVAILABLE</small><h2>$<span class="bal">27.05</span></h2><p>Ready to withdraw</p></div>
-<div class="card"><small>EARNED</small><h2>$135.23</h2><p>Total ever earned</p></div>
-<div class="card"><small>RESERVED</small><h2>$0.00</h2><p>Held for pending</p></div>
-</div>
-<div class="card"><h2>Withdraw Info</h2><p>Withdraw in <b>Dollars ($) and Pounds (£) only</b>. Minimum <b>$100 / £100</b>. Fee <b>20%</b> - you receive 80%.</p><button class="btn" onclick="show('withdraw',null)">Withdraw Now →</button></div>
+<!-- 47 CRYPTO GRIDS -->
+<div class="crypto-head"><div><b>💹 CEDARS CRYPTO GRIDS - 47 LIVE GRIDS</b><br><small style="opacity:.9">Each grid has light = working. Tap any grid to see it pulse.</small></div><div style="text-align:right"><b id="activeCount">47 / 47</b><br><small>● ALL LIGHTS ON</small></div></div>
+<div class="crypto-grid" id="cryptoGrid"></div>
+<p style="text-align:center;font-size:13px;color:#666">Your share powers all 47 grids. When lights blink, grids are earning for you. • Benchmark: Like Binance + Coinbase + Tesla Energy Grids</p>
+
+<div class="card"><h2>💰 Balance Table</h2>
+<table><tr><td>Available Balance</td><td><b>$<span class="bal">52.46</span></b></td><td style="color:#666">Withdrawable / KYC withdrawals from here</td></tr>
+<tr><td>Reserved Balance</td><td><b>$0.00</b></td><td style="color:#666">Held for pending tasks</td></tr>
+<tr><td>Earned Balance</td><td><b>$262.32</b></td><td style="color:#666">Total ever earned - never resets</td></tr>
+<tr><td>Central Reserve</td><td><b>$209.85</b></td><td style="color:#666">Platform reserve - 80% of every reward</td></tr>
+<tr><td>Your Plan</td><td><b>STARTER - 1095 Days</b></td><td style="color:#666">Agreement Period: 1095 Days</td></tr></table></div>
+
+<div class="card"><h2>🌿 Your Shareholder Plan</h2><p><b>STARTER</b> • 1 Share • 2.5% Daily • Agreement 1095 Days • Ends: <b>19 Nov 2029</b></p><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:800"><span>Progress to GROWTH ($100)</span><span>52%</span></div><div class="progress"><div style="width:52%"></div></div><button class="btn" onclick="show('buy',null)">Upgrade Plan → Buy Share</button></div>
 <div class="card"><h2>Recent Withdrawals</h2><div id="historyHome">No withdrawals yet.</div></div>
 </div>
 
 <div id="buy" class="page">
-<div class="card"><h2>💰 Buy Share - Upgrade Your Plan</h2>
-<p><b>STARTER:</b> $25 - 1 Share - 2.5% daily<br><b>GROWTH:</b> $100 - 4 Shares - 4% daily<br><b>EMPIRE:</b> $500 - 20 Shares - 6% daily</p>
-<input id="buyAmt" type="number" placeholder="Amount e.g. 100"><button class="btn" onclick="buyShare()">Deposit / Buy Share</button></div></div>
+<div class="card"><h2>💰 Buy Share - Shareholder Packages</h2><p>Agreement Period: <b>1095 Days (3 Years)</b> • Daily earning from 47 Crypto Grids.</p>
+<table><tr><th>Package</th><th>Price</th><th>Daily</th><th>1095 Days Total</th></tr><tr><td><b>STARTER</b></td><td>$25</td><td>2.5%</td><td>$684.37</td></tr><tr><td><b>GROWTH</b></td><td>$100</td><td>4%</td><td>$4,380</td></tr><tr><td><b>EMPIRE</b></td><td>$500</td><td>6%</td><td>$32,850</td></tr></table>
+<label style="font-size:12px;font-weight:800">SELECT PACKAGE</label>
+<select id="pkg" onchange="calcBuy()"><option value="0.025">STARTER - $25 - 2.5% Daily</option><option value="0.04">GROWTH - $100 - 4% Daily</option><option value="0.06">EMPIRE - $500 - 6% Daily</option></select>
+<label style="font-size:12px;font-weight:800">AMOUNT ($)</label>
+<input id="buyAmt" type="number" value="100" oninput="calcBuy()">
+<div class="fee-box" id="buyCalc"></div>
+<button class="btn" onclick="buyShare()">Deposit / Buy Share</button></div></div>
 
-<div id="balance" class="page"><div class="card"><h2>💳 Balance Table</h2><table><tr><td>Available Balance</td><td style="text-align:right"><b>$<span class="bal">27.05</span></b></td></tr><tr><td>Reserved Balance</td><td style="text-align:right"><b>$0.00</b></td></tr><tr><td>Earned Balance</td><td style="text-align:right"><b>$135.23</b></td></tr><tr><td>Current Plan</td><td style="text-align:right"><b>STARTER</b></td></tr></table><button class="btn" onclick="show('withdraw',null)">Withdraw Now</button></div></div>
+<div id="task" class="page"><div class="card"><h2>☰ Daily Task - Check Grids</h2><p>Check that all 47 grids lights are ON to earn today's reward.</p><div style="font-size:50px;text-align:center">💹 💡 ✅</div><button class="btn" onclick="doTask()">✅ Complete Task - Earn $2.50</button><p id="taskMsg"></p></div></div>
 
 <div id="withdraw" class="page">
-<div class="card"><h2>↗ Withdraw</h2>
-<p>Available: <b>$<span class="bal">27.05</span></b></p>
-<div class="warn">Withdraw ONLY in $ and £ • Minimum $100 / £100 • Fee 20% - You receive 80%</div>
-<div id="wSuccess" class="success">✅ Withdrawal request sent! Admin will approve soon.</div>
-<label style="font-size:12px;font-weight:800">CURRENCY</label>
-<select id="wCurr"><option value="$">US Dollars ($) - Minimum $100</option><option value="£">British Pounds (£) - Minimum £100</option></select>
-<label style="font-size:12px;font-weight:800">AMOUNT</label>
-<input id="wAmt" type="number" placeholder="e.g. 100" oninput="calcFee()">
-<div class="fee-box" id="feeBox">Enter amount to see fee. Fee = 20%, You receive = 80%</div>
-<label style="font-size:12px;font-weight:800">YOUR DETAILS</label>
-<input id="wDetails" type="text" placeholder="Phone / Bank / Wallet for $ or £">
-<button class="btn" onclick="doWithdraw()">Request Withdrawal</button>
-</div>
-<div class="card"><h2>Withdrawal History</h2><div id="history">No withdrawals yet.</div></div>
+<div class="card"><h2>↗ Withdraw</h2><p>Available: <b>$<span class="bal">52.46</span></b></p><div class="warn">Withdraw ONLY in $ and £ • Minimum $100 / £100 • Fee 20% - You receive 80%</div><div id="wSuccess" class="success">✅ Withdrawal request sent! Admin will approve.</div>
+<label style="font-size:12px;font-weight:800">CURRENCY</label><select id="wCurr" onchange="calcWithdraw()"><option value="$">US Dollars ($) - Min $100</option><option value="£">British Pounds (£) - Min £100</option></select>
+<label style="font-size:12px;font-weight:800">AMOUNT</label><input id="wAmt" type="number" placeholder="e.g. 100" oninput="calcWithdraw()">
+<div class="fee-box" id="wCalc">Enter amount. Fee 20%, You receive 80%.</div>
+<input id="wDetails" type="text" placeholder="Phone / Bank / Wallet">
+<button class="btn" onclick="doWithdraw()">Request Withdrawal</button></div>
+<div class="card"><h2>Withdrawal History</h2><div id="history">No withdrawals yet.</div></div></div>
+
+<div id="p2p" class="page">
+<div class="card"><h2>🤝 P2P Transfer</h2><p>Transfer float to another member. <b>Fee: 5%</b> - Receiver gets 95%.</p>
+<label style="font-size:12px;font-weight:800">RECIPIENT CODE</label><input id="p2pTo" type="text" placeholder="e.g. CED-X7K9P2 - NOT name">
+<label style="font-size:12px;font-weight:800">AMOUNT ($)</label><input id="p2pAmt" type="number" placeholder="e.g. 20" oninput="calcP2P()">
+<div class="fee-box" id="p2pCalc">Enter amount. Fee 5%, Receiver gets 95%.</div>
+<button class="btn" onclick="doP2P()">Send P2P Transfer</button><p id="p2pMsg"></p></div>
+<div class="card"><h2>P2P History</h2><div id="p2pHist">No P2P transfers yet.</div></div></div>
+
+<div id="referral" class="page"><div class="card"><h2>👥 Referral - Private Code</h2><p>Your name is NOT shown. Only code.</p><div class="code-box">https://cedarsempire/task/ref=CED-X7K9P2</div><p>Code: <b>CED-X7K9P2</b> • Earn 5% from friends</p><button class="btn" onclick="navigator.clipboard.writeText('https://cedarsempire/task/ref=CED-X7K9P2');alert('Copied!')">Copy Private Link</button></div></div>
+
+<div id="about" class="page">
+<div class="card"><h2>🌍 Talk About Us - Who We Are</h2><p><b>Cedars Empire, Global Operations is GLOBAL. No country owns Cedars Empire.</b> Decentralized grids across Africa, Asia, Europe, Americas.</p></div>
+<div class="card"><h2>🏭 How We Make Money</h2><p>1. <b>47 Crypto Grids:</b> Like Binance + Coinbase - grids trade, stake & earn 24/7.<br>2. <b>Robotic Assembly:</b> Like Tesla Gigafactory.<br>3. <b>Logistics:</b> Like Amazon Robotics.<br>4. <b>Contract Assembly:</b> Like Foxconn.</p></div>
+<div class="card"><h2>👷 Why Become A Worker?</h2><p>• 47 grids work, you earn daily for 1095 days<br>• Withdraw in $ / £, P2P to others<br>• No experience needed</p></div>
+<div class="card"><h2>🗺️ Where We Work</h2><p><b>Global:</b> Uganda Hub • Kenya • Nigeria • India • UAE • UK • USA • China Supply Chain.</p></div>
 </div>
 
-<div id="referral" class="page"><div class="card"><h2>👥 Referral - Private Code</h2><p>Share your code. Your name is <b>NOT</b> shown.</p><p style="font-size:13px;color:#555">Your Private Referral Link:</p><div class="code-box">https://cedarsempire/task/ref=CED-X7K9P2</div><p style="font-size:13px">Your Code: <b>CED-X7K9P2</b> • Earn 5% from every friend who joins</p><button class="btn" onclick="navigator.clipboard.writeText('https://cedarsempire/task/ref=CED-X7K9P2');alert('Link copied!')">Copy Private Link</button><button class="btn btn-outline" onclick="alert('Share via WhatsApp: https://cedarsempire/task/ref=CED-X7K9P2')">Share on WhatsApp</button></div></div>
-<div id="support" class="page"><div class="card"><h2>💬 Live Support</h2><button class="btn">Chat on WhatsApp</button><button class="btn btn-outline">Email Support</button></div></div>
-
 </div>
+<footer>
+<b>CEDARS EMPIRE, Global Operations</b><br><br>
+No country owns Cedars Empire. We are global.<br>
+🌍 Africa • Asia • Europe • Americas<br><br>
+<a href="#" onclick="show('about',null);return false">About Us</a> • <a href="#" onclick="show('buy',null);return false">Buy Share</a> • <a href="#" onclick="show('withdraw',null);return false">Withdraw</a><br><br>
+<small>© 2026 Cedars Empire, Global Operations • 47 Crypto Grids • Agreement 1095 Days • Withdraw Fee 20% • P2P Fee 5%</small>
+</footer>
 <script>
-let balance=parseFloat(localStorage.getItem('cedars_bal')||'27.05');
+const coins=[["BTC","Bitcoin","₿",97432],["ETH","Ethereum","Ξ",3421],["USDT","Tether","₮",1],["BNB","BNB","🟡",698],["SOL","Solana","◎",214],["XRP","XRP","✕",2.41],["ADA","Cardano","₳",0.98],["DOGE","Dogecoin","Ð",0.32],["AVAX","Avalanche","🔺",38],["LINK","Chainlink","⬡",22],["DOT","Polkadot","●",7.2],["MATIC","Polygon","⬡",0.52],["LTC","Litecoin","Ł",112],["TRX","Tron","⚡",0.27],["NEAR","Near","◉",5.4],["ATOM","Cosmos","⚛",9.8],["XLM","Stellar","✦",0.42],["UNI","Uniswap","🦄",14],["APT","Aptos","▲",9.1],["ARB","Arbitrum","🔵",1.12],["OP","Optimism","🔴",2.3],["PEPE","Pepe","🐸",0.00002],["SHIB","Shiba","🐕",0.000024],["TON","Toncoin","💎",5.9],["SUI","Sui","💧",4.6],["TAO","Bittensor","🧠",512],["RENDER","Render","🎨",7.8],["FET","Fetch","🤖",1.45],["FIL","Filecoin","📁",5.6],["ICP","Internet Computer","∞",11],["HBAR","Hedera","ℏ",0.28],["VET","VeChain","✔",0.04],["ALGO","Algorand","⬢",0.32],["KAS","Kaspa","⚡",0.15],["STX","Stacks","📚",1.8],["GRT","Graph","📊",0.21],["INJ","Injective","💉",24],["SEI","Sei","🌊",0.52],["JUP","Jupiter","🪐",0.98],["PYTH","Pyth","🔮",0.38],["WLD","Worldcoin","🌍",2.1],["CED1","Cedars Grid 1","🌿",1.25],["CED2","Cedars Grid 2","🌿",1.32],["CED3","Cedars Grid 3","🌿",1.18],["CED4","Cedars Grid 4","🌿",1.41],["CED5","Cedars Grid 5","🌿",1.27],["CED6","Cedars Grid 6","🌿",1.36]];
+let grid=document.getElementById('cryptoGrid');
+function renderCoins(){
+grid.innerHTML=coins.map((c,i)=>{
+let chg=(Math.random()*4-1.5).toFixed(2);
+let isUp=parseFloat(chg)>=0;
+let w=40+Math.floor(Math.random()*55);
+return `<div class="cbox" onclick="alert('${c[1]} Grid ${i+1} is LIVE - Earning for you!')"><span class="dot ${isUp?'':'red'}"></span><div class="sym">${c[2]}</div><div class="name">${c[0]}</div><div class="price">$${c[3].toLocaleString()}</div><div class="chg ${isUp?'':'down'}">${isUp?'▲':'▼'} ${chg}%</div><div class="bar"><div style="width:${w}%"></div></div><div style="font-size:10px;color:#999">GRID ${i+1} • LIVE</div></div>`;
+}).join('');
+}
+renderCoins();
+setInterval(()=>{renderCoins();let e=parseFloat(document.getElementById('earned').textContent);e+=0.02;document.getElementById('earned').textContent=e.toFixed(2);},4000);
+let balance=parseFloat(localStorage.getItem('cedars_bal')||'52.46');
 let history=JSON.parse(localStorage.getItem('cedars_hist')||'[]');
+let p2ph=JSON.parse(localStorage.getItem('cedars_p2p')||'[]');
 function render(){
 document.querySelectorAll('.bal').forEach(e=>e.textContent=balance.toFixed(2));
-document.getElementById('bal1').textContent=balance.toFixed(2);
-let h=history.length?history.map(x=>`<div style="padding:8px 0;border-bottom:1px solid #e6f4ec">${x.cur}${x.amt} - Fee ${x.cur}${x.fee} - You get ${x.cur}${x.net} - <b>${x.status}</b><br><small>${x.date} • ${x.method}</small></div>`).join(''):'No withdrawals yet.';
+let h=history.length?history.map(x=>`<div style="padding:8px 0;border-bottom:1px solid #eee">${x.cur}${x.amt} - Fee ${x.cur}${x.fee} - You get ${x.cur}${x.net} - <b>${x.status}</b><br><small>${x.date}</small></div>`).join(''):'No withdrawals yet.';
 document.getElementById('history').innerHTML=h;document.getElementById('historyHome').innerHTML=h;
+let ph=p2ph.length?p2ph.map(x=>`<div style="padding:8px 0;border-bottom:1px solid #eee">Sent $${x.amt} to ${x.to} - Fee $${x.fee} - They get $${x.net}<br><small>${x.date}</small></div>`).join(''):'No P2P transfers yet.';
+document.getElementById('p2pHist').innerHTML=ph;
 }
-function show(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));document.getElementById(id).classList.add('show');if(btn){document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}window.scrollTo(0,0);}
-function calcFee(){let amt=parseFloat(document.getElementById('wAmt').value)||0;let cur=document.getElementById('wCurr').value;let fee=amt*0.20;let net=amt-fee;document.getElementById('feeBox').innerHTML=`Amount: ${cur}${amt.toFixed(2)}<br>Fee (20%): ${cur}${fee.toFixed(2)}<br><b>You will receive: ${cur}${net.toFixed(2)}</b>`;}
-function doWithdraw(){
-let amt=parseFloat(document.getElementById('wAmt').value);let cur=document.getElementById('wCurr').value;let det=document.getElementById('wDetails').value;
-if(!amt||amt<100){alert('Minimum withdraw is '+cur+'100');return;}
-if(amt>balance){alert('Not enough balance. You have $'+balance.toFixed(2)+'. Buy more shares to reach '+cur+'100.');return;}
-if(!det){alert('Enter your phone / bank details');return;}
-let fee=amt*0.20;let net=amt-fee;balance-=amt;history.unshift({amt:amt.toFixed(2),cur:cur,fee:fee.toFixed(2),net:net.toFixed(2),status:'Pending',date:new Date().toLocaleString(),method:det});
-localStorage.setItem('cedars_bal',balance);localStorage.setItem('cedars_hist',JSON.stringify(history));render();document.getElementById('wSuccess').style.display='block';document.getElementById('wAmt').value='';document.getElementById('wDetails').value='';
-}
-function buyShare(){let a=document.getElementById('buyAmt').value;if(!a){alert('Enter amount');return;}alert('Buy Share request for $'+a+' sent! Admin will confirm.');}
-render();
+function show(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));let el=document.getElementById(id);if(el)el.classList.add('show');if(btn){document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}window.scrollTo(0,0);}
+function calcBuy(){let r=parseFloat(document.getElementById('pkg').value);let amt=parseFloat(document.getElementById('buyAmt').value)||0;let d=amt*r;let t=d*1095;document.getElementById('buyCalc').innerHTML=`Amount: $${amt.toFixed(2)}<br>Daily Earning (${(r*100)}%): <b>$${d.toFixed(2)} / day</b><br>Total in 1095 Days: <b>$${t.toFixed(2)}</b><br>Agreement Ends: 19 Nov 2029`;}
+function calcWithdraw(){let amt=parseFloat(document.getElementById('wAmt').value)||0;let cur=document.getElementById('wCurr').value;let f=amt*0.20;let n=amt-f;document.getElementById('wCalc').innerHTML=`Amount: ${cur}${amt.toFixed(2)}<br>Fee (20%): ${cur}${f.toFixed(2)}<br><b>You receive: ${cur}${n.toFixed(2)}</b>`;}
+function calcP2P(){let amt=parseFloat(document.getElementById('p2pAmt').value)||0;let f=amt*0.05;let n=amt-f;document.getElementById('p2pCalc').innerHTML=`Amount: $${amt.toFixed(2)}<br>P2P Fee (5%): $${f.toFixed(2)}<br><b>Receiver gets: $${n.toFixed(2)}</b>`;}
+function doWithdraw(){let amt=parseFloat(document.getElementById('wAmt').value);let cur=document.getElementById('wCurr').value;let det=document.getElementById('wDetails').value;if(!amt||amt<100){alert('Minimum '+cur+'100');return;}if(amt>balance){alert('Not enough. You have $'+balance.toFixed(2));return;}if(!det){alert('Enter phone / bank');return;}let f=amt*0.20;let n=amt-f;balance-=amt;history.unshift({amt:amt.toFixed(2),cur:cur,fee:f.toFixed(2),net:n.toFixed(2),status:'Pending',date:new Date().toLocaleString()});localStorage.setItem('cedars_bal',balance);localStorage.setItem('cedars_hist',JSON.stringify(history));render();document.getElementById('wSuccess').style.display='block';document.getElementById('wAmt').value='';}
+function doP2P(){let to=document.getElementById('p2pTo').value;let amt=parseFloat(document.getElementById('p2pAmt').value);if(!to){alert('Enter recipient code');return;}if(!amt||amt<=0){alert('Enter amount');return;}if(amt>balance){alert('Not enough balance $'+balance.toFixed(2));return;}let f=amt*0.05;let n=amt-f;balance-=amt;p2ph.unshift({to:to,amt:amt.toFixed(2),fee:f.toFixed(2),net:n.toFixed(2),date:new Date().toLocaleString()});localStorage.setItem('cedars_bal',balance);localStorage.setItem('cedars_p2p',JSON.stringify(p2ph));render();document.getElementById('p2pMsg').innerHTML='✅ Sent $'+amt.toFixed(2)+' to '+to+'. They receive $'+n.toFixed(2)+' after 5% fee.';document.getElementById('p2pAmt').value='';}
+function buyShare(){let a=document.getElementById('buyAmt').value;if(!a){alert('Enter amount');return;}alert('Buy Share $'+a+' request sent! Agreement 1095 Days starts on approval.');}
+function doTask(){balance+=2.5;localStorage.setItem('cedars_bal',balance);render();document.getElementById('taskMsg').innerHTML='✅ Task done! +$2.50 added. All 47 grids checked.';}
+calcBuy();calcWithdraw();calcP2P();render();
+let sec=17*3600+6*60+54;setInterval(()=>{sec--;let h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;document.getElementById('timer').textContent=`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;},1000);
 </script>
 </body>
 </html>
