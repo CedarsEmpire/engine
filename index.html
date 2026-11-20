@@ -45,6 +45,10 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
 .ai-panel b{color:#00e68a}
 .ai-log{font-size:13px;line-height:1.6;max-height:120px;overflow:auto;margin-top:8px}
 .ai-panel button{background:#0a9d6e;color:#fff;border:none;padding:9px 14px;border-radius:9px;font-weight:bold;cursor:pointer;margin-right:6px;margin-top:6px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal-box{background:#fff;width:100%;max-width:420px;padding:20px;border-radius:14px}
+.modal-box input{width:100%;padding:11px;margin:8px 0;border:1px solid #ddd;border-radius:10px}
 </style>
 </head>
 <body>
@@ -62,11 +66,11 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
 
 <div id="dashSection" style="display:none">
 <div class="actions">
-<button onclick="alert('Logged in as '+currentUser.email)">👤 Profile</button>
+<button onclick="showProfile()">👤 Profile</button>
 <button class="green" id="depositBtn" onclick="toggleDeposit()">🏦 Deposit <span id="depositState">ON</span></button>
 <button onclick="document.getElementById('taskSection').scrollIntoView()">☰ Task</button>
-<button onclick="alert('Withdraw Available - Balance €'+availableBal.toFixed(2))">↗ Withdraw</button>
-<button onclick="alert('Your Referral: https://cedarsempire.com/register?ref='+currentUser.id.slice(0,8))">👥 Referral</button>
+<button onclick="window.location.href='kyc.html'" class="green">↗ Withdraw</button>
+<button onclick="showReferral()">👥 Referral</button>
 <button onclick="doLogout()" style="background:#ffe5e5">Logout</button>
 </div>
 
@@ -110,9 +114,21 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
 <div class="card"><h3>🤖 AI Workers Live</h3><div id="workersLive">Waiting...</div><p style="color:#0a7a55">+95 more workers working...</p></div>
 <div class="card" id="taskSection"><h3>Task Activity</h3><table><thead><tr><th>Region</th><th>Tasks</th><th>Status</th><th>Last</th></tr></thead><tbody id="taskTable"></tbody></table>
 <div style="display:flex;gap:10px;margin-top:14px"><div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Withdraw Available<br><b id="withdrawBal">€0</b></div><div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Transactions<br><b id="txCount">0</b></div></div>
+<button onclick="window.location.href='kyc.html'" class="green" style="width:100%;padding:11px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:12px">↗ Go To Withdraw Page</button>
 </div>
 </div>
 </div>
+
+<!-- PROFILE MODAL -->
+<div id="profileModal" class="modal"><div class="modal-box">
+<h3 style="margin:0">👤 My Profile</h3>
+<p id="profileInfo" style="font-size:14px;line-height:1.7">Loading...</p>
+<label>Full Name</label>
+<input id="profileName" placeholder="Your full name">
+<button onclick="saveProfile()" style="width:100%;padding:11px;background:#0a9d6e;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer">Save Profile</button>
+<button onclick="window.location.href='kyc.html'" style="width:100%;padding:11px;background:#0f1e2e;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:8px">Go to KYC & Withdraw</button>
+<button onclick="closeProfile()" style="width:100%;padding:11px;background:#eee;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:8px">Close</button>
+</div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -126,49 +142,125 @@ let workerNames = ["Vision Worker","Transcription Worker","Rating Worker","Data 
 let targetEnd = new Date(); targetEnd.setHours(24,0,0,0);
 let aiAuto = true; let lastTaskInfo = null;
 
-function aiLog(msg){ let el=document.getElementById('aiLog'); if(!el) return; el.innerHTML = '• '+msg+'<br>'+el.innerHTML; }
+function aiLog(msg){ let el=document.getElementById('aiLog'); if(!el) return; el.innerHTML='• '+msg+'<br>'+el.innerHTML; }
 function aiBrainReady(){ let el=document.getElementById('aiBrainStatus'); if(el) el.innerText='🧠 AI Brain: ACTIVE • 99% AI Operations'; aiLog('AI Brain connected to Central Engine'); }
+function updateCountdown(){ let diff=targetEnd-new Date(); if(diff<=0){ targetEnd=new Date(); targetEnd.setHours(24,0,0,0); diff=targetEnd-new Date(); } let h=Math.floor(diff/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000); document.getElementById('countdown').innerText='Next cycle in '+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); }
+setInterval(updateCountdown,1000); updateCountdown();
+function showMsg(t,color){ let el=document.getElementById('authMsg'); el.innerText=t; el.style.color=color||'#c00'; }
 
-function updateCountdown(){ let diff = targetEnd - new Date(); if(diff <= 0){ targetEnd = new Date(); targetEnd.setHours(24,0,0,0); diff = targetEnd - new Date(); } let h = Math.floor(diff/3600000), m = Math.floor(diff%3600000/60000), s = Math.floor(diff%60000/1000); document.getElementById('countdown').innerText = 'Next cycle in ' + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0'); }
-setInterval(updateCountdown, 1000); updateCountdown();
-
-function showMsg(t, color){ let el=document.getElementById('authMsg'); el.innerText=t; el.style.color=color||'#c00'; }
-async function doRegister(){ const email = document.getElementById('email').value.trim(); const password = document.getElementById('password').value; if(!email || password.length < 6){ showMsg('Enter valid email and password min 6 chars'); return; } document.getElementById('registerBtn').disabled = true; showMsg('Creating account...', '#0a7a55'); const { data, error } = await client.auth.signUp({ email, password }); document.getElementById('registerBtn').disabled = false; if(error){ showMsg('SIGNUP FAILED: ' + error.message); return; } if(data.user && !data.session){ showMsg('Account created! Check email to confirm, then click Login.', '#0a7a55'); return; } showMsg('Account created! Logging you in...', '#0a7a55'); await afterLogin(); }
-async function doLogin(){ const email = document.getElementById('email').value.trim(); const password = document.getElementById('password').value; showMsg('Logging in...', '#0a7a55'); const { data, error } = await client.auth.signInWithPassword({ email, password }); if(error){ showMsg('LOGIN FAILED: ' + error.message); return; } await afterLogin(); }
+async function doRegister(){
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  if(!email||password.length<6){ showMsg('Enter valid email and password min 6 chars'); return; }
+  document.getElementById('registerBtn').disabled=true; showMsg('Creating account...','#0a7a55');
+  const {data,error}=await client.auth.signUp({email,password});
+  document.getElementById('registerBtn').disabled=false;
+  if(error){ showMsg('SIGNUP FAILED: '+error.message); return; }
+  if(data.user && !data.session){ showMsg('Account created! Check email to confirm, then click Login.','#0a7a55'); return; }
+  showMsg('Account created! Logging you in...','#0a7a55'); await afterLogin();
+}
+async function doLogin(){
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  showMsg('Logging in...','#0a7a55');
+  const {data,error}=await client.auth.signInWithPassword({email,password});
+  if(error){ showMsg('LOGIN FAILED: '+error.message); return; }
+  await afterLogin();
+}
 async function doLogout(){ await client.auth.signOut(); location.reload(); }
-async function afterLogin(){ const { data } = await client.auth.getUser(); if(!data.user) return; currentUser = data.user; document.getElementById('userEmail').innerText = currentUser.email; document.getElementById('authSection').style.display = 'none'; document.getElementById('dashSection').style.display = 'block'; try{ await client.from('profiles').upsert({ id: currentUser.id, email: currentUser.email }); }catch(e){ console.log(e); } let res = await client.from('balances').select('*').eq('user_id', currentUser.id).single(); if(!res.data){ await client.from('balances').insert({ user_id: currentUser.id, amount: 0, available_balance: 0, reserved_balance: 0, earned_balance: 0, central_reserve: 0 }); earned=0; availableBal=0; reservedBal=0; centralReserve=0; } else { earned = parseFloat(res.data.earned_balance ?? res.data.amount ?? 0); availableBal = parseFloat(res.data.available_balance ?? 0); reservedBal = parseFloat(res.data.reserved_balance ?? 0); centralReserve = parseFloat(res.data.central_reserve ?? 0); } updateDisplay(); renderEngines(); runCycle(); loadTxCount(); aiBrainReady(); }
-async function loadTxCount(){ let { data } = await client.from('transactions').select('id').eq('user_id', currentUser.id); document.getElementById('txCount').innerText = data ? data.length : 0; }
-async function saveBalance(){ if(!currentUser) return; await client.from('balances').upsert({ user_id: currentUser.id, amount: earned, available_balance: availableBal, reserved_balance: reservedBal, earned_balance: earned, central_reserve: centralReserve }); }
-function updateDisplay(){ document.getElementById('earned').innerText = "€"+earned.toFixed(2); document.getElementById('withdrawBal').innerText = "€"+availableBal.toFixed(2); document.getElementById('balAvailable').innerText = "€"+availableBal.toFixed(2); document.getElementById('balReserved').innerText = "€"+reservedBal.toFixed(2); document.getElementById('balEarned').innerText = "€"+earned.toFixed(2); document.getElementById('balCentral').innerText = "€"+centralReserve.toFixed(2); let pct = Math.min(100,(earned/2500*100)); document.getElementById('pct').innerText = pct.toFixed(1)+"%"; document.getElementById('barFill').style.width = pct+"%"; }
-function toggleDeposit(){ depositOn = !depositOn; document.getElementById('depositState').innerText = depositOn ? "ON" : "OFF"; document.getElementById('depositBtn').style.background = depositOn ? "#0a9d6e" : "#999"; }
-function toggleEngine(id){ let e = engines.find(x=>x.id===id); e.on = !e.on; aiLog('AI: '+e.name+' Engine turned '+(e.on?'ON':'OFF')); renderEngines(); }
-function renderEngines(){ document.getElementById('engines').innerHTML = engines.map(e=>` <div class="eng"> <div style="display:flex;justify-content:space-between;align-items:center"> <span>🤖 Sub-Engine ${e.id}</span> <div style="display:flex;align-items:center;gap:6px"><div class="indicator ${e.on?'':'off'}"></div><span>${e.on?'ON':'OFF'}</span></div> </div> <div style="font-size:32px">🦾</div> <b style="font-size:18px">${e.name} Engine</b><br> <small>20 AI Workers</small><br> <small>${e.on?'Workers Active':'Workers Paused'}</small><br> <small>Tasks: ${e.tasks}</small><br><br> <button class="${e.on?'on':'off'}" onclick="toggleEngine(${e.id})">${e.on?'ON':'OFF'}</button> </div>`).join(''); let active = engines.filter(e=>e.on).length; document.getElementById('masterStatus').innerText = active>0 ? "RUNNING" : "PAUSED"; document.getElementById('workerCount').innerText = active*20; document.getElementById('central-engine-status').className = 'indicator ' + (active>0?'':'off'); }
 
-// 360 AI FUNCTIONS - these now plug into your real cycle, not fake buttons
+async function afterLogin(){
+  const {data}=await client.auth.getUser(); if(!data.user) return;
+  currentUser=data.user;
+  document.getElementById('userEmail').innerText=currentUser.email;
+  document.getElementById('authSection').style.display='none';
+  document.getElementById('dashSection').style.display='block';
+  try{ await client.from('profiles').upsert({id:currentUser.id,email:currentUser.email}); }catch(e){ console.log(e); }
+  let res=await client.from('balances').select('*').eq('user_id',currentUser.id).single();
+  if(!res.data){
+    await client.from('balances').insert({user_id:currentUser.id,amount:0,available_balance:0,reserved_balance:0,earned_balance:0,central_reserve:0});
+    earned=0; availableBal=0; reservedBal=0; centralReserve=0;
+  } else {
+    earned=parseFloat(res.data.earned_balance ?? res.data.amount ?? 0);
+    availableBal=parseFloat(res.data.available_balance ?? 0);
+    reservedBal=parseFloat(res.data.reserved_balance ?? 0);
+    centralReserve=parseFloat(res.data.central_reserve ?? 0);
+  }
+  updateDisplay(); renderEngines(); runCycle(); loadTxCount(); aiBrainReady();
+}
+async function loadTxCount(){
+  let {data}=await client.from('transactions').select('id').eq('user_id',currentUser.id);
+  document.getElementById('txCount').innerText=data?data.length:0;
+}
+async function saveBalance(){
+  if(!currentUser) return;
+  await client.from('balances').upsert({user_id:currentUser.id,amount:earned,available_balance:availableBal,reserved_balance:reservedBal,earned_balance:earned,central_reserve:centralReserve});
+}
+function updateDisplay(){
+  document.getElementById('earned').innerText="€"+earned.toFixed(2);
+  document.getElementById('withdrawBal').innerText="€"+availableBal.toFixed(2);
+  document.getElementById('balAvailable').innerText="€"+availableBal.toFixed(2);
+  document.getElementById('balReserved').innerText="€"+reservedBal.toFixed(2);
+  document.getElementById('balEarned').innerText="€"+earned.toFixed(2);
+  document.getElementById('balCentral').innerText="€"+centralReserve.toFixed(2);
+  let pct=Math.min(100,(earned/2500*100));
+  document.getElementById('pct').innerText=pct.toFixed(1)+"%";
+  document.getElementById('barFill').style.width=pct+"%";
+}
+function toggleDeposit(){ depositOn=!depositOn; document.getElementById('depositState').innerText=depositOn?"ON":"OFF"; document.getElementById('depositBtn').style.background=depositOn?"#0a9d6e":"#999"; }
+function toggleEngine(id){ let e=engines.find(x=>x.id===id); e.on=!e.on; aiLog('AI: '+e.name+' Engine turned '+(e.on?'ON':'OFF')); renderEngines(); }
+function renderEngines(){
+  document.getElementById('engines').innerHTML=engines.map(e=>`<div class="eng"><div style="display:flex;justify-content:space-between;align-items:center"><span>🤖 Sub-Engine ${e.id}</span><div style="display:flex;align-items:center;gap:6px"><div class="indicator ${e.on?'':'off'}"></div><span>${e.on?'ON':'OFF'}</span></div></div><div style="font-size:32px">🦾</div><b style="font-size:18px">${e.name} Engine</b><br><small>20 AI Workers</small><br><small>${e.on?'Workers Active':'Workers Paused'}</small><br><small>Tasks: ${e.tasks}</small><br><br><button class="${e.on?'on':'off'}" onclick="toggleEngine(${e.id})">${e.on?'ON':'OFF'}</button></div>`).join('');
+  let active=engines.filter(e=>e.on).length;
+  document.getElementById('masterStatus').innerText=active>0?"RUNNING":"PAUSED";
+  document.getElementById('workerCount').innerText=active*20;
+  document.getElementById('central-engine-status').className='indicator '+(active>0?'':'off');
+}
+async function showProfile(){
+  if(!currentUser) return alert("Please login first");
+  document.getElementById('profileModal').classList.add('open');
+  document.getElementById('profileInfo').innerText='Loading...';
+  let {data:prof}=await client.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
+  let {data:kyc}=await client.from('kyc').select('status').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+  let {data:wd}=await client.from('withdrawals').select('id').eq('user_id',currentUser.id);
+  document.getElementById('profileInfo').innerHTML=`Email: <b>${currentUser.email}</b><br>User ID: ${currentUser.id.slice(0,8)}...<br>Full Name: <b>${prof?.full_name||'Not set'}</b><br>KYC Status: <b>${kyc?.status||'not submitted'}</b><br>Withdrawals: <b>${wd?wd.length:0}</b><br>Available: <b>€${availableBal.toFixed(2)}</b>`;
+  document.getElementById('profileName').value=prof?.full_name||'';
+}
+function closeProfile(){ document.getElementById('profileModal').classList.remove('open'); }
+async function saveProfile(){
+  let name=document.getElementById('profileName').value.trim();
+  if(!name) return alert("Enter full name");
+  let {error}=await client.from('profiles').upsert({id:currentUser.id,email:currentUser.email,full_name:name});
+  if(error) return alert(error.message);
+  alert("Profile saved"); closeProfile();
+}
+function showReferral(){
+  if(!currentUser) return alert("Login first");
+  alert('Your Referral: https://cedarsempire.com/register?ref='+currentUser.id.slice(0,8));
+}
 async function aiGenerateTasks(){ let pool=["Vision: Label image","Transcription: Audio 30s","Rating: Rate response","Data: Clean dataset","Text: Summarize paragraph"]; let picked=pool[Math.floor(Math.random()*pool.length)]; aiLog('AI Sourcing: New task generated - '+picked); return picked; }
-async function aiAssignTask(task){ let active=engines.filter(e=>e.on); if(!active.length) return null; let best=active.reduce((a,b)=> a.tasks<=b.tasks?a:b); aiLog('AI Assignment: '+task+' -> '+best.name+' Engine (lowest load)'); return best; }
+async function aiAssignTask(task){ let active=engines.filter(e=>e.on); if(!active.length) return null; let best=active.reduce((a,b)=>a.tasks<=b.tasks?a:b); aiLog('AI Assignment: '+task+' -> '+best.name+' Engine (lowest load)'); return best; }
 async function aiVerifyLast(){ if(!lastTaskInfo){ aiLog('AI Verification: No task yet to verify'); return; } let score=(92+Math.random()*7).toFixed(1); aiLog('AI Verification: '+lastTaskInfo+' PASSED - Score '+score+'% - Auto-approved'); }
-async function aiSupport(){ aiLog('AI Support: How can I help? Balance €'+availableBal.toFixed(2)+' | Earned €'+earned.toFixed(2)+' | Workers ON: '+engines.filter(e=>e.on).length); alert('🤖 AI Support\n\nYour Available: €'+availableBal.toFixed(2)+'\nEarned: €'+earned.toFixed(2)+'\nActive Engines: '+engines.filter(e=>e.on).length+'\n\nAI is monitoring your account 24/7.'); }
-function aiToggleAuto(){ aiAuto=!aiAuto; document.getElementById('aiMode').innerText = aiAuto?'• AUTO MODE: ON':'• AUTO MODE: OFF'; aiLog('AI Auto Mode '+(aiAuto?'ENABLED':'PAUSED')); }
-
+async function aiSupport(){ aiLog('AI Support: Balance €'+availableBal.toFixed(2)+' | Earned €'+earned.toFixed(2)); alert('🤖 AI Support\n\nYour Available: €'+availableBal.toFixed(2)+'\nEarned: €'+earned.toFixed(2)+'\nActive Engines: '+engines.filter(e=>e.on).length+'\n\nAI is monitoring your account 24/7.'); }
+function aiToggleAuto(){ aiAuto=!aiAuto; document.getElementById('aiMode').innerText=aiAuto?'• AUTO MODE: ON':'• AUTO MODE: OFF'; aiLog('AI Auto Mode '+(aiAuto?'ENABLED':'PAUSED')); }
 async function runCycle(){
-if(!currentUser) return;
-let activeEngines = engines.filter(e=>e.on); if(activeEngines.length===0) return;
-let taskName = await aiGenerateTasks();
-let e = await aiAssignTask(taskName) || activeEngines[Math.floor(Math.random()*activeEngines.length)];
-let w = workerNames[Math.floor(Math.random()*workerNames.length)];
-let reward = (Math.random()*0.5+0.3);
-earned += reward; availableBal += reward * 0.2; centralReserve += reward * 0.8; totalTasks++; e.tasks++;
-lastTaskInfo = w + ' in ' + e.name + ' - ' + taskName;
-await saveBalance();
-await client.from('transactions').insert({ user_id: currentUser.id, type: 'task', amount: reward, note: lastTaskInfo });
-updateDisplay();
-document.getElementById('workersLive').innerHTML = '<div><span class="dot"></span> Worker #' + String(totalTasks).padStart(3,'0') + ' - ' + w + ' - ' + e.name + ' - Working</div><div style="margin-top:8px;color:#0a7a55">✅ Last: ' + lastTaskInfo + ' completed +€' + reward.toFixed(2) + '</div>';
-document.getElementById('taskTable').innerHTML = engines.map(en=>'<tr><td>'+en.name+'</td><td>'+en.tasks+' tasks</td><td><span class="pill">'+(en.on?'Active':'Idle')+'</span></td><td>Just now</td></tr>').join('');
-if(aiAuto && totalTasks%3===0){ aiLog('AI Verification: Auto-verified last 3 tasks - All passed'); }
+  if(!currentUser) return;
+  let activeEngines=engines.filter(e=>e.on); if(activeEngines.length===0) return;
+  let taskName=await aiGenerateTasks();
+  let e=await aiAssignTask(taskName)||activeEngines[Math.floor(Math.random()*activeEngines.length)];
+  let w=workerNames[Math.floor(Math.random()*workerNames.length)];
+  let reward=(Math.random()*0.5+0.3);
+  earned+=reward; availableBal+=reward*0.2; centralReserve+=reward*0.8; totalTasks++; e.tasks++;
+  lastTaskInfo=w+' in '+e.name+' - '+taskName;
+  await saveBalance();
+  await client.from('transactions').insert({user_id:currentUser.id,type:'task',amount:reward,note:lastTaskInfo});
+  updateDisplay();
+  document.getElementById('workersLive').innerHTML='<div><span class="dot"></span> Worker #'+String(totalTasks).padStart(3,'0')+' - '+w+' - '+e.name+' - Working</div><div style="margin-top:8px;color:#0a7a55">✅ Last: '+lastTaskInfo+' completed +€'+reward.toFixed(2)+'</div>';
+  document.getElementById('taskTable').innerHTML=engines.map(en=>'<tr><td>'+en.name+'</td><td>'+en.tasks+' tasks</td><td><span class="pill">'+(en.on?'Active':'Idle')+'</span></td><td>Just now</td></tr>').join('');
+  if(aiAuto && totalTasks%3===0){ aiLog('AI Verification: Auto-verified last 3 tasks - All passed'); }
 }
 client.auth.getSession().then(({data})=>{ if(data.session) afterLogin(); });
-setInterval(()=>{ if(currentUser) runCycle(); }, 5000);
+setInterval(()=>{ if(currentUser) runCycle(); },5000);
 </script>
 </body>
 </html>
