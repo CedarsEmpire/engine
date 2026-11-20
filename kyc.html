@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYC Verification</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <h2>KYC Verification</h2>
+  <input id="fullName" placeholder="Full Name" /><br><br>
+  <input id="idNumber" placeholder="ID / Passport Number" /><br><br>
+  <select id="docType">
+    <option>National ID</option>
+    <option>Passport</option>
+    <option>Driving License</option>
+  </select><br><br>
+  <input type="file" id="docFile" accept="image/*,.pdf" /><br><br>
+  <button onclick="submitKYC()">Submit for Verification</button>
+  <p id="kycStatus"></p>
+
+  <hr>
+  <h2>Withdraw</h2>
+  <button onclick="checkWithdraw()">Withdraw</button>
+  <p id="withdrawMsg"></p>
+
+  <script>
+    const SUPABASE_URL = "https://lpyvewpjtpgfuqfwizlr.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm"; 
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function submitKYC() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return alert("Please login first");
+
+      const file = document.getElementById('docFile').files[0];
+      if (!file) return alert("Choose your ID photo");
+
+      const filePath = `${user.id}/${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from('kyc-documents')
+        .upload(filePath, file);
+      if (uploadError) return alert(uploadError.message);
+
+      const { error } = await supabase.from('kyc_verifications').insert({
+        user_id: user.id,
+        full_name: document.getElementById('fullName').value,
+        id_number: document.getElementById('idNumber').value,
+        document_type: document.getElementById('docType').value,
+        document_url: filePath,
+        status: 'pending'
+      });
+      if (error) return alert(error.message);
+      document.getElementById('kycStatus').innerText = "Submitted! Status: pending - wait for admin approval";
+    }
+
+    async function checkWithdraw() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return alert("Please login first");
+
+      const { data } = await supabase.from('kyc_verifications')
+        .select('status').eq('user_id', user.id)
+        .order('created_at', { ascending: false }).limit(1).single();
+
+      if (!data || data.status !== 'verified') {
+        document.getElementById('withdrawMsg').innerText = "❌ You must complete KYC and be verified before withdrawing.";
+        return;
+      }
+      document.getElementById('withdrawMsg').innerText = "✅ Verified! You can withdraw now.";
+      // Put your real withdraw code here
+    }
+  </script>
+</body>
+</html>
