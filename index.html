@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cedars Shareholder Dashboard</title>
+    <title>CEDARS EMPIRE - Shareholder Dashboard</title>
     <style>
         /* Add your CSS styles here */
         body {
@@ -11,7 +11,7 @@
             background-color: #f0f0f0;
         }
         .dashboard {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 40px auto;
             padding: 20px;
             background-color: #fff;
@@ -28,13 +28,29 @@
         .header h1 {
             margin: 0;
         }
-        .stats {
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #444;
+            color: #fff;
+        }
+        .nav button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #555;
+            color: #fff;
+            cursor: pointer;
+        }
+        .main {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             margin-top: 20px;
         }
-        .stat {
+        .main .card {
             flex-basis: 30%;
             margin: 10px;
             padding: 20px;
@@ -43,46 +59,95 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .stat h2 {
+        .card h2 {
             margin-top: 0;
         }
-        .actions {
+        .packages {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
             margin-top: 20px;
         }
-        .actions button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #333;
-            color: #fff;
-            cursor: pointer;
+        .package {
+            flex-basis: 20%;
+            margin: 10px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .package h3 {
+            margin-top: 0;
         }
     </style>
 </head>
 <body>
     <div class="dashboard">
         <div class="header">
-            <h1>Cedars Shareholder Dashboard</h1>
+            <h1>CEDARS EMPIRE - Shareholder Dashboard</h1>
         </div>
-        <div class="stats">
-            <div class="stat">
+        <div class="nav">
+            <button>Dashboard</button>
+            <button>Shares</button>
+            <button>Earnings</button>
+            <button>Referral</button>
+            <button>Settings</button>
+        </div>
+        <div class="main">
+            <div class="card">
                 <h2>Shares Owned</h2>
                 <p id="shares-owned">0</p>
             </div>
-            <div class="stat">
+            <div class="card">
                 <h2>Current Balance</h2>
                 <p id="current-balance">$0.00</p>
             </div>
-            <div class="stat">
+            <div class="card">
                 <h2>Daily Earnings</h2>
                 <p id="daily-earnings">$0.00</p>
             </div>
+            <div class="card">
+                <h2>Referral Earnings</h2>
+                <p id="referral-earnings">$0.00</p>
+            </div>
+            <div class="card">
+                <h2>Total Earnings</h2>
+                <p id="total-earnings">$0.00</p>
+            </div>
         </div>
-        <div class="actions">
-            <button id="buy-share-btn">Buy Share</button>
-            <button id="claim-earnings-btn">Claim Earnings</button>
+        <div class="packages">
+            <div class="package">
+                <h3>SEED</h3>
+                <p>$100</p>
+                <p>1% Daily Earnings</p>
+                <button>Buy Now</button>
+            </div>
+            <div class="package">
+                <h3>ROOT</h3>
+                <p>$500</p>
+                <p>1% Daily Earnings</p>
+                <button>Buy Now</button>
+            </div>
+            <div class="package">
+                <h3>STEM</h3>
+                <p>$1,000</p>
+                <p>1% Daily Earnings</p>
+                <button>Buy Now</button>
+            </div>
+            <div class="package">
+                <h3>TREE</h3>
+                <p>$5,000</p>
+                <p>1% Daily Earnings</p>
+                <button>Buy Now</button>
+            </div>
+            <div class="package">
+                <h3>FOREST</h3>
+                <p>$25,000</p>
+                <p>1% Daily Earnings</p>
+                <button>Buy Now</button>
+            </div>
         </div>
-        <!-- Add more content here -->
     </div>
 
     <script>
@@ -90,18 +155,14 @@
         let sharesOwned = 0;
         let currentBalance = 0;
         let dailyEarnings = 0;
+        let referralEarnings = 0;
+        let totalEarnings = 0;
 
         document.getElementById("shares-owned").innerText = sharesOwned;
         document.getElementById("current-balance").innerText = `$${currentBalance.toFixed(2)}`;
         document.getElementById("daily-earnings").innerText = `$${dailyEarnings.toFixed(2)}`;
-
-        document.getElementById("buy-share-btn").addEventListener("click", () => {
-            // Add logic to buy share
-        });
-
-        document.getElementById("claim-earnings-btn").addEventListener("click", () => {
-            // Add logic to claim earnings
-        });
+        document.getElementById("referral-earnings").innerText = `$${referralEarnings.toFixed(2)}`;
+        document.getElementById("total-earnings").innerText = `$${totalEarnings.toFixed(2)}`;
     </script>
 </body>
 </html>
