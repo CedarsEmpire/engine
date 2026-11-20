@@ -6,33 +6,145 @@
   <title>Cedars Empire - Worldwide</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* ... (all styles remain the same) */
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+           margin: 20px; background: #f8f9fa; color: #212529; line-height: 1.5; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { text-align: center; font-size: 2.5rem; color: #1a1a1a; margin-bottom: 10px; }
+    .badge { background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-size: 0.9rem; }
+    .card { background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            padding: 20px; margin-bottom: 20px; }
+    h2 { margin-top: 0; color: #343a40; }
+    input[type="text"], input[type="email"], input[type="password"], input[type="number"] {
+      width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ced4da; 
+      border-radius: 4px; font-size: 1rem;
+    }
+    button { width: 100%; padding: 10px; background: #007bff; color: white; 
+             border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; margin: 8px 0; }
+    button.secondary { background: #6c757d; }
+    button:hover { opacity: 0.9; }
+    .msg { margin-top: 10px; color: #dc3545; font-size: 0.9rem; }
+    .success-msg { color: #28a745; font-weight: bold; }
+    .balance { font-size: 1.5rem; font-weight: bold; color: #007bff; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      body { margin: 10px; }
+    }
+    .transactions { margin-top: 20px; }
+    .transaction-item { padding: 10px; border-bottom: 1px solid #dee2e6; }
+    .admin-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .admin-table th, .admin-table td { padding: 8px; border: 1px solid #dee2e6; text-align: left; }
+    .admin-table th { background: #f8f9fa; }
   </style>
 </head>
 <body>
-  <h1>Cedars Empire</h1>
-  <p style="text-align:center"><span class="badge">🌍 Worldwide - Balance in € EUR</span></p>
+  <div class="container">
+    <h1>Cedars Empire</h1>
+    <p style="text-align:center"><span class="badge">🌍 Worldwide - Balance in € EUR</span></p>
 
-  <div id="auth" class="card">
-    <h2 id="auth-title">Login</h2>
-    <input id="supabase-url" type="text" placeholder="Supabase URL" value="https://ipyvewpjtpgfuqfwizlr.supabase.co">
-    <input id="supabase-key" type="text" placeholder="Supabase Anon Key" value="sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm">
-    <input id="email" type="email" placeholder="Email" style="display:none">
-    <input id="password" type="password" placeholder="Password" style="display:none">
-    <input id="referral-input" type="text" placeholder="Referral Code (optional) - e.g. CED-AB12" style="display:none">
-    <button id="save-supabase-btn" type="button">Save Supabase API</button>
-    <button id="auth-btn" type="button" style="display:none">Login</button>
-    <button id="toggle-auth" type="button" class="secondary" style="display:none">No account? Sign Up</button>
-    <button id="forgot-btn" type="button" class="secondary" style="display:none">Forgot Password? Reset</button>
-    <p id="auth-msg"></p><p id="success-msg" style="color:green;font-weight:bold"></p>
-  </div>
+    <div id="auth" class="card">
+      <h2 id="auth-title">Login</h2>
+      <input id="supabase-url" type="text" placeholder="Supabase URL" value="https://ipyvewpjtpgfuqfwizlr.supabase.co">
+      <input id="supabase-key" type="text" placeholder="Supabase Anon Key" value="sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm">
+      <input id="email" type="email" placeholder="Email" style="display:none">
+      <input id="password" type="password" placeholder="Password" style="display:none">
+      <input id="referral-input" type="text" placeholder="Referral Code (optional) - e.g. CED-AB12" style="display:none">
+      <button id="save-supabase-btn" type="button">Save Supabase API</button>
+      <button id="auth-btn" type="button" style="display:none">Login</button>
+      <button id="toggle-auth" type="button" class="secondary" style="display:none">No account? Sign Up</button>
+      <button id="forgot-btn" type="button" class="secondary" style="display:none">Forgot Password? Reset</button>
+      <p id="auth-msg" class="msg"></p>
+      <p id="success-msg" class="success-msg"></p>
+    </div>
 
-  <div id="app" style="display:none">
-    <!-- ... (all other HTML remains the same) -->
+    <div id="app" style="display:none">
+      <div class="grid">
+        <div class="card">
+          <h2>Dashboard</h2>
+          <p>Welcome, <span id="user-email"></span> 🎉</p>
+          <p>Your balance: <span id="balance" class="balance">0.00 €</span></p>
+          <button id="logout-btn" type="button" class="secondary">Logout</button>
+        </div>
+
+        <div class="card">
+          <h2>Deposit</h2>
+          <input id="deposit-amount" type="number" placeholder="Amount in €">
+          <button id="deposit-btn" type="button">Deposit Money</button>
+          <p id="deposit-msg" class="msg"></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Withdraw</h2>
+        <input id="withdraw-amount" type="number" placeholder="Amount in €">
+        <button id="withdraw-btn" type="button">Withdraw Money</button>
+        <p id="withdraw-msg" class="msg"></p>
+      </div>
+
+      <div class="card">
+        <h2>Referral Program</h2>
+        <p>Your referral code: <span id="referral-code" style="font-weight:bold"></span></p>
+        <p>Earn €5 for every friend who signs up and deposits €10!</p>
+      </div>
+
+      <div class="card">
+        <h2>Transactions</h2>
+        <div id="transactions-list" class="transactions"></div>
+      </div>
+
+      <div id="admin-section" class="card" style="display:none">
+        <h2>Admin Panel</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Balance</th>
+              <th>Referral Code</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-users-list"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <script>
-    // ... (all JavaScript code remains the same)
-  </script>
-</body>
-</html>
+    let supabase;
+    let userSession = null;
+    let referralCode = '';
+
+    // Initialize Supabase with user-provided URL & Key
+    document.getElementById('save-supabase-btn').onclick = async () => {
+      const url = document.getElementById('supabase-url').value;
+      const key = document.getElementById('supabase-key').value;
+      
+      if (!url || !key) {
+        document.getElementById('auth-msg').innerText = 'Please enter both URL and Key';
+        return;
+      }
+      
+      supabase = window.supabase.createClient(url, key);
+      document.getElementById('auth-msg').innerText = 'Supabase connected! Enter email/password to login.';
+      document.getElementById('email').style.display = 'block';
+      document.getElementById('password').style.display = 'block';
+      document.getElementById('referral-input').style.display = 'block';
+      document.getElementById('auth-btn').style.display = 'block';
+      document.getElementById('toggle-auth').style.display = 'block';
+      document.getElementById('forgot-btn').style.display = 'block';
+    };
+
+    // Toggle between Login & Signup
+    let isLogin = true;
+    document.getElementById('toggle-auth').onclick = () => {
+      isLogin = !isLogin;
+      document.getElementById('auth-title').innerText = isLogin ? 'Login' : 'Sign Up';
+      document.getElementById('toggle-auth').innerText = isLogin ? 'No account? Sign Up' : 'Have account? Login';
+      document.getElementById('auth-btn').innerText = isLogin ? 'Login' : 'Sign Up';
+    };
+
+    // Authenticate user
+    document.getElementById('auth-btn').onclick = async () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
