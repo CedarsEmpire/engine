@@ -14,14 +14,13 @@
   #app{display:none}
   #avatar{width:90px;height:90px;border-radius:50%;object-fit:cover;display:none}
   .row{display:flex;gap:10px}.row button{flex:1}
-  small{color:#666}
+  #auth-msg{color:red;font-weight:bold;min-height:20px;white-space:pre-wrap}
+  #success-msg{color:green;font-weight:bold}
 </style>
 </head>
 <body>
-
 <h1>Cedars Empire</h1>
 
-<!-- AUTH -->
 <div id="auth" class="card">
   <h2 id="auth-title">Login</h2>
   <input id="email" type="email" placeholder="Email">
@@ -31,9 +30,10 @@
   <button id="toggle-auth" class="secondary">No account? Sign Up</button>
   <button id="forgot-btn" class="secondary">Forgot Password? Reset</button>
   <p id="auth-msg"></p>
+  <p id="success-msg"></p>
+  <button id="test-btn" class="secondary">Test Connection</button>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div class="card">
     <img id="avatar" alt="Profile">
@@ -45,14 +45,12 @@
       <button id="logout-btn" class="secondary">Logout</button>
     </div>
   </div>
-
   <div class="card">
     <h3>Profile Picture</h3>
     <input id="avatar-input" type="file" accept="image/*">
     <button id="upload-avatar-btn">Upload Profile Picture</button>
     <p id="avatar-msg"></p>
   </div>
-
   <div class="card">
     <h3>KYC Verification</h3>
     <p id="kyc-status">Status: Not submitted</p>
@@ -60,7 +58,6 @@
     <button id="upload-kyc-btn">Submit KYC Document</button>
     <p id="kyc-msg"></p>
   </div>
-
   <div class="card">
     <h3>Withdraw</h3>
     <input id="withdraw-amount" type="number" placeholder="Amount">
@@ -74,10 +71,8 @@
 const SUPABASE_URL = 'YOUR_SUPABASE_URL';
 const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
 let isLogin = true;
 let currentUser = null;
-
 const $ = id => document.getElementById(id);
 
 function showApp(user){
@@ -85,11 +80,9 @@ function showApp(user){
   $('auth').style.display='none';
   $('app').style.display='block';
   $('user-email').textContent = user.email;
-  loadProfile();
-  loadKYC();
-  loadWithdrawals();
+  $('auth-msg').textContent='';
+  loadProfile(); loadKYC(); loadWithdrawals();
 }
-
 function showAuth(){
   currentUser = null;
   $('auth').style.display='block';
@@ -101,66 +94,82 @@ $('toggle-auth').onclick = ()=>{
   $('auth-title').textContent = isLogin ? 'Login' : 'Sign Up';
   $('auth-btn').textContent = isLogin ? 'Login' : 'Sign Up';
   $('toggle-auth').textContent = isLogin ? 'No account? Sign Up' : 'Have account? Login';
+  $('auth-msg').textContent=''; $('success-msg').textContent='';
+};
+
+// TEST BUTTON - tells us if your keys are wrong
+$('test-btn').onclick = async ()=>{
+  $('auth-msg').textContent='Testing...';
+  const {data, error} = await supabase.auth.getSession();
+  if(error) $('auth-msg').textContent='CONNECTION ERROR: '+error.message;
+  else $('auth-msg').textContent='Connection OK. Supabase is reachable. URL is: '+SUPABASE_URL;
+  if(SUPABASE_URL.includes('YOUR_')) $('auth-msg').textContent='ERROR: You did NOT replace YOUR_SUPABASE_URL. Go to Supabase Project Settings > API and paste real URL and anon key.';
 };
 
 $('auth-btn').onclick = async ()=>{
   const email = $('email').value.trim();
   const password = $('password').value;
-  if(!email || !password) return $('auth-msg').textContent = 'Enter email and password';
-  $('auth-msg').textContent = 'Please wait...';
-  let res;
-  if(isLogin){
-    res = await supabase.auth.signInWithPassword({email,password});
-  } else {
-    res = await supabase.auth.signUp({email,password});
-  }
-  if(res.error) return $('auth-msg').textContent = res.error.message;
-  if(res.data.user) {
-    // Remember me: persist session, or use session only
-    if(!$('remember').checked){
-      // keep in this tab only by clearing on close is handled by supabase, we just continue
+  $('auth-msg').textContent=''; $('success-msg').textContent='';
+  if(!email || !password) return $('auth-msg').textContent='Enter email and password';
+  if(password.length < 6) return $('auth-msg').textContent='Password must be at least 6 characters';
+  if(SUPABASE_URL.includes('YOUR_')) return $('auth-msg').textContent='ERROR: Keys not replaced. Paste your real SUPABASE_URL and KEY in the file.';
+  $('auth-msg').textContent='Please wait...';
+  try{
+    let res;
+    if(isLogin){
+      res = await supabase.auth.signInWithPassword({email,password});
+    } else {
+      res = await supabase.auth.signUp({email,password});
     }
-    showApp(res.data.user);
-    $('auth-msg').textContent='';
-  }
+    console.log(res);
+    if(res.error){
+      let msg = res.error.message;
+      // Translate common errors
+      if(msg.includes('Invalid login')) msg = 'Invalid login credentials: Wrong email or password, or user does not exist. Try Sign Up with this email.';
+      if(msg.includes('Email not confirmed')) msg = 'Email not confirmed: Go to Supabase > Authentication > Users > click user > Confirm email, OR turn OFF Confirm Email and Sign Up with a NEW email.';
+      if(msg.includes('User already registered')) msg = 'User already registered: This email already has an account. Click Login, not Sign Up.';
+      $('auth-msg').textContent = 'Error: ' + msg;
+      return;
+    }
+    if(res.data.session && res.data.session.user){
+      $('success-msg').textContent='Success! Logging in...';
+      showApp(res.data.session.user);
+    } else if(res.data.user && !isLogin){
+      $('success-msg').textContent='Account created! Now click Login with same email and password.';
+      isLogin = true;
+      $('auth-title').textContent='Login'; $('auth-btn').textContent='Login'; $('toggle-auth').textContent='No account? Sign Up';
+      $('auth-msg').textContent='If Login says Email not confirmed, go to Supabase and Confirm that user manually.';
+    } else {
+      $('auth-msg').textContent='No session returned. Try Login again.';
+    }
+  }catch(e){ $('auth-msg').textContent='Error: '+e.message; }
 };
 
 $('forgot-btn').onclick = async ()=>{
   const email = $('email').value.trim();
   if(!email) return $('auth-msg').textContent='Enter your email first, then click Reset';
   const {error} = await supabase.auth.resetPasswordForEmail(email, {redirectTo: window.location.href});
-  $('auth-msg').textContent = error ? error.message : 'Reset link sent to your email';
+  $('auth-msg').textContent = error ? error.message : 'Reset link sent to your email. Check spam too.';
 };
 
-$('logout-btn').onclick = async ()=>{
-  await supabase.auth.signOut();
-  localStorage.clear();
-  sessionStorage.clear();
-  showAuth();
-};
+$('logout-btn').onclick = async ()=>{ await supabase.auth.signOut(); showAuth(); };
 
 async function loadProfile(){
-  const {data} = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
-  let profile = data;
-  if(!profile){
-    const code = 'CED' + Math.random().toString(36).substring(2,8).toUpperCase();
-    const {data:created} = await supabase.from('profiles').insert([{id:currentUser.id, email:currentUser.email, referral_code:code}]).select().single();
-    profile = created;
-  }
-  if(profile?.avatar_url){ $('avatar').src = profile.avatar_url; $('avatar').style.display='block'; }
-  if(profile?.referral_code){
-    $('referral-display').textContent = 'Your Referral Code: ' + profile.referral_code + ' | You earn 10% bonus';
-    $('copy-ref').onclick = ()=>{
-      navigator.clipboard.writeText(window.location.origin + '?ref=' + profile.referral_code);
-      alert('Referral link copied!');
-    };
-  }
-  if(profile?.storage_used) $('storage-info').textContent = 'Storage: ' + (profile.storage_used/1024).toFixed(1) + ' KB used';
-  // Count referrals
-  const {data:refs} = await supabase.from('profiles').select('id').eq('referred_by', currentUser.id);
-  if(refs) $('referral-display').textContent += ' | Referrals: ' + refs.length;
+  try{
+    const {data} = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+    let profile = data;
+    if(!profile){
+      const code = 'CED' + Math.random().toString(36).substring(2,8).toUpperCase();
+      const {data:created} = await supabase.from('profiles').insert([{id:currentUser.id, email:currentUser.email, referral_code:code}]).select().single();
+      profile = created;
+    }
+    if(profile?.avatar_url){ $('avatar').src = profile.avatar_url; $('avatar').style.display='block'; }
+    if(profile?.referral_code){
+      $('referral-display').textContent = 'Your Referral Code: ' + profile.referral_code + ' | You earn 10% bonus';
+      $('copy-ref').onclick = ()=>{ navigator.clipboard.writeText(window.location.origin + '?ref=' + profile.referral_code); alert('Referral link copied!'); };
+    }
+  }catch(e){ console.log('profile load', e); }
 }
-
 $('upload-avatar-btn').onclick = async ()=>{
   const file = $('avatar-input').files[0];
   if(!file) return $('avatar-msg').textContent='Choose a photo first';
@@ -173,7 +182,6 @@ $('upload-avatar-btn').onclick = async ()=>{
   $('avatar').src = data.publicUrl; $('avatar').style.display='block';
   $('avatar-msg').textContent='Profile picture updated!';
 };
-
 $('upload-kyc-btn').onclick = async ()=>{
   const file = $('kyc-input').files[0];
   if(!file) return $('kyc-msg').textContent='Choose a KYC document first';
@@ -183,37 +191,23 @@ $('upload-kyc-btn').onclick = async ()=>{
   if(error) return $('kyc-msg').textContent = error.message;
   const {data} = supabase.storage.from('kyc').getPublicUrl(path);
   await supabase.from('kyc').insert([{user_id:currentUser.id, document_url:data.publicUrl, status:'pending'}]);
-  $('kyc-msg').textContent='KYC submitted, pending review';
-  loadKYC();
+  $('kyc-msg').textContent='KYC submitted, pending review'; loadKYC();
 };
-
 async function loadKYC(){
   const {data} = await supabase.from('kyc').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false}).limit(1).single();
   if(data) $('kyc-status').textContent = 'Status: ' + data.status;
 }
-
 $('withdraw-btn').onclick = async ()=>{
   const amount = parseFloat($('withdraw-amount').value);
   if(!amount || amount<=0) return $('withdraw-msg').textContent='Enter a valid amount';
   const {error} = await supabase.from('withdrawals').insert([{user_id:currentUser.id, amount, status:'pending'}]);
-  $('withdraw-msg').textContent = error ? error.message : 'Withdrawal requested!';
-  loadWithdrawals();
+  $('withdraw-msg').textContent = error ? error.message : 'Withdrawal requested!'; loadWithdrawals();
 };
-
 async function loadWithdrawals(){
   const {data} = await supabase.from('withdrawals').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false});
   if(data) $('withdraw-list').innerHTML = data.map(w=>`<p>${w.amount} - ${w.status}</p>`).join('');
 }
-
-// Check session on load - this is why it stays logged in if Remember Me was on
-supabase.auth.getSession().then(({data})=>{
-  if(data.session?.user) showApp(data.session.user);
-  else showAuth();
-});
-supabase.auth.onAuthStateChange((event, session)=>{
-  if(event==='SIGNED_OUT') showAuth();
-  if(event==='SIGNED_IN' && session?.user) showApp(session.user);
-});
+supabase.auth.getSession().then(({data})=>{ if(data.session?.user) showApp(data.session.user); else showAuth(); });
 </script>
 </body>
 </html>
