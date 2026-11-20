@@ -10,15 +10,15 @@ body{background:#f1f3f6;margin:0;padding:16px;color:#0f1e2e}
 .top{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:14px 18px;border-radius:14px}
 .top h1{margin:0;font-size:22px}
 .live{color:#0a9d6e;font-size:14px}
-.authBox{background:#fff;padding:20px;border-radius:14px;max-width:420px;margin:40px auto;box-shadow:0 4px 20px rgba(0,0,0,.08)}
-.authBox input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:10px;font-size:16px}
-.authBox button{width:100%;padding:12px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;margin-top:8px}
+.authBox{background:#fff;padding:22px;border-radius:16px;max-width:440px;margin:36px auto;box-shadow:0 4px 24px rgba(0,0,0,.1)}
+.authBox input{width:100%;padding:13px;margin:8px 0;border:1px solid #ddd;border-radius:10px;font-size:16px}
+.authBox button{width:100%;padding:13px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;margin-top:8px}
 .authBox button.secondary{background:#0f1e2e}
 .authBox button:disabled{opacity:.6}
 .msg{color:#c00;font-size:14px;min-height:18px;text-align:center}
 .remember{display:flex;align-items:center;gap:8px;font-size:14px;margin:6px 0}
 .remember input{width:auto;margin:0}
-.forgot{text-align:right;font-size:13px;margin-top:4px}
+.forgot{text-align:right;font-size:13px;margin-top:6px}
 .forgot a{color:#2563eb;cursor:pointer;text-decoration:underline}
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
 .actions button{background:#fff;border:1px solid #ddd;padding:12px 18px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:15px}
@@ -51,14 +51,15 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
 .ai-panel button{background:#0a9d6e;color:#fff;border:none;padding:9px 14px;border-radius:9px;font-weight:bold;cursor:pointer;margin-right:6px;margin-top:6px}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;align-items:center;justify-content:center;padding:16px}
 .modal.open{display:flex}
-.modal-box{background:#fff;width:100%;max-width:420px;padding:20px;border-radius:14px}
-.modal-box input{width:100%;padding:11px;margin:8px 0;border:1px solid #ddd;border-radius:10px}
+.modal-box{background:#fff;width:100%;max-width:440px;padding:20px;border-radius:14px;max-height:90vh;overflow:auto}
+.modal-box input,.modal-box select{width:100%;padding:11px;margin:8px 0;border:1px solid #ddd;border-radius:10px}
+.modal-box button{width:100%;padding:11px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:8px}
 </style>
 </head>
 <body>
 <div class="top"><h1>CEDARS EMPIRE <span class="live">● Live</span></h1><div id="userEmail">👤 Guest</div></div>
 
-<!-- BEAUTIFUL REGISTER / LOGIN - RESTORED -->
+<!-- BEAUTIFUL REGISTER / LOGIN -->
 <div id="authSection" class="authBox">
 <h2 style="text-align:center;margin:0" id="authTitle">Login / Register</h2>
 <p style="text-align:center;color:#666;font-size:14px" id="authSub">Create account to get your own real balance<br><small>One Email = One Account • One Person = One Account</small></p>
@@ -73,7 +74,7 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
 <button id="registerBtn" onclick="doRegister()">Create Account</button>
 <button id="loginBtn" class="secondary" onclick="doLogin()">Login</button>
 <div class="forgot"><a onclick="doForgot()">Forgot Password?</a></div>
-<p style="font-size:12px;color:#888;text-align:center">After login, use Withdraw button to go to KYC & Withdraw page.<br>Withdraw: Crypto + PayPal ONLY • Min £100 - Max £20,000 • Fee 20%</p>
+<p style="font-size:12px;color:#888;text-align:center">After login, use Withdraw button to withdraw.<br>Withdraw: Crypto + PayPal ONLY • Min £100 - Max £20,000 • Fee 20%<br>No Bank • No MoMo • No Airtel</p>
 </div>
 
 <div id="dashSection" style="display:none">
@@ -81,7 +82,7 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
 <button onclick="showProfile()">👤 Profile</button>
 <button class="green" id="depositBtn" onclick="toggleDeposit()">🏦 Deposit <span id="depositState">ON</span></button>
 <button onclick="document.getElementById('taskSection').scrollIntoView()">☰ Task</button>
-<button onclick="goWithdraw()" class="green">↗ Withdraw</button>
+<button onclick="openWithdraw()" class="green">↗ Withdraw</button>
 <button onclick="showReferral()">👥 Referral</button>
 <button onclick="doLogout()" style="background:#ffe5e5">Logout</button>
 </div>
@@ -92,7 +93,7 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
 </div>
 <div class="card"><h3 style="margin-top:0">💰 Balance Table</h3>
 <table>
-<tr><th>Available Balance</th><td><b id="balAvailable">€0.00</b></td><td><small>Withdrawable / KYC withdrawals from here</small></td></tr>
+<tr><th>Available Balance</th><td><b id="balAvailable">€0.00</b></td><td><small>Withdrawable</small></td></tr>
 <tr><th>Reserved Balance</th><td><b id="balReserved">€0.00</b></td><td><small>Held for pending tasks</small></td></tr>
 <tr><th>Earned Balance</th><td><b id="balEarned">€0.00</b></td><td><small>Total ever earned - never resets</small></td></tr>
 <tr><th>Central Reserve</th><td><b id="balCentral">€0.00</b></td><td><small>Platform reserve - 80% of every reward</small></td></tr>
@@ -110,16 +111,48 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
 <div class="card"><h3>🤖 AI Workers Live</h3><div id="workersLive">Waiting...</div><p style="color:#0a7a55">+95 more workers working...</p></div>
 <div class="card" id="taskSection"><h3>Task Activity</h3><table><thead><tr><th>Region</th><th>Tasks</th><th>Status</th><th>Last</th></tr></thead><tbody id="taskTable"></tbody></table>
 <div style="display:flex;gap:10px;margin-top:14px"><div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Withdraw Available<br><b id="withdrawBal">€0</b></div><div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Transactions<br><b id="txCount">0</b></div></div>
-<button onclick="goWithdraw()" class="green" style="width:100%;padding:11px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:12px">↗ Go To Withdraw Page</button>
+<button onclick="openWithdraw()" class="green" style="width:100%;padding:11px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:12px">↗ Withdraw</button>
 </div></div></div>
 
+<!-- PROFILE MODAL -->
 <div id="profileModal" class="modal"><div class="modal-box">
 <h3 style="margin:0">👤 My Profile</h3>
 <p id="profileInfo" style="font-size:14px;line-height:1.7">Loading...</p>
 <label>Full Name</label><input id="profileName" placeholder="Your full name">
-<button onclick="saveProfile()" style="width:100%;padding:11px;background:#0a9d6e;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer">Save Profile</button>
-<button onclick="goWithdraw()" style="width:100%;padding:11px;background:#0f1e2e;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:8px">Go to KYC & Withdraw</button>
-<button onclick="closeProfile()" style="width:100%;padding:11px;background:#eee;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:8px">Close</button>
+<button onclick="saveProfile()" style="background:#0a9d6e;color:#fff">Save Profile</button>
+<button onclick="openWithdraw()" style="background:#0f1e2e;color:#fff">Go to Withdraw</button>
+<button onclick="closeProfile()" style="background:#eee">Close</button>
+</div></div>
+
+<!-- WITHDRAW MODAL - CRYPTO + PAYPAL ONLY -->
+<div id="withdrawModal" class="modal"><div class="modal-box">
+<h3 style="margin:0">↗ Withdraw</h3>
+<p style="font-size:13px;color:#666">Available: <b id="wAvail">€0.00</b><br>Min <b>£100</b> - Max <b>£20,000</b> • Fee <b>20%</b><br>Crypto + PayPal ONLY • No Bank • No MoMo • No Airtel</p>
+<label>Method</label>
+<select id="withdrawMethod" onchange="switchWithdraw()">
+<option value="Crypto">Crypto</option>
+<option value="PayPal">PayPal</option>
+</select>
+<div id="cryptoFields">
+<label>Crypto</label>
+<select id="cryptoCurrency"><option value="BTC">Bitcoin (BTC)</option><option value="ETH">Ethereum (ETH)</option><option value="USDT">Tether (USDT)</option></select>
+<label>Amount (£)</label><input type="number" id="cryptoAmount" step="0.01" placeholder="100 - 20000" oninput="calcWithdraw()">
+<label>Wallet Address</label><input id="cryptoWalletAddress" placeholder="Paste wallet address">
+<label>Network</label><select id="cryptoNetwork"><option value="BTC">Bitcoin</option><option value="ERC20">Ethereum (ERC20)</option><option value="TRC20">Tron (TRC20)</option><option value="BEP20">BNB (BEP20)</option></select>
+</div>
+<div id="paypalFields" style="display:none">
+<label>PayPal Email</label><input id="paypalEmail" type="email" placeholder="your@paypal.com">
+<label>Amount (£)</label><input type="number" id="paypalAmount" step="0.01" placeholder="100 - 20000" oninput="calcWithdraw()">
+</div>
+<div style="background:#f8fafc;padding:12px;border-radius:10px;font-size:14px;line-height:1.7">
+Gross: <b id="calcGross">£0.00</b><br>
+Fee (20%): <b id="calcFee">- £0.00</b><br>
+You Receive: <b id="calcNet" style="color:#0a9d6e">£0.00</b><br>
+<span id="calcError" style="color:#c00;font-weight:bold"></span>
+</div>
+<div id="withdrawMsg" style="font-size:13px;min-height:18px;text-align:center"></div>
+<button onclick="doWithdraw()" style="background:#0a9d6e;color:#fff">Confirm Withdraw</button>
+<button onclick="closeWithdraw()" style="background:#eee">Close</button>
 </div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -135,10 +168,9 @@ let targetEnd=new Date(); targetEnd.setHours(24,0,0,0);
 let aiAuto=true,lastTaskInfo=null;
 function aiLog(msg){let el=document.getElementById('aiLog'); if(!el) return; el.innerHTML='• '+msg+'<br>'+el.innerHTML;}
 function aiBrainReady(){let el=document.getElementById('aiBrainStatus'); if(el) el.innerText='🧠 AI Brain: ACTIVE • 99% AI Operations'; aiLog('AI Brain connected to Central Engine');}
-function updateCountdown(){let diff=targetEnd-new Date(); if(diff<=0){targetEnd=new Date(); targetEnd.setHours(24,0,0,0); diff=targetEnd-new Date();} let h=Math.floor(diff/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000); document.getElementById('countdown').innerText='Next cycle in '+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+function updateCountdown(){let diff=targetEnd-new Date(); if(diff<=0){targetEnd=new Date(); targetEnd.setHours(24,0,0,0); diff=targetEnd-new Date();} let h=Math.floor(diff/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000); let el=document.getElementById('countdown'); if(el) el.innerText='Next cycle in '+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
 setInterval(updateCountdown,1000); updateCountdown();
 function showMsg(t,color){let el=document.getElementById('authMsg'); el.innerText=t; el.style.color=color||'#c00';}
-
 async function doRegister(){
   const email=document.getElementById('email').value.trim().toLowerCase();
   const password=document.getElementById('password').value;
@@ -146,7 +178,6 @@ async function doRegister(){
   const remember=document.getElementById('rememberMe').checked;
   client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storage: remember?window.localStorage:window.sessionStorage, persistSession:true, autoRefreshToken:true}});
   document.getElementById('registerBtn').disabled=true; showMsg('Checking if email already exists...','#0a7a55');
-  // ONE EMAIL ONE ACCOUNT - Check profiles table first
   try{
     const {data:exists} = await client.from('profiles').select('email').eq('email',email).maybeSingle();
     if(exists){ showMsg('❌ This email is already registered. Please Login or use Forgot Password.'); document.getElementById('registerBtn').disabled=false; return; }
@@ -154,11 +185,8 @@ async function doRegister(){
   const {data,error}=await client.auth.signUp({email,password});
   document.getElementById('registerBtn').disabled=false;
   if(error){
-    if(error.message.toLowerCase().includes('already') || error.message.toLowerCase().includes('registered') || error.message.toLowerCase().includes('exists')){
-      showMsg('❌ This email is already registered. Please Login or use Forgot Password.');
-    } else {
-      showMsg('SIGNUP FAILED: '+error.message);
-    }
+    if(error.message.toLowerCase().includes('already')||error.message.toLowerCase().includes('registered')||error.message.toLowerCase().includes('exists')){showMsg('❌ This email is already registered. Please Login or use Forgot Password.');}
+    else {showMsg('SIGNUP FAILED: '+error.message);}
     return;
   }
   if(data.user && !data.session){showMsg('Account created! Check email to confirm, then click Login.','#0a7a55');return;}
@@ -193,10 +221,54 @@ async function doUpdatePassword(){
   await afterLogin();
 }
 async function doLogout(){ await client.auth.signOut(); location.reload(); }
-async function goWithdraw(){
-  const {data:{user}}=await client.auth.getUser();
-  if(!user){ alert("Please Login first"); document.getElementById('authSection').scrollIntoView(); return; }
-  window.location.href='kyc.html';
+function openWithdraw(){
+  if(!currentUser) return alert("Please Login first");
+  document.getElementById('wAvail').innerText='£'+availableBal.toFixed(2);
+  document.getElementById('withdrawModal').classList.add('open');
+  calcWithdraw();
+}
+function closeWithdraw(){document.getElementById('withdrawModal').classList.remove('open');}
+function switchWithdraw(){
+  let m=document.getElementById('withdrawMethod').value;
+  document.getElementById('cryptoFields').style.display=m==='Crypto'?'block':'none';
+  document.getElementById('paypalFields').style.display=m==='PayPal'?'block':'none';
+  calcWithdraw();
+}
+function calcWithdraw(){
+  let m=document.getElementById('withdrawMethod').value;
+  let amount=0, cur='GBP';
+  if(m==='Crypto'){ amount=parseFloat(document.getElementById('cryptoAmount').value)||0; cur=document.getElementById('cryptoCurrency').value; }
+  else { amount=parseFloat(document.getElementById('paypalAmount').value)||0; cur='GBP'; }
+  let fee=amount*0.20; let net=amount-fee;
+  document.getElementById('calcGross').innerText='£'+amount.toFixed(2)+' '+cur;
+  document.getElementById('calcFee').innerText='- £'+fee.toFixed(2);
+  document.getElementById('calcNet').innerText='£'+net.toFixed(2)+' '+cur;
+  let err='';
+  if(amount>0 && amount<100) err='⚠️ Minimum withdrawal £100';
+  if(amount>20000) err='⚠️ Maximum withdrawal £20,000';
+  if(amount>availableBal) err='⚠️ More than Available (£'+availableBal.toFixed(2)+')';
+  document.getElementById('calcError').innerText=err;
+}
+async function doWithdraw(){
+  let m=document.getElementById('withdrawMethod').value;
+  let amount,cur,wallet,network,paypalEmail;
+  if(m==='Crypto'){ amount=parseFloat(document.getElementById('cryptoAmount').value); cur=document.getElementById('cryptoCurrency').value; wallet=document.getElementById('cryptoWalletAddress').value.trim(); network=document.getElementById('cryptoNetwork').value; }
+  else { amount=parseFloat(document.getElementById('paypalAmount').value); cur='GBP'; paypalEmail=document.getElementById('paypalEmail').value.trim(); }
+  if(!currentUser) return alert("Login first");
+  if(!amount||amount<=0) return alert("Enter valid amount");
+  if(amount<100||amount>20000) return alert("Withdrawal must be between £100 and £20,000");
+  if(amount>availableBal) return alert("Not enough balance. Available: £"+availableBal.toFixed(2));
+  if(m==='Crypto'&&!wallet) return alert("Enter wallet address");
+  if(m==='PayPal'&&!paypalEmail) return alert("Enter PayPal email");
+  let fee=amount*0.20; let net=amount-fee;
+  if(!confirm('Confirm Withdraw?\n\nYou Withdraw: £'+amount.toFixed(2)+' '+cur+'\nFee (20%): -£'+fee.toFixed(2)+'\nYou Receive: £'+net.toFixed(2)+' '+cur+'\nMethod: '+m)) return;
+  document.getElementById('withdrawMsg').innerText='Sending...';
+  const {error}=await client.from('withdrawals').insert({user_id:currentUser.id,amount:amount,gross_amount:amount,fee:fee,net_amount:net,currency:cur,method:m,crypto_wallet_address:m==='Crypto'?wallet:null,crypto_currency:m==='Crypto'?cur:null,crypto_network:m==='Crypto'?network:null,paypal_email:m==='PayPal'?paypalEmail:null,status:'pending'});
+  if(error){document.getElementById('withdrawMsg').innerText='Error: '+error.message; alert('Withdraw failed: '+error.message); return;}
+  document.getElementById('withdrawMsg').innerText='✅ Withdraw sent! You get £'+net.toFixed(2)+' '+cur+' after 20% fee - PENDING';
+  if(m==='Crypto') document.getElementById('cryptoAmount').value='';
+  if(m==='PayPal') document.getElementById('paypalAmount').value='';
+  calcWithdraw();
 }
 async function afterLogin(){
   const {data}=await client.auth.getUser(); if(!data.user) return;
@@ -211,7 +283,7 @@ async function afterLogin(){
   else { earned=parseFloat(res.data.earned_balance ?? res.data.amount ?? 0); availableBal=parseFloat(res.data.available_balance ?? 0); reservedBal=parseFloat(res.data.reserved_balance ?? 0); centralReserve=parseFloat(res.data.central_reserve ?? 0); }
   updateDisplay(); renderEngines(); runCycle(); loadTxCount(); aiBrainReady();
 }
-async function loadTxCount(){ let {data}=await client.from('transactions').select('id').eq('user_id',currentUser.id); document.getElementById('txCount').innerText=data?data.length:0; }
+async function loadTxCount(){ let {data}=await client.from('transactions').select('id').eq('user_id',currentUser.id); let el=document.getElementById('txCount'); if(el) el.innerText=data?data.length:0; }
 async function saveBalance(){ if(!currentUser) return; await client.from('balances').upsert({user_id:currentUser.id,amount:earned,available_balance:availableBal,reserved_balance:reservedBal,earned_balance:earned,central_reserve:centralReserve}); }
 function updateDisplay(){
   document.getElementById('earned').innerText="€"+earned.toFixed(2);
@@ -227,7 +299,7 @@ function updateDisplay(){
 function toggleDeposit(){depositOn=!depositOn; document.getElementById('depositState').innerText=depositOn?"ON":"OFF"; document.getElementById('depositBtn').style.background=depositOn?"#0a9d6e":"#999";}
 function toggleEngine(id){let e=engines.find(x=>x.id===id); e.on=!e.on; aiLog('AI: '+e.name+' Engine turned '+(e.on?'ON':'OFF')); renderEngines();}
 function renderEngines(){
-  document.getElementById('engines').innerHTML=engines.map(e=>`<div class="eng"><div style="display:flex;justify-content:space-between;align-items:center"><span>🤖 Sub-Engine ${e.id}</span><div style="display:flex;align-items:center;gap:6px"><div class="indicator ${e.on?'':'off'}"></div><span>${e.on?'ON':'OFF'}</span></div></div><div style="font-size:32px">🦾</div><b style="font-size:18px">${e.name} Engine</b><br><small>20 AI Workers</small><br><small>${e.on?'Workers Active':'Workers Paused'}</small><br><small>Tasks: ${e.tasks}</small><br><br><button class="${e.on?'on':'off'}" onclick="toggleEngine(${e.id})">${e.on?'ON':'OFF'}</button></div>`).join('');
+  document.getElementById('engines').innerHTML=engines.map(e=>'<div class="eng"><div style="display:flex;justify-content:space-between;align-items:center"><span>🤖 Sub-Engine '+e.id+'</span><div style="display:flex;align-items:center;gap:6px"><div class="indicator '+(e.on?'':'off')+'"></div><span>'+(e.on?'ON':'OFF')+'</span></div></div><div style="font-size:32px">🦾</div><b style="font-size:18px">'+e.name+' Engine</b><br><small>20 AI Workers</small><br><small>'+(e.on?'Workers Active':'Workers Paused')+'</small><br><small>Tasks: '+e.tasks+'</small><br><br><button class="'+(e.on?'on':'off')+'" onclick="toggleEngine('+e.id+')">'+(e.on?'ON':'OFF')+'</button></div>').join('');
   let active=engines.filter(e=>e.on).length;
   document.getElementById('masterStatus').innerText=active>0?"RUNNING":"PAUSED";
   document.getElementById('workerCount').innerText=active*20;
@@ -240,7 +312,7 @@ async function showProfile(){
   let {data:prof}=await client.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
   let {data:kyc}=await client.from('kyc').select('status').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
   let {data:wd}=await client.from('withdrawals').select('id').eq('user_id',currentUser.id);
-  document.getElementById('profileInfo').innerHTML=`Email: <b>${currentUser.email}</b><br>Cedars ID: <b>${prof?.cedars_id||'...'}</b><br>Referral: <b>cedarsempire.com/r/${prof?.cedars_id||''}</b><br>Full Name: <b>${prof?.full_name||'Not set'}</b><br>KYC Status: <b>${kyc?.status||'not submitted'}</b><br>Withdrawals: <b>${wd?wd.length:0}</b><br>Available: <b>€${availableBal.toFixed(2)}</b>`;
+  document.getElementById('profileInfo').innerHTML='Email: <b>'+currentUser.email+'</b><br>Cedars ID: <b>'+(prof?.cedars_id||'...')+'</b><br>Referral: <b>cedarsempire.com/r/'+(prof?.cedars_id||'')+'</b><br>Full Name: <b>'+(prof?.full_name||'Not set')+'</b><br>KYC Status: <b>'+(kyc?.status||'not submitted')+'</b><br>Withdrawals: <b>'+(wd?wd.length:0)+'</b><br>Available: <b>€'+availableBal.toFixed(2)+'</b>';
   document.getElementById('profileName').value=prof?.full_name||'';
 }
 function closeProfile(){document.getElementById('profileModal').classList.remove('open');}
@@ -272,7 +344,7 @@ async function runCycle(){
   earned+=reward; availableBal+=reward*0.2; centralReserve+=reward*0.8; totalTasks++; e.tasks++;
   lastTaskInfo=w+' in '+e.name+' - '+taskName;
   await saveBalance();
-  await client.from('transactions').insert({user_id:currentUser.id,type:'task',amount:reward,note:lastTaskInfo});
+  try{ await client.from('transactions').insert({user_id:currentUser.id,type:'task',amount:reward,note:lastTaskInfo}); }catch(e){}
   updateDisplay();
   document.getElementById('workersLive').innerHTML='<div><span class="dot"></span> Worker #'+String(totalTasks).padStart(3,'0')+' - '+w+' - '+e.name+' - Working</div><div style="margin-top:8px;color:#0a7a55">✅ Last: '+lastTaskInfo+' completed +€'+reward.toFixed(2)+'</div>';
   document.getElementById('taskTable').innerHTML=engines.map(en=>'<tr><td>'+en.name+'</td><td>'+en.tasks+' tasks</td><td><span class="pill">'+(en.on?'Active':'Idle')+'</span></td><td>Just now</td></tr>').join('');
