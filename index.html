@@ -1,175 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cedars Empire - Worldwide</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-* { box-sizing: border-box; }
-body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f8f9fa; color: #212529; }
-.container { max-width: 650px; margin: 0 auto; }
-h1 { text-align: center; font-size: 2.2rem; margin-bottom: 5px; }
-.subtitle { text-align: center; margin-bottom: 20px; }
-.badge { background: #e9ecef; padding: 6px 12px; border-radius: 20px; display: inline-block; }
-.card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 22px; margin-bottom: 18px; }
-h2 { margin-top: 0; }
-input[type="text"], input[type="email"], input[type="password"], input[type="number"] { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ced4da; border-radius: 8px; font-size: 16px; display: block; }
-button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin: 8px 0; }
-button:disabled { background: #b0b0b0; cursor: not-allowed; }
-button.secondary { background: #6c757d; }
-button.linkbtn { background: transparent; color: #007bff; padding: 6px; font-size: 14px; width: auto; }
-.row { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 14px; }
-.row input { width: auto; margin: 0; }
-.msg { color: #dc3545; font-size: 14px; min-height: 18px; }
-.success { color: #28a745; font-weight: bold; font-size: 14px; }
-.balance { font-size: 1.6rem; font-weight: bold; color: #007bff; }
-.hidden { display: none !important; }
-.flex-between { display: flex; justify-content: space-between; align-items: center; }
-.txn { padding: 10px 0; border-bottom: 1px solid #eee; }
-.small { font-size: 13px; color: #666; text-align: center; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEDARS EMPIRE</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 14px 18px;
+            border-radius: 14px;
+        }
+        .authBox {
+            background: #fff;
+            padding: 20px;
+            border-radius: 14px;
+            max-width: 420px;
+            margin: 40px auto;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-<h1>Cedars Empire</h1>
-<p class="subtitle"><span class="badge">🌍 Worldwide - Balance in € EUR</span></p>
+    <div class="top">
+        <h1>CEDARS EMPIRE <span class="live">● Live</span></h1>
+        <div id="userEmail">👤 Guest</div>
+    </div>
+    <div id="authSection" class="authBox">
+        <h2 style="text-align:center;margin:0">Login / Register</h2>
+        <input id="email" type="email" placeholder="Email">
+        <input id="password" type="password" placeholder="Password">
+        <button id="loginBtn" onclick="doLogin()">Login</button>
+        <button id="registerBtn" onclick="doRegister()">Register</button>
+    </div>
+    <div id="dashSection" style="display:none">
+        <h2>Dashboard</h2>
+        <p id="welcomeMessage"></p>
+        <button onclick="doLogout()">Logout</button>
+        <div id="dashboardContent">
+            <!-- Dashboard content here -->
+            <div class="stats">
+                <div class="stat">🤖 AI Workers Online<br><b id="workerCount">100</b><br><small>Online now</small></div>
+                <div class="stat">💶 Total Earned - Never Resets<br><b id="earned">€0.00</b><br><small>Live updating • Keeps accumulating</small></div>
+                <div class="stat">🎯 AI Target €2500<br><b id="pct">0%</b><br><small id="countdown">Next cycle in 24:00:00</small><div class="bar"><div class="fill" id="barFill"></div></div></div>
+            </div>
+            <div class="card">
+                <h3 style="margin-top:0">💰 Balance Table</h3>
+                <table>
+                    <tr><th>Available Balance</th><td><b id="balAvailable">€0.00</b></td><td><small>Withdrawable / KYC withdrawals from here</small></td></tr>
+                    <tr><th>Reserved Balance</th><td><b id="balReserved">€0.00</b></td><td><small>Held for pending tasks / rewards</small></td></tr>
+                    <tr><th>Earned Balance</th><td><b id="balEarned">€0.00</b></td><td><small>Total ever earned - never resets</small></td></tr>
+                    <tr><th>Central Reserve</th><td><b id="balCentral">€0.00</b></td><td><small>Platform reserve - 80% of every reward</small></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
 
-<div id="auth" class="card">
-<h2 id="auth-title">Login</h2>
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-<div class="row"><input id="remember" type="checkbox" checked> <label for="remember">Remember me</label></div>
-<input id="referral-input" type="text" placeholder="Referral Code (optional)" class="hidden">
-<button id="auth-btn" type="button">Login</button>
-<button id="toggle-auth" type="button" class="secondary">No account? Sign Up</button>
-<div class="flex-between">
-<button id="forgot-btn" type="button" class="linkbtn">Forgot Password? Reset</button>
-<button id="show-key-btn" type="button" class="linkbtn">Setup Key</button>
-</div>
-<div id="key-box" class="hidden">
-<p class="small">Paste your Supabase key once. It will be saved on this device.</p>
-<input id="supabase-key" type="text" placeholder="sb_publishable_...">
-<button id="save-key-btn" type="button" class="secondary">Save Key & Activate Login</button>
-</div>
-<p id="auth-msg" class="msg"></p>
-<p id="success-msg" class="success"></p>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = ' https://ipyvewpjtpgfuqfwizlr.supabase.co/rest/v1/';
+        const SUPABASE_KEY = 'sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm';
+        const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-<div id="app" class="hidden">
-<div class="card"><h2>Dashboard</h2><p>Welcome, <span id="user-email"></span> 🎉</p><p>Your balance: <span id="balance" class="balance">0.00 €</span></p><button id="logout-btn" type="button" class="secondary">Logout</button></div>
-<div class="card"><h2>Deposit</h2><input id="deposit-amount" type="number" placeholder="Amount in €"><button id="deposit-btn" type="button">Deposit Money</button><p id="deposit-msg" class="msg"></p></div>
-<div class="card"><h2>Withdraw</h2><input id="withdraw-amount" type="number" placeholder="Amount in €"><button id="withdraw-btn" type="button">Withdraw Money</button><p id="withdraw-msg" class="msg"></p></div>
-<div class="card"><h2>Referral Program</h2><p>Your referral code: <b id="referral-code"></b></p><p>Earn €5 for every friend who signs up and deposits €10!</p></div>
-<div class="card"><h2>Transactions</h2><div id="transactions-list"></div></div>
-</div>
-</div>
+        let currentUser = null;
 
-<script>
-const SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co";
-const SUPABASE_KEY_HARDCODED = "sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm";
-let SUPABASE_KEY = localStorage.getItem("cedars_key") || SUPABASE_KEY_HARDCODED;
-if (SUPABASE_KEY === "PASTE_YOUR_NEW_KEY_HERE") SUPABASE_KEY = "";
-let supabaseClient = null;
-let isLogin = true;
-let currentUser = null;
-let currentProfile = null;
+        async function doRegister() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const { data, error } = await client.auth.signUp({ email, password });
+            if (error) {
+                alert('Error: ' + error.message);
+            } else {
+                alert('Account created successfully!');
+            }
+        }
 
-function updateAuthState() {
-  const btn = document.getElementById("auth-btn");
-  if (!SUPABASE_KEY) {
-    btn.disabled = true; btn.innerText = "Setup Key First Below";
-    document.getElementById("auth-msg").innerText = "Click 'Setup Key' below and save your key to activate Login.";
-    document.getElementById("key-box").classList.remove("hidden");
-  } else {
-    btn.disabled = false; btn.innerText = isLogin ? "Login" : "Sign Up";
-    document.getElementById("auth-msg").innerText = "";
-    document.getElementById("key-box").classList.add("hidden");
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    supabaseClient.auth.getSession().then(({ data }) => { if (data.session?.user) loadApp(data.session.user); });
-  }
-}
-updateAuthState();
-document.getElementById("show-key-btn").onclick = () => { document.getElementById("key-box").classList.toggle("hidden"); };
-document.getElementById("save-key-btn").onclick = () => {
-  const key = document.getElementById("supabase-key").value.trim();
-  if (!key || !key.startsWith("sb_")) { document.getElementById("auth-msg").innerText = "That key looks wrong. It must start with sb_"; return; }
-  SUPABASE_KEY = key; localStorage.setItem("cedars_key", key);
-  document.getElementById("success-msg").innerText = "Key saved! Login is now active.";
-  updateAuthState();
-};
-document.getElementById("toggle-auth").onclick = () => {
-  isLogin = !isLogin;
-  document.getElementById("auth-title").innerText = isLogin ? "Login" : "Sign Up";
-  document.getElementById("auth-btn").innerText = isLogin ? "Login" : "Sign Up";
-  document.getElementById("toggle-auth").innerText = isLogin ? "No account? Sign Up" : "Have account? Login";
-  document.getElementById("referral-input").classList.toggle("hidden", isLogin);
-};
-document.getElementById("auth-btn").onclick = async () => {
-  if (!SUPABASE_KEY) { document.getElementById("auth-msg").innerText = "Save your key first."; return; }
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  if (!email || !password) { document.getElementById("auth-msg").innerText = "Enter email and password"; return; }
-  document.getElementById("auth-msg").innerText = "Please wait...";
-  document.getElementById("auth-btn").disabled = true;
-  let result;
-  if (isLogin) result = await supabaseClient.auth.signInWithPassword({ email, password });
-  else result = await supabaseClient.auth.signUp({ email, password });
-  document.getElementById("auth-btn").disabled = false;
-  if (result.error) { document.getElementById("auth-msg").innerText = result.error.message; return; }
-  document.getElementById("auth-msg").innerText = "";
-  document.getElementById("success-msg").innerText = isLogin ? "Logged in!" : "Account created! Now click Login.";
-  if (isLogin && result.data.user) loadApp(result.data.user);
-  if (!isLogin) { isLogin = true; document.getElementById("toggle-auth").click(); }
-};
-document.getElementById("forgot-btn").onclick = async () => {
-  if (!SUPABASE_KEY) { document.getElementById("auth-msg").innerText = "Save your key first."; return; }
-  const email = document.getElementById("email").value.trim();
-  if (!email) { document.getElementById("auth-msg").innerText = "Type your email first, then click Forgot Password"; return; }
-  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
-  if (error) document.getElementById("auth-msg").innerText = error.message;
-  else document.getElementById("success-msg").innerText = "Reset email sent to " + email;
-};
-async function loadApp(user) {
-  currentUser = user;
-  document.getElementById("auth").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-  document.getElementById("user-email").innerText = user.email;
-  const { data } = await supabaseClient.from("profiles").select("*").eq("id", user.id).single();
-  if (data) { currentProfile = data; document.getElementById("balance").innerText = Number(data.balance || 0).toFixed(2) + " €"; document.getElementById("referral-code").innerText = data.referral_code || ""; }
-  loadTxns();
-}
-async function loadTxns() {
-  const { data } = await supabaseClient.from("transactions").select("*").eq("user_id", currentUser.id).order("created_at", { ascending: false }).limit(20);
-  const el = document.getElementById("transactions-list");
-  if (!data || data.length === 0) { el.innerHTML = "<p>No transactions yet.</p>"; return; }
-  el.innerHTML = data.map(t => `<div class="txn">${t.type} - ${Number(t.amount).toFixed(2)} € - ${new Date(t.created_at).toLocaleString()}</div>`).join("");
-}
-document.getElementById("deposit-btn").onclick = async () => {
-  const amt = Number(document.getElementById("deposit-amount").value);
-  if (!amt || amt <= 0) { document.getElementById("deposit-msg").innerText = "Enter valid amount"; return; }
-  const newBal = Number(currentProfile?.balance || 0) + amt;
-  await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", currentUser.id);
-  await supabaseClient.from("transactions").insert({ user_id: currentUser.id, type: "deposit", amount: amt });
-  currentProfile.balance = newBal; document.getElementById("balance").innerText = newBal.toFixed(2) + " €";
-  document.getElementById("deposit-msg").innerText = "Deposited!"; loadTxns();
-};
-document.getElementById("withdraw-btn").onclick = async () => {
-  const amt = Number(document.getElementById("withdraw-amount").value);
-  if (!amt || amt <= 0) { document.getElementById("withdraw-msg").innerText = "Enter valid amount"; return; }
-  const cur = Number(currentProfile?.balance || 0);
-  if (amt > cur) { document.getElementById("withdraw-msg").innerText = "Not enough balance"; return; }
-  const newBal = cur - amt;
-  await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", currentUser.id);
-  await supabaseClient.from("transactions").insert({ user_id: currentUser.id, type: "withdraw", amount: amt });
-  currentProfile.balance = newBal; document.getElementById("balance").innerText = newBal.toFixed(2) + " €";
-  document.getElementById("withdraw-msg").innerText = "Withdrawn!"; loadTxns();
-};
-document.getElementById("logout-btn").onclick = async () => {
-  await supabaseClient.auth.signOut();
-  document.getElementById("app").classList.add("hidden");
-  document.getElementById("auth").classList.remove("hidden");
-};
-</script>
+        async function doLogin() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const { data, error } = await client.auth.signInWithPassword({ email, password });
+            if (error) {
+                alert('Error: ' + error.message);
+            } else {
+                currentUser = data.user;
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('dashSection').style.display = 'block';
+                document.getElementById('welcomeMessage').innerText = 'Welcome, ' + currentUser.email;
+                // Load dashboard content here
+            }
+        }
+
+        async function doLogout() {
+            await client.auth.signOut();
+            currentUser = null;
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('dashSection').style.display = 'none';
+        }
+
+        // Load user session
+        client.auth.getSession().then(({ data }) => {
+            if (data.session) {
+                currentUser = data.session.user;
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('dashSection').style.display = 'block';
+                document.getElementById('welcomeMessage').innerText = 'Welcome, ' + currentUser.email;
+                // Load dashboard content here
+            }
+        });
+    </script>
 </body>
 </html>
