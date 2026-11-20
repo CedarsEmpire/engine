@@ -24,6 +24,11 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 </head>
 <body>
 <div class="topbar"><b>Cedars</b><a href="index.html">← Back Home</a></div>
+<div class="card" id="loginGuard" style="display:none">
+<h2>Please Login First</h2>
+<p>You opened KYC / Withdraw without logging in. Go to Login page first.</p>
+<button class="btn-blue" onclick="window.location.href='index.html'">Go to Login Page</button>
+</div>
 
 <div class="card">
 <h2>My Profile</h2>
@@ -51,7 +56,6 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 <p id="kycMsg"></p>
 </div>
 
-<!-- WITHDRAW WITH CALCULATOR -->
 <div class="card">
 <h2>Withdraw</h2>
 <p><small>Available: <b id="availText">€0.00</b> - Must be KYC Verified</small></p>
@@ -63,16 +67,16 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 <label id="amountLabel">Amount (£ GBP)</label><input id="withdrawAmount" type="number" placeholder="e.g. 500" min="100" max="20000" step="0.01" oninput="calcWithdraw()">
 </div>
 <div id="cryptoAmountFields" style="display:none">
-<label>Crypto Currency</label><select id="cryptoCurrency" onchange="calcWithdraw()"><option value="BTC">BTC</option><option value="ETH">ETH</option><option value="USDT">USDT</option></select>
+<label>Crypto Currency</label><select id="cryptoCurrency" onchange="calcWithdraw()"><option value="BTC">BTC - Bitcoin</option><option value="ETH">ETH - Ethereum</option><option value="USDT">USDT - Tether</option></select>
 <label>Amount (Crypto)</label><input id="cryptoAmount" type="number" placeholder="e.g. 100 USDT / 0.01 BTC" step="0.0001" oninput="calcWithdraw()">
-<small id="cryptoHint">For USDT: Min 100, Max 20000. For BTC/ETH: Min 0.002</small>
+<small id="cryptoHint">USDT: Min 100 - Max 20000. BTC: Min 0.001 (≈$95). ETH: Min 0.03 (≈$105). Rates: BTC $95,000 / ETH $3,500 / USDT $1</small>
 </div>
-<!-- CALCULATOR -->
 <div class="calc" id="withdrawCalc">
 Withdraw Calculator<br>
 You Withdraw: <b id="calcGross">0.00</b><br>
 Fee (20%): <b id="calcFee" style="color:#dc2626">- 0.00</b><br>
 You Receive: <b id="calcNet" style="color:#16a34a">0.00</b><br>
+<span id="calcUSD" style="color:#2563eb;font-weight:bold"></span><br>
 <span id="calcError" style="color:#dc2626;font-weight:bold"></span>
 </div>
 <div id="bankFields"><label>Account Name</label><input id="bankName" type="text" placeholder="Name on bank account"><label>Bank Account / IBAN</label><input id="bankDetails" type="text" placeholder="IBAN / Account Number"></div>
@@ -81,22 +85,13 @@ You Receive: <b id="calcNet" style="color:#16a34a">0.00</b><br>
 <button class="btn-green" onclick="doWithdraw()">Request Withdraw</button><p id="withdrawMsg"></p>
 </div>
 
-<!-- P2P TRANSFER -->
 <div class="card">
 <h2>💸 P2P Transfer - Member to Member</h2>
 <p><small>Send float from your Available Balance to another member's Cedars ID. Fee <b>5%</b>.</small></p>
-<div class="warn">Example: Send 100 → Fee 5 → Receiver gets <b>95</b>. You pay 100.</div>
 <label>Receiver Cedars ID</label><input id="p2pTo" type="text" placeholder="e.g. CDAB1234">
 <label>Amount to Send</label><input id="p2pAmount" type="number" placeholder="e.g. 50" min="1" step="0.01" oninput="calcP2P()">
-<div class="calc">
-P2P Calculator<br>
-You Send: <b id="p2pGross">0.00</b><br>
-Fee (5%): <b id="p2pFee" style="color:#dc2626">- 0.00</b><br>
-Receiver Gets: <b id="p2pNet" style="color:#16a34a">0.00</b><br>
-</div>
-<button class="btn-purple" onclick="doP2P()">Send P2P Transfer</button>
-<p id="p2pMsg"></p>
-<div id="p2pList">Loading P2P history...</div>
+<div class="calc">P2P Calculator<br>You Send: <b id="p2pGross">0.00</b><br>Fee (5%): <b id="p2pFee" style="color:#dc2626">- 0.00</b><br>Receiver Gets: <b id="p2pNet" style="color:#16a34a">0.00</b></div>
+<button class="btn-purple" onclick="doP2P()">Send P2P Transfer</button><p id="p2pMsg"></p><div id="p2pList">Loading P2P history...</div>
 </div>
 
 <div class="card"><h2>My Withdrawals</h2><button class="btn-grey" onclick="loadWithdrawals()">Refresh</button><div id="withdrawList">Loading...</div></div>
@@ -104,154 +99,5 @@ Receiver Gets: <b id="p2pNet" style="color:#16a34a">0.00</b><br>
 <script>
 const SUPABASE_URL="https://ipyvewpjtpgfuqfwizlr.supabase.co";
 const SUPABASE_KEY="sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm";
-const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let currentUser=null,currentKycStatus=null,avail=0,myCedarsId="";
-function updateCurrencyLabel(){const c=document.getElementById('withdrawCurrency').value;document.getElementById('amountLabel').innerText=c==='GBP'?'Amount (£ GBP)':c==='USD'?'Amount ($ USD)':'Amount (€ EUR)';}
-function updateMethodFields(){const m=document.getElementById('withdrawMethod').value;const isCrypto=m==='Crypto';document.getElementById('bankFields').style.display=m==='Bank Transfer'?'block':'none';document.getElementById('paypalFields').style.display=m==='PayPal'?'block':'none';document.getElementById('cryptoFields').style.display=isCrypto?'block':'none';document.getElementById('fiatFields').style.display=isCrypto?'none':'block';document.getElementById('cryptoAmountFields').style.display=isCrypto?'block':'none';calcWithdraw();}
-function copyRef(){ if(!myCedarsId) return; navigator.clipboard.writeText('https://cedarsempire.com/r/'+myCedarsId); alert('Copied: cedarsempire.com/r/'+myCedarsId); }
-
-// WITHDRAW CALCULATOR - 20% fee
-function calcWithdraw(){
-  const isCrypto=document.getElementById('withdrawMethod').value==='Crypto';
-  const cryptoCur=isCrypto?document.getElementById('cryptoCurrency').value:'';
-  let amount=parseFloat(isCrypto?document.getElementById('cryptoAmount').value:document.getElementById('withdrawAmount').value)||0;
-  let fee=amount*0.20; let net=amount-fee;
-  let cur=isCrypto?cryptoCur:document.getElementById('withdrawCurrency').value;
-  document.getElementById('calcGross').innerText=amount.toFixed(2)+' '+cur;
-  document.getElementById('calcFee').innerText='- '+fee.toFixed(2)+' '+cur;
-  document.getElementById('calcNet').innerText=net.toFixed(2)+' '+cur;
-  let err='';
-  if(amount>0){
-    if(!isCrypto && (amount<100 || amount>20000)) err='⚠️ Must be between 100 and 20000';
-    if(isCrypto && cryptoCur==='USDT' && (amount<100 || amount>20000)) err='⚠️ USDT: Min 100 - Max 20000';
-    if(isCrypto && (cryptoCur==='BTC'||cryptoCur==='ETH') && amount<0.002) err='⚠️ Min 0.002 for BTC/ETH';
-    if(amount>avail) err='⚠️ Amount more than your Available Balance €'+avail.toFixed(2);
-  }
-  document.getElementById('calcError').innerText=err;
-}
-// P2P CALCULATOR - 5% fee
-function calcP2P(){
-  let amount=parseFloat(document.getElementById('p2pAmount').value)||0;
-  let fee=amount*0.05; let net=amount-fee;
-  document.getElementById('p2pGross').innerText=amount.toFixed(2);
-  document.getElementById('p2pFee').innerText='- '+fee.toFixed(2);
-  document.getElementById('p2pNet').innerText=net.toFixed(2);
-}
-async function loadProfile(){
-  const {data:{user}}=await supabase.auth.getUser();
-  if(!user){document.getElementById('userEmail').innerText='Not logged in - please login first';return;}
-  currentUser=user; document.getElementById('userEmail').innerText=user.email;
-  let {data:prof}=await supabase.from('profiles').select('*').eq('id',user.id).maybeSingle();
-  if(!prof){ myCedarsId='CD'+user.id.replace(/-/g,'').substring(0,6).toUpperCase(); await supabase.from('profiles').insert({id:user.id,email:user.email,cedars_id:myCedarsId,referral_code:myCedarsId}); }
-  else { myCedarsId=prof.cedars_id||prof.referral_code||('CD'+user.id.replace(/-/g,'').substring(0,6).toUpperCase()); if(!prof.cedars_id) await supabase.from('profiles').update({cedars_id:myCedarsId,referral_code:myCedarsId}).eq('id',user.id); }
-  document.getElementById('myId').innerText='My Cedars ID: '+myCedarsId;
-  document.getElementById('myRef').innerHTML='My Referral: <b>cedarsempire.com/r/'+myCedarsId+'</b> <button onclick="copyRef()" style="width:auto;padding:6px 12px">Copy</button>';
-  const {data}=await supabase.from('kyc').select('status').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
-  currentKycStatus=data?data.status:null;
-  const box=document.getElementById('statusBox');
-  if(currentKycStatus==='verified'){box.className='status verified';box.innerText='✅ VERIFIED - You can withdraw';}
-  else if(currentKycStatus==='pending'){box.className='status pending';box.innerText='⏳ PENDING - Waiting for admin approval';}
-  else if(currentKycStatus==='rejected'){box.className='status rejected';box.innerText='❌ REJECTED - Please resubmit KYC';}
-  else{box.className='status none';box.innerText='⚠️ NOT SUBMITTED - Submit KYC below';}
-  const {data:bal}=await supabase.from('balances').select('available_balance').eq('user_id',user.id).maybeSingle();
-  avail=bal?parseFloat(bal.available_balance||0):0;
-  document.getElementById('availText').innerText='€'+avail.toFixed(2);
-  loadWithdrawals(); loadP2P();
-}
-async function submitKYC(){
-  const btn=document.getElementById('kycBtn');
-  const fullName=document.getElementById('fullName').value.trim();
-  const country=document.getElementById('country').value;
-  const idNumber=document.getElementById('idNumber').value.trim();
-  const docFile=document.getElementById('docFile').files[0];
-  const selfieFile=document.getElementById('selfieFile').files[0];
-  if(!currentUser) return alert("Please login first");
-  if(!fullName) return alert("Enter Full Name");
-  if(!country) return alert("Select your Country");
-  if(!idNumber) return alert("Enter ID / Passport Number");
-  btn.innerText='Submitting... Please wait'; btn.disabled=true;
-  document.getElementById('kycMsg').innerText='Submitting...';
-  try{
-    const {error}=await supabase.from('kyc').insert({user_id:currentUser.id,full_name:fullName,country:country,id_number:idNumber,doc_type:document.getElementById('docType').value,doc_front_name:docFile?docFile.name:null,selfie_name:selfieFile?selfieFile.name:null,status:'pending'});
-    if(error) throw error;
-    document.getElementById('kycMsg').innerText='✅ KYC Submitted - Waiting for approval';
-    alert('✅ KYC Submitted! Country: '+country);
-    loadProfile();
-  }catch(e){ document.getElementById('kycMsg').innerText='Error: '+e.message; alert('KYC FAILED: '+e.message); }
-  btn.innerText='Submit KYC for Verification'; btn.disabled=false;
-}
-async function doWithdraw(){
-  const method=document.getElementById('withdrawMethod').value;
-  const isCrypto=method==='Crypto';
-  const currency=isCrypto?document.getElementById('cryptoCurrency').value:document.getElementById('withdrawCurrency').value;
-  const amount=parseFloat(isCrypto?document.getElementById('cryptoAmount').value:document.getElementById('withdrawAmount').value);
-  const bankName=document.getElementById('bankName').value.trim();
-  const bankDetails=document.getElementById('bankDetails').value.trim();
-  const paypalEmail=document.getElementById('paypalEmail').value.trim();
-  const cryptoWallet=document.getElementById('cryptoWalletAddress').value.trim();
-  const cryptoNetwork=document.getElementById('cryptoNetwork').value.trim();
-  if(!currentUser) return alert("Please login first");
-  if(!amount||amount<=0) return alert("Enter a valid amount");
-  // MIN / MAX CHECK
-  if(!isCrypto && (amount<100 || amount>20000)) return alert("Withdraw must be between $100 and $20,000");
-  if(isCrypto && currency==='USDT' && (amount<100 || amount>20000)) return alert("USDT Withdraw must be between 100 and 20000");
-  if(isCrypto && (currency==='BTC'||currency==='ETH') && amount<0.002) return alert("BTC/ETH Min is 0.002");
-  if(amount>avail) return alert("Not enough Available Balance. You have €"+avail.toFixed(2));
-  if(method==='Bank Transfer'&&(!bankName||!bankDetails)) return alert("Fill Bank Account Name and Details");
-  if(method==='PayPal'&&!paypalEmail) return alert("Enter PayPal Email");
-  if(method==='Crypto'&&!cryptoWallet) return alert("Enter Crypto Wallet Address");
-  if(currentKycStatus!=='verified'){alert("Please complete KYC first and wait for approval");document.getElementById('kycCard').scrollIntoView({behavior:'smooth'});return;}
-  let fee=amount*0.20; let net=amount-fee;
-  if(!confirm(`Confirm Withdraw?\n\nYou Withdraw: ${amount} ${currency}\nFee (20%): -${fee.toFixed(2)} ${currency}\nYou Receive: ${net.toFixed(2)} ${currency}\nMethod: ${method}`)) return;
-  document.getElementById('withdrawMsg').innerText='Sending...';
-  const {error}=await supabase.from('withdrawals').insert({user_id:currentUser.id,amount:amount,gross_amount:amount,fee:fee,net_amount:net,currency:currency,method:method,bank_name:method==='Bank Transfer'?bankName:null,bank_details:method==='Bank Transfer'?bankDetails:(method==='Crypto'&&cryptoNetwork?'Network: '+cryptoNetwork:null),paypal_email:method==='PayPal'?paypalEmail:null,crypto_wallet_address:method==='Crypto'?cryptoWallet:null,crypto_currency:method==='Crypto'?currency:null,status:'pending'});
-  if(error){document.getElementById('withdrawMsg').innerText="Error: "+error.message;alert("Withdraw failed: "+error.message);return;}
-  document.getElementById('withdrawMsg').innerText=`✅ Withdraw sent! You get ${net.toFixed(2)} ${currency} after 20% fee - PENDING`;
-  loadWithdrawals();
-}
-async function doP2P(){
-  const toId=document.getElementById('p2pTo').value.trim().toUpperCase();
-  const amount=parseFloat(document.getElementById('p2pAmount').value);
-  if(!currentUser) return alert("Please login first");
-  if(!toId) return alert("Enter Receiver Cedars ID e.g. CDAB1234");
-  if(toId===myCedarsId) return alert("You cannot send to yourself");
-  if(!amount||amount<=0) return alert("Enter valid amount");
-  if(amount>avail) return alert("Not enough balance. You have €"+avail.toFixed(2));
-  let fee=amount*0.05; let net=amount-fee;
-  if(!confirm(`Confirm P2P?\n\nTo: ${toId}\nYou Send: ${amount}\nFee (5%): -${fee.toFixed(2)}\nReceiver Gets: ${net.toFixed(2)}`)) return;
-  document.getElementById('p2pMsg').innerText='Sending...';
-  // Find receiver
-  const {data:receiver,error:rErr}=await supabase.from('profiles').select('id,cedars_id,email').eq('cedars_id',toId).maybeSingle();
-  if(rErr||!receiver){ document.getElementById('p2pMsg').innerText='Receiver not found'; return alert("Receiver Cedars ID not found: "+toId); }
-  // Get balances
-  const {data:senderBal}=await supabase.from('balances').select('*').eq('user_id',currentUser.id).maybeSingle();
-  const {data:receiverBal}=await supabase.from('balances').select('*').eq('user_id',receiver.id).maybeSingle();
-  if(!senderBal || parseFloat(senderBal.available_balance||0)<amount) return alert("Not enough balance");
-  // Update balances
-  await supabase.from('balances').update({available_balance:parseFloat(senderBal.available_balance)-amount}).eq('user_id',currentUser.id);
-  if(receiverBal){ await supabase.from('balances').update({available_balance:parseFloat(receiverBal.available_balance||0)+net,earned_balance:parseFloat(receiverBal.earned_balance||0)+net}).eq('user_id',receiver.id); }
-  else { await supabase.from('balances').insert({user_id:receiver.id,available_balance:net,earned_balance:net,amount:net}); }
-  // Log transfer
-  await supabase.from('p2p_transfers').insert({sender_id:currentUser.id,receiver_id:receiver.id,sender_cedars_id:myCedarsId,receiver_cedars_id:toId,amount:amount,fee:fee,net_amount:net,status:'completed'});
-  await supabase.from('transactions').insert([{user_id:currentUser.id,type:'p2p_sent',amount:-amount,note:'P2P to '+toId+' Fee '+fee.toFixed(2)},{user_id:receiver.id,type:'p2p_received',amount:net,note:'P2P from '+myCedarsId}]);
-  document.getElementById('p2pMsg').innerText=`✅ Sent! Receiver ${toId} got ${net.toFixed(2)} after 5% fee`;
-  alert(`✅ P2P Sent!\nTo: ${toId}\nReceiver gets: ${net.toFixed(2)}`);
-  loadProfile();
-}
-async function loadWithdrawals(){
-  if(!currentUser) return;
-  const {data,error}=await supabase.from('withdrawals').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20);
-  if(error){document.getElementById('withdrawList').innerText='Error: '+error.message;return;}
-  if(!data||!data.length){document.getElementById('withdrawList').innerText='No withdrawals yet.';return;}
-  document.getElementById('withdrawList').innerHTML='<table><tr><th>Gross</th><th>Fee 20%</th><th>You Get</th><th>Method</th><th>Status</th><th>Date</th></tr>'+data.map(w=>`<tr><td>${w.gross_amount||w.amount} ${w.currency}</td><td>${(w.fee??(w.amount*0.2)).toFixed(2)}</td><td><b>${(w.net_amount??(w.amount*0.8)).toFixed(2)}</b></td><td>${w.method}</td><td>${w.status}</td><td>${new Date(w.created_at).toLocaleDateString()}</td></tr>`).join('')+'</table>';
-}
-async function loadP2P(){
-  if(!currentUser) return;
-  const {data}=await supabase.from('p2p_transfers').select('*').or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order('created_at',{ascending:false}).limit(10);
-  if(!data||!data.length){document.getElementById('p2pList').innerHTML='No P2P yet.';return;}
-  document.getElementById('p2pList').innerHTML='<table><tr><th>From</th><th>To</th><th>Sent</th><th>Fee 5%</th><th>Received</th></tr>'+data.map(t=>`<tr><td>${t.sender_cedars_id}</td><td>${t.receiver_cedars_id}</td><td>${t.amount}</td><td>${t.fee}</td><td>${t.net_amount}</td></tr>`).join('')+'</table>';
-}
-updateMethodFields(); loadProfile();
-</script>
-</body>
-</html>
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storage:window.localStorage,persistSession:true,autoRefreshToken:true}});
+let currentUser=null,
