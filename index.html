@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEDARS EMPIRE - Shareholder Dashboard</title>
+    <title>Cedars Shareholder Dashboard</title>
     <style>
         /* Add your CSS styles here */
         body {
@@ -57,24 +57,12 @@
             color: #fff;
             cursor: pointer;
         }
-        .transactions {
-            margin-top: 20px;
-        }
-        .transactions ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .transactions li {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
     </style>
 </head>
 <body>
     <div class="dashboard">
         <div class="header">
-            <h1>CEDARS EMPIRE - Shareholder Dashboard</h1>
+            <h1>Cedars Shareholder Dashboard</h1>
         </div>
         <div class="stats">
             <div class="stat">
@@ -89,34 +77,12 @@
                 <h2>Daily Earnings</h2>
                 <p id="daily-earnings">$0.00</p>
             </div>
-            <div class="stat">
-                <h2>Total Earnings</h2>
-                <p id="total-earnings">$0.00</p>
-            </div>
-            <div class="stat">
-                <h2>Package</h2>
-                <p id="package">None</p>
-            </div>
         </div>
         <div class="actions">
             <button id="buy-share-btn">Buy Share</button>
             <button id="claim-earnings-btn">Claim Earnings</button>
         </div>
-        <div class="transactions">
-            <h2>Transaction History</h2>
-            <ul id="transaction-history">
-            </ul>
-        </div>
-        <div class="buy-share-section">
-            <h2>Buy Share</h2>
-            <p>Package:</p>
-            <select id="package-select">
-                <option value="seed">Seed ($100)</option>
-                <option value="root">Root ($500)</option>
-                <option value="stem">Stem ($1,000)</option>
-            </select>
-            <button id="buy-share-confirm-btn">Buy Share</button>
-        </div>
+        <!-- Add more content here -->
     </div>
 
     <script>
@@ -124,14 +90,10 @@
         let sharesOwned = 0;
         let currentBalance = 0;
         let dailyEarnings = 0;
-        let totalEarnings = 0;
-        let packageType = "None";
 
         document.getElementById("shares-owned").innerText = sharesOwned;
         document.getElementById("current-balance").innerText = `$${currentBalance.toFixed(2)}`;
         document.getElementById("daily-earnings").innerText = `$${dailyEarnings.toFixed(2)}`;
-        document.getElementById("total-earnings").innerText = `$${totalEarnings.toFixed(2)}`;
-        document.getElementById("package").innerText = packageType;
 
         document.getElementById("buy-share-btn").addEventListener("click", () => {
             // Add logic to buy share
