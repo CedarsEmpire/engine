@@ -1,167 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KYC & Withdraw - Cedars</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    /* styles here */
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KYC & Withdraw - Cedars</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body{font-family:Arial,sans-serif;background:#f4f4f4;margin:0;padding:0}
+  .topbar{background:#111;color:#fff;padding:15px;display:flex;justify-content:space-between}
+  .topbar a{color:#fff;text-decoration:none}
+  .card{background:#fff;margin:15px;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+  label{display:block;margin-top:12px;font-weight:bold;font-size:14px}
+  input,select{width:100%;padding:10px;margin-top:5px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
+  button{width:100%;padding:12px;margin-top:15px;border:none;border-radius:6px;font-weight:bold;cursor:pointer}
+  .btn-blue{background:#2563eb;color:#fff}
+  .btn-green{background:#16a34a;color:#fff}
+  .btn-grey{background:#e5e7eb}
+  .status{padding:10px;border-radius:6px;margin-top:10px;font-weight:bold}
+  .status.none{background:#fef3c7}.status.verified{background:#dcfce7}.status.pending{background:#dbeafe}.status.rejected{background:#fee2e2}
+  small{color:#666}
+</style>
 </head>
 <body>
-  <!-- topbar, profile card, kyc card, withdraw card -->
-  <div class="topbar">
-    <b>Cedars</b>
-    <a href="index.html">← Back Home</a>
-  </div>
 
-  <!-- PROFILE / STATUS CARD -->
-  <div class="card">
-    <h2>My Profile</h2>
-    <p id="userEmail">Loading...</p>
-    <div id="statusBox" class="status none">Checking KYC...</div>
-    <button class="btn-grey" onclick="loadProfile()">Refresh Status</button>
-  </div>
+<div class="topbar"><b>Cedars</b><a href="index.html">← Back Home</a></div>
 
-  <!-- KYC CARD -->
-  <div class="card" id="kycCard">
-    <h2>KYC Verification</h2>
-    <p><small>Upload your ID to unlock withdrawals. Admin must approve.</small></p>
+<!-- PROFILE -->
+<div class="card">
+  <h2>My Profile</h2>
+  <p id="userEmail">Loading...</p>
+  <div id="statusBox" class="status none">Checking KYC...</div>
+  <button class="btn-grey" onclick="loadProfile()">Refresh Status</button>
+</div>
 
-    <label>Full Name</label>
-    <input id="fullName" type="text" placeholder="e.g. John Doe">
+<!-- KYC -->
+<div class="card" id="kycCard">
+  <h2>KYC Verification</h2>
+  <p><small>Upload your ID to unlock withdrawals. Admin must approve.</small></p>
+  <label>Full Name</label>
+  <input id="fullName" type="text" placeholder="e.g. John Doe">
+  <label>ID / Passport Number</label>
+  <input id="idNumber" type="text" placeholder="e.g. CM12345678">
+  <label>Document Type</label>
+  <select id="docType"><option>National ID</option><option>Passport</option><option>Driving License</option></select>
+  <label>Upload ID Photo (Front)</label>
+  <input id="docFile" type="file" accept="image/*,.pdf">
+  <label>Selfie Holding ID (Optional but faster approval)</label>
+  <input id="selfieFile" type="file" accept="image/*">
+  <button class="btn-blue" onclick="submitKYC()">Submit KYC for Verification</button>
+  <p id="kycMsg"></p>
+</div>
 
-    <label>ID / Passport Number</label>
-    <input id="idNumber" type="text" placeholder="e.g. CM12345678">
+<!-- WITHDRAW - Bank / PayPal / Crypto -->
+<div class="card">
+  <h2>Withdraw</h2>
+  <p><small>You must be KYC Verified to withdraw.</small></p>
 
-    <label>Document Type</label>
-    <select id="docType">
-      <option>National ID</option>
-      <option>Passport</option>
-      <option>Driving License</option>
-    </select>
+  <label>Method</label>
+  <select id="withdrawMethod" onchange="updateMethodFields()">
+    <option value="Bank Transfer">Bank Transfer - £ / $ / €</option>
+    <option value="PayPal">PayPal - £ / $ / €</option>
+    <option value="Crypto">Crypto - BTC / ETH / USDT</option>
+  </select>
 
-    <label>Upload ID Photo (Front)</label>
-    <input id="docFile" type="file" accept="image/*,.pdf">
-
-    <label>Selfie Holding ID (Optional but faster approval)</label>
-    <input id="selfieFile" type="file" accept="image/*">
-
-    <button class="btn-blue" onclick="submitKYC()">Submit KYC for Verification</button>
-    <p id="kycMsg"></p>
-  </div>
-
-  <!-- WITHDRAW CARD - £, $ and € -->
-  <div class="card">
-    <h2>Withdraw</h2>
-    <p><small>You must be KYC Verified to withdraw. Choose your currency.</small></p>
-
+  <div id="fiatFields">
     <label>Currency</label>
     <select id="withdrawCurrency" onchange="updateCurrencyLabel()">
       <option value="GBP">£ GBP - British Pounds</option>
       <option value="USD">$ USD - US Dollars</option>
       <option value="EUR">€ EUR - Euros</option>
     </select>
-
     <label id="amountLabel">Amount (£ GBP)</label>
     <input id="withdrawAmount" type="number" placeholder="e.g. 100" min="1" step="0.01">
-
-    <label>Method</label>
-    <select id="withdrawMethod" onchange="updateMethodFields()">
-      <option value="Bank Transfer">Bank Transfer</option>
-      <option value="PayPal">PayPal</option>
-    </select>
-
-    <div id="bankFields">
-      <label>Account Name</label>
-      <input id="bankName" type="text" placeholder="Name on bank account">
-      <label>Bank Account / IBAN / Sort Code</label>
-      <input id="bankDetails" type="text" placeholder="e.g. IBAN / Account Number">
-    </div>
-
-    <div id="paypalFields" style="display:none;">
-      <label>PayPal Email</label>
-      <input id="paypalEmail" type="email" placeholder="e.g. you@email.com">
-    </div>
-
-    <button class="btn-green" onclick="doWithdraw()">Request Withdraw</button>
-    <p id="withdrawMsg"></p>
   </div>
 
-  <script>
-    const SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_PASTE_YOUR_KEY_HERE";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  <div id="cryptoAmountFields" style="display:none;">
+    <label>Crypto Currency</label>
+    <select id="cryptoCurrency">
+      <option value="BTC">BTC - Bitcoin</option>
+      <option value="ETH">ETH - Ethereum</option>
+      <option value="USDT">USDT - Tether</option>
+    </select>
+    <label>Amount (Crypto)</label>
+    <input id="cryptoAmount" type="number" placeholder="e.g. 0.01" min="0.0001" step="0.0001">
+  </div>
 
-    let currentUser = null;
-    let currentKycStatus = null;
+  <div id="bankFields">
+    <label>Account Name</label>
+    <input id="bankName" type="text" placeholder="Name on bank account">
+    <label>Bank Account / IBAN / Sort Code</label>
+    <input id="bankDetails" type="text" placeholder="e.g. IBAN / Account Number">
+  </div>
 
-    function updateCurrencyLabel() {
-      const cur = document.getElementById('withdrawCurrency').value;
-      const label = document.getElementById('amountLabel');
-      if (cur === 'GBP') label.innerText = 'Amount (£ GBP)';
-      else if (cur === 'USD') label.innerText = 'Amount ($ USD)';
-      else if (cur === 'EUR') label.innerText = 'Amount (€ EUR)';
-    }
+  <div id="paypalFields" style="display:none;">
+    <label>PayPal Email</label>
+    <input id="paypalEmail" type="email" placeholder="e.g. you@email.com">
+  </div>
 
-    function updateMethodFields() {
-      const m = document.getElementById('withdrawMethod').value;
-      document.getElementById('bankFields').style.display = m === 'Bank Transfer' ? 'block' : 'none';
-      document.getElementById('paypalFields').style.display = m === 'PayPal' ? 'block' : 'none';
-    }
+  <div id="cryptoFields" style="display:none;">
+    <label>Crypto Wallet Address</label>
+    <input id="cryptoWalletAddress" type="text" placeholder="e.g. 0x... or bc1...">
+    <label>Network (Optional)</label>
+    <input id="cryptoNetwork" type="text" placeholder="e.g. ERC20, TRC20, BTC">
+  </div>
 
-    async function loadProfile() {
-      // load profile code here
-    }
+  <button class="btn-green" onclick="doWithdraw()">Request Withdraw</button>
+  <p id="withdrawMsg"></p>
+</div>
 
-    async function submitKYC() {
-      // submit KYC code here
-    }
+<script>
+const SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_PASTE_YOUR_KEY_HERE";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function doWithdraw() {
-      const currency = document.getElementById('withdrawCurrency').value;
-      const amount = document.getElementById('withdrawAmount').value;
-      const method = document.getElementById('withdrawMethod').value;
-      const bankName = document.getElementById('bankName').value.trim();
-      const bankDetails = document.getElementById('bankDetails').value.trim();
-      const paypalEmail = document.getElementById('paypalEmail').value.trim();
+let currentUser = null;
+let currentKycStatus = null;
 
-      if (!currentUser) return alert("Please login first");
-      if (!amount || amount <= 0) return alert("Enter amount");
+function updateCurrencyLabel(){
+  const cur = document.getElementById('withdrawCurrency').value;
+  const label = document.getElementById('amountLabel');
+  if(cur==='GBP') label.innerText='Amount (£ GBP)';
+  else if(cur==='USD') label.innerText='Amount ($ USD)';
+  else if(cur==='EUR') label.innerText='Amount (€ EUR)';
+}
 
-      if (method === 'Bank Transfer' && (!bankName || !bankDetails)) return alert("Fill Bank Account Name and Details");
-      if (method === 'PayPal' && !paypalEmail) return alert("Enter PayPal Email");
+function updateMethodFields(){
+  const m = document.getElementById('withdrawMethod').value;
+  const isCrypto = m==='Crypto';
+  document.getElementById('bankFields').style.display = m==='Bank Transfer' ? 'block' : 'none';
+  document.getElementById('paypalFields').style.display = m==='PayPal' ? 'block' : 'none';
+  document.getElementById('cryptoFields').style.display = isCrypto ? 'block' : 'none';
+  document.getElementById('fiatFields').style.display = isCrypto ? 'none' : 'block';
+  document.getElementById('cryptoAmountFields').style.display = isCrypto ? 'block' : 'none';
+}
 
-      if (currentKycStatus !== 'verified') {
-        document.getElementById('withdrawMsg').innerText = "❌ You must complete KYC and be VERIFIED before withdrawing.";
-        alert("Please complete KYC first and wait for approval");
-        document.getElementById('kycCard').scrollIntoView({ behavior: 'smooth' });
-        return;
-      }
+async function loadProfile(){
+  const { data:{ user } } = await supabase.auth.getUser();
+  if(!user){ document.getElementById('userEmail').innerText='Not logged in - please login first'; return; }
+  currentUser = user;
+  document.getElementById('userEmail').innerText = user.email;
+  const { data } = await supabase.from('kyc').select('status').eq('user_id', user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+  currentKycStatus = data ? data.status : null;
+  const box = document.getElementById('statusBox');
+  if(currentKycStatus==='verified'){ box.className='status verified'; box.innerText='✅ VERIFIED - You can withdraw'; }
+  else if(currentKycStatus==='pending'){ box.className='status pending'; box.innerText='⏳ PENDING - Waiting for admin approval'; }
+  else if(currentKycStatus==='rejected'){ box.className='status rejected'; box.innerText='❌ REJECTED - Please resubmit KYC'; }
+  else { box.className='status none'; box.innerText='⚠️ NOT SUBMITTED - Submit KYC below'; }
+}
 
-      const symbol = currency === 'GBP' ? '£' : currency === 'USD' ? '$' : '€';
-      const { error } = await supabase.from('withdrawals').insert({
-        user_id: currentUser.id,
-        amount: parseFloat(amount),
-        currency: currency,
-        method: method,
-        bank_name: bankName || null,
-        bank_details: bankDetails || null,
-        paypal_email: paypalEmail || null,
-        status: 'pending'
-      });
+async function submitKYC(){
+  const fullName=document.getElementById('fullName').value.trim();
+  const idNumber=document.getElementById('idNumber').value.trim();
+  if(!currentUser) return alert("Please login first");
+  if(!fullName||!idNumber) return alert("Fill Full Name and ID Number");
+  document.getElementById('kycMsg').innerText='Submitting...';
+  const { error } = await supabase.from('kyc').insert({ user_id: currentUser.id, full_name: fullName, id_number: idNumber, doc_type: document.getElementById('docType').value, status:'pending' });
+  if(error){ document.getElementById('kycMsg').innerText='Error: '+error.message; return; }
+  document.getElementById('kycMsg').innerText='✅ KYC Submitted - Waiting for approval';
+  loadProfile();
+}
 
-      if (error) {
-        document.getElementById('withdrawMsg').innerText = "Withdraw request noted. Error: " + error.message + " - Create 'withdrawals' table in Supabase with currency column";
-        return;
-      }
+async function doWithdraw(){
+  const method = document.getElementById('withdrawMethod').value;
+  const isCrypto = method==='Crypto';
+  const currency = isCrypto ? document.getElementById('cryptoCurrency').value : document.getElementById('withdrawCurrency').value;
+  const amount = isCrypto ? document.getElementById('cryptoAmount').value : document.getElementById('withdrawAmount').value;
+  const bankName=document.getElementById('bankName').value.trim();
+  const bankDetails=document.getElementById('bankDetails').value.trim();
+  const paypalEmail=document.getElementById('paypalEmail').value.trim();
+  const cryptoWallet=document.getElementById('cryptoWalletAddress').value.trim();
+  const cryptoNetwork=document.getElementById('cryptoNetwork').value.trim();
 
-      document.getElementById('withdrawMsg').innerText = `✅ Withdraw request sent! ${symbol}${amount} ${currency} via ${method} - Status: PENDING`;
-      document.getElementById('withdrawAmount').value = "";
-    }
+  if(!currentUser) return alert("Please login first");
+  if(!amount || parseFloat(amount)<=0) return alert("Enter a valid amount");
+  if(method==='Bank Transfer' && (!bankName||!bankDetails)) return alert("Fill Bank Account Name and Details");
+  if(method==='PayPal' && !paypalEmail) return alert("Enter PayPal Email");
+  if(method==='Crypto' && !cryptoWallet) return alert("Enter Crypto Wallet Address");
 
-    loadProfile();
-  </script>
+  if(currentKycStatus!=='verified'){
+    document.getElementById('withdrawMsg').innerText="❌ You must be KYC VERIFIED before withdrawing.";
+    alert("Please complete KYC first and wait for approval");
+    document.getElementById('kycCard').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+
+  const symbol = currency==='GBP'?'£':currency==='USD'?'$':currency==='EUR'?'€':currency;
+  document.getElementById('withdrawMsg').innerText='Sending...';
+
+  const { error } = await supabase.from('withdrawals').insert({
+    user_id: currentUser.id,
+    amount: parseFloat(amount),
+    currency: currency,
+    method: method,
+    bank_name: method==='Bank Transfer' ? bankName : null,
+    bank_details: method==='Bank Transfer' ? bankDetails : (method==='Crypto' && cryptoNetwork ? 'Network: '+cryptoNetwork : null),
+    paypal_email: method==='PayPal' ? paypalEmail : null,
+    crypto_wallet_address: method==='Crypto' ? cryptoWallet : null,
+    crypto_currency: method==='Crypto' ? currency : null,
+    status: 'pending'
+  });
+
+  if(error){
+    document.getElementById('withdrawMsg').innerText="Error: "+error.message;
+    alert("Withdraw failed: "+error.message);
+    return;
+  }
+
+  document.getElementById('withdrawMsg').innerText=`✅ Withdraw request sent! ${symbol}${amount} ${currency} via ${method} - Status: PENDING`;
+  if(isCrypto) document.getElementById('cryptoAmount').value="";
+  else document.getElementById('withdrawAmount').value="";
+}
+
+updateMethodFields();
+loadProfile();
+</script>
 </body>
 </html>
