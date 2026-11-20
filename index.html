@@ -5,212 +5,154 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CEDARS EMPIRE - Shareholder Dashboard</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 body{background:#0a0f14;color:#fff;min-height:100vh}
-/* FACTORY BACKGROUND LIKE YOUR PHOTO */
-.factory-bg{
-  background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.75)), 
-  radial-gradient(circle at 50% 20%, #2a3d4e 0%, #0a0f14 70%);
-  padding:14px 8px 20px; min-height:100vh;
-}
-.topbar{text-align:center;font-size:11px;letter-spacing:2px;color:#9fb8c8;padding:6px}
-.topbar b{color:#00e5ff}
-/* === ROBOTS HOLDING DASHBOARD - THE MAIN DESIGN === */
-.stage{display:flex;align-items:stretch;justify-content:center;gap:0;max-width:1100px;margin:0 auto}
-.robot-side{
-  width:19%;min-width:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:10px 4px;
-}
-.robot-side .big{font-size:110px;line-height:1;filter:drop-shadow(0 0 18px rgba(0,229,255,.4))}
-@media(max-width:700px){.robot-side .big{font-size:62px}.robot-side{width:16%;min-width:70px}}
-.robot-side h3{font-size:12px;margin-top:8px;color:#00e5ff}
-.robot-side p{font-size:10px;color:#b8d4e3;line-height:1.5;margin-top:4px}
-.robot-side .pill{background:#00c853;color:#fff;font-size:10px;font-weight:900;padding:4px 8px;border-radius:20px;margin-top:8px}
-.hand{font-size:38px;margin-top:-10px}
-@media(max-width:700px){.hand{font-size:24px}}
-
-/* CENTER SCREEN - LIKE IN PHOTO */
-.screen{
-  flex:1;background:#f4f6f8;color:#111;border:8px solid #111;border-radius:18px;
-  box-shadow:0 20px 50px rgba(0,0,0,.7), 0 0 0 3px #333;overflow:hidden;max-width:720px;
-}
-.screen-top{background:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ddd}
-.screen-top b{font-size:14px;letter-spacing:.5px}
-.screen-top span{font-size:11px;color:#666}
-.nav{display:flex;gap:6px;padding:10px 14px;background:#fff;flex-wrap:wrap}
-.nav button{border:0;padding:8px 12px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;background:#eef2f5}
-.nav button.active{background:#111;color:#fff}
-.nav button.green{background:#00c853;color:#fff}
-.screen-body{padding:14px}
-.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-@media(max-width:600px){.stats{grid-template-columns:1fr}}
-.stat{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:12px}
-.stat small{font-size:10px;color:#777;font-weight:800;letter-spacing:1px}
-.stat h2{font-size:22px;margin:4px 0 2px}
-.stat p{font-size:11px;color:#777}
-.balance-box{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:14px;margin-top:12px}
-.balance-box h3{font-size:14px;margin-bottom:8px}
-.brow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #eee;font-size:13px}
-.brow:last-child{border:0}
-.brow b{color:#111}
-.engine{text-align:center;padding:14px 0 4px}
-.engine h2{font-size:16px;letter-spacing:1px}
-.engine p{font-size:11px;color:#00c853;font-weight:900}
-/* BOTTOM SECTION - DARK AGAIN */
+.bg{background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.75)),radial-gradient(circle at 50% 20%,#2a3d4e,#0a0f14 70%);padding:14px 8px 20px;min-height:100vh}
+.top{text-align:center;font-size:11px;letter-spacing:2px;color:#9fb8c8}.top b{color:#00e5ff}
+.stage{display:flex;align-items:stretch;justify-content:center;max-width:1100px;margin:10px auto 0}
+.side{width:18%;min-width:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px 4px}
+.side .big{font-size:100px;line-height:1}.side h3{font-size:12px;color:#00e5ff;margin-top:6px}.side p{font-size:10px;color:#b8d4e3;line-height:1.5;margin-top:4px}.pill{background:#00c853;color:#fff;font-size:10px;font-weight:900;padding:4px 8px;border-radius:20px;margin-top:8px}.hand{font-size:34px}
+@media(max-width:700px){.side .big{font-size:58px}.hand{font-size:22px}}
+.screen{flex:1;background:#f4f6f8;color:#111;border:8px solid #111;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.7);overflow:hidden;max-width:720px}
+.s-top{background:#fff;padding:12px 14px;display:flex;justify-content:space-between;border-bottom:1px solid #ddd}.s-top b{font-size:14px}.s-top span{font-size:11px;color:#666}
+.nav{display:flex;gap:6px;padding:10px 14px;background:#fff;flex-wrap:wrap}.nav button{border:0;padding:8px 12px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;background:#eef2f5}.nav button.g{background:#00c853;color:#fff}.nav button.a{background:#111;color:#fff}
+.s-body{padding:14px}.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}@media(max-width:600px){.stats{grid-template-columns:1fr}}
+.stat{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:12px}.stat small{font-size:10px;color:#777;font-weight:800}.stat h2{font-size:22px;margin:4px 0}.stat p{font-size:11px;color:#777}
+.box{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:14px;margin-top:12px}.box h3{font-size:14px;margin-bottom:6px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #eee;font-size:13px}.row:last-child{border:0}
+.engine{text-align:center;padding:14px 0 4px}.engine p{font-size:11px;color:#00c853;font-weight:900}
 .wrap{max-width:980px;margin:0 auto;padding:14px}
-.cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}
-@media(max-width:650px){.cards{grid-template-columns:1fr}}
-.card{background:#15202b;border:1px solid #2a3d4e;border-radius:14px;padding:16px}
-.card small{color:#9fb8c8;font-size:11px;letter-spacing:1px;font-weight:800}
-.card h2{font-size:26px;margin:6px 0 2px}
-.green{color:#00ff88}.blue{color:#00e5ff}.gold{color:#ffc107}
-.card p{font-size:12px;color:#aebfca}
-.btn{width:100%;padding:13px;border:0;border-radius:10px;font-weight:900;font-size:15px;cursor:pointer;margin-top:10px}
-.btn-blue{background:#00e5ff;color:#000}.btn-green{background:#00c853;color:#fff}.btn-gold{background:#ffc107;color:#000}
-.robots{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
-@media(max-width:650px){.robots{grid-template-columns:1fr 1fr}}
-.robot{background:#1a2a38;border:1px solid #2c4256;border-radius:12px;padding:12px;text-align:center}
-.robot div{font-size:34px}.robot b{font-size:12px;display:block;margin:4px 0 2px}.robot span{font-size:11px;color:#00ff88;font-weight:800}.robot i{font-size:11px;color:#9fb8c8;display:block;font-style:normal;margin-top:4px}
-.table-card{background:#fff;color:#111;border-radius:14px;padding:16px;margin-top:14px}
-.table-card h2{font-size:19px}.table-card p{font-size:12px;color:#555;margin:6px 0 10px}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:640px;font-size:13px}
-th{background:#0a1a2a;color:#fff;padding:10px 8px;text-align:left;white-space:nowrap}
-td{padding:10px 8px;border-bottom:1px solid #eee;white-space:nowrap}
-tr:nth-child(even) td{background:#f7f9fb}
-label{font-size:11px;font-weight:900;letter-spacing:1px;display:block;margin:14px 0 6px;color:#333}
-select,input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:15px}
-.agree{background:#fff7e0;border:1px solid #ffc107;border-radius:12px;padding:14px;margin-top:14px;color:#333}
-.agree h3{font-size:15px}.agree p,.agree ul{font-size:12px;line-height:1.6}
-.footer{text-align:center;font-size:11px;color:#7a8d9a;padding:18px}
+.cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}@media(max-width:650px){.cards{grid-template-columns:1fr}}
+.card{background:#15202b;border:1px solid #2a3d4e;border-radius:14px;padding:16px}.card small{color:#9fb8c8;font-size:11px;font-weight:800}.card h2{font-size:26px;margin:6px 0}.green{color:#00ff88}.blue{color:#00e5ff}.gold{color:#ffc107}.card p{font-size:12px;color:#aebfca}
+.btn{width:100%;padding:13px;border:0;border-radius:10px;font-weight:900;font-size:15px;cursor:pointer;margin-top:10px}.b-blue{background:#00e5ff}.b-green{background:#00c853;color:#fff}.b-gold{background:#ffc107}.b-outline{background:transparent;border:1px solid #00e5ff;color:#00e5ff}
+.robots{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}@media(max-width:650px){.robots{grid-template-columns:1fr 1fr}}
+.robot{background:#1a2a38;border:1px solid #2c4256;border-radius:12px;padding:12px;text-align:center}.robot div{font-size:32px}.robot b{font-size:12px;display:block;margin:4px 0}.robot span{font-size:11px;color:#00ff88;font-weight:800}.robot i{font-size:11px;color:#9fb8c8;display:block;font-style:normal}
+.tcard{background:#fff;color:#111;border-radius:14px;padding:16px;margin-top:14px}.tcard h2{font-size:19px}.tcard p{font-size:12px;color:#555;margin:6px 0 10px}.twrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:640px;font-size:13px}th{background:#0a1a2a;color:#fff;padding:10px 8px;text-align:left}td{padding:10px 8px;border-bottom:1px solid #eee;white-space:nowrap}tr:nth-child(even) td{background:#f7f9fb}
+label{font-size:11px;font-weight:900;display:block;margin:14px 0 6px;color:#333}select,input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:15px}
+.agree{background:#fff7e0;border:1px solid #ffc107;border-radius:12px;padding:14px;margin-top:14px;color:#333}.agree p,.agree ul{font-size:12px;line-height:1.6}.footer{text-align:center;font-size:11px;color:#7a8d9a;padding:18px}
+.sec{background:#15202b;border:1px solid #2a3d4e;border-radius:14px;padding:16px;margin-top:14px}.sec h3{font-size:16px;margin-bottom:8px}.sec p,.sec li{font-size:13px;line-height:1.6;color:#c8d8e2}.sec ul{margin-left:16px}
+.kpi{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-top:10px}@media(max-width:650px){.kpi{grid-template-columns:1fr 1fr}}.kpi div{background:#0f1a24;border-radius:10px;padding:12px;text-align:center}.kpi small{font-size:10px;color:#9fb8c8}.kpi b{font-size:18px;display:block;margin-top:4px}
+.hidden{display:none}
 </style>
 </head>
 <body>
-<div class="factory-bg">
-<div class="topbar">🏭 CEDARS EMPIRE • <b>99.9% ROBOTIC FACTORY • 360°</b> • HEAVY DUTY ROBOTS WORKING</div>
+<div class="bg">
+<div class="top">🏭 CEDARS EMPIRE • <b>SHAREHOLDER DASHBOARD • 99.9% ROBOTIC FACTORY</b></div>
 
-<!-- ===== ROBOTS HOLDING DASHBOARD ===== -->
+<!-- REGISTER / LOGIN -->
+<div class="wrap" id="authBox">
+<div class="tcard">
+<h2>👤 Shareholder Register / Login</h2>
+<p>Create account to buy share and unlock AI Worker. This demo saves in your phone browser.</p>
+<label>FULL NAME</label><input id="regName" placeholder="e.g. John Cedars">
+<label>EMAIL</label><input id="regEmail" placeholder="you@email.com">
+<label>PASSWORD</label><input id="regPass" type="password" placeholder="Create password">
+<label>REFERRAL CODE (Optional)</label><input id="regRef" placeholder="e.g. CEDARS123">
+<button class="btn b-green" onclick="register()">✅ Register & Enter Dashboard</button>
+<button class="btn b-blue" onclick="login()">🔑 Login</button>
+<p style="margin-top:8px">By registering you agree to 1,095 Days Agreement.</p>
+</div>
+</div>
+
 <div class="stage">
-  <!-- LEFT ROBOT -->
-  <div class="robot-side">
-    <div class="big">🤖</div>
-    <div class="hand">🦾</div>
-    <h3>ROBOT-01<br>ASSEMBLER</h3>
-    <p>Holding Dashboard<br>Left Side<br>99.9% Working</p>
-    <div class="pill">● ONLINE</div>
-  </div>
+<div class="side"><div class="big">🤖</div><div class="hand">🦾</div><h3>ROBOT-01<br>ASSEMBLER</h3><p>Holding Dashboard<br>Left Side<br>99.9% Working</p><div class="pill">● ONLINE</div></div>
 
-  <!-- CENTER DASHBOARD SCREEN -->
-  <div class="screen">
-    <div class="screen-top"><b>CEDARS EMPIRE • Live</b><span>cedars.empire@gmail.com</span></div>
-    <div class="nav">
-      <button>👤 Profile</button><button class="green">💰 Deposit / Buy Share</button><button>≡ Tasks</button><button>🤖 AI Worker</button><button>Logout</button>
-    </div>
-    <div class="screen-body">
-      <div class="stats">
-        <div class="stat"><small>👥 AI WORKERS ONLINE</small><h2>100</h2><p>Cedars Units</p></div>
-        <div class="stat"><small>💰 TOTAL EARNED • BALANCE</small><h2>$<span id="topBal">262.32</span></h2><p>Live updating • Factory running</p></div>
-        <div class="stat"><small>📈 AI TARGET</small><h2>10.5%</h2><p>New update: 10.5% this cycle</p></div>
-      </div>
-      <div class="balance-box">
-        <h3>⚖️ Balance Totals</h3>
-        <div class="brow"><span>Available Balance</span><b>$<span id="balance">0.00</span></b></div>
-        <div class="brow"><span>Investment Balance</span><b>$<span id="investBal">0.00</span></b></div>
-        <div class="brow"><span>Interest Balance</span><b>$<span id="earnings">0.00</span></b></div>
-        <div class="brow"><span>Daily Earning (1%)</span><b>$<span id="dailyEarn">0.00</span> / day</b></div>
-        <div class="brow"><span>Package</span><b id="myPackage">No Package Yet</b></div>
-      </div>
-      <div class="engine"><h2>CEDARS CENTRAL ENGINE</h2><p>● RUNNING • 99.9% ROBOTIC</p></div>
-    </div>
-  </div>
-
-  <!-- RIGHT ROBOT -->
-  <div class="robot-side">
-    <div class="big">🤖</div>
-    <div class="hand">🦾</div>
-    <h3>ROBOT-02<br>WELDER</h3>
-    <p>Holding Dashboard<br>Right Side<br>99.8% Working</p>
-    <div class="pill">● ONLINE</div>
-  </div>
+<div class="screen">
+<div class="s-top"><b>CEDARS EMPIRE • Shareholder</b><span id="userEmail">Not logged in</span></div>
+<div class="nav"><button class="a">👤 Profile</button><button class="g" onclick="goBuy()">💰 Buy Share</button><button onclick="goSection('tasksSec')">≡ Tasks</button><button onclick="goSection('referralSec')">👥 Referral</button><button onclick="logout()">Logout</button></div>
+<div class="s-body">
+<div class="stats">
+<div class="stat"><small>👥 AI WORKERS ONLINE</small><h2>100</h2><p>Cedars Units</p></div>
+<div class="stat"><small>💰 TOTAL BALANCE</small><h2>$<span id="topBal">0.00</span></h2><p>Live • Factory running</p></div>
+<div class="stat"><small>📈 DAILY RATE</small><h2>1%</h2><p>Of Package Capital</p></div>
+</div>
+<div class="box"><h3>⚖️ My Balance Totals</h3>
+<div class="row"><span>Available Balance</span><b>$<span id="balance">0.00</span></b></div>
+<div class="row"><span>Investment Balance</span><b>$<span id="investBal">0.00</span></b></div>
+<div class="row"><span>Interest / Earnings Balance</span><b>$<span id="earnings">0.00</span></b></div>
+<div class="row"><span>Daily Earning (1%)</span><b>$<span id="dailyEarn">0.00</span> / day</b></div>
+<div class="row"><span>Package</span><b id="myPackage">No Package Yet</b></div>
+<div class="row"><span>AI Worker</span><b id="aiStatus">🔒 Locked</b></div>
+<div class="row"><span>Days Left (1,095)</span><b id="daysLeft">1,095 Days</b></div>
+</div>
+<div class="engine"><h2>CEDARS CENTRAL ENGINE</h2><p>● RUNNING • 99.9% ROBOTIC</p></div>
+</div>
 </div>
 
-<!-- ===== BELOW THE SCREEN ===== -->
+<div class="side"><div class="big">🤖</div><div class="hand">🦾</div><h3>ROBOT-02<br>WELDER</h3><p>Holding Dashboard<br>Right Side<br>99.8% Working</p><div class="pill">● ONLINE</div></div>
+</div>
+
 <div class="wrap">
-  <div class="cards">
-    <div class="card"><small>ROBOT STATUS</small><h2 class="green">● ONLINE</h2><p>🦾 4 Heavy Duty Robots Active<br>🏭 Factory: 99.9% Automated</p></div>
-    <div class="card"><small>SHAREHOLDER BALANCE</small><h2 class="blue">$<span id="balance2">0.00</span></h2><p>Agreement: <b style="color:#fff">1,095 Days</b></p><button class="btn btn-blue" onclick="updateStats()">↻ Refresh / +1 Day Earning</button></div>
-    <div class="card"><small>TOTAL EARNINGS</small><h2 class="gold">$<span id="earnings2">0.00</span></h2><p>1% Daily of Capital</p><button class="btn btn-green" onclick="claim()">💰 Claim Earnings</button></div>
-  </div>
 
-  <div class="robots">
-    <div class="robot"><div>🦾</div><b>ROBOT-01 ASSEMBLER</b><span>● WORKING 99.9%</span><i>Assembling</i></div>
-    <div class="robot"><div>🦿</div><b>ROBOT-02 WELDER</b><span>● WORKING 99.8%</span><i>Welding</i></div>
-    <div class="robot"><div>🤖</div><b>ROBOT-03 PACKER</b><span>● WORKING 99.9%</span><i>Packing</i></div>
-    <div class="robot"><div>🏭</div><b>ROBOT-04 LOADER</b><span>● WORKING 99.7%</span><i>Loading</i></div>
-  </div>
-
-  <div class="table-card">
-    <h2>💰 Buy Share - Shareholder Packages</h2>
-    <p>Agreement Period: <b>1,095 Days (3 Years)</b> • Daily: <b>1% of Package Capital</b> • Each created account can unlock AI Worker by purchasing shares membership.</p>
-    <div class="table-wrap">
-    <table>
-      <tr><th>Package</th><th>Capital</th><th>Daily %</th><th>Daily</th><th>30 Days</th><th>365 Days</th><th>1,095 Days</th><th></th></tr>
-      <tr><td><b>CEDARS SEED™</b></td><td>$100</td><td>1%</td><td>$1</td><td>$30</td><td>$365</td><td>$1,095</td><td><button onclick="selectPkg(100,'SEED')">Buy</button></td></tr>
-      <tr><td><b>CEDARS ROOT™</b></td><td>$500</td><td>1%</td><td>$5</td><td>$150</td><td>$1,825</td><td>$5,475</td><td><button onclick="selectPkg(500,'ROOT')">Buy</button></td></tr>
-      <tr><td><b>CEDARS STEM™</b></td><td>$1,000</td><td>1%</td><td>$10</td><td>$300</td><td>$3,650</td><td>$10,950</td><td><button onclick="selectPkg(1000,'STEM')">Buy</button></td></tr>
-      <tr><td><b>CEDARS TREE™</b></td><td>$5,000</td><td>1%</td><td>$50</td><td>$1,500</td><td>$18,250</td><td>$54,750</td><td><button onclick="selectPkg(5000,'TREE')">Buy</button></td></tr>
-      <tr><td><b>CEDARS FOREST™</b></td><td>$25,000</td><td>1%</td><td>$250</td><td>$7,500</td><td>$91,250</td><td>$273,750</td><td><button onclick="selectPkg(25000,'FOREST')">Buy</button></td></tr>
-      <tr><td><b>CEDARS EMPIRE™</b></td><td>$50,000</td><td>1%</td><td>$500</td><td>$15,000</td><td>$182,500</td><td>$547,500</td><td><button onclick="selectPkg(50000,'EMPIRE')">Buy</button></td></tr>
-    </table>
-    </div>
-    <label>SELECT PACKAGE</label>
-    <select id="pkg"><option value="100">CEDARS SEED™ - $100</option><option value="500">CEDARS ROOT™ - $500</option><option value="1000">CEDARS STEM™ - $1,000</option><option value="5000">CEDARS TREE™ - $5,000</option><option value="25000">CEDARS FOREST™ - $25,000</option><option value="50000">CEDARS EMPIRE™ - $50,000</option></select>
-    <label>AMOUNT ($)</label><input id="buyAmt" type="number" placeholder="e.g. 100">
-    <button class="btn btn-gold" onclick="buyShare()">🛒 Buy Share & Unlock AI Worker</button>
-    <p style="margin-top:8px">🤖 AI Worker Status: <b id="aiStatus">🔒 Locked - Buy a Share to Unlock</b></p>
-  </div>
-
-  <div class="agree">
-    <h3>📜 Shareholder Agreement Contract - Summary</h3>
-    <p>Capital locked for <b>1,095 Days</b>. Daily earning = <b>1% of package capital</b> per illustration table. AI Worker unlocks after successful share purchase. Cedars Empire verifies payment before activation.</p>
-    <label style="color:#333"><input type="checkbox" id="agreeBox"> I have read and agree to the 1,095 Days Agreement Contract</label>
-  </div>
-  <div class="footer">🦾 CEDARS EMPIRE • Robotic Factory • 99.9% Automated • All Corners 360° • © 2026</div>
-</div>
+<div class="cards">
+<div class="card"><small>ROBOT STATUS</small><h2 class="green">● ONLINE</h2><p>🦾 4 Heavy Duty Robots Active<br>🏭 Factory: 99.9% Automated</p></div>
+<div class="card"><small>SHAREHOLDER BALANCE</small><h2 class="blue">$<span id="balance2">0.00</span></h2><p>Agreement: <b style="color:#fff">1,095 Days (3 Years)</b></p><button class="btn b-blue" onclick="updateStats()">↻ +1 Day Earning (1%)</button></div>
+<div class="card"><small>TOTAL EARNINGS</small><h2 class="gold">$<span id="earnings2">0.00</span></h2><p>1% Daily of Capital</p><button class="btn b-green" onclick="claim()">💰 Claim Earnings</button></div>
 </div>
 
+<div class="robots">
+<div class="robot"><div>🦾</div><b>ROBOT-01 ASSEMBLER</b><span>● WORKING 99.9%</span><i>Assembling</i></div>
+<div class="robot"><div>🦿</div><b>ROBOT-02 WELDER</b><span>● WORKING 99.8%</span><i>Welding</i></div>
+<div class="robot"><div>🤖</div><b>ROBOT-03 PACKER</b><span>● WORKING 99.9%</span><i>Packing</i></div>
+<div class="robot"><div>🏭</div><b>ROBOT-04 LOADER</b><span>● WORKING 99.7%</span><i>Loading</i></div>
+</div>
+
+<div class="sec" id="aiSec"><h3>🤖 AI Worker - Shareholder Component</h3><p>Each created account can unlock AI Worker by purchasing shares membership. AI Worker works 24/7 in the factory.</p><div class="kpi"><div><small>AI WORKER</small><b id="aiKpi">🔒 Locked</b></div><div><small>TASKS TODAY</small><b>12 / 12</b></div><div><small>FACTORY POWER</small><b>99.9%</b></div><div><small>UPTIME</small><b>360°</b></div></div><button class="btn b-outline" onclick="goBuy()">Unlock AI Worker - Buy Share Below ↓</button></div>
+
+<div class="sec" id="tasksSec"><h3>📋 Tasks / Daily Check-in</h3><ul><li>✅ Check-in Daily - Earn activity points</li><li>✅ Factory Watch - Robots working 99.9%</li><li>✅ Share Cedars Empire - Invite shareholders</li><li>✅ Claim Daily 1% Earning</li></ul><button class="btn b-blue" onclick="checkin()">✅ Do Daily Check-in</button><p id="checkinMsg"></p></div>
+
+<div class="sec" id="referralSec"><h3>👥 Referral / Team</h3><p>Your Invite Link: <b id="myLink">cedars.empire/r/YOUR-ID</b></p><p>Your Referral Code: <b id="myCode">CEDARS123</b></p><div class="kpi"><div><small>REFERRALS</small><b id="refCount">0</b></div><div><small>TEAM EARNINGS</small><b>$<span id="refEarn">0.00</span></b></div><div><small>TEAM VOLUME</small><b>$0.00</b></div><div><small>LEVEL</small><b>Shareholder</b></div></div><button class="btn b-blue" onclick="copyLink()">📋 Copy Invite Link</button><label style="color:#c8d8e2">ADD REFERRAL MANUALLY (Demo)</label><input id="newRef" placeholder="Friend name / email" style="background:#0f1a24;color:#fff;border-color:#2a3d4e"><button class="btn b-green" onclick="addRef()">➕ Add Referral</button></div>
+
+<div class="sec" id="walletSec"><h3>💳 Deposit / Withdraw</h3><p>Deposit to buy share. Withdraw your earnings.</p><label style="color:#c8d8e2">AMOUNT ($)</label><input id="walletAmt" type="number" placeholder="e.g. 100" style="background:#0f1a24;color:#fff;border-color:#2a3d4e"><button class="btn b-green" onclick="deposit()">💰 Deposit</button><button class="btn b-gold" onclick="withdraw()">🏧 Withdraw</button><p>Withdraw goes to your wallet / Mobile Money. Admin approves in real version.</p></div>
+
+<div class="sec"><h3>📜 Transaction History</h3><ul id="history"><li>No transactions yet - Buy a share to start</li></ul></div>
+
+<div class="tcard" id="buySection">
+<h2>💰 Buy Share - Shareholder Packages</h2>
+<p>Agreement Period: <b>1,095 Days (3 Years)</b> • Daily: <b>1% of Package Capital</b> • Each created account can unlock AI Worker by purchasing shares membership.</p>
+<div class="twrap"><table>
+<tr><th>Package</th><th>Capital</th><th>Daily</th><th>30 Days</th><th>365 Days</th><th>1,095 Days</th><th></th></tr>
+<tr><td><b>CEDARS SEED™</b></td><td>$100</td><td>$1</td><td>$30</td><td>$365</td><td>$1,095</td><td><button onclick="selectPkg(100,'SEED')">Buy</button></td></tr>
+<tr><td><b>CEDARS ROOT™</b></td><td>$500</td><td>$5</td><td>$150</td><td>$1,825</td><td>$5,475</td><td><button onclick="selectPkg(500,'ROOT')">Buy</button></td></tr>
+<tr><td><b>CEDARS STEM™</b></td><td>$1,000</td><td>$10</td><td>$300</td><td>$3,650</td><td>$10,950</td><td><button onclick="selectPkg(1000,'STEM')">Buy</button></td></tr>
+<tr><td><b>CEDARS TREE™</b></td><td>$5,000</td><td>$50</td><td>$1,500</td><td>$18,250</td><td>$54,750</td><td><button onclick="selectPkg(5000,'TREE')">Buy</button></td></tr>
+<tr><td><b>CEDARS FOREST™</b></td><td>$25,000</td><td>$250</td><td>$7,500</td><td>$91,250</td><td>$273,750</td><td><button onclick="selectPkg(25000,'FOREST')">Buy</button></td></tr>
+<tr><td><b>CEDARS EMPIRE™</b></td><td>$50,000</td><td>$500</td><td>$15,000</td><td>$182,500</td><td>$547,500</td><td><button onclick="selectPkg(50000,'EMPIRE')">Buy</button></td></tr>
+</table></div>
+<label>SELECT PACKAGE</label><select id="pkg"><option value="100">CEDARS SEED™ - $100</option><option value="500">CEDARS ROOT™ - $500</option><option value="1000">CEDARS STEM™ - $1,000</option><option value="5000">CEDARS TREE™ - $5,000</option><option value="25000">CEDARS FOREST™ - $25,000</option><option value="50000">CEDARS EMPIRE™ - $50,000</option></select>
+<label>AMOUNT ($)</label><input id="buyAmt" type="number" placeholder="e.g. 100">
+<button class="btn b-gold" onclick="buyShare()">🛒 Buy Share & Unlock AI Worker</button>
+<p style="margin-top:8px">🤖 AI Worker Status: <b id="aiStatus2">🔒 Locked - Buy a Share to Unlock</b></p>
+</div>
+
+<div class="agree"><h3>📜 Shareholder Agreement Contract - Summary</h3><p>Capital locked for <b>1,095 Days</b>. Daily earning = <b>1% of package capital</b> per table. AI Worker unlocks after successful share purchase.</p><label style="color:#333"><input type="checkbox" id="agreeBox"> I have read and agree to the 1,095 Days Agreement Contract</label></div>
+
+<div class="sec"><h3>👤 Profile / Settings</h3><p>Name: <b id="profName">Shareholder</b> • Email: <b id="profEmail">-</b> • Member Since: 2026 • Status: Active</p><button class="btn b-outline" onclick="alert('Profile saved in this demo. Connect Supabase later for real save.')">⚙️ Save Profile</button></div>
+
+<div class="footer">🦾 CEDARS EMPIRE • Shareholder Dashboard • Robotic Factory • 99.9% Automated • © 2026</div>
+</div>
+</div>
 <script>
-let balance=0, earnings=0, daily=0, invest=0;
-function sync(){
-  ['balance','balance2'].forEach(id=>document.getElementById(id).innerText=balance.toFixed(2));
-  ['earnings','earnings2'].forEach(id=>document.getElementById(id).innerText=earnings.toFixed(2));
-  document.getElementById('investBal').innerText=invest.toFixed(2);
-  document.getElementById('dailyEarn').innerText=daily.toFixed(2);
-  document.getElementById('topBal').innerText=(balance+earnings).toFixed(2);
-}
-function selectPkg(amount,name){
-  document.getElementById('pkg').value=amount;
-  document.getElementById('buyAmt').value=amount;
-  document.getElementById('myPackage').innerText='CEDARS '+name+'™ - $'+amount;
-  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
-}
-function buyShare(){
-  if(!document.getElementById('agreeBox').checked){alert('Please tick Agreement Contract first');return;}
-  let amt=Number(document.getElementById('buyAmt').value)||Number(document.getElementById('pkg').value);
-  if(amt<100){alert('Minimum is $100 - SEED');return;}
-  daily=amt*0.01; balance=amt; invest=amt;
-  document.getElementById('myPackage').innerText='CEDARS Package - $'+amt;
-  document.getElementById('aiStatus').innerText='✅ UNLOCKED - AI Worker Active';
-  sync(); alert('Share Purchased: $'+amt+'\nDaily: $'+daily.toFixed(2)+'\nAI Worker Unlocked!');
-}
-function updateStats(){
-  if(daily>0){earnings+=daily; balance+=daily; sync();}
-  else alert('Buy a Share first to start earning');
-}
-function claim(){
-  if(earnings<=0){alert('No earnings to claim yet');return;}
-  alert('Claim Request: $'+earnings.toFixed(2)+' sent for approval'); earnings=0; sync();
-}
+let balance=0,earnings=0,daily=0,invest=0,daysUsed=0,refCount=0,refEarn=0;
+let userCode='CEDARS'+Math.floor(100+Math.random()*900);
+document.getElementById('myCode').innerText=userCode;
+document.getElementById('myLink').innerText='cedars.empire/r/'+userCode;
+function sync(){document.getElementById('balance').innerText=balance.toFixed(2);document.getElementById('balance2').innerText=balance.toFixed(2);document.getElementById('earnings').innerText=earnings.toFixed(2);document.getElementById('earnings2').innerText=earnings.toFixed(2);document.getElementById('investBal').innerText=invest.toFixed(2);document.getElementById('dailyEarn').innerText=daily.toFixed(2);document.getElementById('topBal').innerText=(balance+earnings).toFixed(2);document.getElementById('daysLeft').innerText=(1095-daysUsed)+' Days';}
+function addHist(t){let h=document.getElementById('history');if(h.innerText.includes('No transactions'))h.innerHTML='';h.innerHTML+='<li>'+t+'</li>';}
+function goBuy(){document.getElementById('buySection').scrollIntoView({behavior:'smooth'});}
+function goSection(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+function register(){let n=document.getElementById('regName').value,email=document.getElementById('regEmail').value,pass=document.getElementById('regPass').value;if(!n||!email||!pass){alert('Fill Name, Email, Password');return;}localStorage.setItem('cedars_user',JSON.stringify({name:n,email:email}));document.getElementById('userEmail').innerText=email;document.getElementById('profName').innerText=n;document.getElementById('profEmail').innerText=email;document.getElementById('authBox').style.display='none';addHist('✅ Registered: '+n+' ('+email+')');alert('Welcome '+n+'! Now Buy Share below to unlock AI Worker.');goBuy();}
+function login(){let saved=JSON.parse(localStorage.getItem('cedars_user')||'null');if(!saved){alert('No account found. Register first.');return;}document.getElementById('userEmail').innerText=saved.email;document.getElementById('profName').innerText=saved.name;document.getElementById('profEmail').innerText=saved.email;document.getElementById('authBox').style.display='none';alert('Welcome back '+saved.name);}
+function logout(){document.getElementById('authBox').style.display='block';document.getElementById('userEmail').innerText='Not logged in';alert('Logged out');}
+function selectPkg(a,n){document.getElementById('pkg').value=a;document.getElementById('buyAmt').value=a;document.getElementById('myPackage').innerText='CEDARS '+n+' - $'+a;goBuy();}
+function buyShare(){if(!document.getElementById('agreeBox').checked){alert('Please tick Agreement Contract first');return;}let amt=Number(document.getElementById('buyAmt').value)||Number(document.getElementById('pkg').value);if(amt<100){alert('Minimum is $100 - SEED');return;}daily=amt*0.01;balance=amt;invest=amt;daysUsed=0;document.getElementById('myPackage').innerText='CEDARS Package - $'+amt;document.getElementById('aiStatus').innerText='✅ UNLOCKED';document.getElementById('aiStatus2').innerText='✅ UNLOCKED - AI Worker Active';document.getElementById('aiKpi').innerText='✅ Active';sync();addHist('✅ Bought Share $'+amt+' - AI Worker Unlocked');alert('Share Purchased: $'+amt+'\nDaily: $'+daily.toFixed(2)+'\nAI Worker Unlocked!');}
+function updateStats(){if(daily>0){earnings+=daily;balance+=daily;daysUsed++;sync();addHist('➕ Daily Earning +$'+daily.toFixed(2)+' Day '+daysUsed);}else alert('Buy a Share first to start earning');}
+function claim(){if(earnings<=0){alert('No earnings to claim yet');return;}alert('Claim Request: $'+earnings.toFixed(2)+' sent for approval');addHist('💰 Claim Request $'+earnings.toFixed(2));earnings=0;sync();}
+function deposit(){let a=Number(document.getElementById('walletAmt').value);if(!a||a<=0){alert('Enter amount');return;}balance+=a;sync();addHist('💰 Deposit +$'+a);alert('Deposited $'+a);}
+function withdraw(){let a=Number(document.getElementById('walletAmt').value);if(!a||a<=0){alert('Enter amount');return;}if(a>balance){alert('Insufficient balance');return;}balance-=a;sync();addHist('🏧 Withdraw Request -$'+a);alert('Withdraw Request $'+a+' sent for approval');}
+function checkin(){document.getElementById('checkinMsg').innerText='✅ Daily Check-in Done! Factory Watch Complete.';addHist('✅ Daily Check-in Done');alert('Check-in Done!');}
+function copyLink(){let link=document.getElementById('myLink').innerText;navigator.clipboard.writeText(link);alert('Copied: '+link);}
+function addRef(){let v=document.getElementById('newRef').value;if(!v){alert('Enter friend name');return;}refCount++;refEarn+=5;document.getElementById('refCount').innerText=refCount;document.getElementById('refEarn').innerText=refEarn.toFixed(2);addHist('👥 Referral Added: '+v+' (+$5 bonus demo)');alert('Referral Added: '+v);document.getElementById('newRef').value='';}
+sync();
 </script>
 </body>
 </html>
