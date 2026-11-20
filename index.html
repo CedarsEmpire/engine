@@ -20,10 +20,10 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background-color: #333;
+            background-color: #34C759;
             color: #fff;
             padding: 10px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #34C759;
         }
         .header h1 {
             margin: 0;
@@ -33,14 +33,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px;
-            background-color: #444;
+            background-color: #3E8E41;
             color: #fff;
         }
         .nav button {
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            background-color: #555;
+            background-color: #34C759;
             color: #fff;
             cursor: pointer;
         }
@@ -150,8 +150,12 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Add your JavaScript code here
+        const SUPABASE_URL = 'https://ipyvewpjtpgfuqfwizlr.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm';
+        const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         let sharesOwned = 0;
         let currentBalance = 0;
         let dailyEarnings = 0;
@@ -163,6 +167,29 @@
         document.getElementById("daily-earnings").innerText = `$${dailyEarnings.toFixed(2)}`;
         document.getElementById("referral-earnings").innerText = `$${referralEarnings.toFixed(2)}`;
         document.getElementById("total-earnings").innerText = `$${totalEarnings.toFixed(2)}`;
+
+        // Add logic to fetch data from Supabase
+        async function fetchData() {
+            const { data, error } = await client.from('shareholders').select('*');
+            if (error) {
+                console.error(error);
+            } else {
+                // Update the dashboard with the fetched data
+                sharesOwned = data[0].shares_owned;
+                currentBalance = data[0].current_balance;
+                dailyEarnings = data[0].daily_earnings;
+                referralEarnings = data[0].referral_earnings;
+                totalEarnings = data[0].total_earnings;
+
+                document.getElementById("shares-owned").innerText = sharesOwned;
+                document.getElementById("current-balance").innerText = `$${currentBalance.toFixed(2)}`;
+                document.getElementById("daily-earnings").innerText = `$${dailyEarnings.toFixed(2)}`;
+                document.getElementById("referral-earnings").innerText = `$${referralEarnings.toFixed(2)}`;
+                document.getElementById("total-earnings").innerText = `$${totalEarnings.toFixed(2)}`;
+            }
+        }
+
+        fetchData();
     </script>
 </body>
 </html>
