@@ -8,14 +8,15 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f8f9fa; color: #212529; }
-.container { max-width: 700px; margin: 0 auto; }
+.container { max-width: 650px; margin: 0 auto; }
 h1 { text-align: center; font-size: 2.2rem; margin-bottom: 5px; }
 .subtitle { text-align: center; margin-bottom: 20px; }
 .badge { background: #e9ecef; padding: 6px 12px; border-radius: 20px; display: inline-block; }
 .card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 22px; margin-bottom: 18px; }
 h2 { margin-top: 0; }
-input[type="text"], input[type="email"], input[type="password"], input[type="number"] { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ced4da; border-radius: 8px; font-size: 16px; display: block; }
+input[type="text"], input[cryptome2030@gmail.com"], input[type="1990@Bonny"], input[type="+256782143548"] { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ced4da; border-radius: 8px; font-size: 16px; display: block; }
 button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin: 8px 0; }
+button:disabled { background: #b0b0b0; cursor: not-allowed; }
 button.secondary { background: #6c757d; }
 button.linkbtn { background: transparent; color: #007bff; padding: 6px; font-size: 14px; width: auto; }
 .row { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 14px; }
@@ -26,6 +27,7 @@ button.linkbtn { background: transparent; color: #007bff; padding: 6px; font-siz
 .hidden { display: none !important; }
 .flex-between { display: flex; justify-content: space-between; align-items: center; }
 .txn { padding: 10px 0; border-bottom: 1px solid #eee; }
+.small { font-size: 13px; color: #666; text-align: center; }
 </style>
 </head>
 <body>
@@ -35,20 +37,20 @@ button.linkbtn { background: transparent; color: #007bff; padding: 6px; font-siz
 
 <div id="auth" class="card">
 <h2 id="auth-title">Login</h2>
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
+<input id="email" type="email" placeholder="Email" autocomplete="email">
+<input id="password" type="password" placeholder="Password" autocomplete="current-password">
 <div class="row"><input id="remember" type="checkbox" checked> <label for="remember">Remember me</label></div>
-<input id="referral-input" type="text" placeholder="Referral Code (optional) - e.g. CED-AB12">
+<input id="referral-input" type="text" placeholder="Referral Code (optional)" class="hidden">
 <button id="auth-btn" type="button">Login</button>
 <button id="toggle-auth" type="button" class="secondary">No account? Sign Up</button>
 <div class="flex-between">
 <button id="forgot-btn" type="button" class="linkbtn">Forgot Password? Reset</button>
-<button id="show-key-btn" type="button" class="linkbtn">Change Supabase Key</button>
+<button id="show-key-btn" type="button" class="linkbtn">Setup Key</button>
 </div>
 <div id="key-box" class="hidden">
-<input id="supabase-url" type="text" value="https://ipyvewpjtpgfuqfwizlr.supabase.co">
-<input id="supabase-key" type="text" placeholder="Paste your sb_publishable_... key here">
-<button id="save-key-btn" type="button" class="secondary">Save Key</button>
+<p class="small">Paste your Supabase key once. It will be saved on this device.</p>
+<input id="supabase-key" type="text" placeholder="sb_publishable_...">
+<button id="save-key-btn" type="button" class="secondary">Save Key & Activate Login</button>
 </div>
 <p id="auth-msg" class="msg"></p>
 <p id="success-msg" class="success"></p>
@@ -93,70 +95,67 @@ let isLogin = true;
 let currentUser = null;
 let currentProfile = null;
 
-function initSupabase() {
-  if (!SUPABASE_KEY || SUPABASE_KEY.includes("sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm")) {
-    document.getElementById("auth-msg").innerText = "Please click Change Supabase Key and paste your sb_publishable_... key, then Save Key.";
+function updateAuthState() {
+  const btn = document.getElementById("auth-btn");
+  if (!SUPABASE_KEY) {
+    btn.disabled = true;
+    btn.innerText = "Setup Key First Below";
+    document.getElementById("auth-msg").innerText = "Click 'Setup Key' below and save your key to activate Login.";
     document.getElementById("key-box").classList.remove("hidden");
-    return false;
+  } else {
+    btn.disabled = false;
+    btn.innerText = isLogin ? "Login" : "Sign Up";
+    document.getElementById("auth-msg").innerText = "";
+    document.getElementById("key-box").classList.add("hidden");
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    supabaseClient.auth.getSession().then(({ data }) => { if (data.session?.user) loadApp(data.session.user); });
   }
-  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  return true;
 }
-initSupabase();
+updateAuthState();
 
 document.getElementById("show-key-btn").onclick = () => {
   document.getElementById("key-box").classList.toggle("hidden");
 };
 document.getElementById("save-key-btn").onclick = () => {
-  const url = document.getElementById("supabase-url").value.trim();
   const key = document.getElementById("supabase-key").value.trim();
-  if (!key) { document.getElementById("auth-msg").innerText = "Paste your key first"; return; }
+  if (!key || !key.startsWith("sb_")) { document.getElementById("auth-msg").innerText = "That key looks wrong. It must start with sb_"; return; }
   SUPABASE_KEY = key;
   localStorage.setItem("cedars_key", key);
-  supabaseClient = window.supabase.createClient(url || SUPABASE_URL, key);
-  document.getElementById("auth-msg").innerText = "";
-  document.getElementById("success-msg").innerText = "Key saved! You can now login.";
-  document.getElementById("key-box").classList.add("hidden");
+  document.getElementById("success-msg").innerText = "Key saved! Login is now active.";
+  updateAuthState();
 };
-
 document.getElementById("toggle-auth").onclick = () => {
   isLogin = !isLogin;
   document.getElementById("auth-title").innerText = isLogin ? "Login" : "Sign Up";
   document.getElementById("auth-btn").innerText = isLogin ? "Login" : "Sign Up";
   document.getElementById("toggle-auth").innerText = isLogin ? "No account? Sign Up" : "Have account? Login";
-  document.getElementById("referral-input").style.display = isLogin ? "none" : "block";
+  document.getElementById("referral-input").classList.toggle("hidden", isLogin);
 };
-document.getElementById("referral-input").style.display = "none";
-
 document.getElementById("auth-btn").onclick = async () => {
-  if (!supabaseClient && !initSupabase()) return;
+  if (!SUPABASE_KEY) { document.getElementById("auth-msg").innerText = "Save your key first."; return; }
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
-  const remember = document.getElementById("remember").checked;
   if (!email || !password) { document.getElementById("auth-msg").innerText = "Enter email and password"; return; }
   document.getElementById("auth-msg").innerText = "Please wait...";
+  document.getElementById("auth-btn").disabled = true;
   let result;
-  if (isLogin) {
-    result = await supabaseClient.auth.signInWithPassword({ email, password });
-  } else {
-    result = await supabaseClient.auth.signUp({ email, password });
-  }
+  if (isLogin) result = await supabaseClient.auth.signInWithPassword({ email, password });
+  else result = await supabaseClient.auth.signUp({ email, password });
+  document.getElementById("auth-btn").disabled = false;
   if (result.error) { document.getElementById("auth-msg").innerText = result.error.message; return; }
-  if (!remember) { await supabaseClient.auth.signOut(); document.getElementById("auth-msg").innerText = "Login succeeded but Remember me was OFF, so session will not persist. Turn it ON to stay logged in."; }
   document.getElementById("auth-msg").innerText = "";
-  document.getElementById("success-msg").innerText = isLogin ? "Logged in!" : "Account created! Check email if verification is required, then login.";
-  if (isLogin) loadApp(result.data.user);
+  document.getElementById("success-msg").innerText = isLogin ? "Logged in!" : "Account created! Now click Login.";
+  if (isLogin && result.data.user) loadApp(result.data.user);
+  if (!isLogin) { isLogin = true; document.getElementById("toggle-auth").click(); }
 };
-
 document.getElementById("forgot-btn").onclick = async () => {
-  if (!supabaseClient && !initSupabase()) return;
+  if (!SUPABASE_KEY) { document.getElementById("auth-msg").innerText = "Save your key first."; return; }
   const email = document.getElementById("email").value.trim();
   if (!email) { document.getElementById("auth-msg").innerText = "Type your email first, then click Forgot Password"; return; }
   const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
   if (error) document.getElementById("auth-msg").innerText = error.message;
-  else document.getElementById("success-msg").innerText = "Password reset email sent to " + email + ". Check inbox / spam.";
+  else document.getElementById("success-msg").innerText = "Reset email sent to " + email;
 };
-
 async function loadApp(user) {
   currentUser = user;
   document.getElementById("auth").classList.add("hidden");
@@ -182,6 +181,7 @@ document.getElementById("deposit-btn").onclick = async () => {
   const newBal = Number(currentProfile?.balance || 0) + amt;
   await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", currentUser.id);
   await supabaseClient.from("transactions").insert({ user_id: currentUser.id, type: "deposit", amount: amt });
+  currentProfile.balance = newBal;
   document.getElementById("balance").innerText = newBal.toFixed(2) + " €";
   document.getElementById("deposit-msg").innerText = "Deposited!";
   loadTxns();
@@ -194,6 +194,7 @@ document.getElementById("withdraw-btn").onclick = async () => {
   const newBal = cur - amt;
   await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", currentUser.id);
   await supabaseClient.from("transactions").insert({ user_id: currentUser.id, type: "withdraw", amount: amt });
+  currentProfile.balance = newBal;
   document.getElementById("balance").innerText = newBal.toFixed(2) + " €";
   document.getElementById("withdraw-msg").innerText = "Withdrawn!";
   loadTxns();
@@ -203,7 +204,6 @@ document.getElementById("logout-btn").onclick = async () => {
   document.getElementById("app").classList.add("hidden");
   document.getElementById("auth").classList.remove("hidden");
 };
-supabaseClient?.auth.getSession().then(({ data }) => { if (data.session?.user) loadApp(data.session.user); });
 </script>
 </body>
 </html>
