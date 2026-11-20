@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,21 +13,24 @@
     <button id="logout-btn" style="display:none;">Logout</button>
     <button id="kyc-btn" style="display:none;">Submit KYC</button>
     <input id="kyc-file" type="file" style="display:none;">
+    <button id="profile-picture-btn" style="display:none;">Upload Profile Picture</button>
+    <input id="profile-picture-file" type="file" style="display:none;">
     <button id="withdraw-btn" style="display:none;">Request Withdrawal</button>
     <input id="amount" type="number" style="display:none;">
     <div id="profile" style="display:none;">
         <h2>Profile</h2>
         <p id="email"></p>
         <img id="avatar" src="" alt="Avatar">
+        <p id="referral-code"></p>
     </div>
 
     <script>
-        const supabaseUrl = 'YOUR_SUPABASE_URL';
-        const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+        const supabaseUrl = 'https://ipyvewpjtpgfuqfwizlr.supabase.co/rest/v1/';
+        const supabaseAnonKey = 'sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm';
         const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
 
         document.getElementById('login-btn').addEventListener('click', async () => {
-            const { user, error } = await supabase.auth.signIn({
+            const { user, error } = await supabase.auth.signInWithPassword({
                 email: 'user@example.com',
                 password: 'password',
             });
@@ -35,21 +39,29 @@
                 document.getElementById('login-btn').style.display = 'none';
                 document.getElementById('logout-btn').style.display = 'block';
                 document.getElementById('kyc-btn').style.display = 'block';
+                document.getElementById('profile-picture-btn').style.display = 'block';
                 document.getElementById('withdraw-btn').style.display = 'block';
                 document.getElementById('amount').style.display = 'block';
                 document.getElementById('profile').style.display = 'block';
                 document.getElementById('email').innerText = user.email;
+                // Generate referral code
+                const referralCode = Math.random().toString(36).substr(2, 10);
+                document.getElementById('referral-code').innerText = `Referral Code: ${referralCode}`;
             }
         });
 
         document.getElementById('logout-btn').addEventListener('click', async () => {
-            await supabase.auth.signOut();
-            document.getElementById('login-btn').style.display = 'block';
-            document.getElementById('logout-btn').style.display = 'none';
-            document.getElementById('kyc-btn').style.display = 'none';
-            document.getElementById('withdraw-btn').style.display = 'none';
-            document.getElementById('amount').style.display = 'none';
-            document.getElementById('profile').style.display = 'none';
+            const { error } = await supabase.auth.signOut();
+            if (error) console.error(error);
+            else {
+                document.getElementById('login-btn').style.display = 'block';
+                document.getElementById('logout-btn').style.display = 'none';
+                document.getElementById('kyc-btn').style.display = 'none';
+                document.getElementById('profile-picture-btn').style.display = 'none';
+                document.getElementById('withdraw-btn').style.display = 'none';
+                document.getElementById('amount').style.display = 'none';
+                document.getElementById('profile').style.display = 'none';
+            }
         });
 
         document.getElementById('kyc-btn').addEventListener('click', () => {
@@ -61,6 +73,21 @@
             const { data, error } = await supabase.storage.from('kyc').upload(`public/${file.name}`, file);
             if (error) console.error(error);
             else console.log('KYC document uploaded successfully');
+        });
+
+        document.getElementById('profile-picture-btn').addEventListener('click', () => {
+            document.getElementById('profile-picture-file').click();
+        });
+
+        document.getElementById('profile-picture-file').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            const { data, error } = await supabase.storage.from('avatars').upload(`public/${file.name}`, file);
+            if (error) console.error(error);
+            else {
+                const { data: publicUrl } = supabase.storage.from('avatars').getPublicUrl(`public/${file.name}`);
+                document.getElementById('avatar').src = publicUrl;
+                console.log('Profile picture uploaded successfully');
+            }
         });
 
         document.getElementById('withdraw-btn').addEventListener('click', async () => {
