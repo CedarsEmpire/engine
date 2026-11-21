@@ -1,285 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CEDARS EMPIRE - Shareholder Dashboard</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f5f6f8;color:#111}
-/* ===== HEADER ===== */
-header{background:#fff;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:10}
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px}
-.topbar b{font-size:20px}
-.topbar b span{color:#16a34a;font-size:13px;font-weight:400}
-.topbar .user{font-size:14px;color:#666}
-.nav1{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 10px;border-bottom:1px solid #e5e7eb}
-.nav1 a{text-decoration:none;color:#111;font-size:14px;padding:9px 14px;border-radius:8px;background:#f8fafc;border:1px solid #eef2f7}
-.nav1 a.active{background:#111;color:#fff}
-.nav2{display:flex;gap:8px;flex-wrap:wrap;padding:10px 20px}
-.nav2 a{text-decoration:none;color:#111;font-size:14px;padding:9px 14px;border-radius:8px;background:#f8fafc;border:1px solid #eef2f7}
-.nav2 a.green{background:#16a34a;color:#fff;border-color:#16a34a}
-.search{margin-left:auto}
-.search input{padding:9px 12px;border:1px solid #e5e7eb;border-radius:8px;width:260px}
-/* ===== BODY ===== */
-main{max-width:1100px;margin:0 auto;padding:18px 14px 40px}
-.cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-@media(max-width:800px){.cards{grid-template-columns:1fr}}
-.card{background:#fff;border:1px solid #eef2f7;border-radius:12px;padding:18px}
-.card small{color:#666;font-size:13px}
-.card h2{font-size:28px;margin:6px 0 4px}
-.card p{font-size:13px;color:#666}
-.bar{height:8px;background:#e5e7eb;border-radius:99px;margin-top:10px;overflow:hidden}
-.bar i{display:block;height:100%;background:#16a34a;width:9%}
-.box{background:#fff;border:1px solid #eef2f7;border-radius:12px;padding:18px;margin-top:14px}
-.box h3{font-size:16px;margin-bottom:4px}
-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
-th{text-align:left;color:#666;font-weight:400;padding:12px 8px;border-bottom:1px solid #eef2f7}
-td{padding:13px 8px;border-bottom:1px solid #f1f5f9}
-td:last-child, th:last-child{color:#666;font-size:13px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:800px){.grid2{grid-template-columns:1fr}}
-label{font-size:13px;display:block;margin-top:12px}
-input,select{width:100%;padding:11px;border:1px solid #e5e7eb;border-radius:8px;margin-top:5px}
-.btn{display:inline-block;padding:11px 16px;border:0;border-radius:8px;font-weight:700;cursor:pointer;margin-top:14px}
-.btn-green{background:#16a34a;color:#fff}
-.btn-dark{background:#111;color:#fff}
-.btn-light{background:#f1f5f9}
-.badge{display:inline-block;padding:4px 8px;border-radius:99px;font-size:12px;background:#dcfce7;color:#166534}
-.badge-yellow{background:#fef9c3;color:#854d0e}
-.note{font-size:13px;color:#666;margin-top:8px;line-height:1.5}
-/* ===== LIVE CHAT ===== */
-.chat-fab{position:fixed;right:16px;bottom:16px;background:#16a34a;border:0;width:58px;height:58px;border-radius:50%;font-size:24px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:50}
-.chat-box{position:fixed;right:16px;bottom:84px;width:330px;max-width:calc(100vw - 32px);background:#fff;border-radius:14px;border:1px solid #e5e7eb;box-shadow:0 20px 50px rgba(0,0,0,.2);overflow:hidden;z-index:50}
-.chat-head{background:#111;color:#fff;padding:14px;display:flex;justify-content:space-between}
-.chat-body{padding:12px;height:220px;overflow:auto}
-.msg{background:#f1f5f9;padding:10px;border-radius:12px;margin-bottom:8px;font-size:14px}
-.msg.me{background:#dcfce7}
-.chat-input{padding:10px;display:flex;gap:8px;border-top:1px solid #eef2f7}
-.chat-input input{margin:0}
-.chat-input .btn{margin:0}
-/* ===== FOOTER ===== */
-footer{background:#fff;border-top:1px solid #e5e7eb;padding:20px;text-align:center;margin-top:10px}
-footer b{font-size:16px}
-footer p{font-size:13px;color:#666;margin-top:6px;line-height:1.6}
-footer .links{margin-top:10px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-footer .links a{font-size:13px;color:#111;text-decoration:none}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEDARS EMPIRE - Shareholder Dashboard</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar b {
+            font-size: 20px;
+        }
+
+        .topbar b span {
+            color: #16a34a;
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .topbar .user {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .account-overview {
+            margin-bottom: 40px;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .card {
+            width: calc(33.33% - 20px);
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .plan-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .plan-card {
+            width: calc(25% - 20px);
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .transactions table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions th, .transactions td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .referrals {
+            margin-top: 40px;
+        }
+
+        .referrals input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .referrals button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #fff;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ================= HEADER ================= -->
-<header>
-  <div class="topbar">
-    <b>CEDARS EMPIRE <span>• Live</span></b>
-    <div class="user">ogwal.bemmanuel@gmail.com</div>
-  </div>
-  <nav class="nav1">
-    <a href="#" class="active">🏠 Home</a>
-    <a href="#">🏦 Deposit</a>
-    <a href="#">👥 Referral</a>
-    <a href="#">↗ Withdraw</a>
-    <a href="#">🔄 P2P</a>
-    <a href="#">📦 Storage</a>
-    <a href="#">📝 Register</a>
-    <a href="#">🔑 Login</a>
-    <a href="#">🚪 Logoff</a>
-    <div class="search"><input placeholder="🔍 Search tasks, engines, workers..."></div>
-  </nav>
-  <nav class="nav2">
-    <a href="#">👤 Profile</a>
-    <a href="#" class="green">🏦 Deposit ON</a>
-    <a href="#">☰ Task</a>
-    <a href="#">↗ Withdraw</a>
-    <a href="#">👥 Referral</a>
-    <a href="#">Toggle Deposit</a>
-  </nav>
-</header>
+    <!-- Header -->
+    <header>
+        <div class="topbar">
+            <b>CEDARS EMPIRE <span>• Live</span></b>
+            <div class="user">ogwal.bemmanuel@gmail.com</div>
+        </div>
+    </header>
 
-<!-- ================= BODY ================= -->
-<main>
+    <!-- Dashboard -->
+    <main class="dashboard">
+        <!-- Account Overview -->
+        <section class="account-overview">
+            <h2>Account Overview</h2>
+            <div class="cards">
+                <div class="card">
+                    <h3>Total Earned</h3>
+                    <p>£224.37</p>
+                </div>
+                <div class="card">
+                    <h3>Available Balance</h3>
+                    <p>£13.87</p>
+                </div>
+                <div class="card">
+                    <h3>Daily Earnings</h3>
+                    <p>+£50.00</p>
+                </div>
+            </div>
+        </section>
 
-  <!-- TOP CARDS -->
-  <section class="cards">
-    <div class="card">
-      <small>🤖 AI Workers Online</small>
-      <h2>100</h2>
-      <p>Online now</p>
-    </div>
-    <div class="card">
-      <small>💻 Total Earned - Never Resets</small>
-      <h2>€224.37</h2>
-      <p>Live updating • Keeps accumulating</p>
-    </div>
-    <div class="card">
-      <small>🎯 AI Target €2500</small>
-      <h2>9.0%</h2>
-      <p>Next cycle in 15:33:40</p>
-      <div class="bar"><i></i></div>
-    </div>
-  </section>
+        <!-- Plans -->
+        <section class="plans">
+            <h2>Shareholder Plans</h2>
+            <div class="plan-cards">
+                <div class="plan-card">
+                    <h3>Starter</h3>
+                    <p>£300</p>
+                    <p>1% daily</p>
+                    <button>Invest</button>
+                </div>
+                <div class="plan-card">
+                    <h3>Bronze</h3>
+                    <p>£1,000</p>
+                    <p>1% daily</p>
+                    <button>Invest</button>
+                </div>
+                <div class="plan-card">
+                    <h3>Silver</h3>
+                    <p>£2,500</p>
+                    <p>1% daily</p>
+                    <button>Invest</button>
+                </div>
+                <div class="plan-card">
+                    <h3>Gold</h3>
+                    <p>£5,000</p>
+                    <p>1% daily</p>
+                    <button>Invest</button>
+                </div>
+            </div>
+        </section>
 
-  <!-- BALANCE TABLE -->
-  <section class="box">
-    <h3>💰 Balance Table</h3>
-    <table>
-      <tr><th>Balance Type</th><th>Amount</th><th>Note</th></tr>
-      <tr><td>Available Balance</td><td><b>€13.87</b></td><td>Withdrawable / KYC withdrawals from here</td></tr>
-      <tr><td>Reserved Balance</td><td><b>€0.00</b></td><td>Held for pending tasks / rewards</td></tr>
-      <tr><td>Earned Balance</td><td><b>€224.37</b></td><td>Total ever earned - never resets</td></tr>
-      <tr><td>Central Reserve</td><td><b>€179.50</b></td><td>Platform reserve - 80% of every reward</td></tr>
-    </table>
-  </section>
+        <!-- Transactions -->
+        <section class="transactions">
+            <h2>Transaction History</h2>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>Today</td>
+                    <td>Daily Earning</td>
+                    <td>+£50.00</td>
+                    <td>Completed</td>
+                </tr>
+                <tr>
+                    <td>Yesterday</td>
+                    <td>Referral Bonus</td>
+                    <td>+£25.00</td>
+                    <td>Completed</td>
+                </tr>
+                <tr>
+                    <td>Nov 18</td>
+                    <td>Redemption</td>
+                    <td>+£100.00</td>
+                    <td>Completed</td>
+                </tr>
+                <tr>
+                    <td>Nov 15</td>
+                    <td>Deposit</td>
+                    <td>+£5,000.00</td>
+                    <td>Completed</td>
+                </tr>
+            </table>
+        </section>
 
-  <!-- PLANS -->
-  <section class="box">
-    <h3>📊 Shareholder Plans - All Earn 1% Every 24 Hours</h3>
-    <p class="note">1% daily on your deposit. Paid every 24 hours. Duration: 1095 days for all plans.</p>
-    <table>
-      <tr><th>Plan</th><th>Deposit</th><th>Daily Earning (1%)</th><th>Status</th></tr>
-      <tr><td>Starter</td><td>$300</td><td>$3.00 / day</td><td><span class="badge">Available</span></td></tr>
-      <tr><td>Bronze</td><td>$1,000</td><td>$10.00 / day</td><td><span class="badge">Available</span></td></tr>
-      <tr><td>Silver</td><td>$2,500</td><td>$25.00 / day</td><td><span class="badge">Available</span></td></tr>
-      <tr><td>Gold</td><td>$5,000</td><td>$50.00 / day</td><td><span class="badge">Your Plan</span></td></tr>
-    </table>
-  </section>
+        <!-- Referrals -->
+        <section class="referrals">
+            <h2>Referral Program</h2>
+            <p>Earn 10% of every deposit made by your referrals.</p>
+            <label>Your Referral Link</label>
+            <input value="https://cedarsempire.com/r/emmanuel123">
+            <button>Copy Link</button>
+        </section>
+    </main>
 
-  <!-- REGISTER + LOGIN -->
-  <section class="grid2">
-    <div class="box">
-      <h3>📝 Register</h3>
-      <p class="note">Create a new shareholder account.</p>
-      <label>Full Name</label><input placeholder="Emmanuel Ogwal">
-      <label>Email</label><input placeholder="you@email.com">
-      <label>Password</label><input type="password" placeholder="••••••••">
-      <label>Referral Code (Optional)</label><input placeholder="e.g. EMMANUEL123">
-      <button class="btn btn-dark" style="width:100%">Create Account</button>
-      <p class="note">Already have an account? <b>Login</b></p>
-    </div>
-    <div class="box">
-      <h3>🔑 Login</h3>
-      <p class="note">Welcome back to CEDARS EMPIRE.</p>
-      <label>Email</label><input placeholder="you@email.com">
-      <label>Password</label><input type="password" placeholder="••••••••">
-      <button class="btn btn-dark" style="width:100%">Login</button>
-      <hr style="margin:16px 0;border:0;border-top:1px solid #eef2f7">
-      <h3>🪪 KYC Verification</h3>
-      <p class="note">Status: <span class="badge badge-yellow">Pending Verification</span></p>
-      <label>ID Number</label><input placeholder="CM12345678">
-      <button class="btn btn-light" style="width:100%">Submit KYC</button>
-    </div>
-  </section>
-
-  <!-- DEPOSIT / WITHDRAW -->
-  <section class="grid2">
-    <div class="box">
-      <h3>🏦 Deposit</h3>
-      <label>Amount</label><input placeholder="e.g. 500">
-      <label>Method</label><select><option>MTN MoMo</option><option>Airtel Money</option><option>Bank Transfer</option><option>USDT</option></select>
-      <button class="btn btn-green" style="width:100%">Deposit</button>
-      <p class="note">Minimum: $300. Funds reflect in 5-15 minutes.</p>
-    </div>
-    <div class="box">
-      <h3>↗ Withdraw</h3>
-      <p class="note">Available: <b>€13.87</b> • KYC required</p>
-      <label>Amount</label><input placeholder="e.g. 100">
-      <label>Withdraw To</label><select><option>MTN MoMo</option><option>Bank Account</option><option>USDT Wallet</option></select>
-      <button class="btn btn-dark" style="width:100%">Request Withdrawal</button>
-    </div>
-  </section>
-
-  <!-- REDEMPTION -->
-  <section class="box">
-    <h3>🎁 Redemption</h3>
-    <p class="note">Redeem your Central Reserve / Earned Balance. Redemption moves funds from Reserve to Available Balance.</p>
-    <table>
-      <tr><th>Source</th><th>Available to Redeem</th><th>Action</th></tr>
-      <tr><td>Central Reserve (80%)</td><td>€179.50</td><td><button class="btn btn-green">Redeem</button></td></tr>
-      <tr><td>Earned Balance</td><td>€224.37</td><td><button class="btn btn-green">Redeem</button></td></tr>
-      <tr><td>Referral Bonus (10%)</td><td>€31.50</td><td><button class="btn btn-green">Redeem</button></td></tr>
-    </table>
-    <label>Redemption Amount</label><input placeholder="e.g. 50">
-    <button class="btn btn-dark">Confirm Redemption</button>
-  </section>
-
-  <!-- REFERRAL -->
-  <section class="box">
-    <h3>👥 Referral - Earn 10%</h3>
-    <p class="note">You earn <b>10% of every deposit</b> made by people you invite. Paid instantly to your Referral Bonus.</p>
-    <label>Your Referral Link</label><input value="https://cedarsempire.com/r/emmanuel123">
-    <button class="btn btn-light">Copy Link</button>
-    <table>
-      <tr><th>Metric</th><th>Value</th><th>Note</th></tr>
-      <tr><td>Friends Joined</td><td>14</td><td>Active referrals</td></tr>
-      <tr><td>Their Total Deposits</td><td>$3,150</td><td>10% = $315</td></tr>
-      <tr><td>Referral Bonus Earned</td><td>$315.00</td><td>Redeemable</td></tr>
-    </table>
-  </section>
-
-  <!-- P2P -->
-  <section class="box">
-    <h3>🔄 P2P Marketplace</h3>
-    <table>
-      <tr><th>Seller</th><th>Rate</th><th>Available</th><th>Action</th></tr>
-      <tr><td>Kato M. - Uganda</td><td>$1 = UGX 3,720</td><td>$2,500</td><td><button class="btn btn-light">Buy</button></td></tr>
-      <tr><td>Wanjiru K. - Kenya</td><td>$1 = KES 129</td><td>$1,800</td><td><button class="btn btn-light">Buy</button></td></tr>
-      <tr><td>Amina S. - Uganda</td><td>$1 = UGX 3,750</td><td>$4,000</td><td><button class="btn btn-light">Sell</button></td></tr>
-    </table>
-  </section>
-
-  <!-- CONTRACT -->
-  <section class="box">
-    <h3>📄 Contract Agreement</h3>
-    <p class="note">I agree to CEDARS EMPIRE shareholder terms. All plans earn 1% every 24 hours for 1095 days. Referral bonus is 10%. Redemption is available from Central Reserve and Earned Balance.</p>
-    <label><input type="checkbox" style="width:auto"> I have read and agree</label>
-    <button class="btn btn-dark">Sign Contract</button>
-  </section>
-
-  <!-- TRANSACTIONS -->
-  <section class="box">
-    <h3>🧾 Transactions</h3>
-    <table>
-      <tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr>
-      <tr><td>Today</td><td>Daily Earning 1%</td><td>+$50.00</td><td>Completed</td></tr>
-      <tr><td>Yesterday</td><td>Referral Bonus 10%</td><td>+$25.00</td><td>Completed</td></tr>
-      <tr><td>Nov 18</td><td>Redemption</td><td>+$100.00</td><td>Completed</td></tr>
-      <tr><td>Nov 15</td><td>Deposit - Gold</td><td>+$5,000.00</td><td>Completed</td></tr>
-    </table>
-  </section>
-
-</main>
-
-<!-- ================= LIVE CHAT ================= -->
-<button class="chat-fab">💬</button>
-<div class="chat-box">
-  <div class="chat-head"><b>Live Chat • Online</b><span>✕</span></div>
-  <div class="chat-body">
-    <div class="msg">Hi Emmanuel! 👋 How can we help you today?</div>
-    <div class="msg">Ask about deposits, withdrawals, or redemption.</div>
-    <div class="msg me">Hello, I want to redeem my reserve.</div>
-    <div class="msg">Sure! Go to Redemption and confirm your amount. We are here if you need help.</div>
-  </div>
-  <div class="chat-input">
-    <input placeholder="Type a message...">
-    <button class="btn btn-green">Send</button>
-  </div>
-</div>
-
-<!-- ================= FOOTER ================= -->
-<footer>
-  <b>CEDARS EMPIRE</b>
-  <p>Shareholder Dashboard • All plans earn 1% every 24 hours • Referral bonus 10% • Redemption available</p>
-  <div class="links">
-    <a href="#">Home</a>
-    <a href="#">Deposit</a>
-    <a href="#">Withdraw</a>
-    <a href="#">Referral</a>
-    <a href="#">P2P</a>
-    <a href="#">Contract</a>
-    <a href="#">Support / Live Chat</a>
-  </div>
-  <p>© 2026 CEDARS EMPIRE. All rights reserved. • Admin layout = User layout</p>
-</footer>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 CEDARS EMPIRE. All rights reserved.</p>
+    </footer>
 
 </body>
 </html>
