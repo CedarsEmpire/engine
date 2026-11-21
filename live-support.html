@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Support Status</title>
+  <style>
+    #status-light {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .online {
+      background-color: #00FF00;
+      animation: blink 1s infinite;
+    }
+    .offline {
+      background-color: #FF0000;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<div>
+  <span id="status-light"></span>
+  <span id="status-message"></span>
+  <!-- Only show switch to admins -->
+  <div id="admin-switch" style="display: none;">
+    <label>Live Support: </label>
+    <label class="switch">
+      <input type="checkbox" id="live-support-toggle">
+      <span class="slider round"></span>
+    </label>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabaseUrl = 'https://ipyvewpjtpgfuqfwizlr.supabase.co';
+  const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlweXZld3BqdHBnZnVxdndpemxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA5ODQ0MDAsImV4cCI6MjA0NjU2MDQwMH0.LpVwYc9fB7oJ7dN8K4yK4yK4yK4yK4yK4yK';
+  const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+  const statusLight = document.getElementById('status-light');
+  const statusMessage = document.getElementById('status-message');
+  const adminSwitch = document.getElementById('admin-switch');
+  const liveSupportToggle = document.getElementById('live-support-toggle');
+
+  // Check live support status
+  async function checkLiveSupportStatus() {
+    const { data, error } = await supabase
+      .from('support_settings')
+      .select('live_support_enabled, welcome_message, offline_message')
+      .single();
+
+    if (error) {
+      console.error(error);
+    } else {
+      const isOnline = data.live_support_enabled;
+      statusLight.className = isOnline ? 'online' : 'offline';
+      statusMessage.textContent = isOnline ? data.welcome_message : data.offline_message;
+      liveSupportToggle.checked = isOnline;
+    }
+  }
+
+  // Show/hide admin switch based on user role
+  async function checkUserRole() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user && (user.id === '0799af3f-920f-4717-b7bf-a97e73fe89e7' || user.id === '471e0290-e809-4a05-b4c1-21cb769e7769')) {
+      adminSwitch.style.display = 'block';
+    }
+  }
+
+  // Toggle live support status
+  liveSupportToggle.addEventListener('change', async () => {
+    const isOnline = liveSupportToggle.checked;
+    const { data, error } = await supabase
+      .from('support_settings')
+      .update({ live_support_enabled: isOnline })
+      .eq('id', 1);
+
+    if (error) {
+      console.error(error);
+    } else {
+      checkLiveSupportStatus();
+    }
+  });
+
+  // Initialize
+  checkLiveSupportStatus();
+  checkUserRole();
+
+  // Real-time updates
+  supabase
+    .from('support_settings')
+    .on('*', payload => {
+      checkLiveSupportStatus();
+    })
+    .subscribe();
+</script>
+
+<style>
+  /* Add switch styles */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+  }
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  .slider.round {
+    border-radius: 34px;
+  }
+  .slider.round:before {
+    border-radius: 50%;
+  }
+</style>
+
+</body>
+</html>
