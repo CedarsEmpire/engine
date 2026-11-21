@@ -3,200 +3,232 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEDARS EMPIRE - Shareholder Dashboard</title>
+  <title>Cedars Empire</title>
   <style>
-    /* Global Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+    /* Desktop styles */
+    @media (min-width: 768px) {
+      .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .grid3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .grid4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
     }
 
-    body {
-      background-color: #fff;
+    /* Tablet styles */
+    @media (max-width: 767px) {
+      .container {
+        max-width: 90%;
+        margin: 20px auto;
+        padding: 10px;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .grid3 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .grid4 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
     }
 
-    /* Header Styles */
-    header {
-      background-color: #fff;
-      padding: 20px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    /* Page Styles */
-    .page {
-      display: none;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    /* Dashboard Styles */
-    main {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 18px 14px 20px;
+    /* Mobile styles */
+    @media (max-width: 480px) {
+      .container {
+        max-width: 100%;
+        margin: 10px auto;
+        padding: 5px;
+      }
+      .grid2, .grid3, .grid4 {
+        display: block;
+      }
+      .card {
+        margin-bottom: 10px;
+      }
     }
 
     .card {
-      background: #f0fdf4;
-      border: 1px solid #ddd;
-      border-radius: 16px;
-      padding: 18px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
       margin-bottom: 20px;
     }
 
-    .card h2 {
+    .card-header {
       font-size: 18px;
+      font-weight: bold;
       margin-bottom: 10px;
     }
 
-    button {
-      background: #16a34a;
-      color: #fff;
-      border: none;
+    .card-content {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      border-radius: 5px;
       padding: 10px 20px;
-      border-radius: 10px;
+      font-size: 16px;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #14b87a;
+    .button:hover {
+      background-color: #ccc;
+    }
+
+    /* Robotic engine styles */
+    .robotic-engine {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background-color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .engine-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #444;
+    }
+
+    .engine-core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #666;
+    }
+
+    .engine-piston {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(0deg);
+      width: 40px;
+      height: 10px;
+      background-color: #888;
+      animation: piston-move 2s infinite;
+    }
+
+    .piston-2 {
+      animation-delay: 0.5s;
+    }
+
+    .piston-3 {
+      animation-delay: 1s;
+    }
+
+    @keyframes piston-move {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      50% {
+        transform: translate(-50%, -50%) rotate(180deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
     }
   </style>
 </head>
 <body>
-
-  <!-- Header -->
-  <header>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h1>CEDARS EMPIRE</h1>
-      <nav>
-        <button onclick="showPage('dashboard')">Dashboard</button>
-        <button onclick="showPage('deposit')">Deposit</button>
-        <button onclick="showPage('withdraw')">Withdraw</button>
-        <button onclick="showPage('referral')">Referral</button>
-        <button onclick="showPage('p2p')">P2P</button>
-        <button onclick="showPage('storage')">Storage</button>
-        <button onclick="showPage('transactions')">Transactions</button>
-      </nav>
+  <!-- Dashboard content -->
+  <div class="container">
+    <!-- Robotic engine -->
+    <div class="robotic-engine">
+      <div class="engine-container">
+        <div class="engine-core"></div>
+        <div class="engine-piston"></div>
+        <div class="engine-piston piston-2"></div>
+        <div class="engine-piston piston-3"></div>
+      </div>
     </div>
-  </header>
 
-  <main>
-    <!-- Dashboard Page -->
-    <section id="page-dashboard" class="page active">
+    <!-- Dashboard cards -->
+    <div class="grid4">
       <div class="card">
-        <h2>Dashboard</h2>
-        <p>Account Balance: £<span id="balance">13.87</span></p>
-        <p>Earnings: £<span id="earnings">224.37</span></p>
+        <div class="card-header">Total Earned</div>
+        <div class="card-content">$224.37</div>
       </div>
       <div class="card">
-        <h2>Live Update</h2>
-        <p>Next payout in: <span id="countdown">07:42:18</span></p>
-        <p>AI Workers Online: <span id="workers">100</span></p>
+        <div class="card-header">Available Balance</div>
+        <div class="card-content">$13.87</div>
       </div>
-    </section>
+      <div class="card">
+        <div class="card-header">Today's Earnings</div>
+        <div class="card-content">$42.00</div>
+      </div>
+      <div class="card">
+        <div class="card-header">Referral Bonus</div>
+        <div class="card-content">$315.00</div>
+      </div>
+    </div>
 
-    <!-- Deposit Page -->
-    <section id="page-deposit" class="page">
+    <!-- Deposit and withdrawal sections -->
+    <div class="grid2">
       <div class="card">
-        <h2>Deposit</h2>
-        <label>Amount (£)</label>
-        <input type="number" placeholder="e.g. 500">
-        <button>Deposit</button>
+        <div class="card-header">Deposit</div>
+        <div class="card-content">
+          <form>
+            <label for="deposit-amount">Amount:</label>
+            <input type="number" id="deposit-amount" value="5000">
+            <button class="button">Deposit</button>
+          </form>
+        </div>
       </div>
-    </section>
-
-    <!-- Withdraw Page -->
-    <section id="page-withdraw" class="page">
       <div class="card">
-        <h2>Withdraw</h2>
-        <label>Amount (£)</label>
-        <input type="number" placeholder="e.g. 100">
-        <button>Withdraw</button>
+        <div class="card-header">Withdrawal</div>
+        <div class="card-content">
+          <form>
+            <label for="withdrawal-amount">Amount:</label>
+            <input type="number" id="withdrawal-amount" value="100">
+            <button class="button">Withdraw</button>
+          </form>
+        </div>
       </div>
-    </section>
-
-    <!-- Referral Page -->
-    <section id="page-referral" class="page">
-      <div class="card">
-        <h2>Referral</h2>
-        <p>Referral Link: <a href="#">https://cedarsempire.com/r/emmanuel123</a></p>
-        <p>Referral Statistics:</p>
-        <ul>
-          <li>Referrals: 14</li>
-          <li>Earnings: £315.00</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- P2P Page -->
-    <section id="page-p2p" class="page">
-      <div class="card">
-        <h2>P2P Marketplace</h2>
-        <table>
-          <tr>
-            <th>Seller</th>
-            <th>Rate</th>
-            <th>Available</th>
-            <th>Action</th>
-          </tr>
-          <tr>
-            <td>Kato M.</td>
-            <td>£1 = USDT 1.00</td>
-            <td>£2,500</td>
-            <td><button>Buy</button></td>
-          </tr>
-        </table>
-      </div>
-    </section>
-
-    <!-- Storage Page -->
-    <section id="page-storage" class="page">
-      <div class="card">
-        <h2>Storage</h2>
-        <p>Storage Balance: £179.50</p>
-      </div>
-    </section>
-
-    <!-- Transactions Page -->
-    <section id="page-transactions" class="page">
-      <div class="card">
-        <h2>Transactions</h2>
-        <table>
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Status</th>
-          </tr>
-          <tr>
-            <td>Today</td>
-            <td>Deposit</td>
-            <td>£500.00</td>
-            <td>Completed</td>
-          </tr>
-        </table>
-      </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
   <script>
-    function showPage(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById('page-' + page).classList.add('active');
-    }
-
-    // Live update
+    // Update system stats every second
     setInterval(() => {
-      document.getElementById('balance').textContent = (13.87 + Math.random() * 10).toFixed(2);
-      document.getElementById('earnings').textContent = (224.37 + Math.random() * 10).toFixed(2);
-      document.getElementById('countdown').textContent = '07:42:' + Math.floor(Math.random() * 60);
-      document.getElementById('workers').textContent = 100 + Math.floor(Math.random() * 10);
-    }, 2000);
+      const cpuUsage = Math.floor(Math.random() * 100);
+      const memoryUsage = Math.floor(Math.random() * 100);
+      const systemUptime = Math.floor(Math.random() * 24);
+
+      // document.getElementById('cpu-usage').textContent = `${cpuUsage}%`;
+      // document.getElementById('memory-usage').textContent = `${memoryUsage}%`;
+      // document.getElementById('system-uptime').textContent = `${systemUptime} hours`;
+    }, 1000);
   </script>
 </body>
 </html>
