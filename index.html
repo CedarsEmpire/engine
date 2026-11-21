@@ -1,223 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CEDARS EMPIRE - Live</title>
-<style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f1f3f6;margin:0;padding:16px;color:#0f1e2e}
-.top{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:14px 18px;border-radius:14px;flex-wrap:wrap;gap:10px}
-.top h1{margin:0;font-size:22px}
-.live{color:#0a9d6e;font-size:14px}
-.nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
-.nav button{background:#fff;border:1px solid #ddd;padding:12px 16px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:14px}
-.nav button.active{background:#0f1e2e;color:#fff}
-.nav button.green{background:#0a9d6e;color:#fff;border:none}
-.searchBox{flex:1;min-width:180px}
-.searchBox input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:14px}
-.authBox{background:#fff;padding:20px;border-radius:14px;max-width:420px;margin:40px auto}
-.authBox input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:10px;font-size:16px}
-.authBox button{width:100%;padding:12px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;margin-top:8px}
-.authBox button.secondary{background:#0f1e2e}
-.authBox button:disabled{opacity:.6}
-.msg{color:#c00;font-size:14px;min-height:18px;text-align:center}
-.remember{display:flex;align-items:center;gap:8px;font-size:14px;margin:6px 0;color:#444}
-.remember input{width:auto;margin:0}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
-.actions button{background:#fff;border:1px solid #ddd;padding:12px 18px;border-radius:10px;font-weight:bold;cursor:pointer;font-size:15px}
-.actions button.green{background:#0a9d6e;color:#fff;border:none}
-.stats{display:flex;gap:12px;flex-wrap:wrap}
-.stat{flex:1;min-width:140px;background:#fff;padding:16px;border-radius:14px}
-.stat b{font-size:28px}
-.card{background:#fff;padding:18px;border-radius:14px;margin-top:14px}
-.big{text-align:center}
-.big .gear{font-size:60px;animation:spin 6s linear infinite;display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
-.engines{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.eng{flex:1;min-width:150px;background:#fff;padding:14px;border-radius:12px}
-.on{color:#fff;background:#0a9d6e;border:none;padding:5px 12px;border-radius:20px;font-weight:bold;cursor:pointer}
-.off{color:#fff;background:#999;border:none;padding:5px 12px;border-radius:20px;font-weight:bold;cursor:pointer}
-.grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
-.grid .card{flex:1;min-width:280px;margin-top:0}
-table{width:100%;border-collapse:collapse;font-size:14px}
-td,th{padding:10px;text-align:left;border-bottom:1px solid #eee}
-.pill{background:#d6f5e8;color:#0a7a55;padding:4px 10px;border-radius:20px;font-weight:bold;font-size:12px}
-.bar{height:8px;background:#e5e7eb;border-radius:5px;overflow:hidden;margin-top:8px}
-.fill{height:100%;background:#0a9d6e;width:0%;transition:width .5s}
-.dot{width:9px;height:9px;background:#00c853;border-radius:50%;display:inline-block}
-.indicator{width:14px;height:14px;border-radius:50%;background:#0a9d6e;box-shadow:0 0 10px #0a9d6e,0 0 20px #0a9d6e;animation:pulse 1.5s infinite;display:inline-block}
-.indicator.off{background:#999;box-shadow:none;animation:none}
-@keyframes pulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}100%{transform:scale(1);opacity:1}}
-.ai-panel{background:#0f1e2e;color:#fff;padding:14px;border-radius:14px;margin-top:14px}
-.ai-panel b{color:#00e68a}
-.ai-log{font-size:13px;line-height:1.6;max-height:120px;overflow:auto;margin-top:8px}
-.ai-panel button{background:#0a9d6e;color:#fff;border:none;padding:9px 14px;border-radius:9px;font-weight:bold;cursor:pointer;margin-right:6px;margin-top:6px}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:99;padding:16px}
-.modal.open{display:flex}
-.modalBox{background:#fff;width:100%;max-width:420px;padding:20px;border-radius:14px}
-.modalBox input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
-.modalBox button{width:100%;padding:12px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;cursor:pointer;margin-top:8px}
-.modalBox button.grey{background:#eee;color:#111}
-.page{display:none}.page.active{display:block}
-.small{font-size:13px;color:#666}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shareholder Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<div class="top"><h1>CEDARS EMPIRE <span class="live">● Live</span></h1><div id="userEmail">👤 Guest</div></div>
-
-<div id="authSection" class="authBox">
-<h2 style="text-align:center;margin:0">Login / Register</h2>
-<p style="text-align:center;color:#666;font-size:14px">Create account to get your own real balance</p>
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password (min 6 chars)">
-<label class="remember"><input type="checkbox" id="rememberMe" checked> Remember me</label>
-<div id="authMsg" class="msg"></div>
-<button id="registerBtn" onclick="doRegister()">Create Account</button>
-<button id="loginBtn" class="secondary" onclick="doLogin()">Login</button>
-<button class="secondary" style="background:#fff;color:#0f1e2e;border:1px solid #ddd" onclick="doResetPassword()">Forgot Password? Reset Password</button>
-</div>
-
-<div id="dashSection" style="display:none">
-<div class="nav">
-<button class="active" data-page="home" onclick="showPage('home',this)">🏠 Home</button>
-<button data-page="deposit" onclick="showPage('deposit',this)">🏦 Deposit</button>
-<button data-page="referral" onclick="showPage('referral',this)">👥 Referral</button>
-<button data-page="withdraw" onclick="showPage('withdraw',this)">↗ Withdraw</button>
-<button data-page="p2p" onclick="showPage('p2p',this)">🔄 P2P</button>
-<button data-page="storage" onclick="showPage('storage',this)">💾 Storage</button>
-<div class="searchBox"><input id="globalSearch" placeholder="🔍 Search tasks, engines, workers..." oninput="doSearch(this.value)"></div>
-<button onclick="doLogout()" style="background:#ffe5e5">Logout</button>
-</div>
-
-<div class="actions">
-<button onclick="alert('Logged in as '+currentUser.email)">👤 Profile</button>
-<button class="green" id="depositBtn" onclick="openModal('depositModal')">🏦 Deposit <span id="depositState">ON</span></button>
-<button onclick="document.getElementById('taskSection').scrollIntoView()">☰ Task</button>
-<button onclick="openModal('withdrawModal')">↗ Withdraw</button>
-<button onclick="openModal('referralModal')">👥 Referral</button>
-<button onclick="toggleDeposit()">Toggle Deposit</button>
-</div>
-
-<!-- HOME -->
-<div id="page-home" class="page active">
-<div class="stats">
-<div class="stat">🤖 AI Workers Online<br><b id="workerCount">100</b><br><small>Online now</small></div>
-<div class="stat">💶 Total Earned - Never Resets<br><b id="earned">€0.00</b><br><small>Live updating • Keeps accumulating</small></div>
-<div class="stat">🎯 AI Target €2500<br><b id="pct">0%</b><br><small id="countdown">Next cycle in 24:00:00</small><div class="bar"><div class="fill" id="barFill"></div></div></div>
-</div>
-
-<div class="card"><h3 style="margin-top:0">💰 Balance Table</h3>
-<table>
-<tr><th>Available Balance</th><td><b id="balAvailable">€0.00</b></td><td><small>Withdrawable / KYC withdrawals from here</small></td></tr>
-<tr><th>Reserved Balance</th><td><b id="balReserved">€0.00</b></td><td><small>Held for pending tasks / rewards</small></td></tr>
-<tr><th>Earned Balance</th><td><b id="balEarned">€0.00</b></td><td><small>Total ever earned - never resets</small></td></tr>
-<tr><th>Central Reserve</th><td><b id="balCentral">€0.00</b></td><td><small>Platform reserve - 80% of every reward</small></td></tr>
-</table></div>
-
-<div class="card big"><h2 style="margin:0">CEDARS CENTRAL ENGINE</h2>
-<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0"><div class="indicator" id="central-engine-status"></div><span id="masterStatus">RUNNING</span></div>
-<div class="gear">⚙️</div><p>100 AI Workers Total • Core processing optimal</p>
-<p id="aiBrainStatus" style="color:#0a7a55;font-weight:bold">🧠 AI Brain: Initializing...</p></div>
-
-<div class="ai-panel"><b>🧠 360° AI OPERATIONS</b> <span id="aiMode">• AUTO MODE: ON</span><br>
-<small>AI Sourcing • AI Assignment • AI Verification • AI Support • AI Content</small><br>
-<button onclick="aiGenerateTasks()">🤖 Generate Tasks</button>
-<button onclick="aiVerifyLast()">✅ Verify Last Task</button>
-<button onclick="aiSupport()">💬 AI Support</button>
-<button onclick="aiToggleAuto()">⏯️ Toggle AI Auto</button>
-<div class="ai-log" id="aiLog">AI log waiting...</div></div>
-
-<div class="engines" id="engines"></div>
-
-<div class="grid">
-<div class="card"><h3>🤖 AI Workers Live</h3><div id="workersLive">Waiting...</div><p style="color:#0a7a55">+95 more workers working...</p></div>
-<div class="card" id="taskSection"><h3>Task Activity</h3>
-<table><thead><tr><th>Region</th><th>Tasks</th><th>Status</th><th>Last</th></tr></thead><tbody id="taskTable"></tbody></table>
-<div style="display:flex;gap:10px;margin-top:14px"><div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Withdraw Available<br><b id="withdrawBal">€0</b></div><div style="flex:1;background:#f8fafc;padding:10px;border-radius:10px">Transactions<br><b id="txCount">0</b></div></div>
-</div></div>
-</div>
-
-<!-- DEPOSIT -->
-<div id="page-deposit" class="page"><div class="card"><h3>🏦 Deposit</h3><p class="small">Deposit goes to Reserved first, then unlocks to Available after AI verification.</p><input id="depositAmount" type="number" placeholder="Amount €" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px"><button onclick="doDeposit()" style="padding:12px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;margin-top:8px;width:100%;cursor:pointer">Confirm Deposit</button><p id="depositMsg" class="small"></p></div></div>
-
-<!-- REFERRAL -->
-<div id="page-referral" class="page"><div class="card"><h3>👥 Referral</h3><p>Your link:</p><p id="refLink" style="word-break:break-all;background:#f8fafc;padding:12px;border-radius:10px"></p><button onclick="copyReferral()" style="padding:12px;border:none;border-radius:10px;background:#0f1e2e;color:#fff;font-weight:bold;cursor:pointer">Copy Link</button><p id="refMsg" class="small"></p></div></div>
-
-<!-- WITHDRAW -->
-<div id="page-withdraw" class="page"><div class="card"><h3>↗ Withdraw</h3><p>Available: <b id="withdrawBal2">€0.00</b></p><input id="withdrawAmount" type="number" placeholder="Amount €" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px"><button onclick="doWithdraw()" style="padding:12px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;margin-top:8px;width:100%;cursor:pointer">Request Withdraw</button><p id="withdrawMsg" class="small"></p></div></div>
-
-<!-- P2P -->
-<div id="page-p2p" class="page"><div class="card"><h3>🔄 P2P</h3><p class="small">Send balance to another user by email / user ID. Demo uses local ledger + Supabase transactions.</p><input id="p2pTo" placeholder="Receiver email or ID" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px"><input id="p2pAmount" type="number" placeholder="Amount €" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:8px"><button onclick="doP2P()" style="padding:12px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;margin-top:8px;width:100%;cursor:pointer">Send P2P</button><p id="p2pMsg" class="small"></p></div></div>
-
-<!-- STORAGE -->
-<div id="page-storage" class="page"><div class="card"><h3>💾 Storage</h3><p class="small">Save notes / files names for your work. Stored in this browser + your transactions log.</p><input id="storageName" placeholder="File / note name" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px"><button onclick="saveStorage()" style="padding:12px;border:none;border-radius:10px;background:#0f1e2e;color:#fff;font-weight:bold;margin-top:8px;width:100%;cursor:pointer">Save to Storage</button><div id="storageList" style="margin-top:12px"></div></div></div>
-
-</div>
-
-<!-- MODALS -->
-<div class="modal" id="depositModal"><div class="modalBox"><h3>🏦 Deposit</h3><input id="depositAmount2" type="number" placeholder="Amount €"><button onclick="doDeposit2()">Confirm Deposit</button><button class="grey" onclick="closeModal('depositModal')">Close</button></div></div>
-<div class="modal" id="withdrawModal"><div class="modalBox"><h3>↗ Withdraw</h3><p>Available: <b id="withdrawBal3">€0.00</b></p><input id="withdrawAmount2" type="number" placeholder="Amount €"><button onclick="doWithdraw2()">Request Withdraw</button><button class="grey" onclick="closeModal('withdrawModal')">Close</button></div></div>
-<div class="modal" id="referralModal"><div class="modalBox"><h3>👥 Referral</h3><p id="refLink2" style="word-break:break-all"></p><button onclick="copyReferral()">Copy Link</button><button class="grey" onclick="closeModal('referralModal')">Close</button></div></div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL='https://ipyvewpjtpgfuqfwizlr.supabase.co';
-const SUPABASE_KEY='sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm';
-const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let currentUser=null;let earned=0;let availableBal=0;let reservedBal=0;let centralReserve=0;let totalTasks=0;let depositOn=true;
-let engines=[{id:1,name:"Africa",on:true,tasks:32},{id:2,name:"Asia",on:true,tasks:28},{id:3,name:"America",on:false,tasks:0},{id:4,name:"Europe",on:true,tasks:19},{id:5,name:"Oceania",on:false,tasks:0}];
-let workerNames=["Vision Worker","Transcription Worker","Rating Worker","Data Worker","Text Worker"];
-let targetEnd=new Date();targetEnd.setHours(24,0,0,0);let aiAuto=true;let lastTaskInfo=null;
-
-function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='referral')updateReferral();if(id==='withdraw')syncWithdrawLabels();if(id==='storage')renderStorage();}
-function openModal(id){document.getElementById(id).classList.add('open');if(id==='referralModal')updateReferral();if(id==='withdrawModal')syncWithdrawLabels();}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
-function updateReferral(){if(!currentUser)return;let l='https://cedarsempire.com/register?ref='+currentUser.id.slice(0,8);let a=document.getElementById('refLink');if(a)a.innerText=l;let b=document.getElementById('refLink2');if(b)b.innerText=l;}
-function copyReferral(){if(!currentUser)return;let l='https://cedarsempire.com/register?ref='+currentUser.id.slice(0,8);navigator.clipboard.writeText(l).then(()=>{let m=document.getElementById('refMsg');if(m)m.innerText='Copied!';alert('Referral copied')})}
-function syncWithdrawLabels(){['withdrawBal2','withdrawBal3'].forEach(i=>{let el=document.getElementById(i);if(el)el.innerText='€'+availableBal.toFixed(2)})}
-function doSearch(q){q=(q||'').toLowerCase();document.querySelectorAll('#taskTable tr').forEach(r=>{r.style.display=r.innerText.toLowerCase().includes(q)?'':'none'});document.querySelectorAll('.eng').forEach(e=>{e.style.display=e.innerText.toLowerCase().includes(q)?'':'none'});renderStorage(q);}
-
-function aiLog(msg){let el=document.getElementById('aiLog');if(!el)return;el.innerHTML='• '+msg+'<br>'+el.innerHTML}
-function aiBrainReady(){let el=document.getElementById('aiBrainStatus');if(el)el.innerText='🧠 AI Brain: ACTIVE • 99% AI Operations';aiLog('AI Brain connected to Central Engine')}
-function updateCountdown(){let diff=targetEnd-new Date();if(diff<=0){targetEnd=new Date();targetEnd.setHours(24,0,0,0);diff=targetEnd-new Date()}let h=Math.floor(diff/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);document.getElementById('countdown').innerText='Next cycle in '+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
-setInterval(updateCountdown,1000);updateCountdown();
-function showMsg(t,color){let el=document.getElementById('authMsg');el.innerText=t;el.style.color=color||'#c00'}
-
-// Remember me - load saved email
-try{let saved=localStorage.getItem('cedars_email');if(saved)document.getElementById('email').value=saved}catch(e){}
-function saveRemembered(){try{if(document.getElementById('rememberMe').checked)localStorage.setItem('cedars_email',document.getElementById('email').value.trim());else localStorage.removeItem('cedars_email')}catch(e){}}
-
-async function doRegister(){const email=document.getElementById('email').value.trim();const password=document.getElementById('password').value;if(!email||password.length<6){showMsg('Enter valid email and password min 6 chars');return}document.getElementById('registerBtn').disabled=true;showMsg('Creating account...','#0a7a55');const{data,error}=await client.auth.signUp({email,password});document.getElementById('registerBtn').disabled=false;if(error){showMsg('SIGNUP FAILED: '+error.message);return}saveRemembered();if(data.user&&!data.session){showMsg('Account created! Check email to confirm, then click Login.','#0a7a55');return}showMsg('Account created! Logging you in...','#0a7a55');await afterLogin()}
-async function doLogin(){const email=document.getElementById('email').value.trim();const password=document.getElementById('password').value;showMsg('Logging in...','#0a7a55');const{data,error}=await client.auth.signInWithPassword({email,password});if(error){showMsg('LOGIN FAILED: '+error.message);return}saveRemembered();await afterLogin()}
-async function doResetPassword(){const email=document.getElementById('email').value.trim();if(!email){showMsg('Enter your email first to reset password');return}showMsg('Sending reset email...','#0a7a55');const{error}=await client.auth.resetPasswordForEmail(email,{redirectTo:window.location.href});if(error){showMsg('RESET FAILED: '+error.message);return}showMsg('Reset link sent! Check your email.','#0a7a55')}
-async function doLogout(){await client.auth.signOut();location.reload()}
-
-async function afterLogin(){const{data}=await client.auth.getUser();if(!data.user)return;currentUser=data.user;document.getElementById('userEmail').innerText=currentUser.email;document.getElementById('authSection').style.display='none';document.getElementById('dashSection').style.display='block';try{await client.from('profiles').upsert({id:currentUser.id,email:currentUser.email})}catch(e){console.log(e)}let res=await client.from('balances').select('*').eq('user_id',currentUser.id).single();if(!res.data){await client.from('balances').insert({user_id:currentUser.id,amount:0,available_balance:0,reserved_balance:0,earned_balance:0,central_reserve:0});earned=0;availableBal=0;reservedBal=0;centralReserve=0}else{earned=parseFloat(res.data.earned_balance??res.data.amount??0);availableBal=parseFloat(res.data.available_balance??0);reservedBal=parseFloat(res.data.reserved_balance??0);centralReserve=parseFloat(res.data.central_reserve??0)}updateDisplay();renderEngines();runCycle();loadTxCount();aiBrainReady();updateReferral();renderStorage()}
-async function loadTxCount(){let{data}=await client.from('transactions').select('id').eq('user_id',currentUser.id);document.getElementById('txCount').innerText=data?data.length:0}
-async function saveBalance(){if(!currentUser)return;await client.from('balances').upsert({user_id:currentUser.id,amount:earned,available_balance:availableBal,reserved_balance:reservedBal,earned_balance:earned,central_reserve:centralReserve})}
-function updateDisplay(){document.getElementById('earned').innerText="€"+earned.toFixed(2);document.getElementById('withdrawBal').innerText="€"+availableBal.toFixed(2);document.getElementById('balAvailable').innerText="€"+availableBal.toFixed(2);document.getElementById('balReserved').innerText="€"+reservedBal.toFixed(2);document.getElementById('balEarned').innerText="€"+earned.toFixed(2);document.getElementById('balCentral').innerText="€"+centralReserve.toFixed(2);let pct=Math.min(100,(earned/2500*100));document.getElementById('pct').innerText=pct.toFixed(1)+"%";document.getElementById('barFill').style.width=pct+"%";syncWithdrawLabels()}
-
-function toggleDeposit(){depositOn=!depositOn;document.getElementById('depositState').innerText=depositOn?"ON":"OFF";document.getElementById('depositBtn').style.background=depositOn?"#0a9d6e":"#999"}
-async function doDeposit(){let v=parseFloat(document.getElementById('depositAmount').value||0);if(!v||v<=0){document.getElementById('depositMsg').innerText='Enter amount';return}if(!depositOn){document.getElementById('depositMsg').innerText='Deposit is OFF';return}reservedBal+=v;await saveBalance();await client.from('transactions').insert({user_id:currentUser.id,type:'deposit',amount:v,note:'Deposit €'+v});updateDisplay();loadTxCount();document.getElementById('depositMsg').innerText='Deposit €'+v.toFixed(2)+' added to Reserved';aiLog('Deposit received €'+v.toFixed(2));document.getElementById('depositAmount').value=''}
-function doDeposit2(){let v=parseFloat(document.getElementById('depositAmount2').value||0);document.getElementById('depositAmount').value=v;doDeposit();closeModal('depositModal')}
-async function doWithdraw(){let el=document.getElementById('withdrawAmount');let v=parseFloat(el.value||0);if(!v||v<=0){document.getElementById('withdrawMsg').innerText='Enter amount';return}if(v>availableBal){document.getElementById('withdrawMsg').innerText='Not enough Available. Available €'+availableBal.toFixed(2);return}availableBal-=v;await saveBalance();await client.from('transactions').insert({user_id:currentUser.id,type:'withdraw',amount:v,note:'Withdraw request €'+v});updateDisplay();loadTxCount();document.getElementById('withdrawMsg').innerText='Withdraw request €'+v.toFixed(2)+' sent - KYC check';aiLog('Withdraw requested €'+v.toFixed(2));el.value=''}
-function doWithdraw2(){let v=parseFloat(document.getElementById('withdrawAmount2').value||0);document.getElementById('withdrawAmount').value=v;doWithdraw();closeModal('withdrawModal')}
-async function doP2P(){let to=document.getElementById('p2pTo').value.trim();let v=parseFloat(document.getElementById('p2pAmount').value||0);if(!to||!v||v<=0){document.getElementById('p2pMsg').innerText='Enter receiver + amount';return}if(v>availableBal){document.getElementById('p2pMsg').innerText='Not enough Available';return}availableBal-=v;await saveBalance();await client.from('transactions').insert({user_id:currentUser.id,type:'p2p',amount:v,note:'P2P to '+to});updateDisplay();document.getElementById('p2pMsg').innerText='P2P €'+v.toFixed(2)+' sent to '+to;aiLog('P2P sent €'+v.toFixed(2)+' to '+to)}
-function saveStorage(){let n=document.getElementById('storageName').value.trim();if(!n)return;let arr=[];try{arr=JSON.parse(localStorage.getItem('cedars_storage')||'[]')}catch(e){}arr.unshift({name:n,time:new Date().toLocaleString()});localStorage.setItem('cedars_storage',JSON.stringify(arr));document.getElementById('storageName').value='';renderStorage()}
-function renderStorage(filter){let arr=[];try{arr=JSON.parse(localStorage.getItem('cedars_storage')||'[]')}catch(e){}if(filter)arr=arr.filter(x=>x.name.toLowerCase().includes(filter.toLowerCase()));document.getElementById('storageList').innerHTML=arr.length?arr.map(x=>'<div style="background:#f8fafc;padding:10px;border-radius:10px;margin-top:6px">💾 '+x.name+'<br><small>'+x.time+'</small></div>').join(''):'<small>No files yet</small>'}
-
-function toggleEngine(id){let e=engines.find(x=>x.id===id);e.on=!e.on;aiLog('AI: '+e.name+' Engine turned '+(e.on?'ON':'OFF'));renderEngines()}
-function renderEngines(){document.getElementById('engines').innerHTML=engines.map(e=>`<div class="eng"><div style="display:flex;justify-content:space-between;align-items:center"><span>🤖 Sub-Engine ${e.id}</span><div style="display:flex;align-items:center;gap:6px"><div class="indicator ${e.on?'':'off'}"></div><span>${e.on?'ON':'OFF'}</span></div></div><div style="font-size:32px">🦾</div><b style="font-size:18px">${e.name} Engine</b><br><small>20 AI Workers</small><br><small>${e.on?'Workers Active':'Workers Paused'}</small><br><small>Tasks: ${e.tasks}</small><br><br><button class="${e.on?'on':'off'}" onclick="toggleEngine(${e.id})">${e.on?'ON':'OFF'}</button></div>`).join('');let active=engines.filter(e=>e.on).length;document.getElementById('masterStatus').innerText=active>0?"RUNNING":"PAUSED";document.getElementById('workerCount').innerText=active*20;document.getElementById('central-engine-status').className='indicator '+(active>0?'':'off')}
-async function aiGenerateTasks(){let pool=["Vision: Label image","Transcription: Audio 30s","Rating: Rate response","Data: Clean dataset","Text: Summarize paragraph"];let picked=pool[Math.floor(Math.random()*pool.length)];aiLog('AI Sourcing: New task generated - '+picked);return picked}
-async function aiAssignTask(task){let active=engines.filter(e=>e.on);if(!active.length)return null;let best=active.reduce((a,b)=>a.tasks<=b.tasks?a:b);aiLog('AI Assignment: '+task+' -> '+best.name+' Engine (lowest load)');return best}
-async function aiVerifyLast(){if(!lastTaskInfo){aiLog('AI Verification: No task yet to verify');return}let score=(92+Math.random()*7).toFixed(1);aiLog('AI Verification: '+lastTaskInfo+' PASSED - Score '+score+'% - Auto-approved')}
-async function aiSupport(){aiLog('AI Support: How can I help? Balance €'+availableBal.toFixed(2)+' | Earned €'+earned.toFixed(2)+' | Workers ON: '+engines.filter(e=>e.on).length);alert('🤖 AI Support\n\nYour Available: €'+availableBal.toFixed(2)+'\nEarned: €'+earned.toFixed(2)+'\nActive Engines: '+engines.filter(e=>e.on).length+'\n\nAI is monitoring your account 24/7.')}
-function aiToggleAuto(){aiAuto=!aiAuto;document.getElementById('aiMode').innerText=aiAuto?'• AUTO MODE: ON':'• AUTO MODE: OFF';aiLog('AI Auto Mode '+(aiAuto?'ENABLED':'PAUSED'))}
-async function runCycle(){if(!currentUser)return;let activeEngines=engines.filter(e=>e.on);if(activeEngines.length===0)return;let taskName=await aiGenerateTasks();let e=await aiAssignTask(taskName)||activeEngines[Math.floor(Math.random()*activeEngines.length)];let w=workerNames[Math.floor(Math.random()*workerNames.length)];let reward=(Math.random()*0.5+0.3);earned+=reward;availableBal+=reward*0.2;centralReserve+=reward*0.8;totalTasks++;e.tasks++;lastTaskInfo=w+' in '+e.name+' - '+taskName;await saveBalance();await client.from('transactions').insert({user_id:currentUser.id,type:'task',amount:reward,note:lastTaskInfo});updateDisplay();document.getElementById('workersLive').innerHTML='<div><span class="dot"></span> Worker #'+String(totalTasks).padStart(3,'0')+' - '+w+' - '+e.name+' - Working</div><div style="margin-top:8px;color:#0a7a55">✅ Last: '+lastTaskInfo+' completed +€'+reward.toFixed(2)+'</div>';document.getElementById('taskTable').innerHTML=engines.map(en=>'<tr><td>'+en.name+'</td><td>'+en.tasks+' tasks</td><td><span class="pill">'+(en.on?'Active':'Idle')+'</span></td><td>Just now</td></tr>').join('');if(aiAuto&&totalTasks%3===0){aiLog('AI Verification: Auto-verified last 3 tasks - All passed')}}
-client.auth.getSession().then(({data})=>{if(data.session)afterLogin()});
-setInterval(()=>{if(currentUser)runCycle()},5000);
-</script>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#account-overview">Account Overview</a></li>
+        <li><a href="#kyc-verification">KYC Verification</a></li>
+        <li><a href="#shareholder-plans">Shareholder Plans</a></li>
+        <li><a href="#transactions">Transactions</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section id="account-overview">
+      <h2>Account Overview</h2>
+      <p>Balance: €<span id="balance">0.00</span></p>
+      <p>Total Earnings: €<span id="total-earnings">0.00</span></p>
+      <button id="deposit-btn">Deposit</button>
+      <button id="withdraw-btn">Withdraw</button>
+    </section>
+    <section id="kyc-verification">
+      <h2>KYC Verification</h2>
+      <p>Status: <span id="kyc-status">Not Verified</span></p>
+      <button id="kyc-verify-btn">Verify Now</button>
+      <form id="kyc-form" style="display: none;">
+        <label>Full Name:</label>
+        <input type="text" id="full-name" required>
+        <label>Date of Birth:</label>
+        <input type="date" id="dob" required>
+        <label>Country:</label>
+        <select id="country" required>
+          <option value="">Select Country</option>
+          <option value="USA">USA</option>
+          <option value="Canada">Canada</option>
+          <option value="UK">UK</option>
+        </select>
+        <button id="submit-kyc-btn">Submit</button>
+      </form>
+    </section>
+    <section id="shareholder-plans">
+      <h2>Shareholder Plans</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Plan</th>
+            <th>Deposit</th>
+            <th>Daily Target</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody id="plans-table-body">
+          <!-- plans will be populated here -->
+        </tbody>
+      </table>
+    </section>
+    <section id="transactions">
+      <h2>Transactions</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody id="transactions-table-body">
+          <!-- transactions will be populated here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script src="script.js"></script>
 </body>
 </html>
+
+
+CSS (in styles.css file)
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 1em;
+  text-align: center;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+nav li {
+  margin-right: 20px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2em;
+}
+
+section {
+  background-color: #f7f7f7;
+  padding: 1em;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-top: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #f0f0f0;
+}
+
+
+JavaScript (in script.js file)
+
+// Populate plans table
+const plans = [
+  { plan: 'Starter', deposit: 300, dailyTarget: 3, duration: 1095 },
+  { plan: 'Bronze', deposit: 1000, dailyTarget: 10, duration: 1095 },
+  { plan: 'Silver', deposit: 2500, dailyTarget: 25, duration: 1095 },
+  { plan: 'Gold', deposit: 5000, dailyTarget: 50, duration: 1095 },
+];
+
+const plansTableBody = document.getElementById('plans-table-body');
+plans.forEach((plan) => {
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td>${plan.plan}</td>
+    <td>€${plan.deposit}</td>
+    <td>€${plan.dailyTarget}</td>
+    <td>${plan.duration} days</td>
+  `;
+  plansTableBody.appendChild(row);
+});
+
+// Handle KYC verification
+const kycVerifyBtn = document.getElementById('kyc-verify-btn');
+const kycForm = document.getElementById('kyc-form');
+kycVerifyBtn.addEventListener('click', () => {
+  kycForm.style.display = 'block';
+});
+
+const submitKycBtn = document.getElementById('submit-kyc-btn');
+submitKycBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  // Submit KYC form data to server
+  console.log('KYC form submitted');
+});
+
+// Update account overview
+const balanceElement = document.getElementById('balance');
+const totalEarningsElement = document.getElementById('total-earnings');
+// Update balance and total earnings values
+balanceElement.textContent = '1000.00';
+totalEarningsElement.textContent = '500.00';
