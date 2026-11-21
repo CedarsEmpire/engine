@@ -1,234 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cedars Empire</title>
-  <style>
-    /* Desktop styles */
-    @media (min-width: 768px) {
-      .container {
-        max-width: 1200px;
-        margin: 40px auto;
-        padding: 20px;
-      }
-      .grid2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-      }
-      .grid3 {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-      }
-      .grid4 {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-      }
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEDARS EMPIRE - Shareholder Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:#070b14;color:#fff;min-height:100vh;padding-bottom:80px}
+a{color:inherit;text-decoration:none}
 
-    /* Tablet styles */
-    @media (max-width: 767px) {
-      .container {
-        max-width: 90%;
-        margin: 20px auto;
-        padding: 10px;
-      }
-      .grid2 {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-      .grid3 {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      .grid4 {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-    }
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(7,11,20,.92);backdrop-filter:blur(12px);border-bottom:1px solid #1e293b;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;font-size:20px;letter-spacing:.5px}
+.logo span{color:#22c55e}
+.logo small{display:block;font-size:10px;letter-spacing:2px;color:#94a3b8;font-weight:600}
+.top-right{display:flex;gap:8px;align-items:center}
+.pill{background:#111827;border:1px solid #334155;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.pill.green{background:#14532d;border-color:#22c55e;color:#bbf7d0}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#0ea5e9);display:grid;place-items:center;font-weight:900}
 
-    /* Mobile styles */
-    @media (max-width: 480px) {
-      .container {
-        max-width: 100%;
-        margin: 10px auto;
-        padding: 5px;
-      }
-      .grid2, .grid3, .grid4 {
-        display: block;
-      }
-      .card {
-        margin-bottom: 10px;
-      }
-    }
+/* LAYOUT */
+.wrap{max-width:1200px;margin:0 auto;padding:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:linear-gradient(180deg,#111827,#0b1220);border:1px solid #1e293b;border-radius:18px;padding:16px}
+.card.soft{background:#0f172a}
+.card h3{font-size:15px;margin-bottom:6px}
+.card p,.card small{color:#94a3b8;font-size:13px;line-height:1.5}
+h2{font-size:28px;line-height:1}
+label{font-size:12px;color:#94a3b8;font-weight:700;display:block;margin:12px 0 6px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1px solid #334155;background:#020617;color:#fff;font-size:14px;outline:none}
+input:focus{border-color:#22c55e}
+.btn{border:0;padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer;font-size:14px;width:100%;margin-top:10px}
+.btn-green{background:#22c55e;color:#04120a}
+.btn-blue{background:#0ea5e9;color:#fff}
+.btn-gold{background:#f59e0b;color:#000}
+.btn-dark{background:#1e293b;color:#fff}
+.badge{display:inline-block;background:#14532d;color:#a7f3d0;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:800}
+.badge.blue{background:#0c4a6e;color:#bae6fd}
+.badge.gold{background:#422006;color:#fde68a}
+.scroll{overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:620px}
+th{text-align:left;color:#94a3b8;padding:10px 8px;border-bottom:1px solid #334155}
+td{padding:10px 8px;border-bottom:1px solid #1e293b}
+.mt{margin-top:12px}
 
-    .card {
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      margin-bottom: 20px;
-    }
+/* NAV */
+.nav{display:flex;gap:8px;overflow:auto;padding:4px 0 12px;scrollbar-width:none}
+.nav button{white-space:nowrap;border:1px solid #334155;background:#111827;color:#e2e8f0;padding:10px 14px;border-radius:999px;font-weight:700;cursor:pointer}
+.nav button.active{background:#fff;color:#000}
+.page{display:none}.page.active{display:block}
 
-    .card-header {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+/* AI BRAIN */
+.ai-head{display:flex;gap:14px;align-items:center}
+.ai-orb{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#4ade80,#0ea5e9 55%,#111827 75%);box-shadow:0 0 0 6px #14532d,0 0 30px #22c55e;animation:pulse 2s infinite;display:grid;place-items:center;font-size:28px;flex-shrink:0}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.ai-bar{height:8px;background:#1e293b;border-radius:999px;overflow:hidden;margin-top:8px}
+.ai-bar i{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#0ea5e9);width:92%}
+.chatbox{background:#020617;border:1px solid #1e293b;border-radius:14px;padding:10px;height:150px;overflow:auto;font-size:13px;line-height:1.6}
+.msg-ai{background:#0f172a;padding:8px 10px;border-radius:12px;margin-bottom:8px}
+.msg-me{background:#14532d;padding:8px 10px;border-radius:12px;margin-bottom:8px;text-align:right}
 
-    .card-content {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
+/* ENGINE */
+.engine{display:flex;gap:14px;align-items:center}
+.engine-circle{width:110px;height:110px;border-radius:50%;border:8px solid #1e293b;border-top-color:#22c55e;border-right-color:#0ea5e9;animation:spin 1.6s linear infinite;display:grid;place-items:center;flex-shrink:0;font-size:26px;background:#020617}
+@keyframes spin{to{transform:rotate(360deg)}}
+.mini{display:flex;justify-content:space-between;background:#020617;border:1px solid #1e293b;padding:8px 10px;border-radius:10px;font-size:12px;margin-top:8px}
+.mini b{color:#4ade80}
 
-    .button {
-      border-radius: 5px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+/* BOTTOM NAV MOBILE */
+.bottomnav{position:fixed;left:0;right:0;bottom:0;background:#0b1220;border-top:1px solid #1e293b;display:flex;justify-content:space-around;padding:10px 6px;z-index:60}
+.bottomnav button{background:none;border:0;color:#94a3b8;font-size:11px;font-weight:700;cursor:pointer}
+.bottomnav button.active{color:#22c55e}
 
-    .button:hover {
-      background-color: #ccc;
-    }
-
-    /* Robotic engine styles */
-    .robotic-engine {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background-color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .engine-container {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background-color: #444;
-    }
-
-    .engine-core {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: #666;
-    }
-
-    .engine-piston {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(0deg);
-      width: 40px;
-      height: 10px;
-      background-color: #888;
-      animation: piston-move 2s infinite;
-    }
-
-    .piston-2 {
-      animation-delay: 0.5s;
-    }
-
-    .piston-3 {
-      animation-delay: 1s;
-    }
-
-    @keyframes piston-move {
-      0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-      }
-      50% {
-        transform: translate(-50%, -50%) rotate(180deg);
-      }
-      100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-      }
-    }
-  </style>
+/* RESPONSIVE */
+@media(max-width:900px){.grid4{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){
+  .wrap{padding:10px}.grid4,.grid2,.grid3{grid-template-columns:1fr}
+  h2{font-size:24px}.topbar{padding:10px}.logo{font-size:17px}
+  .ai-head{flex-direction:column;align-items:flex-start}
+  .engine{flex-direction:column;align-items:flex-start}
+  table{min-width:560px}
+}
+</style>
 </head>
 <body>
-  <!-- Dashboard content -->
-  <div class="container">
-    <!-- Robotic engine -->
-    <div class="robotic-engine">
-      <div class="engine-container">
-        <div class="engine-core"></div>
-        <div class="engine-piston"></div>
-        <div class="engine-piston piston-2"></div>
-        <div class="engine-piston piston-3"></div>
-      </div>
-    </div>
 
-    <!-- Dashboard cards -->
-    <div class="grid4">
-      <div class="card">
-        <div class="card-header">Total Earned</div>
-        <div class="card-content">$224.37</div>
-      </div>
-      <div class="card">
-        <div class="card-header">Available Balance</div>
-        <div class="card-content">$13.87</div>
-      </div>
-      <div class="card">
-        <div class="card-header">Today's Earnings</div>
-        <div class="card-content">$42.00</div>
-      </div>
-      <div class="card">
-        <div class="card-header">Referral Bonus</div>
-        <div class="card-content">$315.00</div>
-      </div>
-    </div>
+<div class="topbar">
+  <div class="logo">🌲 CEDARS <span>EMPIRE</span><small>ROBOTIC • AI • 99.9% AUTOMATED</small></div>
+  <div class="top-right">
+    <div class="pill">🔔 <span id="notifCount">3</span></div>
+    <div class="pill green">● AI ONLINE</div>
+    <div class="avatar">E</div>
+  </div>
+</div>
 
-    <!-- Deposit and withdrawal sections -->
-    <div class="grid2">
-      <div class="card">
-        <div class="card-header">Deposit</div>
-        <div class="card-content">
-          <form>
-            <label for="deposit-amount">Amount:</label>
-            <input type="number" id="deposit-amount" value="5000">
-            <button class="button">Deposit</button>
-          </form>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">Withdrawal</div>
-        <div class="card-content">
-          <form>
-            <label for="withdrawal-amount">Amount:</label>
-            <input type="number" id="withdrawal-amount" value="100">
-            <button class="button">Withdraw</button>
-          </form>
-        </div>
+<div class="wrap">
+
+<!-- NAV -->
+<div class="nav" id="nav">
+  <button class="active" onclick="showPage('dashboard',this)">🏠 Dashboard</button>
+  <button onclick="showPage('deposit',this)">💰 Deposit</button>
+  <button onclick="showPage('withdraw',this)">💸 Withdraw</button>
+  <button onclick="showPage('p2p',this)">🔁 P2P Transfer</button>
+  <button onclick="showPage('referral',this)">👥 Referral</button>
+  <button onclick="showPage('history',this)">📜 History</button>
+  <button onclick="showPage('redeem',this)">🎁 Redeem</button>
+  <button onclick="showPage('support',this)">💬 Support</button>
+</div>
+
+<!-- DASHBOARD -->
+<section id="page-dashboard" class="page active">
+  <div class="card">
+    <div class="ai-head">
+      <div class="ai-orb">🤖</div>
+      <div style="flex:1">
+        <h3>Welcome back, Emmanuel 👋 • AI Brain Active</h3>
+        <p>Your AI is watching markets, paying referrals, and compounding your earnings. System health: <b style="color:#4ade80">99.9% • 360° Robotic</b></p>
+        <div class="ai-bar"><i></i></div>
+        <small>AI Confidence 92% • Last Scan: Just now • Next Payout: Tonight 00:00</small>
       </div>
     </div>
   </div>
 
-  <script>
-    // Update system stats every second
-    setInterval(() => {
-      const cpuUsage = Math.floor(Math.random() * 100);
-      const memoryUsage = Math.floor(Math.random() * 100);
-      const systemUptime = Math.floor(Math.random() * 24);
+  <div class="grid4 mt">
+    <div class="card"><small>Total Earned</small><h2 style="margin:8px 0">£224.37</h2><span class="badge">+ £42 Today</span></div>
+    <div class="card"><small>Available Balance</small><h2 style="margin:8px 0">£13.87</h2><span class="badge blue">Ready to Withdraw</span></div>
+    <div class="card"><small>Active Investment</small><h2 style="margin:8px 0">£5,000</h2><span class="badge gold">Gold Plan • 2.8% / Day</span></div>
+    <div class="card"><small>Referral Bonus (3 Gen)</small><h2 style="margin:8px 0">£315.00</h2><span class="badge">Gen1 6% • Gen2 3% • Gen3 1%</span></div>
+  </div>
 
-      // document.getElementById('cpu-usage').textContent = `${cpuUsage}%`;
-      // document.getElementById('memory-usage').textContent = `${memoryUsage}%`;
-      // document.getElementById('system-uptime').textContent = `${systemUptime} hours`;
-    }, 1000);
-  </script>
+  <div class="grid2 mt">
+    <div class="card">
+      <h3>⚙️ Heavy Duty Robotic Engine - Live Simulation</h3>
+      <div class="engine"><div class="engine-circle">⚙️</div><div style="flex:1"><p>Engine is simulating 1,248 trades / min. No real engine needed - visual AI simulation.</p><div class="mini"><span>CPU</span><b id="cpu">74%</b></div><div class="mini"><span>Memory</span><b id="mem">52%</b></div><div class="mini"><span>Uptime</span><b id="up">99.9% • 312h</b></div></div></div>
+      <div class="grid3 mt" style="text-align:center">
+        <div class="card soft"><b>1,248</b><br><small>Trades/min</small></div>
+        <div class="card soft"><b>£1.42</b><br><small>AI Profit / min</small></div>
+        <div class="card soft"><b>0.02s</b><br><small>Latency</small></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📈 AI Prediction - Next 7 Days</h3>
+      <p>Based on your Gold £5k plan:</p>
+      <div class="mini"><span>Tomorrow</span><b>+ £140.00</b></div>
+      <div class="mini"><span>In 3 Days</span><b>+ £420.00</b></div>
+      <div class="mini"><span>In 7 Days</span><b>+ £980.00</b></div>
+      <div class="mini"><span>Monthly Forecast</span><b style="color:#f59e0b">+ £4,200.00</b></div>
+      <button class="btn btn-green" onclick="showPage('deposit',document.querySelectorAll('.nav button')[1])">Boost With Deposit →</button>
+    </div>
+  </div>
+
+  <div class="grid2 mt">
+    <div class="card">
+      <h3>💎 Investment Plans - AI Auto-Pick</h3>
+      <div class="scroll"><table><tr><th>Plan</th><th>Deposit</th><th>Daily</th><th>Monthly</th><th></th></tr>
+      <tr><td>🥉 Bronze</td><td>£1,000</td><td>1.8% • £18</td><td>£540</td><td><button class="btn btn-dark" style="margin:0;padding:8px" onclick="pickPlan(1000)">Pick</button></td></tr>
+      <tr><td>🥈 Silver</td><td>£2,500</td><td>2.2% • £55</td><td>£1,650</td><td><button class="btn btn-dark" style="margin:0;padding:8px" onclick="pickPlan(2500)">Pick</button></td></tr>
+      <tr><td>🥇 Gold</td><td>£5,000</td><td>2.8% • £140</td><td>£4,200</td><td><button class="btn btn-green" style="margin:0;padding:8px" onclick="pickPlan(5000)">Active ✓</button></td></tr>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>🔔 Notifications</h3>
+      <p>✅ <b>£30.00 referral</b> paid from Gen 2 - John K.</p>
+      <p class="mt">✅ <b>£140.00 daily profit</b> credited by AI.</p>
+      <p class="mt">⚠️ <b>Action needed:</b> Verify your withdrawal wallet.</p>
+      <button class="btn btn-dark" onclick="alert('All notifications marked read')">Mark All Read</button>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOSIT -->
+<section id="page-deposit" class="page">
+  <div class="grid2">
+    <div class="card"><h3>💰 Deposit - AI Calculator</h3><label>Amount (£)</label><input id="depAmt" type="number" value="5000" oninput="calcDep()"><label>Plan</label><select id="depPlan" onchange="calcDep()"><option value="0.018">Bronze 1.8% / day</option><option value="0.022">Silver 2.2% / day</option><option value="0.028" selected>Gold 2.8% / day</option></select><div class="mini"><span>Daily Profit</span><b id="depDaily">£140.00</b></div><div class="mini"><span>Monthly Profit</span><b id="depMonthly">£4,200.00</b></div><button class="btn btn-green" onclick="alert('✅ Deposit request created! AI will confirm in 2 mins.')">Confirm Deposit →</button></div>
+    <div class="card"><h3>🏦 Payment Methods</h3><button class="btn btn-dark">MTN MoMo Uganda</button><button class="btn btn-dark">Airtel Money</button><button class="btn btn-blue">USDT / Crypto</button><button class="btn btn-gold">Bank Transfer</button><p class="mt">Wallet: <b>CE-EMMANUEL-123</b> • AI auto-confirms.</p></div>
+  </div>
+</section>
+
+<!-- WITHDRAW -->
+<section id="page-withdraw" class="page">
+  <div class="card"><h3>💸 Withdraw</h3><p>Balance: <b>£13.87</b> • Min £10 • Fee 2% • AI pays in 5-15 mins</p><label>Amount</label><input id="wdAmt" type="number" value="100" oninput="calcWd()"><div class="mini"><span>You Receive</span><b id="wdNet">£98.00</b></div><button class="btn btn-blue" onclick="alert('✅ Withdrawal sent to AI queue!')">Withdraw Now</button></div>
+</section>
+
+<!-- P2P -->
+<section id="page-p2p" class="page">
+  <div class="card"><h3>🔁 P2P Transfer - Instant</h3><label>Receiver ID / Username</label><input placeholder="e.g. CE-88213 or @kato"><label>Amount (£)</label><input type="number" value="50"><button class="btn btn-green" onclick="alert('✅ P2P Transfer sent! Receiver verified by AI.')">Send Transfer</button><p class="mt">Fee: 0% • AI verifies receiver instantly.</p></div>
+</section>
+
+<!-- REFERRAL -->
+<section id="page-referral" class="page">
+  <div class="card"><h3>👥 Referral - Earn 10% - Up to 3 Generations</h3><p>Gen 1 = 6% • Gen 2 = 3% • Gen 3 = 1% • Paid in £ by AI</p><label>Your Link</label><input value="https://cedarsempire.com/r/emmanuel123" readonly><button class="btn btn-green" onclick="alert('✅ Link copied!')">Copy Link</button>
+  <div class="grid4 mt" style="text-align:center"><div class="card soft"><h2>14</h2><small>Gen 1 - Direct</small></div><div class="card soft"><h2>32</h2><small>Gen 2</small></div><div class="card soft"><h2>28</h2><small>Gen 3</small></div><div class="card soft"><h2>£315</h2><small>Total Bonus</small></div></div></div>
+  <div class="card mt"><h3>📊 Team Table - All Generations</h3><div class="scroll"><table><tr><th>Gen</th><th>Name / ID</th><th>Country</th><th>Plan</th><th>Deposit</th><th>Your Bonus</th><th>Status</th></tr><tr><td><span class="badge">GEN 1</span></td><td>Kato M. - CE-88213</td><td>UG</td><td>Gold £5k</td><td>£5,000</td><td><b>£300.00</b> (6%)</td><td><span class="badge">Active</span></td></tr><tr><td><span class="badge blue">GEN 2</span></td><td>John K. - CE-88301</td><td>KE</td><td>Bronze £1k</td><td>£1,000</td><td><b>£30.00</b> (3%)</td><td><span class="badge">Active</span></td></tr><tr><td><span class="badge gold">GEN 3</span></td><td>Peter O. - CE-88410</td><td>UG</td><td>Silver £2.5k</td><td>£2,500</td><td><b>£25.00</b> (1%)</td><td><span class="badge">Active</span></td></tr></table></div><p class="mt"><b>Total: £315.00</b> • AI pays instantly on their deposit.</p></div>
+</section>
+
+<!-- HISTORY -->
+<section id="page-history" class="page">
+  <div class="card"><h3>📜 Transaction History</h3><div class="scroll"><table><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr><tr><td>Today</td><td>Daily Profit</td><td>+£140.00</td><td><span class="badge">Paid</span></td></tr><tr><td>Today</td><td>Referral Gen 2</td><td>+£30.00</td><td><span class="badge">Paid</span></td></tr><tr><td>Yesterday</td><td>Withdraw</td><td>-£100.00</td><td><span class="badge blue">Completed</span></td></tr></table></div></div>
+</section>
+
+<!-- REDEEM -->
+<section id="page-redeem" class="page">
+  <div class="card"><h3>🎁 Redeem Rewards</h3><p>Points: <b>1,240</b> = £12.40</p><button class="btn btn-gold" onclick="alert('✅ £12.40 redeemed to balance!')">Redeem £12.40 Now</button><button class="btn btn-dark">Redeem Bonus Voucher</button></div>
+</section>
+
+<!-- SUPPORT -->
+<section id="page-support" class="page">
+  <div class="card"><h3>💬 Live Chat - Cedars AI Assistant</h3><div class="chatbox" id="chat"><div class="msg-ai">🤖 Hi Emmanuel! I'm your Cedars AI. Ask me about profit, withdrawal, or referral. How can I help?</div></div><div style="display:flex;gap:8px;margin-top:10px"><input id="chatIn" placeholder="Type a message..."><button class="btn btn-green" style="width:100px;margin:0" onclick="sendChat()">Send</button></div><p class="mt">Human support also available 24/7 on WhatsApp.</p></div>
+</section>
+
+</div>
+
+<div class="bottomnav">
+  <button class="active" onclick="showPage('dashboard',this)">🏠<br>Home</button>
+  <button onclick="showPage('deposit',this)">💰<br>Deposit</button>
+  <button onclick="showPage('referral',this)">👥<br>Team</button>
+  <button onclick="showPage('history',this)">📜<br>History</button>
+  <button onclick="showPage('support',this)">💬<br>Chat</button>
+</div>
+
+<script>
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.bottomnav button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function calcDep(){
+  let a=parseFloat(document.getElementById('depAmt').value||0);
+  let r=parseFloat(document.getElementById('depPlan').value);
+  document.getElementById('depDaily').innerText='£'+(a*r).toFixed(2);
+  document.getElementById('depMonthly').innerText='£'+(a*r*30).toFixed(2);
+}
+function calcWd(){
+  let a=parseFloat(document.getElementById('wdAmt').value||0);
+  document.getElementById('wdNet').innerText='£'+(a*0.98).toFixed(2);
+}
+function pickPlan(v){document.getElementById('depAmt').value=v;showPage('deposit',document.querySelectorAll('.nav button')[1]);calcDep();}
+function sendChat(){
+  let inp=document.getElementById('chatIn'); if(!inp.value) return;
+  let c=document.getElementById('chat');
+  c.innerHTML+='<div class="msg-me">'+inp.value+'</div>';
+  let q=inp.value.toLowerCase(); inp.value='';
+  setTimeout(()=>{let reply='Got it! AI is checking that for you. Your balance is £13.87 and today profit is £140. Withdrawals take 5-15 mins.';
+  if(q.includes('withdraw')) reply='✅ Withdrawal: Min £10, fee 2%, AI pays in 5-15 mins. Go to Withdraw page.';
+  if(q.includes('referral')||q.includes('refer')) reply='👥 Referral: You earn 6% Gen1 + 3% Gen2 + 1% Gen3 = 10% total. Your link is ready!';
+  if(q.includes('profit')||q.includes('earn')) reply='📈 Gold plan: £5,000 = £140/day = £4,200/month. AI compounds daily.';
+  c.innerHTML+='<div class="msg-ai">🤖 '+reply+'</div>'; c.scrollTop=c.scrollHeight;},600);
+}
+setInterval(()=>{
+  document.getElementById('cpu').innerText=Math.floor(65+Math.random()*20)+'%';
+  document.getElementById('mem').innerText=Math.floor(45+Math.random()*20)+'%';
+},1500);
+calcDep();calcWd();
+</script>
 </body>
 </html>
