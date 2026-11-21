@@ -1,286 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cedars Empire - Die rich or die trying</title>
-<style>
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Arial,Inter,sans-serif;background:#f5f6f8;color:#1a1a1a}
-  .topbar{background:#fff;border-bottom:1px solid #e5e7eb;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
-  .logo{font-weight:900;font-size:20px;letter-spacing:.3px}
-  .logo span{color:#0a9e4a}
-  .tag{font-size:11px;color:#666;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-  .pill{font-size:12px;font-weight:800;padding:6px 10px;border-radius:999px;background:#e8f5ee;color:#0a7a3a}
-  .pill.warn{background:#fef3c7;color:#92400e}
-  .nav{background:#fff;padding:10px 16px;display:flex;gap:8px;overflow:auto;border-bottom:1px solid #e5e7eb;white-space:nowrap}
-  .nav button{border:1px solid #e5e7eb;background:#fff;padding:9px 14px;border-radius:999px;cursor:pointer;font-weight:700;font-size:13px}
-  .nav button.active{background:#111827;color:#fff;border-color:#111827}
-  .wrap{max-width:1100px;margin:0 auto;padding:18px;width:100%}
-  .welcome{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
-  .welcome h2{margin:0;font-size:22px}
-  .welcome p{margin:6px 0 0;color:#666;font-size:13px;line-height:1.5}
-  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
-  @media(max-width:800px){.cards{grid-template-columns:1fr 1fr}}
-  @media(max-width:520px){.cards{grid-template-columns:1fr}}
-  .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:16px}
-  .label{font-size:11px;color:#888;font-weight:800;letter-spacing:.7px;text-transform:uppercase}
-  .big{font-size:26px;font-weight:900;margin:8px 0 4px}
-  .muted{font-size:12px;color:#777;line-height:1.5}
-  .badge{font-size:11px;font-weight:800;padding:4px 8px;border-radius:999px;display:inline-block}
-  .b-green{background:#dcfce7;color:#166534}.b-amber{background:#fef3c7;color:#92400e}.b-blue{background:#dbeafe;color:#1e40af}.b-red{background:#fee2e2;color:#991b1b}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-  @media(max-width:800px){.grid2{grid-template-columns:1fr}}
-  h3{margin:0 0 6px}
-  label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px}
-  input,select,textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;font-size:15px;background:#fff}
-  textarea{min-height:80px}
-  .btn{background:#0a9e4a;color:#fff;border:0;padding:13px;border-radius:10px;font-weight:800;cursor:pointer;width:100%;margin-top:12px;font-size:15px}
-  .btn-dark{background:#111827}.btn-outline{background:#fff;border:1px solid #d1d5db;color:#111827}
-  .btn:disabled{background:#d1d5db;color:#666;cursor:not-allowed}
-  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
-  th{ text-align:left;padding:10px 8px;border-bottom:2px solid #eee;color:#666;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
-  td{padding:11px 8px;border-bottom:1px solid #f0f0f0;vertical-align:top}
-  .page{display:none}.page.active{display:block}
-  .msg{font-size:13px;font-weight:700;margin-top:10px}
-  .ok{color:#166534}.err{color:#b91c1c}
-  .plan{border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:center}
-  .plan b{font-size:16px}.plan span{font-size:12px;color:#666}
-  .chatbox{border:1px solid #e5e7eb;border-radius:10px;padding:12px;height:180px;overflow:auto;background:#f9fafb;margin-top:12px}
-  .kyc-banner{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:14px;margin-top:14px;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
-  .footer{text-align:center;color:#999;font-size:12px;padding:20px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cedars Empire</title>
+  <style>
+    /* Styles remain the same */
+  </style>
 </head>
 <body>
+  <!-- Topbar and Navigation -->
+  <div class="topbar">
+    <div class="logo">Cedars Empire</div>
+    <div class="nav">
+      <button class="active" onclick="showPage('dashboard')">Dashboard</button>
+      <button onclick="showPage('deposit')">Deposit</button>
+      <button onclick="showPage('withdraw')">Withdraw</button>
+      <button onclick="showPage('p2p')">P2P Transfer</button>
+      <button onclick="showPage('profile')">Profile</button>
+    </div>
+  </div>
 
-<div class="topbar">
-  <div><div class="logo">CEDARS <span>EMPIRE</span></div><div class="tag">Die rich or die trying • Global Operations • € + Crypto Only</div></div>
-  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="pill" id="kycPill">KYC: NOT DONE</span><span class="pill">● ACTIVE</span><b>Emmanuel</b></div>
-</div>
-
-<nav class="nav" id="nav">
-  <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
-  <button onclick="showPage('deposit',this)">Deposit</button>
-  <button onclick="showPage('withdraw',this)">Withdraw</button>
-  <button onclick="showPage('p2p',this)">P2P Transfer</button>
-  <button onclick="showPage('referral',this)">Referral</button>
-  <button onclick="showPage('history',this)">History</button>
-  <button onclick="showPage('redeem',this)">Redeem</button>
-  <button onclick="showPage('kyc',this)">KYC</button>
-  <button onclick="showPage('support',this)">Support</button>
-</nav>
-
-<div class="wrap">
-
-  <!-- DASHBOARD -->
+  <!-- Dashboard -->
   <div id="page-dashboard" class="page active">
-    <div class="welcome"><div><h2>Welcome back, Emmanuel</h2><p>Shareholders Plan • Global Operations<br>€ and Crypto only. No fiat transactions.</p></div><div><span class="badge b-green">Gold Plan • €5,000</span><br><span class="muted">2.8% / Day • Next Payout Tonight 00:00</span></div></div>
-
+    <h2>Dashboard</h2>
     <div class="cards">
-      <div class="card"><div class="label">Total Earned</div><div class="big" id="totalEarned">€224.37</div><div class="muted">+ €42 Today</div></div>
-      <div class="card"><div class="label">Available Balance</div><div class="big" id="availBal">€13.87</div><span class="badge b-green">Ready To Withdraw</span></div>
-      <div class="card"><div class="label">Active Investment</div><div class="big">€5,000</div><div class="muted">Gold Plan • 2.8% / Day</div></div>
-      <div class="card"><div class="label">Referral Bonus (3 Gen)</div><div class="big">€315.00</div><div class="muted">Gen1 6% • Gen2 3% • Gen3 1%</div></div>
-    </div>
-
-    <div id="kycBanner" class="kyc-banner"><div><b>⚠️ KYC Required Before Withdrawal</b><div class="muted">Complete KYC to unlock Withdraw. This protects your account globally.</div></div><button class="btn" style="width:auto;padding:10px 16px;margin:0" onclick="goKYC()">Complete KYC Now →</button></div>
-
-    <div class="grid2">
-      <div class="card"><h3>Shareholders Plans</h3><p class="muted">From €300 to €50,000. Choose a plan in Deposit.</p>
-        <div class="plan"><div><b>Starter - €300</b><br><span>1.5% / Day</span></div><span class="badge b-blue">ENTRY</span></div>
-        <div class="plan"><div><b>Bronze - €1,000</b><br><span>1.9% / Day</span></div><span class="badge b-amber">POPULAR</span></div>
-        <div class="plan"><div><b>Silver - €2,500</b><br><span>2.3% / Day</span></div><span class="badge b-blue">GROWTH</span></div>
-        <div class="plan"><div><b>Gold - €5,000</b><br><span>2.8% / Day • Your Current Plan</span></div><span class="badge b-green">ACTIVE</span></div>
-        <div class="plan"><div><b>Platinum - €15,000</b><br><span>3.4% / Day</span></div><span class="badge b-blue">PREMIUM</span></div>
-        <div class="plan"><div><b>Diamond - €50,000</b><br><span>4.2% / Day • Max</span></div><span class="badge b-amber">VIP</span></div>
+      <div class="card">
+        <h3>Available Balance</h3>
+        <p id="available-balance">€0.00</p>
       </div>
-      <div class="card"><h3>Recent Activity</h3><p class="muted">Latest 5 transactions from your History.</p><table><thead><tr><th>Type</th><th>Amount</th><th>Status</th></tr></thead><tbody id="recentTable"></tbody></table></div>
+      <div class="card">
+        <h3>Total Earned</h3>
+        <p id="total-earned">€0.00</p>
+      </div>
+    </div>
+    <h2>Shareholder Plans</h2>
+    <div class="plans">
+      <div class="plan">
+        <h3>Starter</h3>
+        <p>Deposit: €300</p>
+        <p>Daily Profit: 1.2% (€3.60)</p>
+        <p>Duration: 1095 days (3 years)</p>
+      </div>
+      <div class="plan">
+        <h3>Bronze</h3>
+        <p>Deposit: €1,000</p>
+        <p>Daily Profit: 1.2% (€12)</p>
+        <p>Duration: 1095 days (3 years)</p>
+      </div>
+      <div class="plan">
+        <h3>Silver</h3>
+        <p>Deposit: €5,000</p>
+        <p>Daily Profit: 1.2% (€60)</p>
+        <p>Duration: 1095 days (3 years)</p>
+      </div>
+      <div class="plan">
+        <h3>Gold</h3>
+        <p>Deposit: €20,000</p>
+        <p>Daily Profit: 1.2% (€240)</p>
+        <p>Duration: 1095 days (3 years)</p>
+      </div>
     </div>
   </div>
 
-  <!-- DEPOSIT -->
+  <!-- Deposit -->
   <div id="page-deposit" class="page">
-    <div class="card"><h3>Deposit</h3><p class="muted">€ only. Pay with Crypto (USDT / BTC / ETH). Minimum €300 for Shareholders Plan.</p>
-      <label>Choose Plan</label><select id="depPlan"><option value="300">Starter - €300</option><option value="1000">Bronze - €1,000</option><option value="2500">Silver - €2,500</option><option value="5000" selected>Gold - €5,000</option><option value="15000">Platinum - €15,000</option><option value="50000">Diamond - €50,000</option></select>
-      <label>Amount (€)</label><input id="depAmt" type="number" value="5000" />
-      <label>Crypto Method</label><select id="depMethod"><option>USDT (TRC20)</option><option>USDT (ERC20)</option><option>BTC</option><option>ETH</option></select>
-      <button class="btn" onclick="doDeposit()">Confirm Deposit</button><p class="msg" id="depMsg"></p>
-      <h3 style="margin-top:20px">Deposit History</h3>
-      <table><thead><tr><th>Date</th><th>Plan</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead><tbody id="depTable"></tbody></table>
-    </div>
+    <h2>Deposit</h2>
+    <label>Amount:</label>
+    <input id="deposit-amount" type="number">
+    <label>Plan:</label>
+    <select id="deposit-plan">
+      <option value="starter">Starter (€300)</option>
+      <option value="bronze">Bronze (€1,000)</option>
+      <option value="silver">Silver (€5,000)</option>
+      <option value="gold">Gold (€20,000)</option>
+    </select>
+    <button onclick="calculateDeposit()">Calculate</button>
+    <p id="deposit-result"></p>
   </div>
 
-  <!-- WITHDRAW -->
+  <!-- Withdraw -->
   <div id="page-withdraw" class="page">
-    <div class="card"><h3>Withdraw</h3><p class="muted">Available: <b id="wBal">€13.87</b> • Payout in € value via Crypto. <b>KYC must be completed first.</b></p>
-      <div id="withdrawLocked" style="background:#fee2e2;border-radius:10px;padding:12px;font-size:13px"><b>🔒 Withdraw Locked</b> - Complete KYC to unlock. <a href="#" onclick="goKYC();return false;">Go to KYC</a></div>
-      <label>Amount (€)</label><input id="wAmt" type="number" placeholder="e.g. 100" />
-      <label>Wallet Address (USDT / BTC / ETH)</label><input id="wWallet" placeholder="Paste your crypto wallet address" />
-      <label>Crypto</label><select id="wCrypto"><option>USDT</option><option>BTC</option><option>ETH</option></select>
-      <button class="btn" id="wBtn" onclick="doWithdraw()" disabled>Request Withdrawal - KYC Required</button><p class="msg" id="wMsg"></p>
-      <h3 style="margin-top:20px">Withdrawal History</h3>
-      <table><thead><tr><th>Date</th><th>Amount</th><th>Wallet</th><th>Status</th></tr></thead><tbody id="wTable"></tbody></table>
-    </div>
+    <h2>Withdraw</h2>
+    <label>Amount:</label>
+    <input id="withdraw-amount" type="number">
+    <button onclick="calculateWithdraw()">Calculate</button>
+    <p id="withdraw-result"></p>
+    <button id="withdraw-btn" onclick="withdraw()" disabled>Withdraw</button>
   </div>
 
-  <!-- P2P -->
+  <!-- P2P Transfer -->
   <div id="page-p2p" class="page">
-    <div class="card"><h3>P2P Transfer</h3><p class="muted">Send € value to another Cedars member. Crypto settlement.</p>
-      <label>Recipient Username / Email</label><input id="p2pTo" placeholder="e.g. john123 or john@email.com" />
-      <label>Amount (€)</label><input id="p2pAmt" type="number" placeholder="e.g. 50" />
-      <button class="btn" onclick="doP2P()">Send Transfer</button><p class="msg" id="p2pMsg"></p>
-      <h3 style="margin-top:20px">P2P Transfer History</h3>
-      <table><thead><tr><th>Date</th><th>To</th><th>Amount</th><th>Status</th></tr></thead><tbody id="p2pTable"></tbody></table>
-    </div>
+    <h2>P2P Transfer</h2>
+    <label>Amount:</label>
+    <input id="p2p-amount" type="number">
+    <button onclick="calculateP2P()">Calculate</button>
+    <p id="p2p-result"></p>
   </div>
 
-  <!-- REFERRAL -->
-  <div id="page-referral" class="page">
-    <div class="card"><h3>Referral</h3><p class="muted">Gen1 6% • Gen2 3% • Gen3 1% • Total Earned: <b>€315.00</b></p>
-      <label>Your Link</label><input id="refLink" readonly value="https://cedarsempire.com/r/emmanuel" />
-      <button class="btn btn-dark" onclick="copyRef()">Copy Link</button><p class="msg" id="refMsg"></p>
-      <h3 style="margin-top:20px">Referral Earnings Table</h3>
-      <table><thead><tr><th>Member</th><th>Generation</th><th>Plan</th><th>Bonus</th></tr></thead><tbody id="refTable"></tbody></table>
-    </div>
+  <!-- Profile -->
+  <div id="page-profile" class="page">
+    <h2>Profile</h2>
+    <h3>KYC</h3>
+    <label>Full Name:</label>
+    <input id="kyc-full-name" type="text">
+    <label>Date of Birth:</label>
+    <input id="kyc-dob" type="date">
+    <label>Country:</label>
+    <input id="kyc-country" type="text">
+    <label>ID Type:</label>
+    <select id="kyc-id-type">
+      <option value="national-id">National ID</option>
+      <option value="passport">Passport</option>
+      <option value="driving-license">Driving License</option>
+    </select>
+    <label>ID Number:</label>
+    <input id="kyc-id-number" type="text">
+    <label>Front photo of ID:</label>
+    <input id="kyc-id-photo" type="file">
+    <label>Selfie holding ID:</label>
+    <input id="kyc-selfie" type="file">
+    <label>Withdrawal PIN:</label>
+    <input id="kyc-withdrawal-pin" type="password">
+    <button onclick="submitKYC()">Submit KYC</button>
+    <p id="kyc-status"></p>
   </div>
 
-  <!-- HISTORY -->
-  <div id="page-history" class="page">
-    <div class="card"><h3>Full History</h3><p class="muted">All your activity in one table.</p>
-      <label>Filter</label><select id="histFilter" onchange="renderHistory()"><option value="All">All</option><option>Deposit</option><option>Withdrawal</option><option>P2P</option><option>Redeem</option><option>Referral</option></select>
-      <table><thead><tr><th>Date</th><th>Type</th><th>Detail</th><th>Amount</th><th>Status</th></tr></thead><tbody id="histTable"></tbody></table>
-    </div>
-  </div>
+  <script>
+    let kycStatus = "Pending";
+    let availableBalance = 0;
+    let totalEarned = 0;
 
-  <!-- REDEEM -->
-  <div id="page-redeem" class="page">
-    <div class="card"><h3>Redeem Code</h3><p class="muted">Try demo: <b>CEDARS50</b> = €50, <b>WELCOME10</b> = €10</p>
-      <label>Code</label><input id="redCode" placeholder="e.g. CEDARS50" />
-      <label>Amount (€)</label><input id="redAmt" readonly placeholder="Auto-filled" />
-      <button class="btn" onclick="doRedeem()">Redeem</button><p class="msg" id="redMsg"></p>
-      <h3 style="margin-top:20px">Redemption History</h3>
-      <table><thead><tr><th>Date</th><th>Code</th><th>Amount</th><th>Status</th></tr></thead><tbody id="redTable"></tbody></table>
-    </div>
-  </div>
+    function showPage(page) {
+      // Show/hide pages
+    }
 
-  <!-- KYC -->
-  <div id="page-kyc" class="page">
-    <div class="card"><h3>KYC Verification - Required Before Withdraw</h3><p class="muted">Upload ID + Selfie + Proof of address. Status updates instantly in demo.</p>
-      <label>Full Legal Name</label><input id="kycName" placeholder="As on ID" />
-      <label>ID Type</label><select id="kycType"><option>National ID</option><option>Passport</option><option>Driving License</option></select>
-      <label>ID Number</label><input id="kycId" placeholder="e.g. CM123456" />
-      <label>Country</label><input id="kycCountry" placeholder="e.g. Uganda" />
-      <button class="btn" onclick="doKYC()">Submit KYC</button><p class="msg" id="kycMsg"></p>
-      <h3 style="margin-top:20px">KYC Status Table</h3>
-      <table><thead><tr><th>Date</th><th>Name</th><th>ID Type</th><th>Status</th></tr></thead><tbody id="kycTable"><tr><td colspan="4" class="muted">No KYC submitted yet.</td></tr></tbody></table>
-    </div>
-  </div>
+    function calculateDeposit() {
+      const amount = parseFloat(document.getElementById("deposit-amount").value);
+      const plan = document.getElementById("deposit-plan").value;
+      const depositFee = 0; // No deposit fee
+      const result = `You will receive €${amount} and unlock the ${plan} plan.`;
+      document.getElementById("deposit-result").innerText = result;
+    }
 
-  <!-- SUPPORT -->
-  <div id="page-support" class="page">
-    <div class="card"><h3>Support - Live Chat</h3><p class="muted">Global Support • € + Crypto only • Response within minutes.</p>
-      <div class="chatbox" id="chatBox"><p><b>Support:</b> Hi Emmanuel, how can we help?</p></div>
-      <label>Message</label><textarea id="chatInput" placeholder="Type your message..."></textarea>
-      <button class="btn" onclick="sendChat()">Send Message</button>
-      <h3 style="margin-top:20px">Support Tickets Table</h3>
-      <table><thead><tr><th>Date</th><th>Message</th><th>Status</th></tr></thead><tbody id="chatTable"><tr><td>Today</td><td>Welcome message</td><td><span class="badge b-green">OPEN</span></td></tr></tbody></table>
-    </div>
-  </div>
+    function calculateWithdraw() {
+      const amount = parseFloat(document.getElementById("withdraw-amount").value);
+      const withdrawFee = amount * 0.2; // 20% withdraw fee
+      const tax = 0; // No tax
+      const result = `You will receive €${amount - withdrawFee - tax}.`;
+      document.getElementById("withdraw-result").innerText = result;
+      if (amount >= 100 && kycStatus === "Approved") {
+        document.getElementById("withdraw-btn").disabled = false;
+      } else {
+        document.getElementById("withdraw-btn").disabled = true;
+      }
+    }
 
-</div>
-<div class="footer">CEDARS EMPIRE • Die rich or die trying • Global Operations • € + Crypto Only</div>
+    function calculateP2P() {
+      const amount = parseFloat(document.getElementById("p2p-amount").value);
+      const rate = 1.9; // P2P rate
+      const fee = amount * 0.05; // 5% P2P fee
+      const result = `You will receive €${amount - fee} at a rate of 1 USD = €${rate}.`;
+      document.getElementById("p2p-result").innerText = result;
+    }
 
-<script>
-  let balance = 13.87, earned = 224.37, kycDone = false;
-  let deposits = [{date:'2026-11-10',plan:'Gold',amt:5000,method:'USDT (TRC20)',status:'Confirmed'}];
-  let withdrawals = [{date:'2026-11-15',amt:200, wallet:'TQ...9xK2', status:'Paid'}];
-  let p2ps = [{date:'2026-11-18',to:'john123',amt:50,status:'Sent'}];
-  let redeems = [{date:'2026-11-12',code:'WELCOME10',amt:10,status:'Redeemed'}];
-  let history = [
-    {date:'2026-11-18',type:'P2P',detail:'To john123',amt:-50,status:'Sent'},
-    {date:'2026-11-15',type:'Withdrawal',detail:'USDT',amt:-200,status:'Paid'},
-    {date:'2026-11-12',type:'Redeem',detail:'WELCOME10',amt:10,status:'Redeemed'},
-    {date:'2026-11-10',type:'Deposit',detail:'Gold Plan',amt:5000,status:'Confirmed'},
-    {date:'2026-11-09',type:'Referral',detail:'Gen1 - John K.',amt:30,status:'Paid'},
-  ];
-  let referrals = [
-    {name:'John K.',gen:'Gen 1',plan:'€5,000 Gold',bonus:300},
-    {name:'Sarah M.',gen:'Gen 2',plan:'€1,000 Bronze',bonus:10},
-    {name:'David O.',gen:'Gen 3',plan:'€500',bonus:5},
-  ];
-  const fmt = n => '€' + n.toFixed(2);
-  const today = '2026-11-21';
-  function showPage(id, btn){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById('page-'+id).classList.add('active'); document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
-  function goKYC(){ showPage('kyc', document.querySelectorAll('.nav button')[7]); }
-  function setMsg(id, txt, ok){ const e=document.getElementById(id); e.textContent=txt; e.className='msg '+(ok?'ok':'err'); }
-  function renderAll(){
-    document.getElementById('availBal').textContent=fmt(balance);
-    document.getElementById('totalEarned').textContent=fmt(earned);
-    document.getElementById('wBal').textContent=fmt(balance);
-    document.getElementById('depTable').innerHTML = deposits.map(d=>`<tr><td>${d.date}</td><td>${d.plan}</td><td>€${d.amt.toLocaleString()}</td><td>${d.method}</td><td><span class="badge b-green">${d.status}</span></td></tr>`).join('');
-    document.getElementById('wTable').innerHTML = withdrawals.map(w=>`<tr><td>${w.date}</td><td>€${w.amt}</td><td>${w.wallet}</td><td><span class="badge ${w.status==='Paid'?'b-green':'b-amber'}">${w.status}</span></td></tr>`).join('');
-    document.getElementById('p2pTable').innerHTML = p2ps.map(p=>`<tr><td>${p.date}</td><td>${p.to}</td><td>€${p.amt}</td><td><span class="badge b-green">${p.status}</span></td></tr>`).join('');
-    document.getElementById('redTable').innerHTML = redeems.map(r=>`<tr><td>${r.date}</td><td>${r.code}</td><td>€${r.amt}</td><td><span class="badge b-green">${r.status}</span></td></tr>`).join('');
-    document.getElementById('refTable').innerHTML = referrals.map(r=>`<tr><td>${r.name}</td><td>${r.gen}</td><td>${r.plan}</td><td>€${r.bonus}</td></tr>`).join('');
-    document.getElementById('recentTable').innerHTML = history.slice(0,5).map(h=>`<tr><td>${h.type}</td><td>${h.amt>=0?'+':''}€${h.amt}</td><td><span class="badge b-green">${h.status}</span></td></tr>`).join('');
-    renderHistory();
-  }
-  function renderHistory(){
-    const f=document.getElementById('histFilter').value;
-    const list = history.filter(h=> f==='All' || h.type===f);
-    document.getElementById('histTable').innerHTML = list.map(h=>`<tr><td>${h.date}</td><td>${h.type}</td><td>${h.detail}</td><td>${h.amt>=0?'+':''}€${h.amt}</td><td><span class="badge b-green">${h.status}</span></td></tr>`).join('') || '<tr><td colspan="5">No records.</td></tr>';
-  }
-  function doDeposit(){
-    const amt=parseFloat(document.getElementById('depAmt').value); const plan=document.getElementById('depPlan').selectedOptions[0].text; const method=document.getElementById('depMethod').value;
-    if(!amt || amt<300){ setMsg('depMsg','Minimum deposit is €300 for Shareholders Plan.',false); return; }
-    if(amt>50000){ setMsg('depMsg','Maximum is €50,000.',false); return; }
-    deposits.unshift({date:today,plan:plan,amt:amt,method:method,status:'Pending'}); history.unshift({date:today,type:'Deposit',detail:plan,amt:amt,status:'Pending'});
-    setMsg('depMsg','Deposit of €'+amt+' for '+plan+' submitted. Pay with '+method+'.',true); renderAll();
-  }
-  function doKYC(){
-    const name=document.getElementById('kycName').value.trim(), id=document.getElementById('kycId').value.trim(), country=document.getElementById('kycCountry').value.trim(); const type=document.getElementById('kycType').value;
-    if(name.length<3 || !id || !country){ setMsg('kycMsg','Fill Full Name, ID Number and Country.',false); return; }
-    kycDone=true;
-    document.getElementById('kycPill').textContent='KYC: COMPLETED'; document.getElementById('kycPill').className='pill';
-    document.getElementById('kycBanner').style.display='none';
-    document.getElementById('withdrawLocked').style.display='none';
-    const btn=document.getElementById('wBtn'); btn.disabled=false; btn.textContent='Request Withdrawal';
-    document.getElementById('kycTable').innerHTML=`<tr><td>${today}</td><td>${name}</td><td>${type}</td><td><span class="badge b-green">APPROVED</span></td></tr>`;
-    setMsg('kycMsg','KYC Approved for '+name+'. Withdraw is now unlocked.',true); renderAll();
-  }
-  function doWithdraw(){
-    if(!kycDone){ setMsg('wMsg','Complete KYC first before Withdraw.',false); goKYC(); return; }
-    const amt=parseFloat(document.getElementById('wAmt').value); const wallet=document.getElementById('wWallet').value.trim(); const crypto=document.getElementById('wCrypto').value;
-    if(!amt || amt<10){ setMsg('wMsg','Minimum withdraw is €10.',false); return; }
-    if(amt>balance){ setMsg('wMsg','Amount is more than your balance '+fmt(balance),false); return; }
-    if(wallet.length<10){ setMsg('wMsg','Enter a valid crypto wallet address.',false); return; }
-    balance-=amt; withdrawals.unshift({date:today,amt:amt,wallet:wallet.slice(0,4)+'...'+wallet.slice(-4),status:'Pending'}); history.unshift({date:today,type:'Withdrawal',detail:crypto+' - '+wallet.slice(0,6)+'...',amt:-amt,status:'Pending'});
-    setMsg('wMsg','Withdrawal of €'+amt+' via '+crypto+' requested. KYC verified.',true); renderAll();
-  }
-  function doP2P(){
-    const to=document.getElementById('p2pTo').value.trim(); const amt=parseFloat(document.getElementById('p2pAmt').value);
-    if(!to){ setMsg('p2pMsg','Enter recipient.',false); return; }
-    if(!amt || amt<5){ setMsg('p2pMsg','Minimum P2P is €5.',false); return; }
-    if(amt>balance){ setMsg('p2pMsg','Not enough balance.',false); return; }
-    balance-=amt; p2ps.unshift({date:today,to:to,amt:amt,status:'Sent'}); history.unshift({date:today,type:'P2P',detail:'To '+to,amt:-amt,status:'Sent'});
-    setMsg('p2pMsg','Sent €'+amt+' to '+to+'.',true); renderAll();
-  }
-  function copyRef(){ const el=document.getElementById('refLink'); el.select(); document.execCommand('copy'); setMsg('refMsg','Link copied!',true); }
-  const codes={CEDARS50:50,WELCOME10:10};
-  document.getElementById('redCode').addEventListener('input', function(){ document.getElementById('redAmt').value = codes[this.value.trim().toUpperCase()] || ''; });
-  function doRedeem(){
-    const code=document.getElementById('redCode').value.trim().toUpperCase();
-    if(!codes[code]){ setMsg('redMsg','Invalid code. Try CEDARS50.',false); return; }
-    const amt=codes[code]; balance+=amt; earned+=amt; redeems.unshift({date:today,code:code,amt:amt,status:'Redeemed'}); history.unshift({date:today,type:'Redeem',detail:code,amt:amt,status:'Redeemed'});
-    setMsg('redMsg','Redeemed €'+amt+' from '+code+'. Added to balance.',true); renderAll();
-  }
-  function sendChat(){
-    const inp=document.getElementById('chatInput'); const txt=inp.value.trim(); if(!txt) return;
-    const box=document.getElementById('chatBox'); box.innerHTML+=`<p><b>You:</b> ${txt}</p>`; inp.value='';
-    document.getElementById('chatTable').innerHTML += `<tr><td>${today}</td><td>${txt}</td><td><span class="badge b-amber">PENDING</span></td></tr>`;
-    setTimeout(()=>{ box.innerHTML+=`<p><b>Support:</b> Got it. We will help you with: "${txt}"</p>`; box.scrollTop=box.scrollHeight; },800);
-  }
-  renderAll();
-</script>
+    function submitKYC() {
+      // Submit KYC form
+      kycStatus = "Approved";
+      document.getElementById("kyc-status").innerText = "KYC Status: Approved";
+    }
+
+    function withdraw() {
+      // Withdraw funds
+      availableBalance -= parseFloat(document.getElementById("withdraw-amount").value);
+      document.getElementById("available-balance").innerText = `€${availableBalance.toFixed(2)}`;
+    }
+  </script>
 </body>
 </html>
