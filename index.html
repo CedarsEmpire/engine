@@ -3,211 +3,283 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shareholder Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>CEDARS EMPIRE - Shareholder Dashboard</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:#0f172a;color:#0f172a;min-height:100vh}
-.topbar{background:#0f172a;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.topbar b{font-size:18px}
-.topbar b span{color:#22c55e}
-.top-actions{display:flex;gap:8px;align-items:center}
-.pill{background:#1e293b;color:#fff;border:1px solid #334155;padding:8px 12px;border-radius:999px;font-size:13px;cursor:pointer}
-.pill.green{background:#22c55e;color:#0f172a;border-color:#22c55e;font-weight:700}
-.wrap{max-width:1100px;margin:0 auto;padding:18px 14px 90px}
-.hero{background:linear-gradient(135deg,#16a34a,#0ea5e9);color:#fff;border-radius:20px;padding:22px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.hero h1{font-size:26px;line-height:1.2}
-.hero p{opacity:.9;margin-top:6px;font-size:14px}
-.hero .cta{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-.btn{border:0;padding:11px 16px;border-radius:12px;font-weight:700;cursor:pointer}
-.btn-white{background:#fff;color:#0f172a}
-.btn-dark{background:#0f172a;color:#fff}
-.btn-green{background:#22c55e;color:#0f172a}
-.btn-outline{background:#fff;border:1px solid #e2e8f0}
-.countdown{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:16px;padding:14px;min-width:230px}
-.countdown small{opacity:.9}
-.countdown h2{font-size:28px;margin-top:4px;letter-spacing:1px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}
-.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.06)}
-.card small{color:#64748b}
-.card h3{font-size:22px;margin:6px 0}
-.card span{font-size:12px;padding:4px 8px;border-radius:999px}
-.up{background:#dcfce7;color:#166534}.warn{background:#fef9c3;color:#854d0e}.red{background:#fee2e2;color:#991b1b}
-.nav{background:#fff;border-radius:16px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;box-shadow:0 8px 24px rgba(0,0,0,.06);position:sticky;top:58px;z-index:9}
-.nav button{border:1px solid #e2e8f0;background:#f8fafc;padding:10px 12px;border-radius:999px;cursor:pointer;font-weight:600}
-.nav button.active{background:#0f172a;color:#fff}
-.section{display:none;margin-top:14px}
-.section.active{display:block}
-.two{display:grid;grid-template-columns:1.4fr .8fr;gap:12px}
-@media(max-width:800px){.two{grid-template-columns:1fr}}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th{text-align:left;color:#64748b;padding:10px 8px;border-bottom:1px solid #e2e8f0}
-td{padding:11px 8px;border-bottom:1px solid #f1f5f9}
-.plan{border:1px solid #e2e8f0;border-radius:16px;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
-.plan.active-plan{border:2px solid #22c55e;background:#f0fdf4}
-.progress{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:8px}
-.progress i{display:block;height:100%;background:#22c55e}
-input,select{width:100%;padding:12px;border:1px solid #e2e8f0;border-radius:12px;margin-top:8px}
-label{font-size:13px;font-weight:600;margin-top:12px;display:block}
-.kyc{display:flex;gap:12px;align-items:center}
-.avatar{width:52px;height:52px;border-radius:50%;background:#22c55e;color:#fff;display:grid;place-items:center;font-weight:800;font-size:20px}
-.chat-fab{position:fixed;right:16px;bottom:16px;background:#22c55e;border:0;width:58px;height:58px;border-radius:50%;font-size:24px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:50}
-.chat-box{position:fixed;right:16px;bottom:84px;width:320px;max-width:calc(100vw - 32px);background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.25);display:none;overflow:hidden;z-index:50}
-.chat-box.open{display:block}
-.chat-head{background:#0f172a;color:#fff;padding:14px;display:flex;justify-content:space-between}
-.chat-body{padding:12px;height:220px;overflow:auto;font-size:14px}
-.msg{background:#f1f5f9;padding:10px;border-radius:12px;margin-bottom:8px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f5f6f8;color:#111}
+/* ===== HEADER ===== */
+header{background:#fff;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:10}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px}
+.topbar b{font-size:20px}
+.topbar b span{color:#16a34a;font-size:13px;font-weight:400}
+.topbar .user{font-size:14px;color:#666}
+.nav1{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 10px;border-bottom:1px solid #e5e7eb}
+.nav1 a{text-decoration:none;color:#111;font-size:14px;padding:9px 14px;border-radius:8px;background:#f8fafc;border:1px solid #eef2f7}
+.nav1 a.active{background:#111;color:#fff}
+.nav2{display:flex;gap:8px;flex-wrap:wrap;padding:10px 20px}
+.nav2 a{text-decoration:none;color:#111;font-size:14px;padding:9px 14px;border-radius:8px;background:#f8fafc;border:1px solid #eef2f7}
+.nav2 a.green{background:#16a34a;color:#fff;border-color:#16a34a}
+.search{margin-left:auto}
+.search input{padding:9px 12px;border:1px solid #e5e7eb;border-radius:8px;width:260px}
+/* ===== BODY ===== */
+main{max-width:1100px;margin:0 auto;padding:18px 14px 40px}
+.cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:800px){.cards{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #eef2f7;border-radius:12px;padding:18px}
+.card small{color:#666;font-size:13px}
+.card h2{font-size:28px;margin:6px 0 4px}
+.card p{font-size:13px;color:#666}
+.bar{height:8px;background:#e5e7eb;border-radius:99px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:#16a34a;width:9%}
+.box{background:#fff;border:1px solid #eef2f7;border-radius:12px;padding:18px;margin-top:14px}
+.box h3{font-size:16px;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+th{text-align:left;color:#666;font-weight:400;padding:12px 8px;border-bottom:1px solid #eef2f7}
+td{padding:13px 8px;border-bottom:1px solid #f1f5f9}
+td:last-child, th:last-child{color:#666;font-size:13px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+label{font-size:13px;display:block;margin-top:12px}
+input,select{width:100%;padding:11px;border:1px solid #e5e7eb;border-radius:8px;margin-top:5px}
+.btn{display:inline-block;padding:11px 16px;border:0;border-radius:8px;font-weight:700;cursor:pointer;margin-top:14px}
+.btn-green{background:#16a34a;color:#fff}
+.btn-dark{background:#111;color:#fff}
+.btn-light{background:#f1f5f9}
+.badge{display:inline-block;padding:4px 8px;border-radius:99px;font-size:12px;background:#dcfce7;color:#166534}
+.badge-yellow{background:#fef9c3;color:#854d0e}
+.note{font-size:13px;color:#666;margin-top:8px;line-height:1.5}
+/* ===== LIVE CHAT ===== */
+.chat-fab{position:fixed;right:16px;bottom:16px;background:#16a34a;border:0;width:58px;height:58px;border-radius:50%;font-size:24px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:50}
+.chat-box{position:fixed;right:16px;bottom:84px;width:330px;max-width:calc(100vw - 32px);background:#fff;border-radius:14px;border:1px solid #e5e7eb;box-shadow:0 20px 50px rgba(0,0,0,.2);overflow:hidden;z-index:50}
+.chat-head{background:#111;color:#fff;padding:14px;display:flex;justify-content:space-between}
+.chat-body{padding:12px;height:220px;overflow:auto}
+.msg{background:#f1f5f9;padding:10px;border-radius:12px;margin-bottom:8px;font-size:14px}
 .msg.me{background:#dcfce7}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;place-items:center;z-index:60;padding:16px}
-.modal.open{display:grid}
-.modal-card{background:#fff;border-radius:18px;padding:20px;width:100%;max-width:420px}
-.flex{display:flex;gap:10px}
-.flex .btn{flex:1}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 16px;border-radius:999px;display:none;z-index:70;font-size:14px}
+.chat-input{padding:10px;display:flex;gap:8px;border-top:1px solid #eef2f7}
+.chat-input input{margin:0}
+.chat-input .btn{margin:0}
+/* ===== FOOTER ===== */
+footer{background:#fff;border-top:1px solid #e5e7eb;padding:20px;text-align:center;margin-top:10px}
+footer b{font-size:16px}
+footer p{font-size:13px;color:#666;margin-top:6px;line-height:1.6}
+footer .links{margin-top:10px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+footer .links a{font-size:13px;color:#111;text-decoration:none}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <b>💹 Share<span>Holder</span> Pro</b>
-  <div class="top-actions">
-    <span style="font-size:13px">👋 Welcome, Emmanuel</span>
-    <button class="pill" onclick="showToast('Logged off - see you soon')">Logoff</button>
+<!-- ================= HEADER ================= -->
+<header>
+  <div class="topbar">
+    <b>CEDARS EMPIRE <span>• Live</span></b>
+    <div class="user">ogwal.bemmanuel@gmail.com</div>
   </div>
-</div>
+  <nav class="nav1">
+    <a href="#" class="active">🏠 Home</a>
+    <a href="#">🏦 Deposit</a>
+    <a href="#">👥 Referral</a>
+    <a href="#">↗ Withdraw</a>
+    <a href="#">🔄 P2P</a>
+    <a href="#">📦 Storage</a>
+    <a href="#">📝 Register</a>
+    <a href="#">🔑 Login</a>
+    <a href="#">🚪 Logoff</a>
+    <div class="search"><input placeholder="🔍 Search tasks, engines, workers..."></div>
+  </nav>
+  <nav class="nav2">
+    <a href="#">👤 Profile</a>
+    <a href="#" class="green">🏦 Deposit ON</a>
+    <a href="#">☰ Task</a>
+    <a href="#">↗ Withdraw</a>
+    <a href="#">👥 Referral</a>
+    <a href="#">Toggle Deposit</a>
+  </nav>
+</header>
 
-<div class="wrap">
-  <div class="hero">
-    <div>
-      <h1>Good evening, Emmanuel 👋<br>Your money is working today.</h1>
-      <p>Gold Plan • Active • Day 142 of 1095 • Next payout in:</p>
-      <div class="cta">
-        <button class="btn btn-white" onclick="openModal('depositModal')">🏦 Deposit</button>
-        <button class="btn btn-dark" onclick="openModal('withdrawModal')">↗ Withdraw</button>
-        <button class="btn btn-green" onclick="showSection('referral')">👥 Invite & Earn</button>
-      </div>
+<!-- ================= BODY ================= -->
+<main>
+
+  <!-- TOP CARDS -->
+  <section class="cards">
+    <div class="card">
+      <small>🤖 AI Workers Online</small>
+      <h2>100</h2>
+      <p>Online now</p>
     </div>
-    <div class="countdown">
-      <small>⏰ NEXT DAILY PAYOUT</small>
-      <h2 id="countdown">07 : 42 : 18</h2>
-      <p style="font-size:13px;margin-top:6px">Reminder: Claim your $50 daily target before midnight to keep your streak.</p>
-      <button class="btn btn-white" style="width:100%;margin-top:10px" onclick="claimDaily()">Claim $50 Now</button>
+    <div class="card">
+      <small>💻 Total Earned - Never Resets</small>
+      <h2>€224.37</h2>
+      <p>Live updating • Keeps accumulating</p>
     </div>
-  </div>
-
-  <div class="grid">
-    <div class="card"><small>Total Balance</small><h3>$5,842.50</h3><span class="up">▲ $128 today</span></div>
-    <div class="card"><small>Total Earnings</small><h3>$2,410.00</h3><span class="up">▲ 12% this month</span></div>
-    <div class="card"><small>Active Deposit</small><h3>$5,000.00</h3><span class="warn">Gold Plan</span></div>
-    <div class="card"><small>Referral Bonus</small><h3>$315.00</h3><span class="up">14 friends joined</span></div>
-  </div>
-
-  <div class="nav">
-    <button class="active" onclick="showSection('home',this)">🏠 Home</button>
-    <button onclick="showSection('plans',this)">📊 Plans</button>
-    <button onclick="showSection('deposit',this)">🏦 Deposit</button>
-    <button onclick="showSection('withdraw',this)">↗ Withdraw</button>
-    <button onclick="showSection('referral',this)">👥 Referral</button>
-    <button onclick="showSection('p2p',this)">🔄 P2P</button>
-    <button onclick="showSection('contract',this)">📄 Contract</button>
-    <button onclick="showSection('transactions',this)">🧾 Transactions</button>
-    <button onclick="showSection('kyc',this)">🪪 KYC</button>
-  </div>
-
-  <!-- HOME -->
-  <div id="home" class="section active">
-    <div class="two">
-      <div class="card">
-        <h3>Your Gold Plan Progress</h3>
-        <p style="font-size:14px;color:#64748b;margin-top:6px">Daily target $50 • $42 earned today</p>
-        <div class="progress"><i style="width:84%"></i></div>
-        <p style="font-size:13px;margin-top:8px">84% of today's target • Keep going!</p>
-        <div style="margin-top:14px" class="flex">
-          <button class="btn btn-green" onclick="claimDaily()">Claim Daily Reward</button>
-          <button class="btn btn-outline" onclick="showSection('plans')">Upgrade Plan</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="kyc"><div class="avatar">E</div><div><b>Emmanuel Ogwal</b><br><small>emmanuel@example.com • Uganda</small></div></div>
-        <p style="margin-top:12px;font-size:14px">KYC Status: <span class="warn">Pending Verification</span></p>
-        <button class="btn btn-dark" style="width:100%;margin-top:10px" onclick="showSection('kyc')">Verify Now →</button>
-      </div>
+    <div class="card">
+      <small>🎯 AI Target €2500</small>
+      <h2>9.0%</h2>
+      <p>Next cycle in 15:33:40</p>
+      <div class="bar"><i></i></div>
     </div>
-  </div>
+  </section>
+
+  <!-- BALANCE TABLE -->
+  <section class="box">
+    <h3>💰 Balance Table</h3>
+    <table>
+      <tr><th>Balance Type</th><th>Amount</th><th>Note</th></tr>
+      <tr><td>Available Balance</td><td><b>€13.87</b></td><td>Withdrawable / KYC withdrawals from here</td></tr>
+      <tr><td>Reserved Balance</td><td><b>€0.00</b></td><td>Held for pending tasks / rewards</td></tr>
+      <tr><td>Earned Balance</td><td><b>€224.37</b></td><td>Total ever earned - never resets</td></tr>
+      <tr><td>Central Reserve</td><td><b>€179.50</b></td><td>Platform reserve - 80% of every reward</td></tr>
+    </table>
+  </section>
 
   <!-- PLANS -->
-  <div id="plans" class="section">
-    <div class="card">
-      <h3>Shareholder Plans</h3>
-      <p style="font-size:13px;color:#64748b">Choose a plan. Duration: 1095 days for all plans.</p>
-      <div style="margin-top:14px">
-        <div class="plan"><div><b>Starter</b><br><small>Deposit $300 • Daily $3</small></div><button class="btn btn-outline" onclick="selectPlan('Starter')">Select</button></div>
-        <div class="plan"><div><b>Bronze</b><br><small>Deposit $1,000 • Daily $10</small></div><button class="btn btn-outline" onclick="selectPlan('Bronze')">Select</button></div>
-        <div class="plan"><div><b>Silver</b><br><small>Deposit $2,500 • Daily $25</small></div><button class="btn btn-outline" onclick="selectPlan('Silver')">Select</button></div>
-        <div class="plan active-plan"><div><b>Gold ⭐ Your Current Plan</b><br><small>Deposit $5,000 • Daily $50</small></div><button class="btn btn-green">Active</button></div>
-      </div>
+  <section class="box">
+    <h3>📊 Shareholder Plans - All Earn 1% Every 24 Hours</h3>
+    <p class="note">1% daily on your deposit. Paid every 24 hours. Duration: 1095 days for all plans.</p>
+    <table>
+      <tr><th>Plan</th><th>Deposit</th><th>Daily Earning (1%)</th><th>Status</th></tr>
+      <tr><td>Starter</td><td>$300</td><td>$3.00 / day</td><td><span class="badge">Available</span></td></tr>
+      <tr><td>Bronze</td><td>$1,000</td><td>$10.00 / day</td><td><span class="badge">Available</span></td></tr>
+      <tr><td>Silver</td><td>$2,500</td><td>$25.00 / day</td><td><span class="badge">Available</span></td></tr>
+      <tr><td>Gold</td><td>$5,000</td><td>$50.00 / day</td><td><span class="badge">Your Plan</span></td></tr>
+    </table>
+  </section>
+
+  <!-- REGISTER + LOGIN -->
+  <section class="grid2">
+    <div class="box">
+      <h3>📝 Register</h3>
+      <p class="note">Create a new shareholder account.</p>
+      <label>Full Name</label><input placeholder="Emmanuel Ogwal">
+      <label>Email</label><input placeholder="you@email.com">
+      <label>Password</label><input type="password" placeholder="••••••••">
+      <label>Referral Code (Optional)</label><input placeholder="e.g. EMMANUEL123">
+      <button class="btn btn-dark" style="width:100%">Create Account</button>
+      <p class="note">Already have an account? <b>Login</b></p>
     </div>
-  </div>
+    <div class="box">
+      <h3>🔑 Login</h3>
+      <p class="note">Welcome back to CEDARS EMPIRE.</p>
+      <label>Email</label><input placeholder="you@email.com">
+      <label>Password</label><input type="password" placeholder="••••••••">
+      <button class="btn btn-dark" style="width:100%">Login</button>
+      <hr style="margin:16px 0;border:0;border-top:1px solid #eef2f7">
+      <h3>🪪 KYC Verification</h3>
+      <p class="note">Status: <span class="badge badge-yellow">Pending Verification</span></p>
+      <label>ID Number</label><input placeholder="CM12345678">
+      <button class="btn btn-light" style="width:100%">Submit KYC</button>
+    </div>
+  </section>
 
-  <!-- DEPOSIT -->
-  <div id="deposit" class="section"><div class="card"><h3>🏦 Deposit Funds</h3><label>Amount (USD)</label><input id="depAmt" type="number" placeholder="e.g. 500"><label>Payment Method</label><select><option>MTN MoMo</option><option>Airtel Money</option><option>Bank Transfer</option><option>USDT</option></select><button class="btn btn-green" style="width:100%;margin-top:14px" onclick="doDeposit()">Deposit Now</button><p style="font-size:12px;color:#64748b;margin-top:8px">Minimum deposit $300. Funds reflect in 5-15 minutes.</p></div></div>
+  <!-- DEPOSIT / WITHDRAW -->
+  <section class="grid2">
+    <div class="box">
+      <h3>🏦 Deposit</h3>
+      <label>Amount</label><input placeholder="e.g. 500">
+      <label>Method</label><select><option>MTN MoMo</option><option>Airtel Money</option><option>Bank Transfer</option><option>USDT</option></select>
+      <button class="btn btn-green" style="width:100%">Deposit</button>
+      <p class="note">Minimum: $300. Funds reflect in 5-15 minutes.</p>
+    </div>
+    <div class="box">
+      <h3>↗ Withdraw</h3>
+      <p class="note">Available: <b>€13.87</b> • KYC required</p>
+      <label>Amount</label><input placeholder="e.g. 100">
+      <label>Withdraw To</label><select><option>MTN MoMo</option><option>Bank Account</option><option>USDT Wallet</option></select>
+      <button class="btn btn-dark" style="width:100%">Request Withdrawal</button>
+    </div>
+  </section>
 
-  <!-- WITHDRAW -->
-  <div id="withdraw" class="section"><div class="card"><h3>↗ Withdraw Funds</h3><p style="font-size:14px">Available: <b>$5,842.50</b></p><label>Amount</label><input id="withAmt" type="number" placeholder="e.g. 200"><label>Withdraw To</label><select><option>MTN MoMo - 0772 *** 123</option><option>Bank Account</option><option>USDT Wallet</option></select><button class="btn btn-dark" style="width:100%;margin-top:14px" onclick="doWithdraw()">Request Withdrawal</button></div></div>
+  <!-- REDEMPTION -->
+  <section class="box">
+    <h3>🎁 Redemption</h3>
+    <p class="note">Redeem your Central Reserve / Earned Balance. Redemption moves funds from Reserve to Available Balance.</p>
+    <table>
+      <tr><th>Source</th><th>Available to Redeem</th><th>Action</th></tr>
+      <tr><td>Central Reserve (80%)</td><td>€179.50</td><td><button class="btn btn-green">Redeem</button></td></tr>
+      <tr><td>Earned Balance</td><td>€224.37</td><td><button class="btn btn-green">Redeem</button></td></tr>
+      <tr><td>Referral Bonus (10%)</td><td>€31.50</td><td><button class="btn btn-green">Redeem</button></td></tr>
+    </table>
+    <label>Redemption Amount</label><input placeholder="e.g. 50">
+    <button class="btn btn-dark">Confirm Redemption</button>
+  </section>
 
   <!-- REFERRAL -->
-  <div id="referral" class="section"><div class="card"><h3>👥 Referral Program</h3><p style="font-size:14px">Earn 5% on every deposit from friends you invite.</p><label>Your Referral Link</label><input id="refLink" value="https://shareholder.pro/r/emmanuel123" readonly><button class="btn btn-green" style="margin-top:10px" onclick="copyRef()">Copy Link</button><div class="grid" style="grid-template-columns:repeat(3,1fr)"><div><h3>14</h3><small>Friends Joined</small></div><div><h3>$315</h3><small>Bonus Earned</small></div><div><h3>$6,300</h3><small>Their Deposits</small></div></div></div></div>
+  <section class="box">
+    <h3>👥 Referral - Earn 10%</h3>
+    <p class="note">You earn <b>10% of every deposit</b> made by people you invite. Paid instantly to your Referral Bonus.</p>
+    <label>Your Referral Link</label><input value="https://cedarsempire.com/r/emmanuel123">
+    <button class="btn btn-light">Copy Link</button>
+    <table>
+      <tr><th>Metric</th><th>Value</th><th>Note</th></tr>
+      <tr><td>Friends Joined</td><td>14</td><td>Active referrals</td></tr>
+      <tr><td>Their Total Deposits</td><td>$3,150</td><td>10% = $315</td></tr>
+      <tr><td>Referral Bonus Earned</td><td>$315.00</td><td>Redeemable</td></tr>
+    </table>
+  </section>
 
   <!-- P2P -->
-  <div id="p2p" class="section"><div class="card"><h3>🔄 P2P Marketplace</h3><table><tr><th>Seller</th><th>Price</th><th>Available</th><th></th></tr><tr><td>🇺🇬 Kato M.</td><td>$1.00 = UGX 3,720</td><td>$2,500</td><td><button class="btn btn-green" onclick="showToast('P2P trade started with Kato')">Buy</button></td></tr><tr><td>🇰🇪 Wanjiru K.</td><td>$1.00 = KES 129</td><td>$1,800</td><td><button class="btn btn-green" onclick="showToast('P2P trade started with Wanjiru')">Buy</button></td></tr><tr><td>🇺🇬 Amina S.</td><td>$1.00 = UGX 3,750</td><td>$4,000</td><td><button class="btn btn-dark" onclick="showToast('Sell offer sent to Amina')">Sell</button></td></tr></table></div></div>
+  <section class="box">
+    <h3>🔄 P2P Marketplace</h3>
+    <table>
+      <tr><th>Seller</th><th>Rate</th><th>Available</th><th>Action</th></tr>
+      <tr><td>Kato M. - Uganda</td><td>$1 = UGX 3,720</td><td>$2,500</td><td><button class="btn btn-light">Buy</button></td></tr>
+      <tr><td>Wanjiru K. - Kenya</td><td>$1 = KES 129</td><td>$1,800</td><td><button class="btn btn-light">Buy</button></td></tr>
+      <tr><td>Amina S. - Uganda</td><td>$1 = UGX 3,750</td><td>$4,000</td><td><button class="btn btn-light">Sell</button></td></tr>
+    </table>
+  </section>
 
   <!-- CONTRACT -->
-  <div id="contract" class="section"><div class="card"><h3>📄 Contract Agreement</h3><p style="font-size:14px;line-height:1.6">This agreement confirms Emmanuel Ogwal is a shareholder under the Gold Plan. Deposit $5,000, daily target $50, duration 1095 days. Earnings are credited daily. Withdrawals processed within 24 hours.</p><label><input type="checkbox" id="agreeCheck" style="width:auto"> I have read and agree to the contract terms</label><button class="btn btn-green" style="width:100%;margin-top:12px" onclick="signContract()">Sign Contract ✍️</button><p id="contractStatus" style="font-size:13px;margin-top:8px;color:#64748b">Status: Not signed yet</p></div></div>
+  <section class="box">
+    <h3>📄 Contract Agreement</h3>
+    <p class="note">I agree to CEDARS EMPIRE shareholder terms. All plans earn 1% every 24 hours for 1095 days. Referral bonus is 10%. Redemption is available from Central Reserve and Earned Balance.</p>
+    <label><input type="checkbox" style="width:auto"> I have read and agree</label>
+    <button class="btn btn-dark">Sign Contract</button>
+  </section>
 
   <!-- TRANSACTIONS -->
-  <div id="transactions" class="section"><div class="card"><h3>🧾 Recent Transactions</h3><table><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr><tr><td>Today, 09:12</td><td>Daily Earnings</td><td>+$50.00</td><td><span class="up">Completed</span></td></tr><tr><td>Yesterday</td><td>Referral Bonus</td><td>+$25.00</td><td><span class="up">Completed</span></td></tr><tr><td>Nov 18</td><td>Withdrawal</td><td>-$200.00</td><td><span class="up">Completed</span></td></tr><tr><td>Nov 15</td><td>Deposit</td><td>+$5,000.00</td><td><span class="up">Completed</span></td></tr></table></div></div>
+  <section class="box">
+    <h3>🧾 Transactions</h3>
+    <table>
+      <tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr>
+      <tr><td>Today</td><td>Daily Earning 1%</td><td>+$50.00</td><td>Completed</td></tr>
+      <tr><td>Yesterday</td><td>Referral Bonus 10%</td><td>+$25.00</td><td>Completed</td></tr>
+      <tr><td>Nov 18</td><td>Redemption</td><td>+$100.00</td><td>Completed</td></tr>
+      <tr><td>Nov 15</td><td>Deposit - Gold</td><td>+$5,000.00</td><td>Completed</td></tr>
+    </table>
+  </section>
 
-  <!-- KYC -->
-  <div id="kyc" class="section"><div class="card"><h3>🪪 KYC Verification</h3><p style="font-size:14px">Verify to unlock withdrawals and higher limits.</p><label>Full Name</label><input value="Emmanuel Ogwal"><label>ID Number</label><input placeholder="e.g. CM12345678"><label>Upload ID Photo</label><input type="file"><button class="btn btn-dark" style="width:100%;margin-top:14px" onclick="showToast('KYC submitted! We will review in 24h')">Submit for Verification</button></div></div>
+</main>
 
+<!-- ================= LIVE CHAT ================= -->
+<button class="chat-fab">💬</button>
+<div class="chat-box">
+  <div class="chat-head"><b>Live Chat • Online</b><span>✕</span></div>
+  <div class="chat-body">
+    <div class="msg">Hi Emmanuel! 👋 How can we help you today?</div>
+    <div class="msg">Ask about deposits, withdrawals, or redemption.</div>
+    <div class="msg me">Hello, I want to redeem my reserve.</div>
+    <div class="msg">Sure! Go to Redemption and confirm your amount. We are here if you need help.</div>
+  </div>
+  <div class="chat-input">
+    <input placeholder="Type a message...">
+    <button class="btn btn-green">Send</button>
+  </div>
 </div>
 
-<button class="chat-fab" onclick="toggleChat()">💬</button>
-<div class="chat-box" id="chatBox">
-  <div class="chat-head"><b>Live Chat • Online</b><span onclick="toggleChat()" style="cursor:pointer">✕</span></div>
-  <div class="chat-body"><div class="msg">Hi Emmanuel! 👋 How can we help you today?</div><div class="msg">Ask about deposits, withdrawals, or your Gold Plan.</div><div id="chatMsgs"></div></div>
-  <div style="padding:10px;display:flex;gap:8px"><input id="chatInput" placeholder="Type a message..."><button class="btn btn-green" onclick="sendChat()">Send</button></div>
-</div>
+<!-- ================= FOOTER ================= -->
+<footer>
+  <b>CEDARS EMPIRE</b>
+  <p>Shareholder Dashboard • All plans earn 1% every 24 hours • Referral bonus 10% • Redemption available</p>
+  <div class="links">
+    <a href="#">Home</a>
+    <a href="#">Deposit</a>
+    <a href="#">Withdraw</a>
+    <a href="#">Referral</a>
+    <a href="#">P2P</a>
+    <a href="#">Contract</a>
+    <a href="#">Support / Live Chat</a>
+  </div>
+  <p>© 2026 CEDARS EMPIRE. All rights reserved. • Admin layout = User layout</p>
+</footer>
 
-<div class="modal" id="depositModal"><div class="modal-card"><h3>🏦 Quick Deposit</h3><input id="depAmt2" type="number" placeholder="Amount"><button class="btn btn-green" style="width:100%;margin-top:12px" onclick="doDeposit()">Deposit</button><button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="closeModal('depositModal')">Cancel</button></div></div>
-<div class="modal" id="withdrawModal"><div class="modal-card"><h3>↗ Quick Withdraw</h3><input id="withAmt2" type="number" placeholder="Amount"><button class="btn btn-dark" style="width:100%;margin-top:12px" onclick="doWithdraw()">Withdraw</button><button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="closeModal('withdrawModal')">Cancel</button></div></div>
-<div class="toast" id="toast"></div>
-
-<script>
-function showSection(id,btn){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function showToast(msg){
-  let t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
-  setTimeout(()=>t.style.display='none',3000);
-}
-function openModal(id){document.getElementById(id).classList.add('open')}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
-function claimDaily(){showToast('✅ $50 daily reward claimed!');}
-function selectPlan(n){showToast(n+' plan selected. Proceed to Deposit.'); showSection('deposit');}
-function doDeposit(){showToast('Deposit request received. Check Transactions.'); closeModal('depositModal');}
-function doWithdraw(){showToast('Withdrawal request sent. Arrives in 24h.'); closeModal('withdrawModal');}
-function copyRef(){let i=document.getElementById('refLink'); i.select(); document.execCommand('copy'); showToast('Referral link copied!');}
-function signContract(){ if(!document.getElementById('agreeCheck').checked){showToast('Please tick Agree first'); return;} document.getElementById('contractStatus').textContent='Status: ✅ Signed on 21 Nov 2026'; showToast('Contract signed successfully!');}
-function toggleChat(){document.getElementById('chatBox').classList.toggle('open')}
-function sendChat(){let inp=document.getElementById('chatInput'); if(!inp.value) return; let d=document.createElement('div'); d.className='msg me'; d.textContent=inp.value; document.getElementById('chatMsgs').appendChild(d); inp.value=''; setTimeout(()=>{let r=document.createElement('div'); r.className='msg'; r.textContent='Thanks! Our support team will reply shortly. For urgent withdrawals, check Transactions.'; document.getElementById('chatMsgs').appendChild(r);},800);}
-let secs = 7*3600 + 42*60 + 18;
-setInterval(()=>{ secs--; if(secs<0) secs=24*3600; let h=Math.floor(secs/3600), m=Math.floor((secs%3600)/60), s=secs%60; document.getElementById('countdown').textContent = String(h).padStart(2,'0')+' : '+String(m).padStart(2,'0')+' : '+String(s).padStart(2,'0'); },1000);
-</script>
 </body>
 </html>
