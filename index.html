@@ -1,189 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shareholder Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shareholder Dashboard</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; background:#f2f2f2; }
+  header { background:#111; color:#fff; padding:15px; text-align:center; }
+  nav a { color:#fff; margin:0 10px; text-decoration:none; }
+  main { max-width:800px; margin:auto; padding:20px; }
+  section { background:#fff; padding:20px; margin-bottom:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+  table { border-collapse:collapse; width:100%; }
+  th, td { border:1px solid #ddd; padding:10px; text-align:left; }
+  th { background:#f0f0f0; }
+  button { padding:8px 15px; margin-right:10px; cursor:pointer; }
+  input, select { display:block; width:100%; padding:8px; margin:8px 0 15px; }
+</style>
 </head>
 <body>
-  <header>
-    <nav>
-      <ul>
-        <li><a href="#account-overview">Account Overview</a></li>
-        <li><a href="#kyc-verification">KYC Verification</a></li>
-        <li><a href="#shareholder-plans">Shareholder Plans</a></li>
-        <li><a href="#transactions">Transactions</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-    <section id="account-overview">
-      <h2>Account Overview</h2>
-      <p>Balance: €<span id="balance">0.00</span></p>
-      <p>Total Earnings: €<span id="total-earnings">0.00</span></p>
-      <button id="deposit-btn">Deposit</button>
-      <button id="withdraw-btn">Withdraw</button>
-    </section>
-    <section id="kyc-verification">
-      <h2>KYC Verification</h2>
-      <p>Status: <span id="kyc-status">Not Verified</span></p>
-      <button id="kyc-verify-btn">Verify Now</button>
-      <form id="kyc-form" style="display: none;">
-        <label>Full Name:</label>
-        <input type="text" id="full-name" required>
-        <label>Date of Birth:</label>
-        <input type="date" id="dob" required>
-        <label>Country:</label>
-        <select id="country" required>
-          <option value="">Select Country</option>
-          <option value="USA">USA</option>
-          <option value="Canada">Canada</option>
-          <option value="UK">UK</option>
-        </select>
-        <button id="submit-kyc-btn">Submit</button>
-      </form>
-    </section>
-    <section id="shareholder-plans">
-      <h2>Shareholder Plans</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Plan</th>
-            <th>Deposit</th>
-            <th>Daily Target</th>
-            <th>Duration</th>
-          </tr>
-        </thead>
-        <tbody id="plans-table-body">
-          <!-- plans will be populated here -->
-        </tbody>
-      </table>
-    </section>
-    <section id="transactions">
-      <h2>Transactions</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody id="transactions-table-body">
-          <!-- transactions will be populated here -->
-        </tbody>
-      </table>
-    </section>
-  </main>
-  <script src="script.js"></script>
+
+<header>
+  <h1>Shareholder Dashboard</h1>
+  <nav>
+    <a href="#account-overview">Overview</a>
+    <a href="#kyc-verification">KYC</a>
+    <a href="#shareholder-plans">Plans</a>
+    <a href="#transactions">Transactions</a>
+  </nav>
+</header>
+
+<main>
+  <section id="account-overview">
+    <h2>Account Overview</h2>
+    <p>Balance: €<span id="balance">0.00</span></p>
+    <p>Total Earnings: €<span id="total-earnings">0.00</span></p>
+    <button>Deposit</button>
+    <button>Withdraw</button>
+  </section>
+
+  <section id="kyc-verification">
+    <h2>KYC Verification</h2>
+    <p>Status: <span id="kyc-status">Not Verified</span></p>
+    <button id="kyc-verify-btn">Verify Now</button>
+    <form id="kyc-form" style="display:none; margin-top:15px;">
+      <label>Full Name:</label>
+      <input type="text" id="full-name" required>
+      <label>Date of Birth:</label>
+      <input type="date" id="dob" required>
+      <label>Country:</label>
+      <select id="country" required>
+        <option value="">Select Country</option>
+        <option>Uganda</option>
+        <option>Kenya</option>
+        <option>USA</option>
+        <option>UK</option>
+      </select>
+      <button id="submit-kyc-btn">Submit</button>
+    </form>
+  </section>
+
+  <section id="shareholder-plans">
+    <h2>Shareholder Plans</h2>
+    <table>
+      <thead><tr><th>Plan</th><th>Deposit</th><th>Daily Target</th><th>Duration</th></tr></thead>
+      <tbody id="plans-table-body"></tbody>
+    </table>
+  </section>
+
+  <section id="transactions">
+    <h2>Transactions</h2>
+    <table>
+      <thead><tr><th>Date</th><th>Type</th><th>Amount</th></tr></thead>
+      <tbody id="transactions-table-body">
+        <tr><td colspan="3">No transactions yet</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<script>
+  const plans = [
+    { plan: 'Starter', deposit: 300, dailyTarget: 3, duration: 1095 },
+    { plan: 'Bronze', deposit: 1000, dailyTarget: 10, duration: 1095 },
+    { plan: 'Silver', deposit: 2500, dailyTarget: 25, duration: 1095 },
+    { plan: 'Gold', deposit: 5000, dailyTarget: 50, duration: 1095 },
+  ];
+  const tbody = document.getElementById('plans-table-body');
+  plans.forEach(p => {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${p.plan}</td><td>€${p.deposit}</td><td>€${p.dailyTarget}</td><td>${p.duration} days</td>`;
+    tbody.appendChild(row);
+  });
+
+  document.getElementById('kyc-verify-btn').addEventListener('click', () => {
+    document.getElementById('kyc-form').style.display = 'block';
+  });
+  document.getElementById('submit-kyc-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('kyc-status').textContent = 'Pending Review';
+    alert('KYC submitted for review');
+  });
+</script>
+
 </body>
 </html>
-
-
-CSS (in styles.css file)
-
-body {
-  font-family: Arial, sans-serif;
-}
-
-header {
-  background-color: #333;
-  color: #fff;
-  padding: 1em;
-  text-align: center;
-}
-
-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: space-between;
-}
-
-nav li {
-  margin-right: 20px;
-}
-
-nav a {
-  color: #fff;
-  text-decoration: none;
-}
-
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2em;
-}
-
-section {
-  background-color: #f7f7f7;
-  padding: 1em;
-  margin-bottom: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  margin-top: 0;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-
-th {
-  background-color: #f0f0f0;
-}
-
-
-JavaScript (in script.js file)
-
-// Populate plans table
-const plans = [
-  { plan: 'Starter', deposit: 300, dailyTarget: 3, duration: 1095 },
-  { plan: 'Bronze', deposit: 1000, dailyTarget: 10, duration: 1095 },
-  { plan: 'Silver', deposit: 2500, dailyTarget: 25, duration: 1095 },
-  { plan: 'Gold', deposit: 5000, dailyTarget: 50, duration: 1095 },
-];
-
-const plansTableBody = document.getElementById('plans-table-body');
-plans.forEach((plan) => {
-  const row = document.createElement('tr');
-  row.innerHTML = `
-    <td>${plan.plan}</td>
-    <td>€${plan.deposit}</td>
-    <td>€${plan.dailyTarget}</td>
-    <td>${plan.duration} days</td>
-  `;
-  plansTableBody.appendChild(row);
-});
-
-// Handle KYC verification
-const kycVerifyBtn = document.getElementById('kyc-verify-btn');
-const kycForm = document.getElementById('kyc-form');
-kycVerifyBtn.addEventListener('click', () => {
-  kycForm.style.display = 'block';
-});
-
-const submitKycBtn = document.getElementById('submit-kyc-btn');
-submitKycBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  // Submit KYC form data to server
-  console.log('KYC form submitted');
-});
-
-// Update account overview
-const balanceElement = document.getElementById('balance');
-const totalEarningsElement = document.getElementById('total-earnings');
-// Update balance and total earnings values
-balanceElement.textContent = '1000.00';
-totalEarningsElement.textContent = '500.00';
