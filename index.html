@@ -1,106 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shareholder Dashboard</title>
-<style>
-  body { font-family: Arial, sans-serif; margin:0; background:#f2f2f2; }
-  header { background:#111; color:#fff; padding:15px; text-align:center; }
-  nav a { color:#fff; margin:0 10px; text-decoration:none; }
-  main { max-width:800px; margin:auto; padding:20px; }
-  section { background:#fff; padding:20px; margin-bottom:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
-  table { border-collapse:collapse; width:100%; }
-  th, td { border:1px solid #ddd; padding:10px; text-align:left; }
-  th { background:#f0f0f0; }
-  button { padding:8px 15px; margin-right:10px; cursor:pointer; }
-  input, select { display:block; width:100%; padding:8px; margin:8px 0 15px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shareholder Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 text-white flex flex-col">
+      <div class="p-6 text-2xl font-bold">Dashboard</div>
+      <nav class="flex-1">
+        <ul>
+          <li class="p-4 bg-gray-800"><a href="#" class="flex items-center"><svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm4 6a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H8a1 1 0 01-1-1v-6zm4 6a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1v-2z"/></svg>Overview</a></li>
+          <li class="p-4"><a href="#" class="flex items-center"><svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V6h2v3z"/></svg>KYC</a></li>
+          <li class="p-4"><a href="#" class="flex items-center"><svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v5a2 2 0 002 2h4a2 2 0 002-2V6a1 1 0 100-2h-3.382l.553-1.447A1 1 0 009 2zM4 7a1 1 0 011-1h6a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7zm6 9a1 1 0 100-2 1 1 0 000 2z"/></svg>Plans</a></li>
+          <li class="p-4"><a href="#" class="flex items-center"><svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zm-9 8a9 9 0 0118 0H0z"/></svg>Transactions</a></li>
+        </ul>
+      </nav>
+      <div class="p-4 text-sm">© 2024 Shareholder App</div>
+    </aside>
 
-<header>
-  <h1>Shareholder Dashboard</h1>
-  <nav>
-    <a href="#account-overview">Overview</a>
-    <a href="#kyc-verification">KYC</a>
-    <a href="#shareholder-plans">Plans</a>
-    <a href="#transactions">Transactions</a>
-  </nav>
-</header>
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto">
+      <!-- Top Bar -->
+      <header class="bg-white shadow p-4 flex justify-between items-center">
+        <h1 class="text-xl font-semibold">Shareholder Dashboard</h1>
+        <div class="flex items-center space-x-4">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 100 12A6 6 0 0010 2zm-2 6a2 2 0 114 0 2 2 0 01-4 0zm6 4a2 2 0 100-4 2 2 0 000 4z"/></svg>
+          <span>ogwalbemmanuel</span>
+        </div>
+      </header>
 
-<main>
-  <section id="account-overview">
-    <h2>Account Overview</h2>
-    <p>Balance: €<span id="balance">0.00</span></p>
-    <p>Total Earnings: €<span id="total-earnings">0.00</span></p>
-    <button>Deposit</button>
-    <button>Withdraw</button>
-  </section>
+      <!-- KYC Banner -->
+      <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 m-4">
+        <p class="font-bold">KYC Not Verified</p>
+        <p>Complete KYC to unlock withdrawals.</p>
+        <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Verify Now</button>
+      </div>
 
-  <section id="kyc-verification">
-    <h2>KYC Verification</h2>
-    <p>Status: <span id="kyc-status">Not Verified</span></p>
-    <button id="kyc-verify-btn">Verify Now</button>
-    <form id="kyc-form" style="display:none; margin-top:15px;">
-      <label>Full Name:</label>
-      <input type="text" id="full-name" required>
-      <label>Date of Birth:</label>
-      <input type="date" id="dob" required>
-      <label>Country:</label>
-      <select id="country" required>
-        <option value="">Select Country</option>
-        <option>Uganda</option>
-        <option>Kenya</option>
-        <option>USA</option>
-        <option>UK</option>
-      </select>
-      <button id="submit-kyc-btn">Submit</button>
-    </form>
-  </section>
+      <!-- Hero Balance Card -->
+      <section class="m-4 p-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-lg">
+        <div class="text-sm">Total Balance</div>
+        <div class="text-4xl font-bold">€0.00</div>
+        <div class="mt-2 flex space-x-4">
+          <button class="bg-white text-blue-600 px-4 py-2 rounded">Deposit</button>
+          <button class="bg-transparent border border-white text-white px-4 py-2 rounded">Withdraw</button>
+        </div>
+        <canvas id="balanceChart" class="mt-4" height="80"></canvas>
+      </section>
 
-  <section id="shareholder-plans">
-    <h2>Shareholder Plans</h2>
-    <table>
-      <thead><tr><th>Plan</th><th>Deposit</th><th>Daily Target</th><th>Duration</th></tr></thead>
-      <tbody id="plans-table-body"></tbody>
-    </table>
-  </section>
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-4 gap-4 m-4">
+        <div class="bg-white p-6 rounded shadow">
+          <div class="text-gray-500">Total Earnings</div>
+          <div class="text-2xl font-bold">€0.00</div>
+        </div>
+        <div class="bg-white p-6 rounded shadow">
+          <div class="text-gray-500">Today's Earnings</div>
+          <div class="text-2xl font-bold">€0.00</div>
+        </div>
+        <div class="bg-white p-6 rounded shadow">
+          <div class="text-gray-500">Active Plan</div>
+          <div class="text-2xl font-bold">None</div>
+        </div>
+        <div class="bg-white p-6 rounded shadow">
+          <div class="text-gray-500">Days Remaining</div>
+          <div class="text-2xl font-bold">1095</div>
+        </div>
+      </div>
 
-  <section id="transactions">
-    <h2>Transactions</h2>
-    <table>
-      <thead><tr><th>Date</th><th>Type</th><th>Amount</th></tr></thead>
-      <tbody id="transactions-table-body">
-        <tr><td colspan="3">No transactions yet</td></tr>
-      </tbody>
-    </table>
-  </section>
-</main>
+      <!-- Plans Section -->
+      <section class="m-4 bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-semibold mb-4">Your Plans</h2>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="border p-4 rounded">
+            <h3 class="font-bold">Starter</h3>
+            <p>€0 invested</p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Choose</button>
+          </div>
+          <div class="border p-4 rounded">
+            <h3 class="font-bold">Pro</h3>
+            <p>€100 - €500</p>
+            <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded mt-2">Upgrade</button>
+          </div>
+          <div class="border p-4 rounded">
+            <h3 class="font-bold">Premium</h3>
+            <p>€500+</p>
+            <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded mt-2">Upgrade</button>
+          </div>
+        </div>
+      </section>
 
-<script>
-  const plans = [
-    { plan: 'Starter', deposit: 300, dailyTarget: 3, duration: 1095 },
-    { plan: 'Bronze', deposit: 1000, dailyTarget: 10, duration: 1095 },
-    { plan: 'Silver', deposit: 2500, dailyTarget: 25, duration: 1095 },
-    { plan: 'Gold', deposit: 5000, dailyTarget: 50, duration: 1095 },
-  ];
-  const tbody = document.getElementById('plans-table-body');
-  plans.forEach(p => {
-    const row = document.createElement('tr');
-    row.innerHTML = `<td>${p.plan}</td><td>€${p.deposit}</td><td>€${p.dailyTarget}</td><td>${p.duration} days</td>`;
-    tbody.appendChild(row);
-  });
-
-  document.getElementById('kyc-verify-btn').addEventListener('click', () => {
-    document.getElementById('kyc-form').style.display = 'block';
-  });
-  document.getElementById('submit-kyc-btn').addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('kyc-status').textContent = 'Pending Review';
-    alert('KYC submitted for review');
-  });
-</script>
-
-</body>
-</html>
+      <!-- Transactions Table -->
+      <section class="m-4 bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-semibold mb-4">Recent Transactions</h2>
+        <table class="min-w-full">
+          <thead>
+            <tr>
+              <th class="px-4 py-2">Date</th>
+              <th class="px-4 py-2">Type</th>
+              <th class="px-4 py-2">Amount</th>
+              <th class="px-4 py-2">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
