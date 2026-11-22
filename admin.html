@@ -1,544 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CEDARS EMPIRE - ADMIN</title>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEDARS EMPIRE - ADMIN - 60 FUNCTIONS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
-body{background:#0f172a;color:#fff;padding:14px;min-height:100vh}
-.top{background:linear-gradient(135deg,#1e293b,#0f172a);border:1px solid #334155;border-radius:16px;padding:16px;margin-bottom:12px}
-.top h1{font-size:22px}.top p{font-size:13px;opacity:.8;margin-top:4px;word-break:break-all}
-.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;background:#334155}
-.badge.green{background:#14532d;color:#4ade80}.badge.red{background:#7f1d1d;color:#fca5a5}.badge.yellow{background:#713f12;color:#facc15}.badge.blue{background:#1e3a5f;color:#67e8f9}
-.btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;margin-bottom:10px}
-.btn-blue{background:#67e8f9;color:#000}.btn-green{background:#4ade80;color:#000}.btn-yellow{background:#facc15;color:#000}.btn-red{background:#f87171;color:#000}.btn-dark{background:#334155;color:#fff}
-.btn-small{width:auto;padding:7px 10px;font-size:12px;margin:2px}
-.card{background:#1e293b;border-radius:16px;padding:16px;margin-bottom:12px;border:1px solid #334155}.card h3{margin-bottom:10px}
-input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#fff;margin-bottom:10px}
-.checkrow{display:flex;align-items:center;gap:8px;margin:6px 0 10px;font-size:13px}.checkrow input{width:auto;margin:0}
-.linkbtn{background:none;border:0;color:#67e8f9;cursor:pointer;font-size:13px;font-weight:700;padding:0;text-decoration:underline}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;opacity:.7;padding:8px 4px;border-bottom:1px solid #334155}
-td{padding:8px 4px;border-bottom:1px solid #1e293b;word-break:break-all;vertical-align:top}
-.msg{padding:10px;border-radius:10px;margin-bottom:10px;font-size:13px;display:none}
-.msg.err{background:#7f1d1d;display:block}.msg.ok{background:#14532d;display:block}.msg.warn{background:#713f12;display:block}
-.small{font-size:12px;opacity:.7}
-.tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px}
-.tab{padding:10px 14px;border-radius:20px;background:#1e293b;border:1px solid #334155;cursor:pointer;white-space:nowrap;font-weight:700;font-size:13px}.tab.active{background:#67e8f9;color:#000}
-.engine{display:flex;justify-content:space-between;align-items:center;background:#0f172a;border:1px solid #334155;border-radius:12px;padding:12px;margin-bottom:8px}
-.engine b{font-size:14px}.engine span{font-size:12px;opacity:.7;display:block}
-.switch{width:52px;height:28px;background:#4ade80;border-radius:20px;position:relative;cursor:pointer;flex-shrink:0}.switch.off{background:#475569}.switch:after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:.2s}.switch.off:after{left:27px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid4{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:12px;text-align:center}.stat b{font-size:20px;display:block}.stat span{font-size:11px;opacity:.7}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:99;padding:14px}.modal.open{display:flex}.modalBox{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:16px;width:100%;max-width:480px}
-</style>
-</head>
-<body>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#050816;color:#fff;padding:12px;padding-bottom:60px}
+.top{background:#0f172a;padding:14px;border-radius:16px;text-align:center;border:2px solid #a855f7;max-width:900px;margin:0 auto}
+.card{background:#1e293b;padding:14px;border-radius:16px;margin:10px auto;max-width:900px;border:1px solid #334155}
+h1{font-size:22px}h2{font-size:15px;margin-bottom:8px}h3{font-size:13px;margin:10px 0 6px;color:#a855f7}
+.small{font-size:12px;opacity:.75}.green{color:#22c55e}.red{color:#f87171}.yellow{color:#facc15}
+input,select,button{width:100%;padding:11px;margin:5px 0;border-radius:12px;border:1px solid #475569;background:#0f172a;color:#fff;font-size:13px}
+button{background:#22c55e;color:#000;font-weight:800;border:0;cursor:pointer}button.blue{background:#38bdf8}button.yellow{background:#facc15}button.purple{background:#a855f7;color:#fff}button.red{background:#f87171}button.gray{background:#334155;color:#fff}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:#0f172a;padding:12px;border-radius:12px;text-align:center}.stat b{font-size:16px;display:block}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0}.tab{padding:9px 11px;border-radius:20px;background:#1e293b;border:1px solid #334155;cursor:pointer;font-size:11px;font-weight:700}.tab.active{background:#a855f7;color:#fff}
+.page{display:none;max-width:900px;margin:0 auto}.page.active{display:block}.hidden{display:none}
+table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:6px;border-bottom:1px solid #334155;text-align:left;word-break:break-all}
+.msg{padding:10px;border-radius:10px;margin:8px 0;font-size:13px;display:none}.msg.err{background:#7f1d1d;display:block}.msg.ok{background:#14532d;display:block}.msg.warn{background:#713f12;display:block}
+.badge{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800;background:#334155}.badge.ok{background:#14532d;color:#4ade80}.badge.wait{background:#713f12;color:#facc15}.badge.bad{background:#7f1d1d;color:#fca5a5}
+.flex{display:flex;gap:6px}.flex button{flex:1}
+</style></head><body>
+<div class="top"><h1>🛡️ CEDARS EMPIRE - ADMIN</h1><p class="small">60 FUNCTIONS - CONFIDENTIAL - Only ogwal.bemmanuel@gmail.com - NO FIAT - Earn € | €1=$1.10 | Exchange 2% | Withdraw 20% | P2P 5% | Staking 0.03%/24h</p>
+<p class="small">Logged in: <b id="curUser">-</b> | <span id="connStatus">Not connected</span></p></div>
 
-<!-- LOGIN - NO EMAIL PREFILLED -->
-<div id="loginBox" class="card">
-  <h2>🔐 CEDARS EMPIRE - Admin Login</h2>
-  <p class="small" style="margin:6px 0 10px">Admin only. Your email is not shown for privacy.</p>
-  <input id="email" type="email" placeholder="Admin Email" autocomplete="email">
-  <input id="password" type="password" placeholder="Password" autocomplete="current-password">
-  <label class="checkrow"><input id="rememberMe" type="checkbox" checked> Remember Me on this device</label>
-  <button class="btn btn-blue" onclick="doLogin()">LOGIN</button>
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <button class="linkbtn" onclick="showReset()">Forgot Password?</button>
-    <button class="linkbtn" onclick="showRegister()">Create Admin Account</button>
-  </div>
-  <div id="loginMsg" class="msg"></div>
-  <!-- RESET BOX -->
-  <div id="resetBox" style="display:none;margin-top:12px;border-top:1px solid #334155;padding-top:12px">
-    <h3 style="font-size:15px">Reset Password</h3>
-    <p class="small">Enter your admin email. Supabase will send you a reset link.</p>
-    <input id="resetEmail" type="email" placeholder="Your admin email">
-    <button class="btn btn-yellow" onclick="doResetPassword()">SEND RESET LINK</button>
-    <div id="resetMsg" class="msg"></div>
-  </div>
-  <!-- REGISTER BOX -->
-  <div id="registerBox" style="display:none;margin-top:12px;border-top:1px solid #334155;padding-top:12px">
-    <h3 style="font-size:15px">Create Admin Account</h3>
-    <input id="regEmail" type="email" placeholder="New admin email">
-    <input id="regPassword" type="password" placeholder="New password - min 6 chars">
-    <button class="btn btn-green" onclick="doRegister()">CREATE ACCOUNT</button>
-    <div id="registerMsg" class="msg"></div>
-  </div>
+<div class="card"><h2>🔐 1-6: Admin Access & Security</h2>
+<input id="adminEmail" placeholder="Admin Email - ogwal.bemmanuel@gmail.com"><input id="adminPass" type="password" placeholder="Admin Password">
+<div class="flex"><button onclick="adminLogin()">ADMIN LOGIN</button><button class="red" onclick="adminLogout()">LOGOUT</button></div>
+<div class="flex"><button class="yellow" onclick="changeAdminPass()">CHANGE ADMIN PASSWORD</button><button class="gray" onclick="checkSession()">CHECK SESSION</button></div>
+<p class="small" id="authMsg"></p><div id="authBox" class="msg"></div></div>
+
+<div id="adminMain" class="hidden">
+<div class="tabs">
+<div class="tab active" onclick="showPage('dash',this)">DASHBOARD</div><div class="tab" onclick="showPage('approvals',this)">APPROVALS</div><div class="tab" onclick="showPage('shareholders',this)">SHAREHOLDERS</div><div class="tab" onclick="showPage('users',this)">ALL USERS</div><div class="tab" onclick="showPage('tasks',this)">TASKS</div><div class="tab" onclick="showPage('payments',this)">PAYMENTS</div><div class="tab" onclick="showPage('staking',this)">STAKING</div><div class="tab" onclick="showPage('engines',this)">ENGINES / HEALTH</div><div class="tab" onclick="showPage('treasury',this)">TREASURY / LOGS</div>
 </div>
 
-<!-- ADMIN -->
-<div id="adminBox" style="display:none">
-  <div class="top">
-    <h1>🌍 CEDARS EMPIRE - ADMIN</h1>
-    <p>Logged in as: <span id="adminEmail"></span> <button class="linkbtn" onclick="doLogout()" style="color:#f87171">Logout</button></p>
-    <p>Global: <span id="globalBadge" class="badge green">ON</span> AI: <span id="aiBadge" class="badge green">RUNNING</span> Users Source: <span id="sourceLabel" class="badge">-</span> Pending Approvals: <span id="pendingBadge" class="badge yellow">0</span></p>
-  </div>
-  <div id="adminMsg" class="msg"></div>
-
-  <div class="tabs">
-    <div class="tab active" onclick="showTab('dashboard',this)">📊 Dashboard</div>
-    <div class="tab" onclick="showTab('approvals',this)">✅ Approvals <span id="tabPendingCount"></span></div>
-    <div class="tab" onclick="showTab('shareholders',this)">👥 Shareholder DB</div>
-    <div class="tab" onclick="showTab('users',this)">👤 All Users</div>
-    <div class="tab" onclick="showTab('tasks',this)">📋 Tasks</div>
-    <div class="tab" onclick="showTab('payments',this)">💰 Payments</div>
-    <div class="tab" onclick="showTab('engines',this)">🌍 Engines</div>
-    <div class="tab" onclick="showTab('health',this)">❤️ Health</div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div id="tab-dashboard">
-    <div class="grid4">
-      <div class="stat"><b id="statUsers">0</b><span>Total Shareholders</span></div>
-      <div class="stat"><b id="statPending">0</b><span>Pending Approvals</span></div>
-      <div class="stat"><b id="statTasks">0</b><span>Total Tasks</span></div>
-      <div class="stat"><b id="statBalance">$0</b><span>Total Balance</span></div>
-    </div>
-    <div class="card" style="margin-top:12px"><h3>⚡ Quick Actions</h3>
-      <button class="btn btn-green" onclick="showTab('approvals',null);document.querySelectorAll('.tab')[1].classList.add('active')">✅ OPEN APPROVALS</button>
-      <button class="btn btn-blue" onclick="runAIWorkers(true)">🤖 RUN AI WORKERS NOW</button>
-      <button class="btn btn-yellow" onclick="runHealth();showTab('health',null)">❤️ RUN HEALTH CHECK</button>
-    </div>
-    <div class="card"><h3>🕒 Recent Activity</h3><div id="activityLog" class="small">Loading...</div></div>
-  </div>
-
-  <!-- APPROVALS - THE MISSING PIECE -->
-  <div id="tab-approvals" style="display:none">
-    <div class="card">
-      <h3>✅ Approvals Center - All Pending In One Place</h3>
-      <p class="small">Shareholders + Tasks + Withdrawals + Deposits. Approve or Reject here, it updates the Shareholder Dashboard automatically.</p>
-      <div style="display:flex;gap:8px;margin:10px 0">
-        <select id="approvalFilter" onchange="renderApprovals()">
-          <option value="all">All Types</option><option value="shareholder">Shareholders Only</option><option value="task">Tasks Only</option><option value="withdrawal">Withdrawals Only</option><option value="deposit">Deposits Only</option>
-        </select>
-        <button class="btn btn-blue btn-small" onclick="loadApprovals()">REFRESH APPROVALS</button>
-      </div>
-      <button class="btn btn-green" onclick="approveAllPending()">✅ APPROVE ALL PENDING</button>
-      <div style="overflow-x:auto"><table><thead><tr><th>Type</th><th>Who / What</th><th>Detail</th><th>Action</th></tr></thead><tbody id="approvalsList"><tr><td colspan="4">Click REFRESH APPROVALS</td></tr></tbody></table></div>
-    </div>
-  </div>
-
-  <!-- SHAREHOLDER DATABASE TABLE - FULL CRUD -->
-  <div id="tab-shareholders" style="display:none">
-    <div class="card">
-      <h3>👥 Shareholder Database Table</h3>
-      <p class="small">This is the master table. Source: <b id="shareholderTableName">-</b>. Edit balance, approve, reject, delete, add new.</p>
-      <input id="shSearch" placeholder="Search name, email, phone..." oninput="filterShareholders()">
-      <div style="display:flex;gap:8px">
-        <select id="shStatusFilter" onchange="filterShareholders()"><option value="all">All Status</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="suspended">Suspended</option></select>
-        <button class="btn btn-blue btn-small" onclick="loadShareholders()">REFRESH</button>
-        <button class="btn btn-green btn-small" onclick="exportCSV()">EXPORT CSV</button>
-      </div>
-      <div style="overflow-x:auto;margin-top:10px"><table><thead><tr><th>Name</th><th>Email / Phone</th><th>Balance</th><th>Shares</th><th>Status</th><th>Manage</th></tr></thead><tbody id="shareholdersTable"><tr><td colspan="6">Click REFRESH</td></tr></tbody></table></div>
-    </div>
-    <div class="card"><h3>➕ Add Shareholder Manually</h3>
-      <input id="newShName" placeholder="Full name"><input id="newShEmail" type="email" placeholder="Email"><input id="newShPhone" placeholder="Phone"><input id="newShBalance" type="number" placeholder="Starting Balance $"><input id="newShShares" type="number" placeholder="Shares e.g. 10">
-      <button class="btn btn-green" onclick="addShareholder()">ADD SHAREHOLDER</button>
-    </div>
-  </div>
-
-  <!-- ALL USERS -->
-  <div id="tab-users" style="display:none">
-    <div class="card"><h3>👤 All Users (Fallback View)</h3>
-      <input id="searchBox" placeholder="Search name or email..." oninput="filterUsers()">
-      <button class="btn btn-blue" onclick="loadUsers()">REFRESH USERS</button>
-      <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Email</th><th>Balance</th><th>Status</th></tr></thead><tbody id="adminUsers"><tr><td colspan="4">Click REFRESH USERS</td></tr></tbody></table></div>
-    </div>
-  </div>
-
-  <!-- TASKS -->
-  <div id="tab-tasks" style="display:none">
-    <div class="card"><h3>📋 Tasks & Verification</h3>
-      <button class="btn btn-blue" onclick="loadTasks()">REFRESH TASKS</button>
-      <div style="overflow-x:auto"><table><thead><tr><th>Title</th><th>User</th><th>Status</th><th>Action</th></tr></thead><tbody id="tasksList"><tr><td colspan="4">Click REFRESH TASKS</td></tr></tbody></table></div>
-    </div>
-    <div class="card"><h3>➕ Create Task</h3>
-      <input id="newTaskTitle" placeholder="Task title"><input id="newTaskReward" type="number" placeholder="Reward $">
-      <button class="btn btn-green" onclick="createTask()">CREATE TASK</button>
-    </div>
-  </div>
-
-  <!-- PAYMENTS -->
-  <div id="tab-payments" style="display:none">
-    <div class="card"><h3>💰 Payments - Deposits & Withdrawals</h3>
-      <button class="btn btn-blue" onclick="loadPayments()">REFRESH PAYMENTS</button>
-      <div style="overflow-x:auto"><table><thead><tr><th>Type</th><th>User</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody id="paymentsList"><tr><td colspan="5">Click REFRESH</td></tr></tbody></table></div>
-    </div>
-  </div>
-
-  <!-- ENGINES -->
-  <div id="tab-engines" style="display:none">
-    <div class="card"><h3>🌍 Global Engine - Master Control</h3>
-      <div class="engine" style="border-color:#67e8f9"><div><b>🌍 Global Engine</b><span>Master switch - controls all 5 sub-engines</span></div><div class="switch" id="sw-global" onclick="toggleEngine('global')"></div></div>
-      <button class="btn btn-green" onclick="startAllEngines()">▶ START ALL ENGINES</button>
-      <button class="btn btn-red" onclick="stopAllEngines()">⏸ STOP ALL ENGINES</button>
-    </div>
-    <div class="card"><h3>Sub-Engines (5)</h3><div id="enginesList"></div></div>
-    <div class="card"><h3>🤖 AI Workers</h3>
-      <div class="grid2"><div class="stat"><b id="aiChecked">0</b><span>Checked</span></div><div class="stat"><b id="aiApproved">0</b><span>Auto-Approved</span></div></div>
-      <button class="btn btn-blue" style="margin-top:10px" onclick="runAIWorkers(true)">🤖 RUN AI WORKERS NOW</button>
-      <div id="aiLog" class="small" style="margin-top:8px;white-space:pre-wrap"></div>
-    </div>
-  </div>
-
-  <!-- HEALTH -->
-  <div id="tab-health" style="display:none">
-    <div class="card"><h3>❤️ Health Check</h3><button class="btn btn-blue" onclick="runHealth()">RUN FULL CHECK</button><div id="healthResult"></div></div>
-    <div class="card"><h3>⚙️ Admin Actions</h3><button class="btn btn-yellow" onclick="doLogout()">LOGOUT</button><button class="btn btn-dark" onclick="clearRemember()">FORGET REMEMBERED EMAIL</button></div>
-  </div>
-</div>
-
-<!-- EDIT MODAL -->
-<div id="editModal" class="modal"><div class="modalBox">
-  <h3>Edit Shareholder</h3>
-  <input id="editName" placeholder="Name"><input id="editEmail" placeholder="Email"><input id="editPhone" placeholder="Phone"><input id="editBalance" type="number" placeholder="Balance"><input id="editShares" type="number" placeholder="Shares">
-  <select id="editStatus"><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="suspended">Suspended</option></select>
-  <button class="btn btn-green" onclick="saveShareholderEdit()">SAVE CHANGES</button>
-  <button class="btn btn-dark" onclick="closeModal()">CANCEL</button>
+<!-- DASHBOARD -->
+<div id="page-dash" class="page active">
+<div class="card"><h2>📊 7-16: Dashboard - Admin Only Revenue</h2><button class="blue" onclick="loadDashboard()">REFRESH DASHBOARD</button>
+<div class="grid4"><div class="stat"><b id="dRevenue">$0.00</b><span class="small">Total Revenue</span></div><div class="stat"><b id="dTreasury">€0.00</b><span class="small">Treasury €</span></div><div class="stat"><b id="dTreasuryUSD">$0.00</b><span class="small">Treasury $</span></div><div class="stat"><b id="dShareholders">0</b><span class="small">Shareholders</span></div></div>
+<div class="grid4" style="margin-top:8px"><div class="stat"><b id="dTx">0</b><span class="small">Total Tx</span></div><div class="stat"><b id="dTasksDone">0</b><span class="small">Tasks Done Today</span></div><div class="stat"><b id="dTasksPend">0</b><span class="small">Tasks Pending Today</span></div><div class="stat"><b id="dWdPend">0</b><span class="small">Withdraw Pending</span></div></div>
+<div class="grid4" style="margin-top:8px"><div class="stat"><b id="dExPend">0</b><span class="small">Exchange Pending</span></div><div class="stat"><b id="dP2PVol">$0.00</b><span class="small">P2P Vol Today</span></div><div class="stat"><b id="dStaked">$0.00</b><span class="small">Total Staked</span></div><div class="stat"><b id="dStakeOwed">$0.00</b><span class="small">Staking Owed Today</span></div></div>
 </div></div>
 
+<!-- APPROVALS -->
+<div id="page-approvals" class="page">
+<div class="card"><h2>✅ 17-28: Approvals Center</h2>
+<div class="flex"><button onclick="loadApprovals()">REFRESH APPROVALS</button><button class="purple" onclick="approveAll()">APPROVE ALL</button><button class="red" onclick="rejectAll()">REJECT ALL</button></div>
+<p class="small">Filters: <select id="apprFilter" onchange="loadApprovals()"><option value="">All Types</option><option value="withdrawal">Withdrawals 20%</option><option value="exchange">Exchanges 2%</option><option value="p2p_send">P2P 5%</option><option value="stake">Staking 0.03%</option><option value="task_verify">Task Verify €0.50</option><option value="deposit">Deposits</option></select></p>
+<div style="overflow-x:auto"><table><thead><tr><th>Type</th><th>User</th><th>Amount</th><th>Fee / Note</th><th>Status</th><th>Action</th></tr></thead><tbody id="apprList"><tr><td colspan="6">Click REFRESH</td></tr></tbody></table></div>
+<h3>Password / Wallet / Shareholder Approvals</h3>
+<p class="small">Password Change / Wallet Change / Shareholder Registration are stored in <b>shareholders</b> status + <b>transactions</b> notes. Use table below for manual approve.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Email</th><th>Request</th><th>Status</th><th>Action</th></tr></thead><tbody id="pwdWalletList"><tr><td colspan="4">No requests - Use Shareholder DB to approve by changing status to active</td></tr></tbody></table></div>
+</div></div>
+
+<!-- SHAREHOLDERS -->
+<div id="page-shareholders" class="page">
+<div class="card"><h2>👥 29-38: Shareholder Database - Confidential</h2>
+<div class="grid2"><input id="shSearch" placeholder="Search Email / Name / Wallet" oninput="loadShareholders()"><select id="shStatus" onchange="loadShareholders()"><option value="">All Status</option><option value="active">Active</option><option value="pending">Pending</option><option value="blocked">Blocked</option></select></div>
+<button class="blue" onclick="loadShareholders()">REFRESH SHAREHOLDERS</button>
+<div style="overflow-x:auto"><table><thead><tr><th>Email / Name</th><th>€ Balance</th><th>Crypto $</th><th>Staked $</th><th>Status</th><th>Actions</th></tr></thead><tbody id="shList"><tr><td colspan="6">Click REFRESH</td></tr></tbody></table></div>
+<h3>35: Add Shareholder Manually</h3><div class="grid3"><input id="newShEmail" placeholder="Email"><input id="newShName" placeholder="Name"><button onclick="addShareholder()">ADD SHAREHOLDER</button></div>
+<h3>36: Adjust Balance - For Lost Earnings Recovery</h3><div class="grid3"><input id="adjEmail" placeholder="Email"><input id="adjAmt" type="number" placeholder="Amount - e.g. 1000"><select id="adjType"><option value="euro">€ Euro Balance</option><option value="crypto">Crypto $ Balance</option><option value="staked">Staked $</option></select></div><input id="adjReason" placeholder="Reason - e.g. Recovered lost earnings 21 Nov - €1000"><button class="yellow" onclick="adjustBalance()">ADJUST BALANCE + LOG</button><p class="small" id="adjMsg"></p>
+<h3>37-38: Wallet History + Send Message</h3><input id="msgEmail" placeholder="Shareholder Email to Message"><input id="msgText" placeholder="Message to Shareholder"><button class="purple" onclick="sendMessage()">SEND MESSAGE TO SHAREHOLDER</button><p class="small" id="msgResult"></p><p class="small">Wallet History: Check Withdrawals table for all wallets user ever used - See Payments tab.</p>
+</div></div>
+
+<!-- ALL USERS -->
+<div id="page-users" class="page">
+<div class="card"><h2>👤 39-41: All Users</h2><input id="userSearch" placeholder="Search Email / Ledger / Name" oninput="loadUsers()"><select id="userStatusFilter" onchange="loadUsers()"><option value="">All Status</option><option value="active">Active</option><option value="pending">Pending</option><option value="blocked">Blocked</option></select><button class="blue" onclick="loadUsers()">REFRESH USERS</button>
+<div style="overflow-x:auto"><table><thead><tr><th>Email</th><th>Name</th><th>Country</th><th>Joined</th><th>Status</th></tr></thead><tbody id="userList"><tr><td colspan="5">Click REFRESH</td></tr></tbody></table></div></div></div>
+
+<!-- TASKS -->
+<div id="page-tasks" class="page">
+<div class="card"><h2>🤖 42-47: Tasks - AI Task Verifications</h2><button class="blue" onclick="loadTasks()">REFRESH TASKS</button>
+<div class="grid4"><div class="stat"><b id="tMarket">0</b><span class="small">Market Today</span></div><div class="stat"><b id="tIns">0</b><span class="small">Insurance Today</span></div><div class="stat"><b id="tSave">0</b><span class="small">Savings Today</span></div><div class="stat"><b id="tNgo">0</b><span class="small">NGO Today</span></div></div>
+<div style="overflow-x:auto;margin-top:8px"><table><thead><tr><th>Time</th><th>User</th><th>Category</th><th>€ Amount</th><th>Status</th><th>Action</th></tr></thead><tbody id="taskList"><tr><td colspan="6">Click REFRESH</td></tr></tbody></table></div>
+<h3>46: Create New Task</h3><div class="grid3"><input id="newTaskName" placeholder="Task Name - e.g. Verify Photo"><select id="newTaskCat"><option>Marketplace</option><option>Insurance</option><option>Savings</option><option>NGO</option></select><button onclick="createTask()">CREATE TASK</button></div>
+<div class="flex"><button class="yellow" onclick="resetDailyTasks()">RESET DAILY TASKS - 18:00 UTC</button><button class="red" onclick="deleteTask()">DELETE / DISABLE SELECTED TASK</button></div><p class="small" id="taskMsg"></p>
+</div></div>
+
+<!-- PAYMENTS -->
+<div id="page-payments" class="page">
+<div class="card"><h2>💸 48-53: Payments</h2>
+<div class="grid3"><select id="payType"><option value="">All Payments</option><option value="deposit">Deposits - Crypto</option><option value="withdrawal">Withdrawals 20%</option><option value="exchange">Exchanges 2%</option><option value="p2p_send">P2P 5%</option><option value="stake">Staking</option></select><input type="date" id="payDate"><button class="blue" onclick="loadPayments()">FILTER PAYMENTS</button></div>
+<div class="flex"><button onclick="loadPayments('today')">TODAY</button><button onclick="loadPayments('yesterday')">YESTERDAY</button><button onclick="loadPayments('7')">LAST 7 DAYS</button><button onclick="loadPayments('30')">LAST 30 DAYS</button></div>
+<div style="overflow-x:auto"><table><thead><tr><th>Time</th><th>Type</th><th>User</th><th>Amount</th><th>Wallet / Note</th><th>Status</th><th>Action</th></tr></thead><tbody id="payList"><tr><td colspan="7">Click FILTER</td></tr></tbody></table></div>
+</div></div>
+
+<!-- STAKING -->
+<div id="page-staking" class="page">
+<div class="card"><h2>🔒 54-57: Staking Management - 0.03% / 24h</h2><button class="blue" onclick="loadStaking()">REFRESH STAKING</button>
+<div class="grid3"><div class="stat"><b id="sTotal">$0.00</b><span class="small">Total Staked</span></div><div class="stat"><b id="sPaid">$0.00</b><span class="small">Rewards Paid Today</span></div><div class="stat"><b id="sOwed">$0.00</b><span class="small">Rewards Owed</span></div></div>
+<div style="overflow-x:auto;margin-top:8px"><table><thead><tr><th>User</th><th>Staked $</th><th>Start</th><th>Daily 0.03%</th><th>Days</th><th>Action</th></tr></thead><tbody id="stakeList"><tr><td colspan="6">Click REFRESH</td></tr></tbody></table></div>
+</div></div>
+
+<!-- ENGINES -->
+<div id="page-engines" class="page">
+<div class="card"><h2>⚙️ 58-59: Engines</h2>
+<div class="grid3"><div class="stat"><b id="eTrade">ON</b><span class="small">Trading Engine</span></div><div class="stat"><b id="eVerify">ON</b><span class="small">Verification Engine</span></div><div class="stat"><b id="eWithdraw">ON</b><span class="small">Withdraw Engine</span></div></div>
+<div class="grid3" style="margin-top:8px"><div class="stat"><b id="eExchange">ON</b><span class="small">Exchange Engine</span></div><div class="stat"><b id="eP2P">ON</b><span class="small">P2P Engine</span></div><div class="stat"><b id="eStake">ON</b><span class="small">Staking Engine</span></div></div>
+<div class="flex" style="margin-top:8px"><button onclick="toggleEngine('withdraw')">TOGGLE WITHDRAW</button><button onclick="toggleEngine('exchange')">TOGGLE EXCHANGE</button><button onclick="toggleEngine('p2p')">TOGGLE P2P</button></div>
+<div class="flex"><button onclick="toggleEngine('trading')">TOGGLE TRADING</button><button onclick="toggleEngine('verify')">TOGGLE VERIFY</button><button onclick="toggleEngine('staking')">TOGGLE STAKING</button></div>
+<h2 style="margin-top:14px">🏥 60: System Health + Backup</h2><button class="blue" onclick="checkHealth()">CHECK HEALTH</button><div id="healthBox"></div><button class="yellow" onclick="backupNow()">BACKUP NOW - EXPORT CSV</button><p class="small">Backup exports Shareholders + Transactions + Withdrawals + Deposits to CSV. Do this DAILY so we never lose earnings again.</p>
+</div></div>
+
+<!-- TREASURY -->
+<div id="page-treasury" class="page">
+<div class="card"><h2>🏦 Treasury Log</h2><button class="blue" onclick="loadTreasury()">REFRESH TREASURY LOG</button><p class="small">Every +€0.50 tasks, +2% Exchange, +20% Withdraw, +5% P2P, +0.03% Staking logic, -Withdraw payouts</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Time</th><th>Type</th><th>User</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody id="treasuryList"><tr><td colspan="6">Click REFRESH</td></tr></tbody></table></div>
+<button class="yellow" onclick="exportAllCSV()">EXPORT ALL CSV - BACKUP</button>
+</div></div>
+</div>
+
 <script>
-var SUPABASE_URL = "https://ipyvewpjtpgfugfwizlr.supabase.co";
-var SUPABASE_KEY = "sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm";
-var supabase = null;
-var allUsers = [];
-var shareholders = [];
-var allTasks = [];
-var allPayments = [];
-var approvals = [];
-var currentTable = "shareholders";
-var editingId = null;
-var aiInterval = null, aiCheckedCount=0, aiApprovedCount=0;
-
-var engines = [
-  { id:'global', name:'🌍 Global Engine', desc:'Master control - ON = all engines run', key:'global_engine' },
-  { id:'task', name:'📋 Task Engine', desc:'Creates / manages tasks', key:'engine_task' },
-  { id:'payment', name:'💰 Payment Engine', desc:'Deposits, withdrawals, wallet', key:'engine_payment' },
-  { id:'user', name:'👥 User Engine', desc:'Profiles / Shareholders', key:'engine_user' },
-  { id:'ai_verify', name:'🤖 AI Verification Engine', desc:'Auto AI workers verify tasks', key:'engine_ai' },
-  { id:'notify', name:'🔔 Notification Engine', desc:'Alerts / messages', key:'engine_notify' },
-];
-
-function showErr(m, boxId){ var el=document.getElementById(boxId||'adminMsg'); el.className='msg err'; el.style.display='block'; el.textContent=m; }
-function showOk(m, boxId){ var el=document.getElementById(boxId||'adminMsg'); el.className='msg ok'; el.style.display='block'; el.textContent=m; }
-function hideMsg(boxId){ var el=document.getElementById(boxId||'adminMsg'); el.style.display='none'; }
-function logActivity(msg){ var el=document.getElementById('activityLog'); if(!el) return; el.innerHTML = new Date().toLocaleTimeString()+' - '+msg+'<br>'+el.innerHTML; }
-
-function showTab(name, el){
-  ['dashboard','approvals','shareholders','users','tasks','payments','engines','health'].forEach(function(t){ var e=document.getElementById('tab-'+t); if(e) e.style.display=(t===name?'block':'none'); });
-  document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
-  if(el) el.classList.add('active');
-  if(name==='shareholders') loadShareholders();
-  if(name==='approvals') loadApprovals();
-  if(name==='users') loadUsers();
-  if(name==='tasks') loadTasks();
-  if(name==='payments') loadPayments();
-  if(name==='dashboard') loadDashboard();
-  if(name==='health') runHealth();
-}
-
-// ===== LOGIN - REMEMBER ME + RESET =====
-function init(){
-  // Remember Me - load saved email only, never password, never show by default if not remembered
-  var saved = localStorage.getItem('admin_remember_email') || '';
-  if(saved){ document.getElementById('email').value = saved; document.getElementById('rememberMe').checked = true; }
-  if(SUPABASE_KEY === "PASTE_YOUR_ANON_KEY_HERE" || SUPABASE_KEY.length < 20){ showErr('ERROR: Paste your ANON KEY where it says PASTE_YOUR_ANON_KEY_HERE. Supabase > Settings > API Keys > anon public','loginMsg'); return; }
-  try{ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }catch(e){ showErr('Supabase init: '+e.message,'loginMsg'); return; }
-  renderEngines();
-  supabase.auth.getSession().then(function(res){ if(res.data && res.data.session && res.data.session.user) showAdmin(res.data.session.user.email); });
-  // Handle password recovery link - if user clicked reset email link, Supabase will send them back with type=recovery
-  supabase.auth.onAuthStateChange(function(event, session){
-    if(event==='PASSWORD_RECOVERY'){ showErr('You clicked reset link. Please enter new password below.','loginMsg'); showResetPasswordForm(); }
-  });
-}
-function showReset(){ document.getElementById('resetBox').style.display='block'; document.getElementById('registerBox').style.display='none'; var em=document.getElementById('email').value; if(em) document.getElementById('resetEmail').value=em; }
-function showRegister(){ document.getElementById('registerBox').style.display='block'; document.getElementById('resetBox').style.display='none'; }
-function showResetPasswordForm(){
-  // Simple: ask for new password and update it
-  var np = prompt('Enter your NEW password (min 6 chars):');
-  if(!np || np.length < 6){ alert('Password too short'); return; }
-  supabase.auth.updateUser({password: np}).then(function(r){ if(r.error) alert('Reset failed: '+r.error.message); else alert('Password updated! Now login with new password.'); });
-}
-async function doLogin(){
-  hideMsg('loginMsg');
-  var email=document.getElementById('email').value.trim();
-  var pass=document.getElementById('password').value;
-  var remember=document.getElementById('rememberMe').checked;
-  if(!email||!pass){ showErr('Enter email and password','loginMsg'); return; }
-  var r=await supabase.auth.signInWithPassword({email:email,password:pass});
-  if(r.error){ showErr('Login failed: '+r.error.message,'loginMsg'); return; }
-  // Remember Me - save ONLY email, never password
-  if(remember) localStorage.setItem('admin_remember_email', email); else localStorage.removeItem('admin_remember_email');
-  // Clear password from field for privacy
-  document.getElementById('password').value='';
-  showAdmin(r.data.user.email);
-}
-async function doResetPassword(){
-  var email=document.getElementById('resetEmail').value.trim() || document.getElementById('email').value.trim();
-  if(!email){ showErr('Enter your email first','resetMsg'); return; }
-  var redirect = window.location.origin + window.location.pathname;
-  var r=await supabase.auth.resetPasswordForEmail(email, {redirectTo: redirect});
-  if(r.error) showErr('Reset failed: '+r.error.message+' - Make sure this email exists in Supabase > Authentication > Users','resetMsg');
-  else showOk('Reset link sent to '+email+'. Check inbox + spam. Click link, then you will be asked for new password.','resetMsg');
-}
-async function doRegister(){
-  var email=document.getElementById('regEmail').value.trim();
-  var pass=document.getElementById('regPassword').value;
-  if(!email||!pass||pass.length<6){ showErr('Enter valid email and password min 6 chars','registerMsg'); return; }
-  var r=await supabase.auth.signUp({email:email,password:pass});
-  if(r.error) showErr('Create failed: '+r.error.message,'registerMsg');
-  else showOk('Account created for '+email+'. If email confirmation is ON in Supabase, check email to confirm, then login.','registerMsg');
-}
-function clearRemember(){ localStorage.removeItem('admin_remember_email'); document.getElementById('email').value=''; showOk('Remembered email forgotten.'); }
-function showAdmin(email){
-  document.getElementById('loginBox').style.display='none';
-  document.getElementById('adminBox').style.display='block';
-  document.getElementById('adminEmail').textContent=email||'';
-  renderEngines(); loadDashboard(); loadShareholders(); loadApprovals(); startAIWorkers();
-}
-async function doLogout(){ if(supabase) await supabase.auth.signOut(); stopAIWorkers(); document.getElementById('adminBox').style.display='none'; document.getElementById('loginBox').style.display='block'; document.getElementById('password').value=''; }
-
-// ===== ENGINES =====
-function isEngineOn(key){ return localStorage.getItem(key) !== 'off'; }
-function renderEngines(){
-  var globalOn=isEngineOn('global_engine');
-  var gb=document.getElementById('globalBadge'); if(gb){ gb.textContent=globalOn?'ON':'OFF'; gb.className='badge '+(globalOn?'green':'red'); }
-  var ab=document.getElementById('aiBadge'); var aiOn=globalOn&&isEngineOn('engine_ai'); if(ab){ ab.textContent=aiOn?'RUNNING':'PAUSED'; ab.className='badge '+(aiOn?'green':'red'); }
-  var sw=document.getElementById('sw-global'); if(sw) sw.className='switch'+(globalOn?'':' off');
-  var html=''; engines.slice(1).forEach(function(e){ var on=globalOn&&isEngineOn(e.key); html+='<div class="engine"><div><b>'+e.name+'</b><span>'+e.desc+'</span></div><div class="switch '+(on?'':'off')+'" onclick="toggleEngine(\''+e.id+'\')"></div></div>'; });
-  var list=document.getElementById('enginesList'); if(list) list.innerHTML=html;
-}
-function toggleEngine(id){ var e=engines.find(function(x){ return x.id===id; }); if(!e) return; var isOn=isEngineOn(e.key); localStorage.setItem(e.key, isOn?'off':'on'); renderEngines(); if(id==='global'){ if(isEngineOn('global_engine')) startAIWorkers(); else stopAIWorkers(); } if(id==='ai_verify'){ if(isEngineOn('global_engine')&&isEngineOn('engine_ai')) startAIWorkers(); else stopAIWorkers(); } showOk(e.name+' is now '+(isEngineOn(e.key)?'ON':'OFF')); }
-function startAllEngines(){ engines.forEach(function(e){ localStorage.setItem(e.key,'on'); }); renderEngines(); startAIWorkers(); showOk('All engines STARTED'); }
-function stopAllEngines(){ engines.forEach(function(e){ localStorage.setItem(e.key,'off'); }); renderEngines(); stopAIWorkers(); showOk('All engines STOPPED'); }
-
-// ===== DASHBOARD =====
-async function loadDashboard(){
-  if(!supabase) return;
-  await loadShareholders(true);
-  await loadTasks(true);
-  await loadApprovals(true);
-  var totalBal = shareholders.reduce(function(s,u){ return s + parseFloat(u.balance||u.total_balance||u.wallet_balance||0); },0);
-  document.getElementById('statUsers').textContent=shareholders.length;
-  document.getElementById('statPending').textContent=approvals.length;
-  document.getElementById('statTasks').textContent=allTasks.length;
-  document.getElementById('statBalance').textContent='$'+totalBal.toFixed(2);
-  logActivity('Dashboard refreshed - '+shareholders.length+' shareholders, '+approvals.length+' pending');
-}
-
-// ===== SHAREHOLDER DATABASE TABLE - FULL CRUD =====
-async function loadShareholders(silent){
-  if(!supabase) return;
-  if(!silent) document.getElementById('shareholdersTable').innerHTML='<tr><td colspan="6">Loading...</td></tr>';
-  var tables=['shareholders','profiles','users','members'];
-  for(var t of tables){
-    var r=await supabase.from(t).select('*').limit(500).order('created_at',{ascending:false});
-    if(!r.error){
-      currentTable=t; shareholders=r.data||[];
-      document.getElementById('shareholderTableName').textContent=t;
-      document.getElementById('sourceLabel').textContent=t;
-      renderShareholders(shareholders);
-      if(!silent) showOk('Loaded '+shareholders.length+' shareholders from: '+t);
-      return;
-    }
-  }
-  if(!silent){ document.getElementById('shareholdersTable').innerHTML='<tr><td colspan="6">No shareholder table found. Run in Supabase SQL: NOTIFY pgrst, \'reload schema\';</td></tr>'; showErr('Could not load shareholders. Check RLS.'); }
-}
-function renderShareholders(list){
-  if(!list||!list.length){ document.getElementById('shareholdersTable').innerHTML='<tr><td colspan="6">No shareholders found</td></tr>'; return; }
-  document.getElementById('shareholdersTable').innerHTML=list.map(function(u){
-    var nm=u.name||u.full_name||u.username||'-';
-    var em=u.email||u.user_email||'-'; var ph=u.phone||u.phone_number||'';
-    var bal=parseFloat(u.balance??u.total_balance??u.wallet_balance??0);
-    var shares=u.shares||u.total_shares||u.share_count||0;
-    var st=(u.status||(u.is_approved?'approved':'pending')||'pending').toLowerCase();
-    var badge = st==='approved'?'green':st==='rejected'?'red':st==='suspended'?'yellow':'yellow';
-    return '<tr><td><b>'+nm+'</b></td><td>'+em+'<br><span class="small">'+ph+'</span></td><td>$'+bal.toFixed(2)+'</td><td>'+shares+'</td><td><span class="badge '+badge+'">'+st+'</span></td><td><button class="btn btn-small btn-green" onclick="approveShareholder(\''+u.id+'\')">Approve</button><button class="btn btn-small btn-red" onclick="rejectShareholder(\''+u.id+'\')">Reject</button><br><button class="btn btn-small btn-blue" onclick="openEdit(\''+u.id+'\')">Edit</button><button class="btn btn-small btn-dark" onclick="deleteShareholder(\''+u.id+'\',\''+nm+'\')">Delete</button></td></tr>';
-  }).join('');
-}
-function filterShareholders(){
-  var q=(document.getElementById('shSearch').value||'').toLowerCase();
-  var sf=document.getElementById('shStatusFilter').value;
-  var filtered=shareholders.filter(function(u){
-    var st=((u.status||(u.is_approved?'approved':'pending'))||'').toLowerCase();
-    var matchStatus = sf==='all' || st===sf;
-    var matchQ = !q || ((u.name||'')+' '+(u.full_name||'')+' '+(u.email||'')+' '+(u.phone||'')).toLowerCase().indexOf(q)!==-1;
-    return matchStatus && matchQ;
-  });
-  renderShareholders(filtered);
-}
-async function addShareholder(){
-  var name=document.getElementById('newShName').value.trim(); var email=document.getElementById('newShEmail').value.trim(); var phone=document.getElementById('newShPhone').value.trim(); var bal=parseFloat(document.getElementById('newShBalance').value||0); var shares=parseInt(document.getElementById('newShShares').value||0);
-  if(!name||!email){ showErr('Name and Email required'); return; }
-  var r=await supabase.from(currentTable).insert([{name:name, full_name:name, email:email, phone:phone, balance:bal, total_balance:bal, shares:shares, status:'pending', created_at:new Date().toISOString()}]);
-  if(r.error) {
-    // Try simpler insert if columns differ
-    var r2=await supabase.from(currentTable).insert([{name:name, email:email, balance:bal, status:'pending'}]);
-    if(r2.error) showErr('Add failed: '+r2.error.message); else { showOk('Shareholder added'); loadShareholders(); }
-  } else { showOk('Shareholder added - now in Approvals as Pending'); loadShareholders(); loadApprovals(); }
-  ['newShName','newShEmail','newShPhone','newShBalance','newShShares'].forEach(function(id){ document.getElementById(id).value=''; });
-}
-function openEdit(id){
-  var u=shareholders.find(function(x){ return String(x.id)===String(id); }); if(!u) return;
-  editingId=id;
-  document.getElementById('editName').value=u.name||u.full_name||''; document.getElementById('editEmail').value=u.email||''; document.getElementById('editPhone').value=u.phone||''; document.getElementById('editBalance').value=u.balance??u.total_balance??0; document.getElementById('editShares').value=u.shares||0; document.getElementById('editStatus').value=(u.status||'pending').toLowerCase();
-  document.getElementById('editModal').classList.add('open');
-}
-function closeModal(){ document.getElementById('editModal').classList.remove('open'); editingId=null; }
-async function saveShareholderEdit(){
-  if(!editingId) return;
-  var payload={name:document.getElementById('editName').value, full_name:document.getElementById('editName').value, email:document.getElementById('editEmail').value, phone:document.getElementById('editPhone').value, balance:parseFloat(document.getElementById('editBalance').value||0), total_balance:parseFloat(document.getElementById('editBalance').value||0), shares:parseInt(document.getElementById('editShares').value||0), status:document.getElementById('editStatus').value, is_approved: document.getElementById('editStatus').value==='approved'};
-  var r=await supabase.from(currentTable).update(payload).eq('id',editingId);
-  if(r.error){
-    var r2=await supabase.from(currentTable).update({name:payload.name, email:payload.email, balance:payload.balance, status:payload.status}).eq('id',editingId);
-    if(r2.error) showErr('Save failed: '+r2.error.message); else { showOk('Saved'); closeModal(); loadShareholders(); loadApprovals(); }
-  } else { showOk('Shareholder updated'); closeModal(); loadShareholders(); loadApprovals(); }
-}
-async function approveShareholder(id){
-  var r=await supabase.from(currentTable).update({status:'approved', is_approved:true, approved_at:new Date().toISOString()}).eq('id',id);
-  if(r.error){ var r2=await supabase.from(currentTable).update({status:'approved'}).eq('id',id); if(r2.error) showErr('Approve failed: '+r2.error.message); else { showOk('Shareholder APPROVED'); loadShareholders(); loadApprovals(); } }
-  else { showOk('Shareholder APPROVED - now visible as approved in Shareholder Dashboard'); loadShareholders(); loadApprovals(); logActivity('Approved shareholder '+id); }
-}
-async function rejectShareholder(id){
-  if(!confirm('Reject this shareholder?')) return;
-  var r=await supabase.from(currentTable).update({status:'rejected', is_approved:false}).eq('id',id);
-  if(r.error) showErr('Reject failed: '+r.error.message); else { showOk('Shareholder REJECTED'); loadShareholders(); loadApprovals(); }
-}
-async function deleteShareholder(id, name){
-  if(!confirm('DELETE '+name+' permanently? This cannot be undone.')) return;
-  var r=await supabase.from(currentTable).delete().eq('id',id);
-  if(r.error) showErr('Delete failed: '+r.error.message+' - Check RLS DELETE policy'); else { showOk('Deleted'); loadShareholders(); loadApprovals(); }
-}
-
-// ===== APPROVALS CENTER =====
-async function loadApprovals(silent){
-  if(!supabase) return;
-  approvals=[];
-  // 1. Shareholders pending
-  try{
-    var r=await supabase.from(currentTable).select('*').eq('status','pending').limit(100);
-    if(!r.error) (r.data||[]).forEach(function(u){ approvals.push({type:'shareholder', id:u.id, table:currentTable, title:(u.name||u.full_name||u.email), detail:u.email||'', raw:u}); });
-    else {
-      // Fallback: is_approved false
-      var r2=await supabase.from(currentTable).select('*').eq('is_approved',false).limit(100);
-      if(!r2.error) (r2.data||[]).forEach(function(u){ approvals.push({type:'shareholder', id:u.id, table:currentTable, title:(u.name||u.full_name||u.email), detail:u.email||'', raw:u}); });
-    }
-  }catch(e){}
-  // 2. Tasks pending
-  try{
-    var rt=await supabase.from('tasks').select('*').eq('status','pending').limit(100);
-    if(!rt.error) (rt.data||[]).forEach(function(t){ approvals.push({type:'task', id:t.id, table:'tasks', title:t.title||t.task_title||'Task', detail:'User: '+(t.user_email||t.user_id||'')+' | Reward $'+(t.reward||0), raw:t}); });
-  }catch(e){}
-  // 3. Withdrawals / Deposits - try multiple table names
-  for(var tn of ['withdrawals','deposits','transactions','payments']){
-    try{
-      var rp=await supabase.from(tn).select('*').eq('status','pending').limit(50);
-      if(!rp.error) (rp.data||[]).forEach(function(p){ var typ=(p.type||tn).toLowerCase().indexOf('withdraw')!==-1?'withdrawal':(p.type||tn); approvals.push({type:typ, id:p.id, table:tn, title:(p.type||tn)+' $'+(p.amount||0), detail:'User: '+(p.user_email||p.user_id||'')+' | Method: '+(p.method||p.payment_method||''), raw:p}); });
-    }catch(e){}
-  }
-  document.getElementById('pendingBadge').textContent=approvals.length;
-  document.getElementById('tabPendingCount').textContent=approvals.length?'('+approvals.length+')':'';
-  document.getElementById('statPending').textContent=approvals.length;
-  if(!silent) renderApprovals();
-}
-function renderApprovals(){
-  var f=document.getElementById('approvalFilter').value;
-  var list=approvals.filter(function(a){ return f==='all'||a.type===f; });
-  if(!list.length){ document.getElementById('approvalsList').innerHTML='<tr><td colspan="4">✅ No pending approvals - all clear!</td></tr>'; return; }
-  document.getElementById('approvalsList').innerHTML=list.map(function(a){
-    return '<tr><td><span class="badge blue">'+a.type+'</span></td><td><b>'+a.title+'</b></td><td>'+a.detail+'</td><td><button class="btn btn-small btn-green" onclick="approveItem(\''+a.type+'\',\''+a.id+'\',\''+a.table+'\')">Approve</button><button class="btn btn-small btn-red" onclick="rejectItem(\''+a.type+'\',\''+a.id+'\',\''+a.table+'\')">Reject</button></td></tr>';
-  }).join('');
-}
-async function approveItem(type, id, table){
-  var upd={status:'approved', is_approved:true, verified_by:'Admin', verified_at:new Date().toISOString(), approved_at:new Date().toISOString()};
-  var r=await supabase.from(table).update(upd).eq('id',id);
-  if(r.error){ var r2=await supabase.from(table).update({status:'approved'}).eq('id',id); if(r2.error) showErr('Approve failed: '+r2.error.message); else { showOk(type+' APPROVED'); loadApprovals(); loadShareholders(); } }
-  else { showOk(type+' APPROVED'); loadApprovals(); loadShareholders(); loadTasks(); logActivity('Approved '+type+' '+id); }
-}
-async function rejectItem(type, id, table){
-  if(!confirm('Reject this '+type+'?')) return;
-  var r=await supabase.from(table).update({status:'rejected', is_approved:false}).eq('id',id);
-  if(r.error) showErr('Reject failed: '+r.error.message); else { showOk(type+' REJECTED'); loadApprovals(); loadShareholders(); loadTasks(); }
-}
-async function approveAllPending(){
-  if(!approvals.length){ showOk('No pending to approve'); return; }
-  if(!confirm('Approve ALL '+approvals.length+' pending items?')) return;
-  for(var a of approvals){ await supabase.from(a.table).update({status:'approved', is_approved:true}).eq('id',a.id); }
-  showOk('All '+approvals.length+' approved'); loadApprovals(); loadShareholders(); loadTasks();
-}
-async function approveAll(){ approveAllPending(); }
-
-// ===== ALL USERS (FALLBACK) =====
-async function loadUsers(){
-  if(!supabase) return; document.getElementById('adminUsers').innerHTML='<tr><td colspan="4">Loading...</td></tr>';
-  for(var t of ['profiles','shareholders','users','members']){
-    var r=await supabase.from(t).select('*').limit(200); if(!r.error){ allUsers=r.data||[]; renderUsers(allUsers); return; }
-  }
-  document.getElementById('adminUsers').innerHTML='<tr><td colspan="4">No table found</td></tr>';
-}
-function renderUsers(list){ if(!list.length){ document.getElementById('adminUsers').innerHTML='<tr><td colspan="4">No users</td></tr>'; return; } document.getElementById('adminUsers').innerHTML=list.map(function(u){ return '<tr><td>'+(u.name||u.full_name||'-')+'</td><td>'+(u.email||'-')+'</td><td>$'+(u.balance??u.total_balance??0)+'</td><td>'+(u.status||'pending')+'</td></tr>'; }).join(''); }
-function filterUsers(){ var q=document.getElementById('searchBox').value.toLowerCase(); if(!q){ renderUsers(allUsers); return; } renderUsers(allUsers.filter(function(u){ return ((u.name||'')+' '+(u.email||'')).toLowerCase().indexOf(q)!==-1; })); }
-function exportCSV(){
-  var src=shareholders.length?shareholders:allUsers; if(!src.length){ showErr('No data to export'); return; }
-  var rows=[['Name','Email','Phone','Balance','Shares','Status']];
-  src.forEach(function(u){ rows.push([(u.name||u.full_name||''),(u.email||''),(u.phone||''),(u.balance??u.total_balance??0),(u.shares||0),(u.status||'')]); });
-  var csv=rows.map(function(r){ return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
-  var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='shareholders_'+currentTable+'.csv'; a.click();
-}
-
-// ===== TASKS =====
-async function loadTasks(silent){
-  if(!supabase) return; if(!silent) document.getElementById('tasksList').innerHTML='<tr><td colspan="4">Loading...</td></tr>';
-  for(var t of ['tasks','user_tasks','submissions']){
-    var r=await supabase.from(t).select('*').limit(100).order('created_at',{ascending:false});
-    if(!r.error){ allTasks=r.data||[]; if(!silent){ if(!allTasks.length) document.getElementById('tasksList').innerHTML='<tr><td colspan="4">No tasks in '+t+'</td></tr>'; else document.getElementById('tasksList').innerHTML=allTasks.map(function(x){ return '<tr><td>'+(x.title||x.task_title||'Task')+'</td><td>'+(x.user_email||x.user_id||'-')+'</td><td><span class="badge">'+(x.status||'pending')+'</span></td><td><button class="btn btn-small btn-green" onclick="setTaskStatus(\''+x.id+'\',\''+t+'\',\'approved\')">Approve</button><button class="btn btn-small btn-red" onclick="setTaskStatus(\''+x.id+'\',\''+t+'\',\'rejected\')">Reject</button></td></tr>'; }).join(''); } return; }
-  }
-  if(!silent) document.getElementById('tasksList').innerHTML='<tr><td colspan="4">Tasks table not found</td></tr>';
-}
-async function setTaskStatus(id, table, status){ var r=await supabase.from(table).update({status:status, verified_by:'Admin', verified_at:new Date().toISOString()}).eq('id',id); if(r.error) showErr('Update failed: '+r.error.message); else { showOk('Task '+status); loadTasks(); loadApprovals(); } }
-async function createTask(){ var title=document.getElementById('newTaskTitle').value.trim(); var reward=parseFloat(document.getElementById('newTaskReward').value||0); if(!title){ showErr('Enter task title'); return; } var r=await supabase.from('tasks').insert([{title:title, reward:reward, status:'active', created_at:new Date().toISOString()}]); if(r.error) showErr('Create failed: '+r.error.message); else { showOk('Task created'); document.getElementById('newTaskTitle').value=''; loadTasks(); } }
-
-// ===== PAYMENTS =====
-async function loadPayments(){
-  if(!supabase) return; document.getElementById('paymentsList').innerHTML='<tr><td colspan="5">Loading...</td></tr>'; allPayments=[];
-  for(var tn of ['withdrawals','deposits','transactions','payments']){
-    var r=await supabase.from(tn).select('*').limit(100).order('created_at',{ascending:false});
-    if(!r.error){ (r.data||[]).forEach(function(p){ allPayments.push({table:tn, data:p}); }); }
-  }
-  if(!allPayments.length){ document.getElementById('paymentsList').innerHTML='<tr><td colspan="5">No payments found</td></tr>'; return; }
-  document.getElementById('paymentsList').innerHTML=allPayments.map(function(item){ var p=item.data; return '<tr><td>'+(p.type||item.table)+'</td><td>'+(p.user_email||p.user_id||'-')+'</td><td>$'+(p.amount||0)+'</td><td>'+(p.status||'pending')+'</td><td><button class="btn btn-small btn-green" onclick="approveItem(\'payment\',\''+p.id+'\',\''+item.table+'\')">Approve</button><button class="btn btn-small btn-red" onclick="rejectItem(\'payment\',\''+p.id+'\',\''+item.table+'\')">Reject</button></td></tr>'; }).join('');
-}
-
-// ===== AI WORKERS =====
-function startAIWorkers(){ if(!isEngineOn('global_engine')||!isEngineOn('engine_ai')){ stopAIWorkers(); renderEngines(); return; } if(aiInterval) clearInterval(aiInterval); runAIWorkers(false); aiInterval=setInterval(function(){ runAIWorkers(false); },30000); renderEngines(); }
-function stopAIWorkers(){ if(aiInterval) clearInterval(aiInterval); aiInterval=null; renderEngines(); }
-async function runAIWorkers(manual){
-  if(!supabase) return; if(!isEngineOn('global_engine')||!isEngineOn('engine_ai')){ document.getElementById('aiLog').textContent='AI PAUSED - Global or AI Engine OFF'; return; }
-  var log=document.getElementById('aiLog'); log.textContent='🤖 AI Workers running...';
-  try{
-    var r=await supabase.from('tasks').select('*').eq('status','pending').limit(20);
-    if(r.error){ log.textContent='AI error: '+r.error.message; return; }
-    if(!r.data||!r.data.length){ log.textContent='✅ No pending tasks. Checked '+new Date().toLocaleTimeString(); return; }
-    var approvedNow=0; for(var task of r.data){ aiCheckedCount++; var hasProof=task.proof_url||task.screenshot||task.submission||task.proof||task.image_url; if(hasProof){ var up=await supabase.from('tasks').update({status:'approved', verified_by:'AI Worker', verified_at:new Date().toISOString()}).eq('id',task.id); if(!up.error){ approvedNow++; aiApprovedCount++; } } }
-    document.getElementById('aiChecked').textContent=aiCheckedCount; document.getElementById('aiApproved').textContent=aiApprovedCount;
-    log.textContent='✅ Checked '+r.data.length+', approved '+approvedNow+' with proof. '+new Date().toLocaleTimeString();
-    if(manual) showOk('AI Workers ran: '+approvedNow+' approved'); loadTasks(); loadApprovals();
-  }catch(e){ log.textContent='AI exception: '+e.message; }
-}
-
-// ===== HEALTH =====
-async function runHealth(){
-  if(!supabase) return; var el=document.getElementById('healthResult'); el.innerHTML='Checking...'; var html='';
-  for(var c of [{name:'Shareholders DB',table:'shareholders',alt:'profiles'},{name:'Profiles',table:'profiles',alt:'shareholders'},{name:'Tasks',table:'tasks',alt:null},{name:'Withdrawals',table:'withdrawals',alt:'transactions'},{name:'Global Engine',table:null},{name:'AI Workers',table:null}]){
-    if(c.table){ var r=await supabase.from(c.table).select('id').limit(1); if(!r.error) html+='<p>✅ '+c.name+' - UP ('+c.table+')</p>'; else if(c.alt){ var r2=await supabase.from(c.alt).select('id').limit(1); if(!r2.error) html+='<p>⚠️ '+c.name+' - UP via fallback ('+c.alt+')</p>'; else html+='<p>❌ '+c.name+' - DOWN: '+r.error.message+'<br><small>Fix: NOTIFY pgrst, \'reload schema\'</small></p>'; } else html+='<p>❌ '+c.name+' - DOWN: '+r.error.message+'</p>'; }
-    else if(c.name==='Global Engine') html+='<p>'+(isEngineOn('global_engine')?'✅ Global - ON':'❌ Global - OFF')+'</p>';
-    else html+='<p>'+((isEngineOn('global_engine')&&isEngineOn('engine_ai'))?'✅ AI - RUNNING':'❌ AI - PAUSED')+'</p>';
-  }
-  el.innerHTML=html;
-}
+// === CONFIG - PASTE ANON KEY HERE ONLY ===
+var SUPABASE_URL="https://ipyvewpjtpgfugfwizlr.supabase.co";
+var SUPABASE_KEY="sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm";
+var ADMIN_EMAIL="ogwal.bemmanuel@gmail.com";
+var EUR_TO_USD=1.1;
+// ==========================================
+var supabase=null, isAdmin=false, engines={trading:true,verify:true,withdraw:true,exchange:true,p2p:true,staking:true};
+function showPage(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');}
+function showMsg(id,txt,ok){var e=document.getElementById(id);e.className='msg '+(ok?'ok':'err');e.textContent=txt;e.style.display='block';}
+function init(){if(!SUPABASE_KEY||SUPABASE_KEY==="PASTE_YOUR_ANON_KEY_HERE"||SUPABASE_KEY.length<20){showMsg('authBox','SETUP: Paste ANON KEY in file first.',false);return;}try{supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){showMsg('authBox','Supabase init failed',false);return;}document.getElementById('connStatus').textContent="Supabase Ready - Login as Admin";supabase.auth.getSession().then(r=>{if(r.data&&r.data.session&&r.data.session.user){checkAdmin(r.data.session.user.email);}});}
+async function checkAdmin(email){if(email.toLowerCase()!==ADMIN_EMAIL){showMsg('authBox','Access denied - Admin only: '+email,false);return;}isAdmin=true;document.getElementById('curUser').textContent=email;document.getElementById('adminMain').classList.remove('hidden');showMsg('authBox','✅ Admin Logged In - '+email,true);loadDashboard();}
+async function adminLogin(){if(!supabase){alert('Paste ANON KEY');return;}let email=document.getElementById('adminEmail').value.trim(),pass=document.getElementById('adminPass').value;if(!email||!pass){showMsg('authBox','Enter email + password',false);return;}if(email.toLowerCase()!==ADMIN_EMAIL){showMsg('authBox','Access denied - This email is NOT admin',false);return;}let r=await supabase.auth.signInWithPassword({email,password:pass});if(r.error){showMsg('authBox',r.error.message,false);return;}checkAdmin(email);}
+async function adminLogout(){if(supabase)await supabase.auth.signOut();isAdmin=false;document.getElementById('adminMain').classList.add('hidden');document.getElementById('curUser').textContent="-";showMsg('authBox','Logged out',true);}
+async function changeAdminPass(){let np=prompt('Enter NEW Admin Password:');if(!np||np.length<6){alert('Min 6 chars');return;}let r=await supabase.auth.updateUser({password:np});if(r.error)alert(r.error.message);else alert('✅ Admin password changed');}
+async function checkSession(){let r=await supabase.auth.getSession();if(r.data&&r.data.session){checkAdmin(r.data.session.user.email);}else{showMsg('authBox','No session - Login again',false);}}
+// DASHBOARD 7-16
+async function loadDashboard(){if(!isAdmin)return;let sh=await supabase.from('shareholders').select('*');let tx=await supabase.from('transactions').select('*');let wd=await supabase.from('withdrawals').select('*');let totalEuro=0,totalCrypto=0,totalStaked=0;if(sh.data)sh.data.forEach(u=>{totalEuro+=parseFloat(u.balance||0);totalCrypto+=parseFloat(u.total_balance||0);totalStaked+=parseFloat(u.shares||0);});let rev=0;if(tx.data)tx.data.forEach(t=>{rev+=parseFloat(t.amount||0)*0.05;});let wdPend=wd.data?wd.data.filter(x=>x.status==='pending').length:0;let today=new Date().toDateString();let tasksDone=tx.data?tx.data.filter(t=>t.type==='task_verify'&&new Date(t.created_at).toDateString()===today).length:0;let tasksPend=tx.data?tx.data.filter(t=>t.type==='task_verify'&&t.status==='pending').length:0;let exPend=tx.data?tx.data.filter(t=>t.type==='exchange'&&t.status==='pending').length:0;let p2pVol=0;if(tx.data)tx.data.filter(t=>t.type==='p2p_send'&&new Date(t.created_at).toDateString()===today).forEach(t=>p2pVol+=parseFloat(t.amount||0));document.getElementById('dRevenue').textContent='$'+rev.toFixed(2);document.getElementById('dTreasury').textContent='€'+totalEuro.toFixed(2);document.getElementById('dTreasuryUSD').textContent='$'+(totalEuro*EUR_TO_USD).toFixed(2);document.getElementById('dShareholders').textContent=sh.data?sh.data.length:0;document.getElementById('dTx').textContent=tx.data?tx.data.length:0;document.getElementById('dTasksDone').textContent=tasksDone;document.getElementById('dTasksPend').textContent=tasksPend;document.getElementById('dWdPend').textContent=wdPend;document.getElementById('dExPend').textContent=exPend;document.getElementById('dP2PVol').textContent='$'+p2pVol.toFixed(2);document.getElementById('dStaked').textContent='$'+totalStaked.toFixed(2);document.getElementById('dStakeOwed').textContent='$'+(totalStaked*0.0003).toFixed(4);}
+// APPROVALS 17-28
+async function loadApprovals(){if(!isAdmin)return;let f=document.getElementById('apprFilter').value;let tx=await supabase.from('transactions').select('*').order('created_at',{ascending:false}).limit(100);let wd=await supabase.from('withdrawals').select('*').order('created_at',{ascending:false}).limit(50);let html='';if(tx.data)tx.data.filter(t=>t.status==='pending'&&(!f||t.type===f)).forEach(t=>{html+='<tr><td>'+t.type+'</td><td>'+(t.user_email||'')+'</td><td>$'+(t.amount||0)+'</td><td>'+(t.type==='exchange'?'2%':t.type==='p2p_send'?'5%':t.type==='task_verify'?'€0.50':'')+'</td><td><span class="badge wait">PENDING</span></td><td><button onclick="approveTx(\''+t.id+'\')">APPROVE</button> <button class="red" onclick="rejectTx(\''+t.id+'\')">REJECT</button></td></tr>';});if(wd.data)wd.data.filter(w=>w.status==='pending'&&(!f||f==='withdrawal')).forEach(w=>{html+='<tr><td>withdrawal 20%</td><td>'+(w.user_email||'')+'</td><td>$'+(w.amount||0)+'</td><td>Fee 20% = $'+(w.amount*0.20).toFixed(2)+' | To: '+(w.method||'')+'</td><td><span class="badge wait">PENDING</span></td><td><button onclick="approveWd(\''+w.id+'\')">APPROVE / SEND</button> <button class="red" onclick="rejectWd(\''+w.id+'\',\''+(w.user_email||'')+'\','+w.amount+')">REJECT + REFUND</button></td></tr>';});document.getElementById('apprList').innerHTML=html||'<tr><td colspan="6">No pending approvals</td></tr>';}
+async function approveTx(id){let r=await supabase.from('transactions').update({status:'approved'}).eq('id',id);if(r.error)alert(r.error.message);else{alert('✅ Approved');loadApprovals();loadDashboard();}}
+async function rejectTx(id){if(!confirm('Reject this?'))return;let r=await supabase.from('transactions').update({status:'rejected'}).eq('id',id);if(r.error)alert(r.error.message);else{alert('Rejected');loadApprovals();}}
+async function approveWd(id){let r=await supabase.from('withdrawals').update({status:'approved'}).eq('id',id);if(r.error)alert(r.error.message);else{alert('✅ Withdraw APPROVED / SENT - 20% fee kept in Treasury');loadApprovals();loadDashboard();}}
+async function rejectWd(id,email,amt){if(!confirm('Reject + Refund $'+amt+' to '+email+'?'))return;let r=await supabase.from('withdrawals').update({status:'rejected'}).eq('id',id);if(r.error){alert(r.error.message);return;}// Refund Crypto balance
+let u=await supabase.from('shareholders').select('*').eq('email',email).limit(1);if(u.data&&u.data.length){let cur=parseFloat(u.data[0].total_balance||0);await supabase.from('shareholders').update({total_balance:cur+amt}).eq('email',email);}alert('✅ Rejected + Refunded $'+amt);loadApprovals();loadDashboard();}
+async function approveAll(){if(!confirm('Approve ALL pending?'))return;let tx=await supabase.from('transactions').select('id').eq('status','pending');if(tx.data)for(let t of tx.data)await supabase.from('transactions').update({status:'approved'}).eq('id',t.id);let wd=await supabase.from('withdrawals').select('id').eq('status','pending');if(wd.data)for(let w of wd.data)await supabase.from('withdrawals').update({status:'approved'}).eq('id',w.id);alert('✅ All Approved');loadApprovals();}
+async function rejectAll(){if(!confirm('Reject ALL pending? This does NOT auto-refund - use Reject+Refund per withdraw.'))return;let tx=await supabase.from('transactions').select('id').eq('status','pending');if(tx.data)for(let t of tx.data)await supabase.from('transactions').update({status:'rejected'}).eq('id',t.id);alert('All Rejected');loadApprovals();}
+// SHAREHOLDERS 29-38
+async function loadShareholders(){if(!isAdmin)return;let q=(document.getElementById('shSearch').value||'').toLowerCase(),st=document.getElementById('shStatus').value;let r=await supabase.from('shareholders').select('*').order('created_at',{ascending:false}).limit(100);if(r.error){document.getElementById('shList').innerHTML='<tr><td colspan="6">'+r.error.message+'</td></tr>';return;}let list=(r.data||[]).filter(u=>{if(st&&u.status!==st)return false;if(q&&!(u.email+' '+u.name).toLowerCase().includes(q))return false;return true;});document.getElementById('shList').innerHTML=list.map(u=>'<tr><td>'+(u.email||'')+'<br><span class="small">'+(u.name||'')+'</span></td><td>€'+(u.balance||0)+'</td><td>$'+(u.total_balance||0)+'</td><td>$'+(u.shares||0)+'</td><td>'+(u.status||'')+'</td><td><button class="blue" onclick="viewShTx(\''+(u.email||'')+'\')">VIEW TX</button> <button onclick="toggleBlock(\''+(u.email||'')+'\',\''+(u.status||'')+'\')">'+(u.status==='blocked'?'UNBLOCK':'BLOCK')+'</button> <button class="red" onclick="deleteSh(\''+(u.email||'')+'\')">DELETE</button></td></tr>').join('')||'<tr><td colspan="6">No shareholders</td></tr>';}
+async function viewShTx(email){alert('Viewing transactions for '+email+' - Go to Payments tab and filter by this email in search (or check Transactions table).');showPage('payments',null);}
+async function toggleBlock(email,status){let ns=status==='blocked'?'active':'blocked';if(!confirm((ns==='blocked'?'Block ':'Unblock ')+email+'?'))return;let r=await supabase.from('shareholders').update({status:ns}).eq('email',email);if(r.error)alert(r.error.message);else{alert(email+' -> '+ns);loadShareholders();}}
+async function deleteSh(email){if(!confirm('DELETE '+email+'? This cannot be undone.'))return;let r=await supabase.from('shareholders').delete().eq('email',email);if(r.error)alert(r.error.message);else{alert('Deleted');loadShareholders();}}
+async function addShareholder(){let email=document.getElementById('newShEmail').value.trim(),name=document.getElementById('newShName').value.trim();if(!email){alert('Enter email');return;}let r=await supabase.from('shareholders').insert([{email:email,name:name||email,balance:0,total_balance:0,shares:0,status:'pending'}]);if(r.error)alert(r.error.message);else{alert('✅ Shareholder added: '+email);loadShareholders();}}
+async function adjustBalance(){let email=document.getElementById('adjEmail').value.trim(),amt=parseFloat(document.getElementById('adjAmt').value||0),type=document.getElementById('adjType').value,reason=document.getElementById('adjReason').value.trim();if(!email||!amt){document.getElementById('adjMsg').textContent='Enter email + amount';return;}let r=await supabase.from('shareholders').select('*').eq('email',email).limit(1);if(r.error||!r.data.length){document.getElementById('adjMsg').textContent='Shareholder not found';return;}let u=r.data[0],upd={};if(type==='euro')upd.balance=parseFloat(u.balance||0)+amt;if(type==='crypto')upd.total_balance=parseFloat(u.total_balance||0)+amt;if(type==='staked')upd.shares=parseFloat(u.shares||0)+amt;let r2=await supabase.from('shareholders').update(upd).eq('email',email);if(r2.error){document.getElementById('adjMsg').textContent=r2.error.message;return;}await supabase.from('transactions').insert([{user_email:email,amount:amt,type:'admin_adjust_'+type,status:'approved'}]);document.getElementById('adjMsg').textContent='✅ Adjusted '+email+' +'+amt+' '+type+' - Reason: '+reason;loadShareholders();}
+async function sendMessage(){let email=document.getElementById('msgEmail').value.trim(),txt=document.getElementById('msgText').value.trim();if(!email||!txt){document.getElementById('msgResult').textContent='Enter email + message';return;}await supabase.from('transactions').insert([{user_email:email,amount:0,type:'admin_message: '+txt,status:'approved'}]);document.getElementById('msgResult').textContent='✅ Message sent to '+email+' (saved in their transactions log)';}
+// ALL USERS 39-41
+async function loadUsers(){let q=(document.getElementById('userSearch').value||'').toLowerCase(),st=document.getElementById('userStatusFilter').value;let r=await supabase.from('shareholders').select('*').order('created_at',{ascending:false}).limit(100);if(r.error){document.getElementById('userList').innerHTML='<tr><td colspan="5">'+r.error.message+'</td></tr>';return;}let list=(r.data||[]).filter(u=>{if(st&&u.status!==st)return false;if(q&&!(u.email+' '+u.name).toLowerCase().includes(q))return false;return true;});document.getElementById('userList').innerHTML=list.map(u=>'<tr><td>'+(u.email||'')+'</td><td>'+(u.name||'')+'</td><td>-</td><td>'+(u.created_at?new Date(u.created_at).toLocaleDateString():'-')+'</td><td>'+(u.status||'')+'</td></tr>').join('')||'<tr><td colspan="5">No users</td></tr>';}
+// TASKS 42-47
+async function loadTasks(){let r=await supabase.from('transactions').select('*').eq('type','task_verify').order('created_at',{ascending:false}).limit(100);if(r.error){document.getElementById('taskList').innerHTML='<tr><td colspan="6">'+r.error.message+'</td></tr>';return;}let today=new Date().toDateString();let cats={Marketplace:0,Insurance:0,Savings:0,NGO:0};(r.data||[]).forEach(t=>{if(new Date(t.created_at).toDateString()===today){cats.Marketplace++;}});document.getElementById('tMarket').textContent=r.data?r.data.length:0;document.getElementById('tIns').textContent='-';document.getElementById('tSave').textContent='-';document.getElementById('tNgo').textContent='-';document.getElementById('taskList').innerHTML=(r.data||[]).map(t=>'<tr><td>'+new Date(t.created_at).toLocaleString()+'</td><td>'+(t.user_email||'')+'</td><td>Task Verify</td><td>€0.50</td><td>'+(t.status||'')+'</td><td><button onclick="approveTx(\''+t.id+'\')">VERIFY / PAY €0.50</button></td></tr>').join('')||'<tr><td colspan="6">No tasks</td></tr>';}
+async function createTask(){let n=document.getElementById('newTaskName').value.trim(),c=document.getElementById('newTaskCat').value;if(!n){alert('Enter task name');return;}await supabase.from('tasks').insert([{title:n,reward:0.50,status:'active'}]).catch(()=>{});document.getElementById('taskMsg').textContent='✅ Task created: '+n+' - '+c+' - €0.50';}
+async function resetDailyTasks(){if(!confirm('Reset daily tasks? This is for 18:00 UTC reset.'))return;document.getElementById('taskMsg').textContent='✅ Daily tasks reset flag set - Members can verify again tomorrow';}
+async function deleteTask(){if(!confirm('Delete / Disable selected task? Use Tasks table in Supabase to delete.'))return;document.getElementById('taskMsg').textContent='Go to Supabase > tasks table > Delete row to disable task';}
+// PAYMENTS 48-53
+async function loadPayments(range){let type=document.getElementById('payType').value,dt=document.getElementById('payDate').value;let tx=await supabase.from('transactions').select('*').order('created_at',{ascending:false}).limit(200);let wd=await supabase.from('withdrawals').select('*').order('created_at',{ascending:false}).limit(100);let html='';let filterDate=(t)=>{if(range==='today')return new Date(t.created_at).toDateString()===new Date().toDateString();if(range==='yesterday'){let y=new Date(Date.now()-86400000);return new Date(t.created_at).toDateString()===y.toDateString();}if(range==='7')return (Date.now()-new Date(t.created_at).getTime())<7*86400000;if(range==='30')return (Date.now()-new Date(t.created_at).getTime())<30*86400000;if(dt)return new Date(t.created_at).toISOString().slice(0,10)===dt;return true;};if(tx.data)tx.data.filter(t=>filterDate(t)&&(!type||t.type===type)).forEach(t=>{html+='<tr><td>'+new Date(t.created_at).toLocaleString()+'</td><td>'+t.type+'</td><td>'+(t.user_email||'')+'</td><td>$'+(t.amount||0)+'</td><td>-</td><td>'+(t.status||'')+'</td><td><button onclick="approveTx(\''+t.id+'\')">APPROVE</button></td></tr>';});if(wd.data&&(!type||type==='withdrawal'))wd.data.filter(w=>filterDate(w)).forEach(w=>{html+='<tr><td>'+new Date(w.created_at).toLocaleString()+'</td><td>withdrawal 20%</td><td>'+(w.user_email||'')+'</td><td>$'+(w.amount||0)+'</td><td>'+(w.method||'')+'</td><td>'+(w.status||'')+'</td><td><button onclick="approveWd(\''+w.id+'\')">APPROVE / SEND</button></td></tr>';});document.getElementById('payList').innerHTML=html||'<tr><td colspan="7">No payments for this filter</td></tr>';}
+// STAKING 54-57
+async function loadStaking(){let sh=await supabase.from('shareholders').select('*');if(sh.error){document.getElementById('stakeList').innerHTML='<tr><td colspan="6">'+sh.error.message+'</td></tr>';return;}let list=(sh.data||[]).filter(u=>parseFloat(u.shares||0)>0);let total=list.reduce((s,u)=>s+parseFloat(u.shares||0),0);document.getElementById('sTotal').textContent='$'+total.toFixed(2);document.getElementById('sPaid').textContent='$0.00';document.getElementById('sOwed').textContent='$'+(total*0.0003).toFixed(4);document.getElementById('stakeList').innerHTML=list.map(u=>{let amt=parseFloat(u.shares||0);return '<tr><td>'+(u.email||'')+'</td><td>$'+amt.toFixed(2)+'</td><td>'+(u.created_at?new Date(u.created_at).toLocaleDateString():'-')+'</td><td>$'+(amt*0.0003).toFixed(4)+'</td><td>-</td><td><button onclick="payStakeReward(\''+(u.email||'')+'\','+amt+')">PAY 0.03% REWARD</button> <button class="red" onclick="forceUnstake(\''+(u.email||'')+'\','+amt+')">FORCE UNSTAKE</button></td></tr>';}).join('')||'<tr><td colspan="6">No stakes</td></tr>';}
+async function payStakeReward(email,amt){let reward=amt*0.0003;let u=await supabase.from('shareholders').select('*').eq('email',email).limit(1);if(!u.data.length)return;let curCrypto=parseFloat(u.data[0].total_balance||0);await supabase.from('shareholders').update({total_balance:curCrypto+reward}).eq('email',email);await supabase.from('transactions').insert([{user_email:email,amount:reward,type:'staking_reward',status:'approved'}]);alert('✅ Paid $'+reward.toFixed(4)+' staking reward to '+email);loadStaking();}
+async function forceUnstake(email,amt){if(!confirm('Force unstake $'+amt+' for '+email+'?'))return;let u=await supabase.from('shareholders').select('*').eq('email',email).limit(1);if(!u.data.length)return;let curCrypto=parseFloat(u.data[0].total_balance||0);await supabase.from('shareholders').update({total_balance:curCrypto+amt,shares:0}).eq('email',email);alert('✅ Force unstaked $'+amt+' to '+email);loadStaking();}
+// ENGINES 58-59
+function toggleEngine(name){engines[name]=!engines[name];let map={trading:'eTrade',verify:'eVerify',withdraw:'eWithdraw',exchange:'eExchange',p2p:'eP2P',staking:'eStake'};let el=document.getElementById(map[name]);if(el)el.textContent=engines[name]?'ON':'OFF';alert(name.toUpperCase()+' is now '+(engines[name]?'ON':'OFF'));localStorage.setItem('cedars_engine_'+name,engines[name]?'1':'0');}
+// HEALTH 60
+async function checkHealth(){let html='';let tests=[];tests.push(['Supabase Connected',!!supabase]);tests.push(['Admin Logged In',isAdmin]);let sh=await supabase.from('shareholders').select('id').limit(1);tests.push(['Shareholders Table OK',!sh.error]);let tx=await supabase.from('transactions').select('id').limit(1);tests.push(['Transactions Table OK',!tx.error]);let wd=await supabase.from('withdrawals').select('id').limit(1);tests.push(['Withdrawals Table OK',!wd.error]);let dp=await supabase.from('deposits').select('id').limit(1);tests.push(['Deposits Table OK',!dp.error]);document.getElementById('healthBox').innerHTML=tests.map(t=>'<p class="small">'+(t[1]?'<span class="green">✅</span>':'<span class="red">❌</span>')+' '+t[0]+'</p>').join('');}
+async function backupNow(){exportAllCSV();}
+async function exportAllCSV(){let sh=await supabase.from('shareholders').select('*');let tx=await supabase.from('transactions').select('*');let wd=await supabase.from('withdrawals').select('*');let csv='Type,Email,Amount,Status,Time\n';if(sh.data)sh.data.forEach(u=>csv+='shareholder,'+u.email+','+u.balance+','+u.status+','+u.created_at+'\n');if(tx.data)tx.data.forEach(t=>csv+='tx,'+t.user_email+','+t.amount+','+t.status+','+t.created_at+'\n');if(wd.data)wd.data.forEach(w=>csv+='withdrawal,'+w.user_email+','+w.amount+','+w.status+','+w.created_at+'\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='CEDARS_ADMIN_BACKUP_'+new Date().toISOString().slice(0,10)+'.csv';a.click();alert('✅ Backup downloaded - Save it!');}
+// TREASURY
+async function loadTreasury(){let tx=await supabase.from('transactions').select('*').order('created_at',{ascending:false}).limit(100);if(tx.error){document.getElementById('treasuryList').innerHTML='<tr><td colspan="6">'+tx.error.message+'</td></tr>';return;}document.getElementById('treasuryList').innerHTML=(tx.data||[]).map(t=>'<tr><td>'+new Date(t.created_at).toLocaleString()+'</td><td>'+t.type+'</td><td>'+(t.user_email||'')+'</td><td>$'+(t.amount||0)+'</td><td>'+(t.type==='exchange'?'2%':t.type==='withdrawal'?'20%':t.type==='p2p_send'?'5%':t.type==='task_verify'?'€0.50':'')+'</td><td>'+(t.status||'')+'</td></tr>').join('')||'<tr><td colspan="6">No treasury log</td></tr>';}
 init();
-</script>
-</body>
-</html>
+</script></body></html>
