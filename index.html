@@ -1,258 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cedars Empire - Exchange & Wallet</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEDARS EMPIRE - Shareholder Dashboard</title>
 <style>
-*{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:#f4f6f9;color:#111}
-.top{background:#ffffff;border-bottom:1px solid #e5e7eb;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
-.logo{font-weight:900;font-size:22px}.logo i{color:#f0b90b;font-style:normal}
-.tag{font-size:11px;color:#888;font-weight:800;letter-spacing:1px}
-.live{display:flex;gap:14px;font-size:12px;font-weight:700;overflow:auto;white-space:nowrap}.live b{color:#16a34a}
-.user{display:flex;gap:8px;align-items:center}.avatar{width:36px;height:36px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900}
-.pill{font-size:11px;padding:6px 10px;border-radius:999px;font-weight:800}.pill-red{background:#fee2e2;color:#991b1b}.pill-green{background:#dcfce7;color:#166534}
-.nav{background:#fff;border-bottom:1px solid #e5e7eb;padding:10px 14px;display:flex;gap:8px;overflow:auto;white-space:nowrap;position:sticky;top:60px;z-index:19}
-.nav button{border:1px solid #e5e7eb;background:#fff;padding:9px 15px;border-radius:999px;cursor:pointer;font-weight:700}.nav button.active{background:#111;color:#fff}
-.wrap{max-width:1120px;margin:0 auto;padding:16px;width:100%}
-.hero{background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;padding:20px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.hero h1{margin:0;font-size:26px}.hero p{color:#666;font-size:13px;line-height:1.5;margin:8px 0 0}
-.hero .big{font-size:34px;font-weight:900;margin:6px 0}.hero .big small{font-size:13px;color:#16a34a}
-.btn{border:0;padding:13px;border-radius:10px;font-weight:800;cursor:pointer;width:100%;font-size:15px}.btn-y{background:#f0b90b;color:#111}.btn-d{background:#111;color:#fff}.btn-g{background:#16a34a;color:#fff}.btn:disabled{background:#d1d5db;color:#666;cursor:not-allowed}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}@media(max-width:820px){.cards{grid-template-columns:1fr 1fr}}@media(max-width:520px){.cards{grid-template-columns:1fr}}
-.card{background:#fff;border:1px solid #e7e9ee;border-radius:14px;padding:16px}
-.label{font-size:11px;color:#888;font-weight:800;letter-spacing:.6px;text-transform:uppercase}.big2{font-size:24px;font-weight:900;margin:8px 0 4px}.muted{font-size:12px;color:#777;line-height:1.5}.green{color:#16a34a}.red{color:#dc2626}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}@media(max-width:820px){.grid2{grid-template-columns:1fr}}
-label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;background:#fff}textarea{min-height:70px}
-.calc{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;padding:12px;margin-top:12px;font-size:13px;line-height:1.8}.calc b{float:right}
-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}th{text-align:left;padding:10px 8px;border-bottom:2px solid #eee;color:#666;font-size:11px;text-transform:uppercase}td{padding:11px 8px;border-bottom:1px solid #f0f0f0}
-.page{display:none}.page.active{display:block}.msg{font-size:13px;font-weight:700;margin-top:10px}.ok{color:#166534}.err{color:#b91c1c}
-.badge{font-size:11px;font-weight:800;padding:4px 8px;border-radius:999px}.bg{background:#dcfce7;color:#166534}.ba{background:#fef3c7;color:#92400e}.bb{background:#dbeafe;color:#1e40af}.br{background:#fee2e2;color:#991b1b}
-.kycbox{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:13px;margin-top:12px;font-size:13px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:600px){.row{grid-template-columns:1fr}}
-.footer{text-align:center;color:#999;font-size:12px;padding:20px}
-.chat{border:1px solid #e5e7eb;border-radius:10px;padding:12px;height:160px;overflow:auto;background:#f9fafb}
-.notice{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px;font-size:12px;line-height:1.6;margin-top:12px}
+*{box-sizing:border-box;font-family:Arial,sans-serif} body{background:#0f1e2e;margin:0;padding:14px;color:#0f1e2e} .top{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:14px 18px;border-radius:14px;flex-wrap:wrap;gap:10px} .top h1{margin:0;font-size:20px} .live{color:#0a9d6e;font-size:14px} .card{background:#fff;padding:18px;border-radius:14px;margin-top:14px} .authBox{background:#fff;padding:22px;border-radius:14px;max-width:440px;margin:30px auto} .authBox input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:10px;font-size:16px} .authBox button{width:100%;padding:12px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;margin-top:8px} .authBox button.grey{background:#999} .msg{color:#c00;font-size:14px;min-height:18px;text-align:center} .nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px} .nav button{background:#fff;border:1px solid #ddd;padding:11px 14px;border-radius:10px;font-weight:bold;cursor:pointer} .nav button.active{background:#0a9d6e;color:#fff;border-color:#0a9d6e} .page{display:none} .page.active{display:block} .stats{display:flex;gap:12px;flex-wrap:wrap} .stat{flex:1;min-width:150px;background:#fff;padding:16px;border-radius:14px} .stat b{font-size:24px} .btn{background:#0a9d6e;color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:bold;cursor:pointer} .btn.dark{background:#0f1e2e} .btn.red{background:#c00} .btn.small{padding:6px 10px;font-size:13px} .btn.purple{background:#7c3aed} .btn:disabled{opacity:.5;cursor:not-allowed} input,select,textarea{padding:11px;border:1px solid #ddd;border-radius:10px;font-size:15px;width:100%;margin:6px 0} table{width:100%;border-collapse:collapse;font-size:14px} td,th{padding:10px;text-align:left;border-bottom:1px solid #eee} .pill{background:#d6f5e8;color:#0a7a55;padding:4px 10px;border-radius:20px;font-weight:bold;font-size:12px} .pill.warn{background:#fff3cd;color:#856404} .pill.red{background:#ffe5e5;color:#c00} .pill.purple{background:#ede9fe;color:#5b21b6} .small{font-size:13px;color:#666} .flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center} .flex>*{flex:1;min-width:150px} .item{padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap} .totals{background:#f1f3f6;padding:12px;border-radius:10px;margin-top:10px} .healthBar{display:flex;height:18px;border-radius:10px;overflow:hidden;background:#eee;margin:10px 0} .healthSeg{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:bold;white-space:nowrap;overflow:hidden} .healthSeg.green{background:#0a9d6e} .healthSeg.yellow{background:#eab308;color:#000} .healthSeg.purple{background:#7c3aed} .countBox{background:#0f1e2e;color:#fff;padding:16px;border-radius:12px;text-align:center} .countBox b{font-size:30px} .alertBox{background:#fff3cd;border:2px solid #eab308;padding:12px;border-radius:10px;margin-top:10px} .alertBox.red{background:#ffe5e5;border-color:#c00} .alertBox.green{background:#d6f5e8;border-color:#0a9d6e} .chatBox{height:320px;overflow:auto;border:1px solid #eee;border-radius:10px;padding:10px;background:#fafafa} .msgBubble{padding:8px 12px;border-radius:12px;margin:6px 0;max-width:80%} .msgBubble.mine{background:#0a9d6e;color:#fff;margin-left:auto} .msgBubble.theirs{background:#fff;border:1px solid #eee} .capBar{height:10px;background:#eee;border-radius:10px;overflow:hidden;margin-top:6px} .capFill{height:100%;background:#0a9d6e;width:0%}
 </style>
 </head>
 <body>
+<div class="top"><h1>CEDARS EMPIRE <span class="live">● Live</span></h1><div><span id="userEmailTop">👤 Guest</span> | <span id="engineTop">Engine: -</span> | <button class="btn red small" onclick="doLogout()" id="logoutBtn" style="display:none">Logout</button> <a href="admin.html" style="background:#0f1e2e;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:bold">Admin →</a></div></div>
 
-<div class="top">
-<div><div class="logo">CEDARS <i>EMPIRE</i></div><div class="tag">EXCHANGE • WALLET • COMMUNITY</div></div>
-<div class="live"><span class="liveRateText">€1 = $1.0968 • LIVE</span><span>USDT <b>$1.00</b></span><span>● LIVE</span></div>
-<div class="user"><span class="pill pill-red" id="kycPillTop">KYC: NOT DONE</span><div class="avatar">E</div><b>Emmanuel</b></div>
-</div>
+<div id="authSection" class="authBox"><h2 style="text-align:center;margin:0">CEDARS EMPIRE</h2><p style="text-align:center;color:#666;font-size:14px">Shareholder Login / Signup<br>Membership €300 - €100,000 • Agreement 1095 Days • Daily 0.03% INCLUSIVE</p><input id="email" type="email" placeholder="Email"><input id="password" type="password" placeholder="Password (min 6)"><div id="authMsg" class="msg"></div><button onclick="doLogin()">Login</button><button class="grey" onclick="doSignup()">Create Account</button><p class="small" style="text-align:center">After signup, choose your engine and create your contract in Contracts tab.<br>Admins: use Admin → link above.</p></div>
 
-<nav class="nav">
-<button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
-<button onclick="showPage('exchange',this)">Exchange € → USDT</button>
-<button onclick="showPage('deposit',this)">Deposit</button>
-<button onclick="showPage('withdraw',this)">Withdraw</button>
-<button onclick="showPage('p2p',this)">P2P</button>
-<button onclick="showPage('referral',this)">Referral</button>
-<button onclick="showPage('history',this)">History</button>
-<button onclick="showPage('redeem',this)">Redeem</button>
-<button onclick="showPage('profile',this)">Profile / KYC</button>
-<button onclick="showPage('support',this)">Support</button>
-</nav>
-
-<div class="wrap">
-
-<!-- DASHBOARD -->
-<div id="page-dashboard" class="page active">
-<div class="hero"><div><div class="label">TOTAL VALUE • LIVE RATE</div><div class="big">€<span id="heroBal">5,013.87</span> <small class="liveRateText">€1 = $1.0968</small></div><p>€ Balance + USDT Balance (converted at live rate)<br>Engine profit is variable - not guaranteed. See Engine Tracker below.</p></div>
-<div style="min-width:220px"><button class="btn btn-y" onclick="go('exchange')">Exchange € → USDT</button><button class="btn btn-g" style="margin-top:8px" onclick="go('withdraw')">Withdraw USDT</button><button class="btn btn-d" style="margin-top:8px" onclick="go('deposit')">Deposit</button></div></div>
-
-<div class="cards">
-<div class="card"><div class="label">€ Balance</div><div class="big2" id="eurBal">€5,013.87</div><div class="muted">Use Exchange to convert to USDT</div></div>
-<div class="card"><div class="label">USDT Balance</div><div class="big2" id="usdtBal">0.00 USDT</div><div class="muted">Only USDT can be withdrawn</div></div>
-<div class="card"><div class="label">Engine Profit - Today (Variable)</div><div class="big2 green" id="engineToday">+ €0.00</div><div class="muted">Set by Admin from real engine result</div></div>
-<div class="card"><div class="label">Referral Bonus</div><div class="big2">€315.00</div><div class="muted">Gen1 6% • Gen2 3% • Gen3 1% of fees</div></div>
+<div id="dashSection" style="display:none">
+<div class="nav">
+<button class="active" onclick="showPage('home',this)">🏠 Home</button>
+<button onclick="showPage('contract',this)">📜 My Contract 1095 Days <span id="contractBadgeNav" style="background:#c00;color:#fff;padding:2px 7px;border-radius:10px;font-size:12px;display:none">!</span></button>
+<button onclick="showPage('staking',this)">🥩 Staking 0.03%</button>
+<button onclick="showPage('money',this)">💰 Deposit / Withdraw / Exchange</button>
+<button onclick="showPage('crypto',this)">₿ Crypto</button>
+<button onclick="showPage('kyc',this)">🪪 KYC</button>
+<button onclick="showPage('chat',this)">💬 Chat Admin <span id="chatBadge" style="background:#c00;color:#fff;padding:2px 7px;border-radius:10px;font-size:12px;display:none">0</span></button>
+<button onclick="showPage('statement',this)">📄 Statement</button>
 </div>
 
-<div class="grid2">
-<div class="card"><h3>Engine Profit Tracker - Variable, Not Guaranteed</h3><p class="muted">Admin enters real daily result. Users see history, not a promise.</p>
-<label>Today's Engine Result (Admin demo - €)</label><input id="engineInput" type="number" placeholder="e.g. 120 or -40" value="42">
-<button class="btn btn-d" onclick="setEngine()">Update Today's Engine Profit</button>
-<table><thead><tr><th>Date</th><th>Engine Profit</th><th>Note</th></tr></thead><tbody id="engineTable"><tr><td>2026-11-21</td><td class="green">+ €42.00</td><td>Trading + Fees</td></tr><tr><td>2026-11-20</td><td class="green">+ €18.50</td><td>Fees only</td></tr><tr><td>2026-11-19</td><td class="red">- €12.00</td><td>Trading loss</td></tr></tbody></table>
-<div class="notice"><b>Important:</b> Trading can go up or down. Past profit does not guarantee future profit. Never deposit money you cannot afford to lose.</div>
+<div id="page-home" class="page active">
+<!-- HEALTH BAR - Shareholder sees only Green/Yellow/Purple, no diagnosis -->
+<div class="card" style="border:2px solid #0a9d6e"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3 style="margin:0" id="healthTitle">🟢 All Systems Operational</h3><span class="small">Uptime <span id="healthUptime">99.98%</span> • <button class="btn small dark" onclick="loadHealth()">↻ Check</button></span></div><div class="healthBar" id="healthBarTop"></div><div class="flex" id="healthMini" style="font-size:13px"></div><p class="small">Green = Operational, Yellow = Degraded, Purple = Paused / Maintenance. Admin sees full diagnosis.</p></div>
+<!-- CONTRACT REMINDER -->
+<div id="contractAlertHome"></div>
+<!-- CONTRACT COUNTDOWN -->
+<div class="card" style="background:#0f1e2e;color:#fff"><h3 style="margin:0;color:#fff">📜 My Contract - 1095 Days - Countdown LIVE</h3><div id="contractCountdownHome" style="margin-top:10px"></div></div>
+<div class="stats">
+<div class="stat">💰 Available<br><b id="statAvail">€0.00</b><br><small>Can Withdraw</small></div>
+<div class="stat">💶 Earned<br><b id="statEarned">€0.00</b><br><small>Total Earned</small></div>
+<div class="stat">🔒 Locked / Reserved<br><b id="statReserved">€0.00</b></div>
+<div class="stat">📜 Contract<br><b id="statContract">€0.00</b><br><small>€300 - €100k</small></div>
+<div class="stat">📈 Daily Earning<br><b id="statDaily">€0.00</b><br><small>0.03% INCLUSIVE</small></div>
+<div class="stat">🥩 Staked Extra<br><b id="statStaked">€0.00</b></div>
+<div class="stat">₿ USDT<br><b id="statUSDT">0.00</b></div>
+<div class="stat">⚙️ My Engine<br><b id="statEngine">-</b><br><small id="statEngineReserve">Reserve €0.00</small></div>
+</div>
+<div class="card"><h3 style="margin-top:0">👑 My Engine - Choose Once, Then Move Only Via Admin</h3><p class="small">Capacity STRICT 5B per engine, 25B total. If engine is full, choose another.</p><div class="flex"><select id="engineSelect"><option>Africa</option><option>Europe</option><option>Asia</option><option>America</option><option>Oceania</option></select><button class="btn" onclick="chooseEngine()">Choose / Change My Engine</button></div><div id="engineResult"></div><div id="capacityBox" style="margin-top:10px"></div></div>
+<div class="card"><h3 style="margin-top:0">📜 Last Transactions</h3><div id="lastTx">Loading...</div></div>
 </div>
 
-<div class="card"><h3>Active Balance - Single Table</h3><p class="muted">This is the ONLY balance table. All pages use this same balance.</p>
-<table><thead><tr><th>Item</th><th>Amount</th></tr></thead><tbody>
-<tr><td>€ Balance</td><td><b id="tblEur">€5,013.87</b></td></tr>
-<tr><td>USDT Balance</td><td><b id="tblUsdt">0.00 USDT</b></td></tr>
-<tr><td>USDT Value in € (live)</td><td id="tblUsdtEur">€0.00</td></tr>
-<tr><td>Referral Bonus</td><td>€315.00</td></tr>
-<tr><td><b>Total Value</b></td><td><b id="tblTotal">€5,328.87</b></td></tr>
-</tbody></table>
-<div class="kycbox" id="kycBanner"><b>🔒 KYC Required</b><br>Complete KYC in Profile to unlock Withdraw. <a href="#" onclick="go('profile');return false">Go to Profile →</a></div>
-<div class="notice"><b>How Withdraw works:</b><br>1. Earn / Deposit in €<br>2. Exchange € → USDT (1% fee, live rate locked)<br>3. Withdraw USDT (20% fee, min 100 USDT)</div>
-</div>
-</div>
+<div id="page-contract" class="page">
+<div class="card" style="border:2px solid #0f1e2e"><h3 style="margin-top:0">📜 Shareholder Agreement - 1095 Days (3 Years)</h3>
+<p class="small"><b>Membership:</b> €300 minimum, €100,000 maximum. <b>Initial Deposit INCLUSIVE:</b> Daily Earning = Your Deposit x 0.03% every day for 1095 days. Your deposit IS the earning base. At end of 1095 days, principal is returned + you keep all daily earnings.</p>
+<table><tr><th>Deposit</th><th>Daily INCLUSIVE</th><th>Total 1095 Days</th><th>At End</th></tr><tr><td>€300</td><td>€0.09 / day</td><td>€98.55</td><td>+ €300 principal back</td></tr><tr><td>€1,000</td><td>€0.30 / day</td><td>€328.50</td><td>+ €1,000 principal back</td></tr><tr><td>€10,000</td><td>€3.00 / day</td><td>€3,285.00</td><td>+ €10,000 principal back</td></tr><tr><td>€100,000</td><td>€30.00 / day</td><td>€32,850.00</td><td>+ €100,000 principal back</td></tr></table>
+<div id="contractAlertPage"></div>
+<div id="contractDetail" style="margin-top:12px"></div></div>
+<div class="card"><h3 style="margin-top:0">➕ Create My Contract - Request To Admin</h3><p class="small">Enter amount €300 - €100,000. Admin will approve and your 1095-day countdown starts. You must have Available balance OR Deposit approved first. If you deposit via Deposit tab, admin approves it, then you can create contract here.</p><div class="flex"><input id="contractAmt" type="number" placeholder="Amount €300 - €100,000"><input id="contractStart" type="date"></div><div id="contractPreview" class="small"></div><button class="btn" onclick="requestContract()">Request 1095-Day Contract</button><div id="contractRequestResult"></div><p class="small">Note: This creates a request in Transactions + Chat message to Admin. Admin creates the contract in admin.html → Contracts tab. You will see countdown here once approved.</p></div>
+<div class="card"><h3 style="margin-top:0">📋 My Contracts</h3><div id="contractsList">Loading...</div></div>
 </div>
 
-<!-- EXCHANGE -->
-<div id="page-exchange" class="page">
-<div class="card"><h3>Exchange € → USDT - Option A</h3><p class="liveRateText">€1 = $1.0968 • LIVE</p><p class="muted">Fee 1% • $1 = 1 USDT • Rate locked when you click Exchange</p>
-<label>Your € Balance</label><input readonly id="exEurBal" value="€5,013.87">
-<label>Amount in € to Exchange</label><input id="exAmt" type="number" placeholder="Min €10" oninput="calcExchange()">
-<label>Receive in</label><select id="exTo"><option>USDT (TRC20)</option></select>
-<div class="calc" id="exCalc">Type amount to see live USDT.</div>
-<button class="btn btn-y" onclick="doExchange()">Exchange Now</button><p class="msg" id="exMsg"></p>
-<h3 style="margin-top:18px">Exchange History - Rate Locked</h3><table><thead><tr><th>Date</th><th>€ In</th><th>Rate Locked</th><th>Fee 1%</th><th>USDT You Get</th></tr></thead><tbody id="exTable"></tbody></table>
-</div>
+<div id="page-staking" class="page">
+<div class="card" style="border:2px solid #7c3aed"><h3 style="margin-top:0">🥩 Staking - Up To 0.03% Daily - Revenue Capped</h3>
+<p class="small">Your 1095-Day Contract ALREADY pays 0.03% daily. Extra Staking is for extra lock beyond contract. <b>Formula:</b> Daily = min(Staked x 0.03%, Revenue Pool x 80% / All Stakers). If Revenue = €0, payout = €0. Paid from real revenue, never from deposits or Central Safety.</p>
+<div class="flex"><div class="stat">My Extra Staked<br><b id="myStaked">€0.00</b></div><div class="stat">Revenue Pool Available<br><b id="revAvail">€0.00</b></div><div class="stat">Max Payout Today<br><b id="stakeMax">€0.00</b><br><small>Revenue x 80%</small></div><div class="stat">My Daily (Extra)<br><b id="myStakeDaily">€0.00</b></div></div>
+<div id="stakingAlert"></div></div>
+<div class="card"><h3 style="margin-top:0">➕ Stake Extra (Optional)</h3><p class="small">Locks Available balance. Cannot withdraw locked amount until unstake.</p><div class="flex"><input id="stakeAmt" type="number" placeholder="Amount €"><select id="stakeLock"><option value="7">7 Days</option><option value="30" selected>30 Days</option><option value="90">90 Days</option></select></div><button class="btn" onclick="requestStake()">Request Stake</button><div id="stakeResult"></div><p class="small">This sends a request to Admin via Chat. Admin will lock it in admin.html → Revenue + Staking.</p></div>
+<div class="card"><h3 style="margin-top:0">📋 My Extra Stakes</h3><div id="stakesList">Loading...</div></div>
+<div class="card"><h3 style="margin-top:0">💵 Revenue Pool Transparency</h3><p class="small">This is real revenue Cedars Empire earned - withdrawal fees, exchange spread, task commissions. This is what pays your 0.03%.</p><div id="revList">Loading...</div></div>
 </div>
 
-<!-- DEPOSIT -->
-<div id="page-deposit" class="page">
-<div class="card"><h3>Deposit</h3><p class="muted">Deposit fee €0 • Crypto: USDT / BTC / ETH • <b>Transaction Hash required</b></p>
-<label>Amount (€)</label><input id="depAmt" type="number" value="1000" oninput="calcDeposit()">
-<label>Crypto Method</label><select id="depMethod"><option>USDT (TRC20)</option><option>USDT (ERC20)</option><option>BTC</option><option>ETH</option></select>
-<label>Transaction Hash (Tx Hash) - REQUIRED</label><input id="depHash" placeholder="Paste Tx Hash - e.g. 0x... or TQ...">
-<div class="calc" id="depCalc"></div>
-<button class="btn btn-y" onclick="doDeposit()">Submit Deposit</button><p class="msg" id="depMsg"></p>
-<h3 style="margin-top:18px">Deposit History</h3><table><thead><tr><th>Date</th><th>Amount</th><th>Tx Hash</th><th>Status</th></tr></thead><tbody id="depTable"></tbody></table>
-</div>
+<div id="page-money" class="page">
+<div class="card"><h3 style="margin-top:0">🏦 Deposit - Request To Admin</h3><p class="small">Deposit via Bank / Mobile Money / Crypto. Upload proof. Admin approves, Available increases. Deposit can then be used for Contract €300-€100k.</p><div class="flex"><input id="depAmt" type="number" placeholder="Amount €"><select id="depMethod"><option>Bank Transfer</option><option>Mobile Money</option><option>Crypto USDT</option><option>Cash</option></select><input id="depProof" placeholder="Proof Link / Reference"></div><button class="btn" onclick="requestDeposit()">Request Deposit</button><div id="depResult"></div><div id="myDeposits" style="margin-top:10px"></div></div>
+<div class="card"><h3 style="margin-top:0">↗ Withdraw - Request To Admin</h3><p class="small">Withdraw from Available only. Fee may apply - admin will confirm in Chat. Withdrawals are paid after admin approval.</p><div class="flex"><input id="wdAmt" type="number" placeholder="Amount €"><select id="wdMethod"><option>Bank Transfer</option><option>Mobile Money</option><option>Crypto USDT</option></select><input id="wdWallet" placeholder="Wallet / Account / Phone"></div><button class="btn" onclick="requestWithdraw()">Request Withdrawal</button><div id="wdResult"></div><div id="myWithdrawals" style="margin-top:10px"></div></div>
+<div class="card"><h3 style="margin-top:0">💱 Exchange</h3><p class="small">Exchange between EUR and USDT. Rate shown by admin. Request, admin confirms.</p><div class="flex"><input id="exFromAmt" type="number" placeholder="From Amount"><select id="exFrom"><option>EUR</option><option>USDT</option></select><input id="exToAmt" type="number" placeholder="To Amount (auto 1:1 for now)"><select id="exTo"><option>USDT</option><option>EUR</option></select></div><button class="btn" onclick="requestExchange()">Request Exchange</button><div id="exResult"></div><div id="myExchanges" style="margin-top:10px"></div></div>
+<div class="card"><h3 style="margin-top:0">🎟️ Redeem Code</h3><div class="flex"><input id="redeemCode" placeholder="Code e.g. CEDARS-XXXXXX"></div><button class="btn" onclick="redeemMyCode()">Redeem My Code</button><div id="redeemResult"></div></div>
 </div>
 
-<!-- WITHDRAW -->
-<div id="page-withdraw" class="page">
-<div class="card"><h3>Withdraw USDT Only</h3><p class="muted">Fee 20% • Min 100 USDT • KYC Approved required • PIN required • Must Exchange first</p>
-<p class="muted">Your USDT Balance: <b id="wUsdtBal">0.00 USDT</b> • <span class="liveRateText">€1 = $1.0968</span></p>
-<div class="kycbox" id="withdrawLocked"><b>🔒 Withdraw Locked - KYC Not Approved</b><br>Complete KYC in Profile first. <button class="btn btn-d" style="width:auto;padding:8px 14px;margin-top:8px" onclick="go('profile')">Complete KYC First</button></div>
-<div class="kycbox" id="exchangeLocked"><b>🔄 Exchange First</b><br>You have 0 USDT. Exchange € → USDT first. <button class="btn btn-y" style="width:auto;padding:8px 14px;margin-top:8px" onclick="go('exchange')">Go to Exchange</button></div>
-<label>Amount (USDT)</label><input id="wAmt" type="number" placeholder="Min 100 USDT" oninput="calcWithdraw()">
-<label>Wallet Address (USDT TRC20)</label><input id="wWallet" placeholder="T... address">
-<label>Withdraw PIN (6 digits)</label><input id="wPin" type="password" maxlength="6" placeholder="••••••">
-<div class="calc" id="wCalc">Type amount to see fee & what you receive.</div>
-<button class="btn btn-g" id="wBtn" onclick="doWithdraw()" disabled>Complete KYC First</button><p class="msg" id="wMsg"></p>
-<h3 style="margin-top:18px">Withdrawal History</h3><table><thead><tr><th>Date</th><th>Amount USDT</th><th>Fee 20%</th><th>You Receive</th><th>Status</th></tr></thead><tbody id="wTable"></tbody></table>
-</div>
+<div id="page-crypto" class="page">
+<div class="card"><h3 style="margin-top:0">₿ My Crypto Wallet - Hold / Receive / Send</h3><div class="flex"><div class="stat">USDT<br><b id="cryptoUSDT">0.00</b></div><div class="stat">BTC<br><b id="cryptoBTC">0.00000000</b></div><div class="stat">ETH<br><b id="cryptoETH">0.000000</b></div></div><div class="flex"><input id="myWallet" placeholder="My Wallet Address"><button class="btn dark" onclick="saveMyWallet()">Save My Wallet</button></div><div id="walletResult"></div></div>
+<div class="card"><h3 style="margin-top:0">➕ Deposit Crypto - Request</h3><div class="flex"><select id="cryptoDepCoin"><option>USDT</option><option>BTC</option><option>ETH</option></select><input id="cryptoDepAmt" type="number" placeholder="Amount"><input id="cryptoDepTx" placeholder="TX Hash - Required"></div><button class="btn" onclick="requestCryptoDeposit()">Request Crypto Deposit</button><div id="cryptoDepResult"></div></div>
+<div class="card"><h3 style="margin-top:0">↗ Send Crypto To External Wallet - Request</h3><div class="flex"><select id="cryptoWdCoin"><option>USDT</option><option>BTC</option><option>ETH</option></select><input id="cryptoWdAmt" type="number" placeholder="Amount"><input id="cryptoWdWallet" placeholder="External Wallet Address"></div><button class="btn" onclick="requestCryptoWithdraw()">Request Crypto Withdrawal</button><div id="cryptoWdResult"></div></div>
+<div class="card"><h3 style="margin-top:0">📜 My Crypto Transactions</h3><div id="myCryptoTx">Loading...</div></div>
 </div>
 
-<!-- P2P -->
-<div id="page-p2p" class="page">
-<div class="card"><h3>P2P Transfer - Live Rate</h3><p class="muted">Fee 5% • Live rate everywhere • Receiver gets USDT</p><p class="liveRateText">€1 = $1.0968 • LIVE</p>
-<label>Recipient Username / Email</label><input id="p2pTo" placeholder="e.g. john123">
-<label>Amount (€)</label><input id="p2pAmt" type="number" placeholder="e.g. 100" oninput="calcP2P()">
-<div class="calc" id="p2pCalc">Type amount to see live USD + USDT.</div>
-<button class="btn btn-y" onclick="doP2P()">Send P2P</button><p class="msg" id="p2pMsg"></p>
-<h3 style="margin-top:18px">P2P History</h3><table><thead><tr><th>Date</th><th>To</th><th>Amount €</th><th>Fee 5%</th><th>Receiver Gets USDT</th></tr></thead><tbody id="p2pTable"></tbody></table>
-</div>
+<div id="page-kyc" class="page">
+<div class="card"><h3 style="margin-top:0">🪪 KYC Verification</h3><p class="small">Upload ID / Passport. Admin approves. If rejected, you can re-upload.</p><div id="kycStatus"></div><div class="flex"><select id="kycType"><option>National ID</option><option>Passport</option><option>Driving License</option></select><input id="kycUrl" placeholder="Document Link - Upload to Drive / Imgur and paste link"></div><button class="btn" onclick="submitKyc()">Submit KYC</button><div id="kycResult"></div><div id="myKyc" style="margin-top:10px"></div></div>
 </div>
 
-<!-- REFERRAL -->
-<div id="page-referral" class="page">
-<div class="card"><h3>Referral - From Fees Only</h3><p class="muted">Gen1 6% • Gen2 3% • Gen3 1% of platform fees, not of deposits. Total €315</p>
-<label>Your Link</label><input readonly value="https://cedarsempire.com/r/emmanuel">
-<button class="btn btn-d" onclick="copyRef()">Copy Link</button><p class="msg" id="refMsg"></p>
-<table><thead><tr><th>Member</th><th>Gen</th><th>Fee Paid</th><th>Your Bonus</th></tr></thead><tbody><tr><td>John K.</td><td>Gen 1</td><td>€5,000 fees</td><td>€300</td></tr><tr><td>Sarah M.</td><td>Gen 2</td><td>€333 fees</td><td>€10</td></tr><tr><td>David O.</td><td>Gen 3</td><td>€500 fees</td><td>€5</td></tr></tbody></table>
-</div>
+<div id="page-chat" class="page">
+<div class="card"><h3 style="margin-top:0">💬 Chat With Admin - Saved Forever</h3><p class="small">Ask about contract, deposit, withdrawal, staking. Admin replies here.</p><div id="chatBox" class="chatBox">Loading...</div><div class="flex"><input id="chatInput" placeholder="Type message to Admin..."><button class="btn" onclick="sendChat()">Send</button></div><button class="btn dark" onclick="loadAll()">↻ Refresh Chat</button></div>
 </div>
 
-<!-- HISTORY -->
-<div id="page-history" class="page">
-<div class="card"><h3>Full History</h3><select id="histFilter" onchange="renderHistory()"><option value="All">All</option><option>Deposit</option><option>Withdrawal</option><option>Exchange</option><option>P2P</option><option>Redeem</option></select>
-<table><thead><tr><th>Date</th><th>Type</th><th>Detail</th><th>Amount</th><th>Status</th></tr></thead><tbody id="histTable"></tbody></table></div>
-</div>
-
-<!-- REDEEM -->
-<div id="page-redeem" class="page">
-<div class="card"><h3>Redeem Code</h3><p class="muted">Try CEDARS50 = €50 • Codes are created by Admin, one-time use</p>
-<label>Code</label><input id="redCode" placeholder="CEDARS50"><button class="btn btn-g" style="margin-top:12px" onclick="doRedeem()">Redeem</button><p class="msg" id="redMsg"></p>
-<table><thead><tr><th>Date</th><th>Code</th><th>Amount</th><th>Status</th></tr></thead><tbody id="redTable"></tbody></table>
-</div>
-</div>
-
-<!-- PROFILE / KYC -->
-<div id="page-profile" class="page">
-<div class="card"><h3>Profile - Emmanuel</h3><p class="muted">Email: emmanuel@example.com • Member since 2026-11-10 • Country: Uganda</p>
-<span class="badge br" id="kycBadge">KYC: PENDING / NOT DONE</span>
-<h3 style="margin-top:16px">KYC Verification</h3><p class="muted">All fields required. Fingerprint optional. Withdraw PIN is 6 digits.</p>
-<div class="row"><div><label>Full Name *</label><input id="kycName" placeholder="As on ID"></div><div><label>Date of Birth *</label><input id="kycDob" type="date"></div></div>
-<div class="row"><div><label>Country *</label><input id="kycCountry" placeholder="e.g. Uganda"></div><div><label>ID Type *</label><select id="kycType"><option>National ID</option><option>Passport</option><option>Driving License</option></select></div></div>
-<label>ID Number *</label><input id="kycId" placeholder="e.g. CM123456">
-<div class="row"><div><label>Front Photo of ID *</label><input id="kycFront" type="file" accept="image/*"></div><div><label>Selfie Holding ID *</label><input id="kycSelfie" type="file" accept="image/*"></div></div>
-<div class="row"><div><label>Fingerprint (Optional)</label><input id="kycFinger" type="file" accept="image/*"></div><div><label>Withdraw PIN (6 digits) *</label><input id="kycPin" type="password" maxlength="6" placeholder="Create 6-digit PIN"></div></div>
-<button class="btn btn-y" onclick="doKYC()">Submit KYC for Review</button><p class="msg" id="kycMsg"></p>
-<div class="kycbox">In this demo, KYC becomes <b>APPROVED instantly</b> after you submit correctly. In real app, admin will approve / reject.<br>Status: <b id="kycStatusText">Pending / Not Done</b></div>
-<table><thead><tr><th>Date</th><th>Name</th><th>DOB</th><th>Country</th><th>ID Type</th><th>Status</th></tr></thead><tbody id="kycTable"><tr><td colspan="6" class="muted">No KYC submitted yet.</td></tr></tbody></table>
-</div>
-</div>
-
-<!-- SUPPORT -->
-<div id="page-support" class="page">
-<div class="card"><h3>Support - Live Chat</h3><div class="chat" id="chatBox"><p><b>Support:</b> Hi Emmanuel, how can we help?</p></div><label>Message</label><textarea id="chatInput" placeholder="Type..."></textarea><button class="btn btn-d" onclick="sendChat()">Send</button></div>
+<div id="page-statement" class="page">
+<div class="card"><h3 style="margin-top:0">📄 My Statement</h3><div id="statementSummary"></div><div class="flex"><input id="stmtFrom" type="date"><input id="stmtTo" type="date"><button class="btn" onclick="downloadCSV()">⬇ Download CSV</button><button class="btn dark" onclick="printStatement()">🖨 Print / PDF</button></div><div id="statementTx" style="margin-top:10px"></div></div>
 </div>
 
 </div>
-<div class="footer">CEDARS EMPIRE • Exchange • Wallet • Community • Trading involves risk</div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-let eurBalance=5013.87, usdtBalance=0, eurUsd=1.09679, kycStatus='NOT DONE', savedPin='';
-let deposits=[{date:'2026-11-10',amt:5000,hash:'TQ...9xK2',status:'Approved'}];
-let withdrawals=[], exchanges=[], p2ps=[{date:'2026-11-18',to:'john123',amt:100,fee:5,net:95,usdt:104.20}], redeems=[{date:'2026-11-12',code:'WELCOME10',amt:10,status:'Redeemed'}];
-let history=[{date:'2026-11-18',type:'P2P',detail:'To john123',amt:-100,status:'Sent'},{date:'2026-11-10',type:'Deposit',detail:'USDT',amt:5000,status:'Approved'}];
-const fmtE=n=>'€'+n.toFixed(2), today='2026-11-22';
+const SUPABASE_URL = 'https://ipyvewpjtpgfuqfwizlr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm';
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const ADMIN_EMAILS = ['ogwal.bemmanuel@gmail.com','cryptome2030@gmail.com'];
+const ADMIN_IDS = []; // filled after first chat - admin will be found via messages
+const ENGINE_LIST = ['Africa','Europe','Asia','America','Oceania'];
+const MIN_MEMBERSHIP = 300, MAX_MEMBERSHIP = 100000, DAILY_RATE = 0.0003, CONTRACT_DAYS = 1095;
+let currentUser=null, myProfile=null, myBalance=null, myContract=null, allContracts=[], myStakes=[], allRevenue=[], myCrypto=null, myCryptoTx=[], allMessages=[], myDeposits=[], myWithdrawals=[], myExchanges=[], myKyc=[], engines=[], healthData=null;
 
-async function getLiveRate(){
-  try{
-    let r=await fetch('https://api.exchangerate-api.com/v4/latest/EUR');
-    let d=await r.json(); eurUsd=d.rates.USD;
-    document.querySelectorAll('.liveRateText').forEach(e=>e.innerText='€1 = $'+eurUsd.toFixed(4)+' • LIVE • '+new Date().toLocaleTimeString());
-  }catch(e){
-    document.querySelectorAll('.liveRateText').forEach(e=>e.innerText='€1 = $'+eurUsd.toFixed(4)+' • OFFLINE - Last saved rate');
+function showPage(id,btn){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById('page-'+id).classList.add('active'); document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); if(id==='contract') renderContractPage(); if(id==='staking') renderStakingPage(); if(id==='chat') renderChat(); if(id==='statement') renderStatement(); }
+function showMsg(t,c){ let el=document.getElementById('authMsg'); el.innerText=t; el.style.color=c||'#c00'; }
+function daysLeft(endDate){ return Math.ceil((new Date(endDate)-new Date())/86400000); }
+function daysPassed(startDate){ return Math.floor((new Date()-new Date(startDate))/86400000); }
+function formatCountdown(endDate){ let diff=new Date(endDate)-new Date(); if(diff<=0) return {text:'EXPIRED', expired:true}; let days=Math.floor(diff/86400000); let hrs=Math.floor(diff%86400000/3600000); let mins=Math.floor(diff%3600000/60000); let secs=Math.floor(diff%60000/1000); return {text: days+' Days : '+String(hrs).padStart(2,'0')+'h : '+String(mins).padStart(2,'0')+'m : '+String(secs).padStart(2,'0')+'s', expired:false}; }
+function getContractStatus(c){ let dl=daysLeft(c.end_date); if(dl<=0) return {label:'EXPIRED', color:'#c00'}; if(dl<=1) return {label:'EXPIRES TOMORROW', color:'#c00'}; if(dl<=7) return {label:'EXPIRES IN '+dl+' DAYS', color:'#c00'}; if(dl<=30) return {label:'EXPIRING SOON - '+dl+' DAYS', color:'#d9a400'}; return {label:'ACTIVE - '+dl+' DAYS LEFT', color:'#0a9d6e'}; }
+
+async function doSignup(){ const email=document.getElementById('email').value.trim().toLowerCase(); const password=document.getElementById('password').value; if(!email||!password||password.length<6){ showMsg('Enter email + password min 6 chars'); return; } const {data,error}=await client.auth.signUp({email,password}); if(error){ showMsg('SIGNUP FAILED: '+error.message); return; } showMsg('Account created! Now Login. If email confirmation required, check your inbox.', '#0a9d6e'); }
+async function doLogin(){ const email=document.getElementById('email').value.trim().toLowerCase(); const password=document.getElementById('password').value; if(!email||!password){ showMsg('Enter email + password'); return; } const {data,error}=await client.auth.signInWithPassword({email,password}); if(error){ showMsg('LOGIN FAILED: '+error.message); return; } await afterLogin(); }
+async function doLogout(){ await client.auth.signOut(); location.reload(); }
+async function afterLogin(){ const {data}=await client.auth.getUser(); if(!data.user) return; currentUser=data.user; if(ADMIN_EMAILS.includes(currentUser.email.toLowerCase())){ window.location.href='admin.html'; return; } document.getElementById('userEmailTop').innerText='👤 '+currentUser.email; document.getElementById('logoutBtn').style.display='inline-block'; document.getElementById('authSection').style.display='none'; document.getElementById('dashSection').style.display='block'; await loadAll(); setInterval(updateCountdowns,1000); setInterval(()=>{ if(currentUser) loadAll(true); },60000); }
+
+async function loadAll(silent){ try{ let {data:prof}=await client.from('profiles').select('*').eq('id',currentUser.id).single(); myProfile=prof||{id:currentUser.id, email:currentUser.email, sub_engine:null}; if(!prof){ await client.from('profiles').insert({id:currentUser.id, email:currentUser.email}); myProfile={id:currentUser.id, email:currentUser.email, sub_engine:null}; } }catch(e){ myProfile={id:currentUser.id, email:currentUser.email, sub_engine:null}; } try{ let {data:bal}=await client.from('balances').select('*').eq('user_id',currentUser.id).single(); myBalance=bal||{available_balance:0,reserved_balance:0,earned_balance:0,central_reserve:0}; if(!bal){ await client.from('balances').insert({user_id:currentUser.id, available_balance:0, reserved_balance:0, earned_balance:0, central_reserve:0, amount:0}); } }catch(e){ myBalance={available_balance:0,reserved_balance:0,earned_balance:0}; } try{ let {data}=await client.from('contracts').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}); allContracts=data||[]; myContract=allContracts.find(c=>c.status==='active' && daysLeft(c.end_date)>0) || allContracts[0] || null; }catch(e){ allContracts=[]; } try{ let {data}=await client.from('stakes').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}); myStakes=data||[]; }catch(e){ myStakes=[]; } try{ let {data}=await client.from('revenue_pool').select('*').order('created_at',{ascending:false}).limit(50); allRevenue=data||[]; }catch(e){ allRevenue=[]; } try{ let {data}=await client.from('crypto_balances').select('*').eq('user_id',currentUser.id).single(); myCrypto=data||{usdt:0,btc:0,eth:0,wallet_address:''}; if(!data){ await client.from('crypto_balances').insert({user_id:currentUser.id, usdt:0, btc:0, eth:0}); } }catch(e){ myCrypto={usdt:0,btc:0,eth:0,wallet_address:''}; } try{ let {data}=await client.from('crypto_transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(50); myCryptoTx=data||[]; }catch(e){ myCryptoTx=[]; } try{ let {data}=await client.from('messages').select('*').or('sender_id.eq.'+currentUser.id+',receiver_id.eq.'+currentUser.id).order('created_at',{ascending:true}).limit(500); allMessages=data||[]; }catch(e){ allMessages=[]; } try{ let {data}=await client.from('deposits').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myDeposits=data||[]; }catch(e){ myDeposits=[]; } try{ let {data}=await client.from('withdrawals').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myWithdrawals=data||[]; }catch(e){ myWithdrawals=[]; } try{ let {data}=await client.from('exchanges').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myExchanges=data||[]; }catch(e){ myExchanges=[]; } try{ let {data}=await client.from('kyc_documents').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myKyc=data||[]; }catch(e){ myKyc=[]; } try{ let {data}=await client.from('sub_engines').select('*'); engines=data||[]; }catch(e){ engines=[]; } renderHome(); renderContractPage(); renderStakingPage(); renderMoney(); renderCrypto(); renderKyc(); renderChat(); renderStatement(); loadHealth(); }
+
+function renderHome(){
+  document.getElementById('statAvail').innerText='€'+parseFloat(myBalance.available_balance||0).toFixed(2);
+  document.getElementById('statEarned').innerText='€'+parseFloat(myBalance.earned_balance||0).toFixed(2);
+  document.getElementById('statReserved').innerText='€'+parseFloat(myBalance.reserved_balance||0).toFixed(2);
+  document.getElementById('statContract').innerText=myContract?'€'+parseFloat(myContract.amount||0).toFixed(2):'€0.00';
+  document.getElementById('statDaily').innerText=myContract?'€'+parseFloat(myContract.daily_earning||0).toFixed(2):'€0.00';
+  let staked=myStakes.filter(s=>s.status==='active').reduce((s,x)=>s+parseFloat(x.amount||0),0);
+  document.getElementById('statStaked').innerText='€'+staked.toFixed(2);
+  document.getElementById('statUSDT').innerText=parseFloat(myCrypto.usdt||0).toFixed(2);
+  document.getElementById('statEngine').innerText=myProfile.sub_engine||'Not Chosen';
+  document.getElementById('engineTop').innerText='Engine: '+(myProfile.sub_engine||'-');
+  let eng=engines.find(e=>e.name===myProfile.sub_engine); document.getElementById('statEngineReserve').innerText='Reserve €'+(eng?parseFloat(eng.reserve||0).toFixed(2):'0.00');
+  document.getElementById('engineSelect').value=myProfile.sub_engine||'Africa';
+  // Contract countdown home
+  if(myContract && myContract.status==='active'){
+    let cd=formatCountdown(myContract.end_date); let st=getContractStatus(myContract); let pct=Math.min(100, daysPassed(myContract.start_date)/1095*100);
+    let alertHtml=''; let dl=daysLeft(myContract.end_date);
+    if(dl<=0) alertHtml='<div class="alertBox red"><b>🔴 CONTRACT EXPIRED</b> - Contact Admin to return principal €'+parseFloat(myContract.amount||0).toFixed(2)+'</div>';
+    else if(dl<=7) alertHtml='<div class="alertBox red"><b>⏰ CONTRACT EXPIRES IN '+dl+' DAYS</b> - Contact Admin now. Principal €'+parseFloat(myContract.amount||0).toFixed(2)+' will be returned at end.</div>';
+    else if(dl<=30) alertHtml='<div class="alertBox"><b>⚠️ CONTRACT EXPIRING IN '+dl+' DAYS</b> - Prepare for renewal / principal return.</div>';
+    else alertHtml='<div class="alertBox green"><b>✅ Contract Active</b> - '+dl+' days left.</div>';
+    document.getElementById('contractAlertHome').innerHTML=alertHtml;
+    document.getElementById('contractBadgeNav').style.display= dl<=30 ? 'inline' : 'none'; document.getElementById('contractBadgeNav').innerText= dl<=0?'EXPIRED':dl+'d';
+    document.getElementById('contractCountdownHome').innerHTML='<div class="countBox"><div>⏰ CONTRACT COUNTDOWN - LIVE</div><b class="contractTimer" data-end="'+myContract.end_date+'">'+(cd.expired?'EXPIRED':cd.text)+'</b><div style="margin-top:8px">Contract: €'+parseFloat(myContract.amount||0).toFixed(2)+' • Daily €'+parseFloat(myContract.daily_earning||0).toFixed(2)+' INCLUSIVE • Day '+(daysPassed(myContract.start_date)+1)+' / 1095 • '+pct.toFixed(1)+'% • Ends '+(myContract.end_date||'').slice(0,10)+'</div><div style="font-size:13px;margin-top:6px">Earned: €'+parseFloat(myContract.total_earned||0).toFixed(2)+' • Paid: €'+parseFloat(myContract.total_paid||0).toFixed(2)+' • Principal returned at end</div></div>';
+  } else {
+    document.getElementById('contractAlertHome').innerHTML='<div class="alertBox"><b>❌ NO ACTIVE CONTRACT</b> - Go to Contracts tab, create €300 - €100,000 contract. Daily 0.03% INCLUSIVE starts after admin approval.</div>';
+    document.getElementById('contractCountdownHome').innerHTML='<div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;text-align:center"><b>No Contract Yet</b><br>Create in Contracts tab - €300 to €100,000 - 1095 Days</div>';
   }
-  calcExchange(); calcP2P(); calcDeposit(); calcWithdraw(); renderAll();
+  // Capacity
+  document.getElementById('capacityBox').innerHTML=ENGINE_LIST.map(e=>{ let en=engines.find(x=>x.name===e); return '<div style="background:#f8fafc;color:#000;padding:10px;border-radius:10px;margin-top:6px"><b>'+e+'</b> • '+(en?(en.is_on?'🟢 ON':'🟣 PAUSED'):'-')+' • Reserve €'+(en?parseFloat(en.reserve||0).toFixed(2):'0.00')+'</div>'; }).join('');
+  // Last Tx
+  (async()=>{ let {data}=await client.from('transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(10); document.getElementById('lastTx').innerHTML=(data||[]).map(t=>'<div style="padding:8px;border-bottom:1px solid #eee">'+(t.created_at||'').slice(0,19)+' • '+t.type+' • '+(t.note||'')+' • <b>€'+parseFloat(t.amount||0).toFixed(2)+'</b></div>').join('')||'No transactions yet'; })();
 }
-function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
-function go(id){let btns=[...document.querySelectorAll('.nav button')];let map={dashboard:0,exchange:1,deposit:2,withdraw:3,p2p:4,referral:5,history:6,redeem:7,profile:8,support:9};showPage(id,btns[map[id]])}
-function msg(id,t,ok){let e=document.getElementById(id);e.textContent=t;e.className='msg '+(ok?'ok':'err')}
-function setEngine(){let v=parseFloat(document.getElementById('engineInput').value)||0;document.getElementById('engineToday').textContent=(v>=0?'+ ':'- ')+fmtE(Math.abs(v));document.getElementById('engineToday').className='big2 '+(v>=0?'green':'red');let row=document.createElement('tr');row.innerHTML=`<td>${today}</td><td class="${v>=0?'green':'red'}">${v>=0?'+ ':'- '}${fmtE(Math.abs(v))}</td><td>Admin updated</td>`;document.getElementById('engineTable').prepend(row);msg('engineToday','',true);}
-function calcExchange(){let eur=parseFloat(document.getElementById('exAmt').value)||0;let gross=eur*eurUsd;let fee=gross*0.01;let net=gross-fee;document.getElementById('exCalc').innerHTML=`€${eur.toFixed(2)} × $${eurUsd.toFixed(4)} = ${gross.toFixed(2)} USDT<br>Exchange Fee 1%: <b>- ${fee.toFixed(2)} USDT</b><br>You Get: <b style="color:#16a34a">${net.toFixed(2)} USDT</b><br>Rate locked when you click Exchange`;}
-function doExchange(){let eur=parseFloat(document.getElementById('exAmt').value);if(!eur||eur<10){msg('exMsg','Minimum exchange €10',false);return}if(eur>eurBalance){msg('exMsg','Not enough € balance. Balance '+fmtE(eurBalance),false);return}let rateLocked=eurUsd;let gross=eur*rateLocked;let fee=gross*0.01;let net=gross-fee;eurBalance-=eur;usdtBalance+=net;exchanges.unshift({date:today,eur:eur,rate:rateLocked,fee:fee,net:net});history.unshift({date:today,type:'Exchange',detail:'€'+eur+' → USDT @ $'+rateLocked.toFixed(4),amt:-eur,status:'Done'});msg('exMsg','Exchanged €'+eur+' → '+net.toFixed(2)+' USDT at $'+rateLocked.toFixed(4)+'. Fee '+fee.toFixed(2)+' USDT',true);renderAll();calcExchange();}
-function calcDeposit(){let amt=parseFloat(document.getElementById('depAmt').value)||0;let usd=amt*eurUsd;document.getElementById('depCalc').innerHTML=`Amount: <b>${fmtE(amt)}</b><br>Live Rate: <b>€1 = $${eurUsd.toFixed(4)}</b><br>Value in USD: <b>$${usd.toFixed(2)}</b><br>Deposit Fee (0%): <b>€0.00</b><br>You Receive: <b>${fmtE(amt)}</b>`;}
-function doDeposit(){let amt=parseFloat(document.getElementById('depAmt').value);let hash=document.getElementById('depHash').value.trim();if(!amt||amt<10){msg('depMsg','Minimum deposit €10',false);return}if(!hash||hash.length<8){msg('depMsg','Transaction Hash REQUIRED. Deposit cannot be submitted without it.',false);return}eurBalance+=amt;deposits.unshift({date:today,amt:amt,hash:hash.slice(0,4)+'...'+hash.slice(-4),status:'Pending'});history.unshift({date:today,type:'Deposit',detail:'Hash '+hash.slice(0,6),amt:amt,status:'Pending'});msg('depMsg','Deposit '+fmtE(amt)+' submitted. Waiting approval. Hash saved.',true);renderAll();}
-function calcWithdraw(){let amt=parseFloat(document.getElementById('wAmt').value)||0;let fee=amt*0.20;let net=amt-fee;document.getElementById('wCalc').innerHTML=`Amount: <b>${amt.toFixed(2)} USDT</b><br>Fee 20%: <b>- ${fee.toFixed(2)} USDT</b><br>You Will Receive: <b style="color:#16a34a">${net.toFixed(2)} USDT</b><br>Value in € (live): <b>${fmtE(net/eurUsd)}</b><br>Minimum: <b>100 USDT</b> • Your USDT: <b>${usdtBalance.toFixed(2)} USDT</b>`;}
-function doWithdraw(){
-  if(kycStatus!=='APPROVED'){msg('wMsg','Complete KYC First - Go to Profile.',false);go('profile');return}
-  if(usdtBalance<=0){msg('wMsg','You must EXCHANGE € to USDT first. Your USDT balance is 0.',false);go('exchange');return}
-  let amt=parseFloat(document.getElementById('wAmt').value);let wallet=document.getElementById('wWallet').value.trim();let pin=document.getElementById('wPin').value.trim();
-  if(!amt||amt<100){msg('wMsg','Minimum withdraw is 100 USDT.',false);return}
-  if(amt>usdtBalance){msg('wMsg','Not enough USDT. Exchange more. Balance '+usdtBalance.toFixed(2)+' USDT',false);return}
-  if(wallet.length<10){msg('wMsg','Enter valid USDT wallet address.',false);return}
-  if(pin!==savedPin){msg('wMsg','Wrong Withdraw PIN (6 digits). Use PIN you set in KYC.',false);return}
-  let fee=amt*0.20,net=amt-fee;usdtBalance-=amt;withdrawals.unshift({date:today,amt:amt,fee:fee,net:net,status:'Pending'});history.unshift({date:today,type:'Withdrawal',detail:'Fee 20% - Net '+net.toFixed(2)+' USDT',amt:-amt,status:'Pending'});msg('wMsg','Withdraw '+amt+' USDT requested. Fee '+fee.toFixed(2)+' - You receive '+net.toFixed(2)+' USDT',true);renderAll();calcWithdraw();
+function updateCountdowns(){ document.querySelectorAll('.contractTimer').forEach(el=>{ let end=el.getAttribute('data-end'); if(!end) return; let cd=formatCountdown(end); el.innerText='⏰ '+(cd.expired?'EXPIRED - 0 Days Left':cd.text); }); }
+
+function renderContractPage(){
+  if(!currentUser) return;
+  document.getElementById('contractAlertPage').innerHTML=document.getElementById('contractAlertHome').innerHTML;
+  if(myContract){
+    let st=getContractStatus(myContract); let cd=formatCountdown(myContract.end_date); let pct=Math.min(100, daysPassed(myContract.start_date)/1095*100);
+    document.getElementById('contractDetail').innerHTML='<div class="countBox"><div>⏰ LIVE COUNTDOWN</div><b class="contractTimer" data-end="'+myContract.end_date+'">'+(cd.expired?'EXPIRED':cd.text)+'</b><div style="margin-top:8px">Amount: €'+parseFloat(myContract.amount||0).toFixed(2)+' • Daily: €'+parseFloat(myContract.daily_earning||0).toFixed(2)+' INCLUSIVE • Day '+(daysPassed(myContract.start_date)+1)+' / 1095 • '+pct.toFixed(1)+'%</div><div>Start: '+(myContract.start_date||'').slice(0,10)+' → End: '+(myContract.end_date||'').slice(0,10)+' • Status: '+st.label+'</div><div>Earned: €'+parseFloat(myContract.total_earned||0).toFixed(2)+' • Paid: €'+parseFloat(myContract.total_paid||0).toFixed(2)+'</div></div>';
+  } else {
+    document.getElementById('contractDetail').innerHTML='<div class="alertBox"><b>No Contract</b> - Create one below. €300 - €100,000, 1095 Days.</div>';
+  }
+  document.getElementById('contractsList').innerHTML=allContracts.length?allContracts.map(c=>{ let st=getContractStatus(c); let cd=formatCountdown(c.end_date); return '<div class="item"><span><b>€'+parseFloat(c.amount||0).toFixed(2)+'</b> • '+(c.start_date||'').slice(0,10)+' → '+(c.end_date||'').slice(0,10)+' • Daily €'+parseFloat(c.daily_earning||0).toFixed(2)+' • Earned €'+parseFloat(c.total_earned||0).toFixed(2)+'<br><b class="contractTimer" data-end="'+c.end_date+'">⏰ '+(cd.expired?'EXPIRED':cd.text)+'</b></span><span><span class="pill" style="background:'+st.color+'22;color:'+st.color+'">'+st.label+'</span> • '+c.status+'</span></div>'; }).join(''):'No contracts yet';
 }
-function calcP2P(){let amt=parseFloat(document.getElementById('p2pAmt').value)||0;let fee=amt*0.05;let netEur=amt-fee;let netUsd=netEur*eurUsd;document.getElementById('p2pCalc').innerHTML=`Amount: <b>${fmtE(amt)}</b><br>Live Rate: <b>€1 = $${eurUsd.toFixed(4)}</b><br>P2P Fee 5%: <b>- ${fmtE(fee)}</b><br>Receiver Gets: <b>${fmtE(netEur)} = $${netUsd.toFixed(2)} = ${netUsd.toFixed(2)} USDT</b>`;}
-function doP2P(){let to=document.getElementById('p2pTo').value.trim();let amt=parseFloat(document.getElementById('p2pAmt').value);if(!to){msg('p2pMsg','Enter recipient.',false);return}if(!amt||amt<5){msg('p2pMsg','Minimum P2P €5.',false);return}if(amt>eurBalance){msg('p2pMsg','Not enough € balance.',false);return}let fee=amt*0.05,netEur=amt-fee,netUsd=netEur*eurUsd;eurBalance-=amt;p2ps.unshift({date:today,to:to,amt:amt,fee:fee,net:netUsd});history.unshift({date:today,type:'P2P',detail:'To '+to,amt:-amt,status:'Sent'});msg('p2pMsg','Sent '+fmtE(amt)+' to '+to+'. Fee '+fmtE(fee)+' - Receiver gets '+netUsd.toFixed(2)+' USDT',true);renderAll();}
-function copyRef(){navigator.clipboard&&navigator.clipboard.writeText('https://cedarsempire.com/r/emmanuel');msg('refMsg','Link copied!',true)}
-function doRedeem(){let c=document.getElementById('redCode').value.trim().toUpperCase();if(c!=='CEDARS50'){msg('redMsg','Invalid code. Try CEDARS50',false);return}eurBalance+=50;redeems.unshift({date:today,code:c,amt:50,status:'Redeemed'});history.unshift({date:today,type:'Redeem',detail:c,amt:50,status:'Redeemed'});msg('redMsg','Redeemed €50 added.',true);renderAll();}
-function sendChat(){let inp=document.getElementById('chatInput');let t=inp.value.trim();if(!t)return;let b=document.getElementById('chatBox');b.innerHTML+=`<p><b>You:</b> ${t}</p>`;inp.value='';setTimeout(()=>{b.innerHTML+=`<p><b>Support:</b> Got it - we will help with: "${t}"</p>`;b.scrollTop=b.scrollHeight},700)}
-function doKYC(){let name=document.getElementById('kycName').value.trim(),dob=document.getElementById('kycDob').value,country=document.getElementById('kycCountry').value.trim(),idn=document.getElementById('kycId').value.trim(),pin=document.getElementById('kycPin').value.trim(),front=document.getElementById('kycFront').files.length,selfie=document.getElementById('kycSelfie').files.length,type=document.getElementById('kycType').value;if(name.length<3){msg('kycMsg','Enter Full Name.',false);return}if(!dob){msg('kycMsg','Select Date of Birth.',false);return}if(!country){msg('kycMsg','Enter Country.',false);return}if(!idn){msg('kycMsg','Enter ID Number.',false);return}if(!front){msg('kycMsg','Upload Front Photo of ID.',false);return}if(!selfie){msg('kycMsg','Upload Selfie Holding ID.',false);return}if(!/^\d{6}$/.test(pin)){msg('kycMsg','Withdraw PIN must be exactly 6 digits.',false);return}kycStatus='APPROVED';savedPin=pin;document.getElementById('kycPillTop').textContent='KYC: APPROVED';document.getElementById('kycPillTop').className='pill pill-green';document.getElementById('kycBadge').textContent='KYC: APPROVED';document.getElementById('kycBadge').className='badge bg';document.getElementById('kycStatusText').textContent='Approved';document.getElementById('kycBanner').style.display='none';document.getElementById('withdrawLocked').style.display='none';let b=document.getElementById('wBtn');b.disabled=false;b.textContent='Request Withdrawal';document.getElementById('kycTable').innerHTML=`<tr><td>${today}</td><td>${name}</td><td>${dob}</td><td>${country}</td><td>${type}</td><td><span class="badge bg">APPROVED</span></td></tr>`;msg('kycMsg','KYC Approved for '+name+'. Withdraw unlocked. Your PIN is saved.',true);renderAll();}
-function renderHistory(){let f=document.getElementById('histFilter').value;let list=history.filter(h=>f==='All'||h.type===f);document.getElementById('histTable').innerHTML=list.map(h=>`<tr><td>${h.date}</td><td>${h.type}</td><td>${h.detail}</td><td>${h.amt>=0?'+':''}€${h.amt}</td><td><span class="badge bg">${h.status}</span></td></tr>`).join('')}
-function renderAll(){
-  let usdtEur = usdtBalance / eurUsd;
-  let total = eurBalance + usdtEur + 315;
-  document.getElementById('heroBal').textContent=(eurBalance+usdtEur).toFixed(2);
-  document.getElementById('eurBal').textContent=fmtE(eurBalance);
-  document.getElementById('usdtBal').textContent=usdtBalance.toFixed(2)+' USDT';
-  document.getElementById('tblEur').textContent=fmtE(eurBalance);
-  document.getElementById('tblUsdt').textContent=usdtBalance.toFixed(2)+' USDT';
-  document.getElementById('tblUsdtEur').textContent=fmtE(usdtEur);
-  document.getElementById('tblTotal').textContent=fmtE(total);
-  document.getElementById('exEurBal').value=fmtE(eurBalance);
-  document.getElementById('wUsdtBal').textContent=usdtBalance.toFixed(2)+' USDT';
-  document.getElementById('exchangeLocked').style.display = usdtBalance>0 ? 'none' : 'block';
-  document.getElementById('depTable').innerHTML=deposits.map(d=>`<tr><td>${d.date}</td><td>${fmtE(d.amt)}</td><td>${d.hash}</td><td><span class="badge ${d.status==='Approved'?'bg':'ba'}">${d.status}</span></td></tr>`).join('');
-  document.getElementById('exTable').innerHTML=exchanges.map(x=>`<tr><td>${x.date}</td><td>${fmtE(x.eur)}</td><td>$${x.rate.toFixed(4)}</td><td>${x.fee.toFixed(2)}</td><td>${x.net.toFixed(2)} USDT</td></tr>`).join('')||'<tr><td colspan="5" class="muted">No exchanges yet</td></tr>';
-  document.getElementById('wTable').innerHTML=withdrawals.map(w=>`<tr><td>${w.date}</td><td>${w.amt}</td><td>${w.fee}</td><td>${w.net}</td><td><span class="badge ${w.status==='Paid'?'bg':'ba'}">${w.status}</span></td></tr>`).join('')||'<tr><td colspan="5" class="muted">No withdrawals yet</td></tr>';
-  document.getElementById('p2pTable').innerHTML=p2ps.map(p=>`<tr><td>${p.date}</td><td>${p.to}</td><td>${fmtE(p.amt)}</td><td>${fmtE(p.fee)}</td><td>${p.net.toFixed(2)} USDT</td></tr>`).join('');
-  document.getElementById('redTable').innerHTML=redeems.map(r=>`<tr><td>${r.date}</td><td>${r.code}</td><td>${fmtE(r.amt)}</td><td><span class="badge bg">${r.status}</span></td></tr>`).join('');
-  renderHistory();
+document.getElementById('contractAmt')?.addEventListener?.('input', ()=>{ let amt=parseFloat(document.getElementById('contractAmt').value); let start=document.getElementById('contractStart').value||new Date().toISOString().slice(0,10); if(!amt){ document.getElementById('contractPreview').innerHTML=''; return; } let end=new Date(start); end.setDate(end.getDate()+1095); let daily=amt*DAILY_RATE; let total=daily*1095; let valid=amt>=300 && amt<=100000; document.getElementById('contractPreview').innerHTML= valid ? '✅ Valid: €'+amt.toFixed(2)+' • Daily €'+daily.toFixed(2)+' INCLUSIVE • Total 1095 days: €'+total.toFixed(2)+' • '+start+' → '+end.toISOString().slice(0,10)+' • Principal returned at end' : '⛔ INVALID: €'+amt.toFixed(2)+' - Must be €300 to €100,000'; });
+async function requestContract(){
+  let amt=parseFloat(document.getElementById('contractAmt').value); let startVal=document.getElementById('contractStart').value;
+  if(!amt){ document.getElementById('contractRequestResult').innerText='Enter amount'; return; }
+  if(amt<MIN_MEMBERSHIP){ document.getElementById('contractRequestResult').innerText='⛔ REJECTED - €'+amt.toFixed(2)+' BELOW €300 minimum'; return; }
+  if(amt>MAX_MEMBERSHIP){ document.getElementById('contractRequestResult').innerText='⛔ REJECTED - €'+amt.toFixed(2)+' ABOVE €100,000 maximum'; return; }
+  if(myContract && myContract.status==='active' && daysLeft(myContract.end_date)>0){ document.getElementById('contractRequestResult').innerText='You already have ACTIVE contract €'+parseFloat(myContract.amount||0).toFixed(2); return; }
+  if(parseFloat(myBalance.available_balance||0)<amt && myDeposits.filter(d=>d.status==='approved').reduce((s,d)=>s+parseFloat(d.amount||0),0)<amt){ if(!confirm('Your Available is €'+parseFloat(myBalance.available_balance||0).toFixed(2)+' - less than €'+amt+'. Do you want to still send request? Admin will ask you to deposit first.')) return; }
+  let start=startVal? new Date(startVal) : new Date(); let end=new Date(start); end.setDate(end.getDate()+1095); let daily=amt*DAILY_RATE;
+  await client.from('transactions').insert({user_id:currentUser.id, type:'contract_request', amount:amt, note:'REQUEST 1095-Day Contract €'+amt+' - Daily €'+daily.toFixed(2)+' - Start '+start.toISOString().slice(0,10)+' - Ends '+end.toISOString().slice(0,10)});
+  await sendChatToAdmin('Hello Admin, I request a 1095-Day Contract: €'+amt.toFixed(2)+' - Daily €'+daily.toFixed(2)+' INCLUSIVE - Start '+start.toISOString().slice(0,10)+' → End '+end.toISOString().slice(0,10)+' - Please approve.');
+  document.getElementById('contractRequestResult').innerText='✅ Request sent to Admin. Admin will create contract in admin.html. You will see countdown here once approved.';
+  await loadAll();
 }
-getLiveRate(); setInterval(getLiveRate,60000);
-calcExchange(); calcP2P(); calcDeposit(); calcWithdraw(); renderAll();
+async function chooseEngine(){
+  let eng=document.getElementById('engineSelect').value;
+  if(myProfile.sub_engine && myProfile.sub_engine===eng){ document.getElementById('engineResult').innerText='Already in '+eng; return; }
+  let {error}=await client.from('profiles').update({sub_engine:eng}).eq('id',currentUser.id);
+  if(error){ document.getElementById('engineResult').innerText='Failed: '+error.message; return; }
+  document.getElementById('engineResult').innerText='✅ Engine set to '+eng;
+  await loadAll();
+}
+function renderStakingPage(){
+  if(!currentUser) return;
+  let myStaked=myStakes.filter(s=>s.status==='active').reduce((s,x)=>s+parseFloat(x.amount||0),0);
+  let revTotal=allRevenue.reduce((s,r)=>s+parseFloat(r.amount||0),0);
+  let paidStakes=myStakes.reduce((s,x)=>s+parseFloat(x.total_reward_paid||0),0);
+  let paidContracts=allContracts.reduce((s,c)=>s+parseFloat(c.total_paid||0),0);
+  // Global revenue available approx = total - paid (admin calculates exact, this is display)
+  let revAvail=Math.max(0, revTotal - paidStakes - paidContracts);
+  let maxToday=revAvail*0.8;
+  document.getElementById('myStaked').innerText='€'+myStaked.toFixed(2);
+  document.getElementById('revAvail').innerText='€'+revAvail.toFixed(2);
+  document.getElementById('stakeMax').innerText='€'+maxToday.toFixed(2);
+  document.getElementById('myStakeDaily').innerText='€'+(myStaked*DAILY_RATE).toFixed(2);
+  document.getElementById('stakingAlert').innerHTML= revAvail<=0 ? '<div class="alertBox"><b>⚠️ Revenue Pool = €0</b> - Staking / Contract payout will be €0 today. Cedars needs real revenue (fees, commissions) to pay.</div>' : '<div class="alertBox green"><b>✅ Revenue Pool Available: €'+revAvail.toFixed(2)+'</b> - Max payout today €'+maxToday.toFixed(2)+'</div>';
+  document.getElementById('stakesList').innerHTML=myStakes.length?myStakes.map(s=>'<div class="item"><span>Staked €'+parseFloat(s.amount||0).toFixed(2)+' • '+s.lock_days+' days • Daily €'+(parseFloat(s.amount||0)*DAILY_RATE).toFixed(2)+' • Paid €'+parseFloat(s.total_reward_paid||0).toFixed(2)+' • Ends '+(s.end_date||'').slice(0,10)+'</span><span class="pill">'+s.status+'</span></div>').join(''):'No extra stakes - Your contract is main staking';
+  document.getElementById('revList').innerHTML=allRevenue.length?allRevenue.slice(0,20).map(r=>'<div style="padding:8px;border-bottom:1px solid #eee"><b>+€'+parseFloat(r.amount||0).toFixed(2)+'</b> • '+r.source+' • '+(r.note||'')+' • '+(r.created_at||'').slice(0,16)+'</div>').join(''):'No revenue logged yet';
+}
+async function requestStake(){
+  let amt=parseFloat(document.getElementById('stakeAmt').value); let lockDays=document.getElementById('stakeLock').value;
+  if(!amt||amt<=0){ document.getElementById('stakeResult').innerText='Enter amount'; return; }
+  if(parseFloat(myBalance.available_balance||0)<amt){ document.getElementById('stakeResult').innerText='Not enough Available €'+parseFloat(myBalance.available_balance||0).toFixed(2); return; }
+  await sendChatToAdmin('Hello Admin, I request Extra Staking: €'+amt.toFixed(2)+' for '+lockDays+' days at 0.03% daily - Please lock it.');
+  await client.from('transactions').insert({user_id:currentUser.id, type:'stake_request', amount:amt, note:'REQUEST Extra Stake €'+amt+' for '+lockDays+' days'});
+  document.getElementById('stakeResult').innerText='✅ Stake request sent to Admin via Chat.';
+}
+function renderMoney(){
+  if(!currentUser) return;
+  document.getElementById('myDeposits').innerHTML=myDeposits.length?myDeposits.map(d=>'<div class="item"><span>€'+parseFloat(d.amount||0).toFixed(2)+' • '+(d.method||'')+' • '+(d.created_at||'').slice(0,16)+'</span><span class="pill '+(d.status==='approved'?'':d.status==='rejected'?'red':'warn')+'">'+(d.status||'pending')+'</span></div>').join(''):'No deposits yet';
+  document.getElementById('myWithdrawals').innerHTML=myWithdrawals.length?myWithdrawals.map(w=>'<div class="item"><span>€'+parseFloat(w.amount||0).toFixed(2)+' • '+(w.method||'')+' • '+(w.wallet_address||'')+'</span><span class="pill '+(w.status==='paid'?'':w.status==='rejected'?'red':'warn')+'">'+(w.status||'pending')+'</span></div>').join(''):'No withdrawals yet';
+  document.getElementById('myExchanges').innerHTML=myExchanges.length?myExchanges.map(x=>'<div class="item"><span>'+parseFloat(x.from_amount||0).toFixed(2)+' '+(x.from_currency||'')+' → '+parseFloat(x.to_amount||0).toFixed(2)+' '+(x.to_currency||'')+'</span><span>'+(x.created_at||'').slice(0,16)+'</span></div>').join(''):'No exchanges yet';
+}
+async function requestDeposit(){
+  let amt=parseFloat(document.getElementById('depAmt').value); let method=document.getElementById('depMethod').value; let proof=document.getElementById('depProof').value||'';
+  if(!amt||amt<=0){ document.getElementById('depResult').innerText='Enter amount'; return; }
+  let {error}=await client.from('deposits').insert({user_id:currentUser.id, amount:amt, method, proof_url:proof, status:'pending'});
+  if(error){ document.getElementById('depResult').innerText='Failed: '+error.message; return; }
+  await sendChatToAdmin('Hello Admin, I deposited €'+amt.toFixed(2)+' via '+method+' - Proof: '+proof+' - Please approve.');
+  document.getElementById('depResult').innerText='✅ Deposit request sent. Admin will approve.';
+  await loadAll();
+}
+async function requestWithdraw(){
+  let amt=parseFloat(document.getElementById('wdAmt').value); let method=document.getElementById('wdMethod').value; let wallet=document.getElementById('wdWallet').value||'';
+  if(!amt||amt<=0){ document.getElementById('wdResult').innerText='Enter amount'; return; }
+  if(parseFloat(myBalance.available_balance||0)<amt){ document.getElementById('wdResult').innerText='Not enough Available €'+parseFloat(myBalance.available_balance||0).toFixed(2); return; }
+  let {error}=await client.from('withdrawals').insert({user_id:currentUser.id, amount:amt, method, wallet_address:wallet, status:'pending'});
+  if(error){ document.getElementById('wdResult').innerText='Failed: '+error.message; return; }
+  await sendChatToAdmin('Hello Admin, I request withdrawal €'+amt.toFixed(2)+' via '+method+' to '+wallet+' - Please approve.');
+  document.getElementById('wdResult').innerText='✅ Withdrawal request sent.';
+  await loadAll();
+}
+async function requestExchange(){
+  let fromAmt=parseFloat(document.getElementById('exFromAmt').value); let from=document.getElementById('exFrom').value; let toAmt=parseFloat(document.getElementById('exToAmt').value)||fromAmt; let to=document.getElementById('exTo').value;
+  if(!fromAmt||fromAmt<=0){ document.getElementById('exResult').innerText='Enter amount'; return; }
+  let {error}=await client.from('exchanges').insert({user_id:currentUser.id, from_amount:fromAmt, from_currency:from, to_amount:toAmt, to_currency:to, status:'pending'});
+  if(error){ document.getElementById('exResult').innerText='Failed: '+error.message; return; }
+  await sendChatToAdmin('Hello Admin, I request exchange '+fromAmt+' '+from+' → '+toAmt+' '+to);
+  document.getElementById('exResult').innerText='✅ Exchange request sent.';
+  await loadAll();
+}
+async function redeemMyCode(){
+  let code=document.getElementById('redeemCode').value.trim(); if(!code){ document.getElementById('redeemResult').innerText='Enter code'; return; }
+  let {data:c}=await client.from('redemption_codes').select('*').eq('code',code).eq('status','active').single();
+  if(!c){ document.getElementById('redeemResult').innerText='Invalid / used code'; return; }
+  let {data:locked}=await client.from('redemption_codes').update({status:'used', redeemed_by:currentUser.id, redeemed_at:new Date().toISOString()}).eq('code',code).eq('status','active').select();
+  if(!locked||locked.length===0){ document.getElementById('redeemResult').innerText='Just used by someone else'; return; }
+  let b=myBalance; await client.from('balances').upsert({user_id:currentUser.id, available_balance:parseFloat(b.available_balance||0)+parseFloat(c.amount), earned_balance:parseFloat(b.earned_balance||0)+parseFloat(c.amount), reserved_balance:b.reserved_balance, central_reserve:b.central_reserve, amount:parseFloat(b.earned_balance||0)+parseFloat(c.amount)});
+  await client.from('transactions').insert({user_id:currentUser.id, type:'redeem', amount:parseFloat(c.amount), note:'Redeemed '+code});
+  document.getElementById('redeemResult').innerText='✅ Redeemed €'+parseFloat(c.amount).toFixed(2);
+  await loadAll();
+}
+function renderCrypto(){
+  if(!currentUser) return;
+  document.getElementById('cryptoUSDT').innerText=parseFloat(myCrypto.usdt||0).toFixed(2);
+  document.getElementById('cryptoBTC').innerText=parseFloat(myCrypto.btc||0).toFixed(8);
+  document.getElementById('cryptoETH').innerText=parseFloat(myCrypto.eth||0).toFixed(6);
+  document.getElementById('myWallet').value=myCrypto.wallet_address||'';
+  document.getElementById('myCryptoTx').innerHTML=myCryptoTx.length?myCryptoTx.map(t=>'<div class="item"><span>'+parseFloat(t.amount||0)+' '+t.coin+' • '+t.type+' • TX: '+(t.tx_hash||'No hash')+'</span><span class="pill '+(t.status==='paid'?'':t.status==='rejected'?'red':'warn')+'">'+t.status+'</span></div>').join(''):'No crypto transactions';
+}
+async function saveMyWallet(){
+  let addr=document.getElementById('myWallet').value.trim(); if(!addr){ document.getElementById('walletResult').innerText='Enter wallet'; return; }
+  await client.from('crypto_balances').upsert({user_id:currentUser.id, wallet_address:addr, usdt:myCrypto.usdt||0, btc:myCrypto.btc||0, eth:myCrypto.eth||0});
+  document.getElementById('walletResult').innerText='✅ Wallet saved';
+  await loadAll();
+}
+async function requestCryptoDeposit(){
+  let coin=document.getElementById('cryptoDepCoin').value; let amt=parseFloat(document.getElementById('cryptoDepAmt').value); let tx=document.getElementById('cryptoDepTx').value.trim();
+  if(!amt||!tx){ document.getElementById('cryptoDepResult').innerText='Enter amount + TX Hash (required)'; return; }
+  let {error}=await client.from('crypto_transactions').insert({user_id:currentUser.id, coin, type:'deposit', amount:amt, tx_hash:tx, status:'pending'});
+  if(error){ document.getElementById('cryptoDepResult').innerText='Failed: '+error.message; return; }
+  await sendChatToAdmin('Hello Admin, I deposited '+amt+' '+coin+' - TX: '+tx+' - Please approve.');
+  document.getElementById('cryptoDepResult').innerText='✅ Crypto deposit request sent.';
+  await loadAll();
+}
+async function requestCryptoWithdraw(){
+  let coin=document.getElementById('cryptoWdCoin').value; let amt=parseFloat(document.getElementById('cryptoWdAmt').value); let wallet=document.getElementById('cryptoWdWallet').value.trim();
+  if(!amt||!wallet){ document.getElementById('cryptoWdResult').innerText='Enter amount + external wallet'; return; }
+  let field=coin.toLowerCase(); if(parseFloat(myCrypto[field]||0)<amt){ document.getElementById('cryptoWdResult').innerText='Not enough '+coin; return; }
+  let {error}=await client.from('crypto_transactions').insert({user_id:currentUser.id, coin, type:'withdrawal', amount:amt, external_wallet:wallet, status:'pending'});
+  if(error){ document.getElementById('cryptoWdResult').innerText='Failed: '+error.message; return; }
+  await sendChatToAdmin('Hello Admin, I request crypto withdrawal '+amt+' '+coin+' to '+wallet);
+  document.getElementById('cryptoWdResult').innerText='✅ Crypto withdrawal request sent.';
+  await loadAll();
+}
+function renderKyc(){
+  if(!currentUser) return;
+  let latest=myKyc[0];
+  document.getElementById('kycStatus').innerHTML= latest ? '<div class="pill '+(latest.status==='approved'?'':latest.status==='rejected'?'red':'warn')+'">KYC: '+(latest.status||'pending')+'</div>' : '<div class="pill warn">KYC: Not Submitted</div>';
+  document.getElementById('myKyc').innerHTML=myKyc.map(k=>'<div class="item"><span>'+(k.doc_type||'')+' • '+(k.doc_url?'<a href="'+k.doc_url+'" target="_blank">View Doc</a>':'')+'</span><span class="pill '+(k.status==='approved'?'':k.status==='rejected'?'red':'warn')+'">'+(k.status||'pending')+'</span></div>').join('')||'No KYC yet';
+}
+async function submitKyc(){
+  let type=document.getElementById('kycType').value; let url=document.getElementById('kycUrl').value.trim();
+  if(!url){ document.getElementById('kycResult').innerText='Enter document link'; return; }
+  let {error}=await client.from('kyc_documents').insert({user_id:currentUser.id, doc_type:type, doc_url:url, status:'pending'});
+  if(error){ document.getElementById('kycResult').innerText='Failed: '+error.message; return; }
+  await sendChatToAdmin('Hello Admin, I submitted KYC: '+type+' - Doc: '+url);
+  document.getElementById('kycResult').innerText='✅ KYC submitted.';
+  await loadAll();
+}
+async function sendChatToAdmin(msg){
+  // Find admin via profiles - admin emails are known, try to find admin user id via messages or profiles
+  let {data:admins}=await client.from('profiles').select('id,email').in('email', ADMIN_EMAILS);
+  let adminId=admins && admins.length>0 ? admins[0].id : null;
+  if(!adminId){
+    // Fallback: send to first message receiver if exists, else store with receiver = currentUser (admin will see via transactions)
+    return;
+  }
+  await client.from('messages').insert({sender_id:currentUser.id, receiver_id:adminId, sender_email:currentUser.email, message:msg});
+}
+async function sendChat(){
+  let text=document.getElementById('chatInput').value.trim(); if(!text) return;
+  await sendChatToAdmin(text);
+  document.getElementById('chatInput').value='';
+  await loadAll();
+}
+function renderChat(){
+  if(!currentUser) return;
+  let msgs=allMessages.filter(m=>m.sender_id===currentUser.id || m.receiver_id===currentUser.id);
+  document.getElementById('chatBox').innerHTML=msgs.length?msgs.map(m=>'<div class="msgBubble '+(m.sender_id===currentUser.id?'mine':'theirs')+'">'+m.message+'<br><span style="font-size:11px;opacity:.7">'+(m.created_at||'').slice(0,16)+'</span></div>').join(''):'No messages yet - Say hello to Admin';
+  let box=document.getElementById('chatBox'); box.scrollTop=box.scrollHeight;
+  let unread=allMessages.filter(m=>m.receiver_id===currentUser.id && !m.is_read).length;
+  let badge=document.getElementById('chatBadge'); badge.style.display=unread>0?'inline':'none'; badge.innerText=unread;
+  // Mark admin messages as read when opening chat
+  if(unread>0){ client.from('messages').update({is_read:true}).eq('receiver_id',currentUser.id).eq('is_read',false).then(()=>{}); }
+}
+async function renderStatement(){
+  if(!currentUser) return;
+  let from=document.getElementById('stmtFrom')?.value||''; let to=document.getElementById('stmtTo')?.value||'';
+  let {data:tx}=await client.from('transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(200);
+  let list=(tx||[]).filter(t=>{ if(from && (t.created_at||'')<from) return false; if(to && (t.created_at||'')>to+'T23:59:59') return false; return true; });
+  document.getElementById('statementSummary').innerHTML='<div class="totals"><b>'+currentUser.email+'</b> • Engine: '+(myProfile.sub_engine||'-')+' • Contract: '+(myContract?'€'+parseFloat(myContract.amount||0).toFixed(2)+' • 1095 Days • Ends '+(myContract.end_date||'').slice(0,10)+' • Daily €'+parseFloat(myContract.daily_earning||0).toFixed(2):'No Contract')+'<br>Available: €'+parseFloat(myBalance.available_balance||0).toFixed(2)+' • Earned: €'+parseFloat(myBalance.earned_balance||0).toFixed(2)+' • USDT: '+parseFloat(myCrypto.usdt||0).toFixed(2)+'</div>';
+  document.getElementById('statementTx').innerHTML=list.map(t=>'<div class="item"><span>'+(t.created_at||'').slice(0,19)+' • '+t.type+' • '+(t.note||'')+'</span><b>€'+parseFloat(t.amount||0).toFixed(2)+'</b></div>').join('')||'No transactions in period';
+}
+async function downloadCSV(){
+  let from=document.getElementById('stmtFrom').value; let to=document.getElementById('stmtTo').value;
+  let {data:tx}=await client.from('transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(500);
+  let list=(tx||[]).filter(t=>{ if(from && (t.created_at||'')<from) return false; if(to && (t.created_at||'')>to+'T23:59:59') return false; return true; });
+  let rows=[['CEDARS EMPIRE - STATEMENT'],['Name', currentUser.email],['Engine', myProfile.sub_engine||''],['Contract', myContract?myContract.amount+' - 1095 Days - Ends '+myContract.end_date:'No Contract'],['Available', myBalance.available_balance],['Earned', myBalance.earned_balance],[''],['Date','Type','Amount','Note']];
+  list.forEach(t=>rows.push([t.created_at||'', t.type||'', t.amount||0, (t.note||'').replace(/,/g,' ')]));
+  let csv=rows.map(r=>r.join(',')).join('\n'); let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='statement_'+currentUser.email+'.csv'; a.click();
+}
+async function printStatement(){
+  let {data:tx}=await client.from('transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(200);
+  let w=window.open('','','width=800,height=900'); w.document.write('<html><head><title>Statement</title><style>body{font-family:Arial;padding:30px} table{width:100%;border-collapse:collapse} td,th{border:1px solid #ddd;padding:8px}</style></head><body><h1>CEDARS EMPIRE</h1><h2>Account Statement</h2><p><b>'+currentUser.email+'</b><br>Engine: '+(myProfile.sub_engine||'')+'<br>Contract: '+(myContract?'€'+parseFloat(myContract.amount||0).toFixed(2)+' • 1095 Days • Ends '+(myContract.end_date||'').slice(0,10):'No Contract')+'</p><table><tr><th>Balance</th><th>Amount</th></tr><tr><td>Available</td><td>€'+parseFloat(myBalance.available_balance||0).toFixed(2)+'</td></tr><tr><td>Earned</td><td>€'+parseFloat(myBalance.earned_balance||0).toFixed(2)+'</td></tr><tr><td>USDT</td><td>'+parseFloat(myCrypto.usdt||0).toFixed(2)+'</td></tr></table><h3>Transactions</h3><table><tr><th>Date</th><th>Type</th><th>Amount</th></tr>'+(tx||[]).map(t=>'<tr><td>'+(t.created_at||'').slice(0,19)+'</td><td>'+t.type+'</td><td>€'+parseFloat(t.amount||0).toFixed(2)+'</td></tr>').join('')+'</table></body></html>'); w.document.close(); w.print();
+}
+async function loadHealth(){
+  // Shareholder sees only Green/Yellow/Purple bar, no diagnosis - derived from engines + contracts + revenue
+  try{
+    let green=10, yellow=0, purple=0;
+    let expiring=allContracts.filter(c=>{ let dl=daysLeft(c.end_date); return dl>0 && dl<=30 && c.status==='active'; }).length;
+    let expired=allContracts.filter(c=>daysLeft(c.end_date)<=0 && c.status==='active').length;
+    let paused=engines.filter(e=>!e.is_on).length;
+    if(expired>0) yellow+=1;
+    if(expiring>0) yellow+=1;
+    purple=paused;
+    let total=green+yellow+purple||1;
+    let title= yellow>0 ? '🟡 '+yellow+' Warning(s) - Degraded, But Running' : purple>0 ? '🟣 Operational With '+purple+' Paused (Maintenance)' : '🟢 All Systems Operational';
+    document.getElementById('healthTitle').innerText=title;
+    document.getElementById('healthBarTop').innerHTML='<div class="healthSeg green" style="width:'+(green/total*100)+'%">'+green+' Green</div><div class="healthSeg yellow" style="width:'+(yellow/total*100)+'%">'+(yellow>0?yellow+' Yellow':'')+'</div><div class="healthSeg purple" style="width:'+(purple/total*100)+'%">'+(purple>0?purple+' Purple':'')+'</div>';
+    document.getElementById('healthMini').innerHTML='<span>🟢 '+green+' Operational</span><span>🟡 '+yellow+' Degraded</span><span>🟣 '+purple+' Paused</span>';
+    document.getElementById('healthUptime').innerText=((green+purple)/total*100).toFixed(2)+'%';
+  }catch(e){}
+}
+client.auth.getSession().then(({data})=>{ if(data.session) afterLogin(); });
 </script>
 </body>
 </html>
