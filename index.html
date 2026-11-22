@@ -5,87 +5,99 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CEDARS EMPIRE - Shareholder Dashboard</title>
 <style>
-*{box-sizing:border-box;font-family:Arial,sans-serif} body{background:#0f1e2e;margin:0;padding:14px;color:#0f1e2e} .top{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:14px 18px;border-radius:14px;flex-wrap:wrap;gap:10px} .top h1{margin:0;font-size:20px} .live{color:#0a9d6e;font-size:14px} .card{background:#fff;padding:18px;border-radius:14px;margin-top:14px} .authBox{background:#fff;padding:22px;border-radius:14px;max-width:440px;margin:30px auto} .authBox input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:10px;font-size:16px} .authBox button{width:100%;padding:12px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;margin-top:8px} .authBox button.grey{background:#999} .msg{color:#c00;font-size:14px;min-height:18px;text-align:center} .nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px} .nav button{background:#fff;border:1px solid #ddd;padding:11px 14px;border-radius:10px;font-weight:bold;cursor:pointer} .nav button.active{background:#0a9d6e;color:#fff;border-color:#0a9d6e} .page{display:none} .page.active{display:block} .stats{display:flex;gap:12px;flex-wrap:wrap} .stat{flex:1;min-width:150px;background:#fff;padding:16px;border-radius:14px} .stat b{font-size:24px} .btn{background:#0a9d6e;color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:bold;cursor:pointer} .btn.dark{background:#0f1e2e} .btn.red{background:#c00} .btn.small{padding:6px 10px;font-size:13px} .btn.purple{background:#7c3aed} .btn:disabled{opacity:.5;cursor:not-allowed} input,select,textarea{padding:11px;border:1px solid #ddd;border-radius:10px;font-size:15px;width:100%;margin:6px 0} table{width:100%;border-collapse:collapse;font-size:14px} td,th{padding:10px;text-align:left;border-bottom:1px solid #eee} .pill{background:#d6f5e8;color:#0a7a55;padding:4px 10px;border-radius:20px;font-weight:bold;font-size:12px} .pill.warn{background:#fff3cd;color:#856404} .pill.red{background:#ffe5e5;color:#c00} .pill.purple{background:#ede9fe;color:#5b21b6} .small{font-size:13px;color:#666} .flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center} .flex>*{flex:1;min-width:150px} .item{padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap} .totals{background:#f1f3f6;padding:12px;border-radius:10px;margin-top:10px} .healthBar{display:flex;height:18px;border-radius:10px;overflow:hidden;background:#eee;margin:10px 0} .healthSeg{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:bold;white-space:nowrap;overflow:hidden} .healthSeg.green{background:#0a9d6e} .healthSeg.yellow{background:#eab308;color:#000} .healthSeg.purple{background:#7c3aed} .countBox{background:#0f1e2e;color:#fff;padding:16px;border-radius:12px;text-align:center} .countBox b{font-size:30px} .alertBox{background:#fff3cd;border:2px solid #eab308;padding:12px;border-radius:10px;margin-top:10px} .alertBox.red{background:#ffe5e5;border-color:#c00} .alertBox.green{background:#d6f5e8;border-color:#0a9d6e} .chatBox{height:320px;overflow:auto;border:1px solid #eee;border-radius:10px;padding:10px;background:#fafafa} .msgBubble{padding:8px 12px;border-radius:12px;margin:6px 0;max-width:80%} .msgBubble.mine{background:#0a9d6e;color:#fff;margin-left:auto} .msgBubble.theirs{background:#fff;border:1px solid #eee} .capBar{height:10px;background:#eee;border-radius:10px;overflow:hidden;margin-top:6px} .capFill{height:100%;background:#0a9d6e;width:0%}
+*{box-sizing:border-box;font-family:Arial,sans-serif} body{background:#0f1e2e;margin:0;padding:14px;color:#0f1e2e} .top{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:14px 18px;border-radius:14px;flex-wrap:wrap;gap:10px} .top h1{margin:0;font-size:20px} .live{color:#0a9d6e;font-size:14px} .card{background:#fff;padding:18px;border-radius:14px;margin-top:14px} .authBox{background:#fff;padding:22px;border-radius:14px;max-width:440px;margin:30px auto} .authBox input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:10px;font-size:16px} .authBox button{width:100%;padding:12px;border:none;border-radius:10px;background:#0a9d6e;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;margin-top:8px} .authBox button.grey{background:#999} .msg{color:#c00;font-size:14px;min-height:18px;text-align:center} .nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px} .nav button{background:#fff;border:1px solid #ddd;padding:11px 14px;border-radius:10px;font-weight:bold;cursor:pointer} .nav button.active{background:#0a9d6e;color:#fff;border-color:#0a9d6e} .nav button.hiddenNav{display:none} .page{display:none} .page.active{display:block} .stats{display:flex;gap:12px;flex-wrap:wrap} .stat{flex:1;min-width:150px;background:#fff;padding:16px;border-radius:14px} .stat b{font-size:24px} .btn{background:#0a9d6e;color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:bold;cursor:pointer} .btn.dark{background:#0f1e2e} .btn.red{background:#c00} .btn.small{padding:6px 10px;font-size:13px} .btn.purple{background:#7c3aed} .btn:disabled{opacity:.5;cursor:not-allowed} input,select,textarea{padding:11px;border:1px solid #ddd;border-radius:10px;font-size:15px;width:100%;margin:6px 0} table{width:100%;border-collapse:collapse;font-size:14px} td,th{padding:10px;text-align:left;border-bottom:1px solid #eee} .pill{background:#d6f5e8;color:#0a7a55;padding:4px 10px;border-radius:20px;font-weight:bold;font-size:12px} .pill.warn{background:#fff3cd;color:#856404} .pill.red{background:#ffe5e5;color:#c00} .pill.purple{background:#ede9fe;color:#5b21b6} .small{font-size:13px;color:#666} .flex{display:flex;gap:10px;flex-wrap:wrap;align-items:center} .flex>*{flex:1;min-width:150px} .item{padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap} .totals{background:#f1f3f6;padding:12px;border-radius:10px;margin-top:10px} .healthBar{display:flex;height:18px;border-radius:10px;overflow:hidden;background:#eee;margin:10px 0} .healthSeg{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:bold;white-space:nowrap;overflow:hidden} .healthSeg.green{background:#0a9d6e} .healthSeg.yellow{background:#eab308;color:#000} .healthSeg.purple{background:#7c3aed} .countBox{background:#0f1e2e;color:#fff;padding:16px;border-radius:12px;text-align:center} .countBox b{font-size:30px} .alertBox{background:#fff3cd;border:2px solid #eab308;padding:12px;border-radius:10px;margin-top:10px} .alertBox.red{background:#ffe5e5;border-color:#c00} .alertBox.green{background:#d6f5e8;border-color:#0a9d6e} .chatBox{height:320px;overflow:auto;border:1px solid #eee;border-radius:10px;padding:10px;background:#fafafa} .msgBubble{padding:8px 12px;border-radius:12px;margin:6px 0;max-width:80%} .msgBubble.mine{background:#0a9d6e;color:#fff;margin-left:auto} .msgBubble.theirs{background:#fff;border:1px solid #eee} .capBar{height:10px;background:#eee;border-radius:10px;overflow:hidden;margin-top:6px} .capFill{height:100%;background:#0a9d6e;width:0%} .blockedBox{background:#ffe5e5;border:2px solid #c00;padding:12px;border-radius:10px;margin-top:10px;text-align:center}
 </style>
 </head>
 <body>
 <div class="top"><h1>CEDARS EMPIRE <span class="live">● Live</span></h1><div><span id="userEmailTop">👤 Guest</span> | <span id="engineTop">Engine: -</span> | <button class="btn red small" onclick="doLogout()" id="logoutBtn" style="display:none">Logout</button> <a href="admin.html" style="background:#0f1e2e;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:bold">Admin →</a></div></div>
 
-<div id="authSection" class="authBox"><h2 style="text-align:center;margin:0">CEDARS EMPIRE</h2><p style="text-align:center;color:#666;font-size:14px">Shareholder Login / Signup<br>Membership €300 - €100,000 • Agreement 1095 Days • Daily 0.03% INCLUSIVE</p><input id="email" type="email" placeholder="Email"><input id="password" type="password" placeholder="Password (min 6)"><div id="authMsg" class="msg"></div><button onclick="doLogin()">Login</button><button class="grey" onclick="doSignup()">Create Account</button><p class="small" style="text-align:center">After signup, choose your engine and create your contract in Contracts tab.<br>Admins: use Admin → link above.</p></div>
+<!-- ADMIN CONTROL BANNERS - AUTO FROM site_settings -->
+<div id="maintenanceBox" style="display:none;background:#c00;color:#fff;padding:22px;border-radius:14px;margin-top:14px;text-align:center"><h2 style="margin:0">🛑 CEDARS EMPIRE IS UNDER MAINTENANCE</h2><p id="maintenanceText" style="font-size:16px"></p><p class="small" style="color:#fff">Admin is updating the system. Please check back soon. Admin login still works via Admin → link above.</p></div>
+<div id="announcementBox" style="display:none;background:#fff3cd;border:2px solid #eab308;padding:12px;border-radius:10px;margin-top:14px"><b>📢 Announcement From Admin:</b> <span id="announcementTextShow"></span></div>
+<div id="frozenBox" style="display:none;background:#ffe5e5;border:2px solid #c00;padding:12px;border-radius:10px;margin-top:14px"><b>🧊 YOUR ACCOUNT IS FROZEN</b> - <span id="frozenReasonText"></span><br><span class="small">Payouts, withdrawals and new contracts are paused. Contact Admin via Chat.</span></div>
+<div id="featureBlockedBox" style="display:none"></div>
+
+<div id="authSection" class="authBox"><h2 style="text-align:center;margin:0">CEDARS EMPIRE</h2><p style="text-align:center;color:#666;font-size:14px">Shareholder Login / Signup<br><span id="authSubtitle">Membership €300 - €100,000 • Agreement 1095 Days • Daily 0.03% INCLUSIVE</span></p><input id="email" type="email" placeholder="Email"><input id="password" type="password" placeholder="Password (min 6)"><div id="authMsg" class="msg"></div><button onclick="doLogin()">Login</button><button class="grey" id="signupBtn" onclick="doSignup()">Create Account</button><div id="signupBlocked" class="blockedBox" style="display:none">⛔ Signup is currently PAUSED by Admin. Please try later.</div><p class="small" style="text-align:center">After signup, choose your engine and create your contract in Contracts tab.<br>Admins: use Admin → link above.</p></div>
 
 <div id="dashSection" style="display:none">
 <div class="nav">
-<button class="active" onclick="showPage('home',this)">🏠 Home</button>
-<button onclick="showPage('contract',this)">📜 My Contract 1095 Days <span id="contractBadgeNav" style="background:#c00;color:#fff;padding:2px 7px;border-radius:10px;font-size:12px;display:none">!</span></button>
-<button onclick="showPage('staking',this)">🥩 Staking 0.03%</button>
-<button onclick="showPage('money',this)">💰 Deposit / Withdraw / Exchange</button>
-<button onclick="showPage('crypto',this)">₿ Crypto</button>
-<button onclick="showPage('kyc',this)">🪪 KYC</button>
-<button onclick="showPage('chat',this)">💬 Chat Admin <span id="chatBadge" style="background:#c00;color:#fff;padding:2px 7px;border-radius:10px;font-size:12px;display:none">0</span></button>
-<button onclick="showPage('statement',this)">📄 Statement</button>
+<button class="active" onclick="showPage('home',this)" id="navHome">🏠 Home</button>
+<button onclick="showPage('contract',this)" id="navContract">📜 My Contract <span id="contractBadgeNav" style="background:#c00;color:#fff;padding:2px 7px;border-radius:10px;font-size:12px;display:none">!</span></button>
+<button onclick="showPage('staking',this)" id="navStaking">🥩 Staking 0.03%</button>
+<button onclick="showPage('money',this)" id="navMoney">💰 Deposit / Withdraw / Exchange</button>
+<button onclick="showPage('crypto',this)" id="navCrypto">₿ Crypto</button>
+<button onclick="showPage('kyc',this)" id="navKyc">🪪 KYC</button>
+<button onclick="showPage('chat',this)" id="navChat">💬 Chat Admin <span id="chatBadge" style="background:#c00;color:#fff;padding:2px 7px;border-radius:10px;font-size:12px;display:none">0</span></button>
+<button onclick="showPage('statement',this)" id="navStatement">📄 Statement</button>
 </div>
 
 <div id="page-home" class="page active">
-<!-- HEALTH BAR - Shareholder sees only Green/Yellow/Purple, no diagnosis -->
-<div class="card" style="border:2px solid #0a9d6e"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3 style="margin:0" id="healthTitle">🟢 All Systems Operational</h3><span class="small">Uptime <span id="healthUptime">99.98%</span> • <button class="btn small dark" onclick="loadHealth()">↻ Check</button></span></div><div class="healthBar" id="healthBarTop"></div><div class="flex" id="healthMini" style="font-size:13px"></div><p class="small">Green = Operational, Yellow = Degraded, Purple = Paused / Maintenance. Admin sees full diagnosis.</p></div>
-<!-- CONTRACT REMINDER -->
+<div class="card" style="border:2px solid #0a9d6e"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3 style="margin:0" id="healthTitle">🟢 All Systems Operational</h3><span class="small">Uptime <span id="healthUptime">99.98%</span> • <button class="btn small dark" onclick="loadHealth()">↻ Check</button></span></div><div class="healthBar" id="healthBarTop"></div><div class="flex" id="healthMini" style="font-size:13px"></div><p class="small">Green = Operational, Yellow = Degraded, Purple = Paused / Maintenance.</p></div>
 <div id="contractAlertHome"></div>
-<!-- CONTRACT COUNTDOWN -->
-<div class="card" style="background:#0f1e2e;color:#fff"><h3 style="margin:0;color:#fff">📜 My Contract - 1095 Days - Countdown LIVE</h3><div id="contractCountdownHome" style="margin-top:10px"></div></div>
+<div class="card" style="background:#0f1e2e;color:#fff"><h3 style="margin:0;color:#fff">📜 My Contract - <span class="contractDaysLabel">1095</span> Days - Countdown LIVE</h3><div id="contractCountdownHome" style="margin-top:10px"></div></div>
 <div class="stats">
 <div class="stat">💰 Available<br><b id="statAvail">€0.00</b><br><small>Can Withdraw</small></div>
 <div class="stat">💶 Earned<br><b id="statEarned">€0.00</b><br><small>Total Earned</small></div>
 <div class="stat">🔒 Locked / Reserved<br><b id="statReserved">€0.00</b></div>
-<div class="stat">📜 Contract<br><b id="statContract">€0.00</b><br><small>€300 - €100k</small></div>
-<div class="stat">📈 Daily Earning<br><b id="statDaily">€0.00</b><br><small>0.03% INCLUSIVE</small></div>
+<div class="stat">📜 Contract<br><b id="statContract">€0.00</b><br><small id="contractRangeLabel">€300 - €100k</small></div>
+<div class="stat">📈 Daily Earning<br><b id="statDaily">€0.00</b><br><small id="dailyRateLabel">0.03% INCLUSIVE</small></div>
 <div class="stat">🥩 Staked Extra<br><b id="statStaked">€0.00</b></div>
 <div class="stat">₿ USDT<br><b id="statUSDT">0.00</b></div>
 <div class="stat">⚙️ My Engine<br><b id="statEngine">-</b><br><small id="statEngineReserve">Reserve €0.00</small></div>
 </div>
-<div class="card"><h3 style="margin-top:0">👑 My Engine - Choose Once, Then Move Only Via Admin</h3><p class="small">Capacity STRICT 5B per engine, 25B total. If engine is full, choose another.</p><div class="flex"><select id="engineSelect"><option>Africa</option><option>Europe</option><option>Asia</option><option>America</option><option>Oceania</option></select><button class="btn" onclick="chooseEngine()">Choose / Change My Engine</button></div><div id="engineResult"></div><div id="capacityBox" style="margin-top:10px"></div></div>
+<div class="card"><h3 style="margin-top:0">👑 My Engine - Choose Once</h3><p class="small">Capacity STRICT 5B per engine, 25B total.</p><div class="flex"><select id="engineSelect"><option>Africa</option><option>Europe</option><option>Asia</option><option>America</option><option>Oceania</option></select><button class="btn" onclick="chooseEngine()">Choose / Change My Engine</button></div><div id="engineResult"></div><div id="capacityBox" style="margin-top:10px"></div></div>
 <div class="card"><h3 style="margin-top:0">📜 Last Transactions</h3><div id="lastTx">Loading...</div></div>
 </div>
 
 <div id="page-contract" class="page">
-<div class="card" style="border:2px solid #0f1e2e"><h3 style="margin-top:0">📜 Shareholder Agreement - 1095 Days (3 Years)</h3>
-<p class="small"><b>Membership:</b> €300 minimum, €100,000 maximum. <b>Initial Deposit INCLUSIVE:</b> Daily Earning = Your Deposit x 0.03% every day for 1095 days. Your deposit IS the earning base. At end of 1095 days, principal is returned + you keep all daily earnings.</p>
-<table><tr><th>Deposit</th><th>Daily INCLUSIVE</th><th>Total 1095 Days</th><th>At End</th></tr><tr><td>€300</td><td>€0.09 / day</td><td>€98.55</td><td>+ €300 principal back</td></tr><tr><td>€1,000</td><td>€0.30 / day</td><td>€328.50</td><td>+ €1,000 principal back</td></tr><tr><td>€10,000</td><td>€3.00 / day</td><td>€3,285.00</td><td>+ €10,000 principal back</td></tr><tr><td>€100,000</td><td>€30.00 / day</td><td>€32,850.00</td><td>+ €100,000 principal back</td></tr></table>
+<div class="card" style="border:2px solid #0f1e2e"><h3 style="margin-top:0">📜 Shareholder Agreement - <span class="contractDaysLabel">1095</span> Days (3 Years)</h3>
+<p class="small"><b>Membership:</b> <span id="membershipText">€300 minimum, €100,000 maximum.</span> <b>Initial Deposit INCLUSIVE:</b> Daily Earning = Your Deposit x <span id="dailyRateText">0.03%</span> every day for <span class="contractDaysLabel">1095</span> days. Your deposit IS the earning base. At end, principal is returned + you keep all daily earnings.</p>
+<table><tr><th>Deposit</th><th>Daily INCLUSIVE</th><th>Total <span class="contractDaysLabel">1095</span> Days</th><th>At End</th></tr><tbody id="contractTableBody"></tbody></table>
 <div id="contractAlertPage"></div>
 <div id="contractDetail" style="margin-top:12px"></div></div>
-<div class="card"><h3 style="margin-top:0">➕ Create My Contract - Request To Admin</h3><p class="small">Enter amount €300 - €100,000. Admin will approve and your 1095-day countdown starts. You must have Available balance OR Deposit approved first. If you deposit via Deposit tab, admin approves it, then you can create contract here.</p><div class="flex"><input id="contractAmt" type="number" placeholder="Amount €300 - €100,000"><input id="contractStart" type="date"></div><div id="contractPreview" class="small"></div><button class="btn" onclick="requestContract()">Request 1095-Day Contract</button><div id="contractRequestResult"></div><p class="small">Note: This creates a request in Transactions + Chat message to Admin. Admin creates the contract in admin.html → Contracts tab. You will see countdown here once approved.</p></div>
+<div class="card" id="contractRequestCard"><h3 style="margin-top:0">➕ Create My Contract - Request To Admin</h3><p class="small">Enter amount in membership range. Admin will approve and your countdown starts. You must have Available balance OR Deposit approved first.</p><div class="flex"><input id="contractAmt" type="number" placeholder="Amount €300 - €100,000"><input id="contractStart" type="date"></div><div id="contractPreview" class="small"></div><button class="btn" id="requestContractBtn" onclick="requestContract()">Request Contract</button><div id="contractRequestResult"></div><p class="small">This creates a request + Chat message to Admin. Admin creates contract in admin.html → Contracts tab.</p></div>
+<div id="contractBlocked" class="blockedBox" style="display:none">⛔ Contract Requests are currently PAUSED by Admin.</div>
 <div class="card"><h3 style="margin-top:0">📋 My Contracts</h3><div id="contractsList">Loading...</div></div>
 </div>
 
 <div id="page-staking" class="page">
-<div class="card" style="border:2px solid #7c3aed"><h3 style="margin-top:0">🥩 Staking - Up To 0.03% Daily - Revenue Capped</h3>
-<p class="small">Your 1095-Day Contract ALREADY pays 0.03% daily. Extra Staking is for extra lock beyond contract. <b>Formula:</b> Daily = min(Staked x 0.03%, Revenue Pool x 80% / All Stakers). If Revenue = €0, payout = €0. Paid from real revenue, never from deposits or Central Safety.</p>
-<div class="flex"><div class="stat">My Extra Staked<br><b id="myStaked">€0.00</b></div><div class="stat">Revenue Pool Available<br><b id="revAvail">€0.00</b></div><div class="stat">Max Payout Today<br><b id="stakeMax">€0.00</b><br><small>Revenue x 80%</small></div><div class="stat">My Daily (Extra)<br><b id="myStakeDaily">€0.00</b></div></div>
+<div class="card" style="border:2px solid #7c3aed"><h3 style="margin-top:0">🥩 Staking - Up To <span id="stakingRateLabel">0.03%</span> Daily - Revenue Capped</h3>
+<p class="small">Your Contract ALREADY pays daily. Extra Staking is for extra lock beyond contract. <b>Formula:</b> Daily = min(Staked x Daily Rate, Revenue Pool x Revenue Share / All Stakers). If Revenue = €0, payout = €0. Paid from real revenue, never from deposits or Central Safety.</p>
+<div class="flex"><div class="stat">My Extra Staked<br><b id="myStaked">€0.00</b></div><div class="stat">Revenue Pool Available<br><b id="revAvail">€0.00</b></div><div class="stat">Max Payout Today<br><b id="stakeMax">€0.00</b><br><small>Revenue x Share</small></div><div class="stat">My Daily (Extra)<br><b id="myStakeDaily">€0.00</b></div></div>
 <div id="stakingAlert"></div></div>
-<div class="card"><h3 style="margin-top:0">➕ Stake Extra (Optional)</h3><p class="small">Locks Available balance. Cannot withdraw locked amount until unstake.</p><div class="flex"><input id="stakeAmt" type="number" placeholder="Amount €"><select id="stakeLock"><option value="7">7 Days</option><option value="30" selected>30 Days</option><option value="90">90 Days</option></select></div><button class="btn" onclick="requestStake()">Request Stake</button><div id="stakeResult"></div><p class="small">This sends a request to Admin via Chat. Admin will lock it in admin.html → Revenue + Staking.</p></div>
+<div class="card" id="stakeRequestCard"><h3 style="margin-top:0">➕ Stake Extra (Optional)</h3><p class="small">Locks Available balance. Cannot withdraw locked amount until unstake.</p><div class="flex"><input id="stakeAmt" type="number" placeholder="Amount €"><select id="stakeLock"><option value="7">7 Days</option><option value="30" selected>30 Days</option><option value="90">90 Days</option></select></div><button class="btn" onclick="requestStake()">Request Stake</button><div id="stakeResult"></div><p class="small">This sends a request to Admin via Chat. Admin will lock it in admin.html → Revenue + Staking.</p></div>
+<div id="stakeBlocked" class="blockedBox" style="display:none">⛔ Extra Staking is currently PAUSED by Admin.</div>
 <div class="card"><h3 style="margin-top:0">📋 My Extra Stakes</h3><div id="stakesList">Loading...</div></div>
-<div class="card"><h3 style="margin-top:0">💵 Revenue Pool Transparency</h3><p class="small">This is real revenue Cedars Empire earned - withdrawal fees, exchange spread, task commissions. This is what pays your 0.03%.</p><div id="revList">Loading...</div></div>
+<div class="card"><h3 style="margin-top:0">💵 Revenue Pool Transparency</h3><p class="small">Real revenue Cedars earned - withdrawal fees, exchange spread, task commissions. This is what pays your daily.</p><div id="revList">Loading...</div></div>
 </div>
 
 <div id="page-money" class="page">
-<div class="card"><h3 style="margin-top:0">🏦 Deposit - Request To Admin</h3><p class="small">Deposit via Bank / Mobile Money / Crypto. Upload proof. Admin approves, Available increases. Deposit can then be used for Contract €300-€100k.</p><div class="flex"><input id="depAmt" type="number" placeholder="Amount €"><select id="depMethod"><option>Bank Transfer</option><option>Mobile Money</option><option>Crypto USDT</option><option>Cash</option></select><input id="depProof" placeholder="Proof Link / Reference"></div><button class="btn" onclick="requestDeposit()">Request Deposit</button><div id="depResult"></div><div id="myDeposits" style="margin-top:10px"></div></div>
-<div class="card"><h3 style="margin-top:0">↗ Withdraw - Request To Admin</h3><p class="small">Withdraw from Available only. Fee may apply - admin will confirm in Chat. Withdrawals are paid after admin approval.</p><div class="flex"><input id="wdAmt" type="number" placeholder="Amount €"><select id="wdMethod"><option>Bank Transfer</option><option>Mobile Money</option><option>Crypto USDT</option></select><input id="wdWallet" placeholder="Wallet / Account / Phone"></div><button class="btn" onclick="requestWithdraw()">Request Withdrawal</button><div id="wdResult"></div><div id="myWithdrawals" style="margin-top:10px"></div></div>
-<div class="card"><h3 style="margin-top:0">💱 Exchange</h3><p class="small">Exchange between EUR and USDT. Rate shown by admin. Request, admin confirms.</p><div class="flex"><input id="exFromAmt" type="number" placeholder="From Amount"><select id="exFrom"><option>EUR</option><option>USDT</option></select><input id="exToAmt" type="number" placeholder="To Amount (auto 1:1 for now)"><select id="exTo"><option>USDT</option><option>EUR</option></select></div><button class="btn" onclick="requestExchange()">Request Exchange</button><div id="exResult"></div><div id="myExchanges" style="margin-top:10px"></div></div>
+<div class="card" id="depositCard"><h3 style="margin-top:0">🏦 Deposit - Request To Admin</h3><p class="small">Deposit via Bank / Mobile Money / Crypto. Upload proof. Admin approves, Available increases. Deposit can then be used for Contract.</p><div class="flex"><input id="depAmt" type="number" placeholder="Amount €"><select id="depMethod"><option>Bank Transfer</option><option>Mobile Money</option><option>Crypto USDT</option><option>Cash</option></select><input id="depProof" placeholder="Proof Link / Reference"></div><button class="btn" onclick="requestDeposit()">Request Deposit</button><div id="depResult"></div><div id="myDeposits" style="margin-top:10px"></div></div>
+<div id="depositBlocked" class="blockedBox" style="display:none">⛔ Deposits are currently PAUSED by Admin.</div>
+<div class="card" id="withdrawCard"><h3 style="margin-top:0">↗ Withdraw - Request To Admin</h3><p class="small">Withdraw from Available only. Fee may apply - admin will confirm in Chat.</p><div class="flex"><input id="wdAmt" type="number" placeholder="Amount €"><select id="wdMethod"><option>Bank Transfer</option><option>Mobile Money</option><option>Crypto USDT</option></select><input id="wdWallet" placeholder="Wallet / Account / Phone"></div><button class="btn" onclick="requestWithdraw()">Request Withdrawal</button><div id="wdResult"></div><div id="myWithdrawals" style="margin-top:10px"></div></div>
+<div id="withdrawBlocked" class="blockedBox" style="display:none">⛔ Withdrawals are currently PAUSED by Admin. Please try later.</div>
+<div class="card" id="exchangeCard"><h3 style="margin-top:0">💱 Exchange</h3><p class="small">Exchange between EUR and USDT. Request, admin confirms.</p><div class="flex"><input id="exFromAmt" type="number" placeholder="From Amount"><select id="exFrom"><option>EUR</option><option>USDT</option></select><input id="exToAmt" type="number" placeholder="To Amount"><select id="exTo"><option>USDT</option><option>EUR</option></select></div><button class="btn" onclick="requestExchange()">Request Exchange</button><div id="exResult"></div><div id="myExchanges" style="margin-top:10px"></div></div>
+<div id="exchangeBlocked" class="blockedBox" style="display:none">⛔ Exchange is currently PAUSED by Admin.</div>
 <div class="card"><h3 style="margin-top:0">🎟️ Redeem Code</h3><div class="flex"><input id="redeemCode" placeholder="Code e.g. CEDARS-XXXXXX"></div><button class="btn" onclick="redeemMyCode()">Redeem My Code</button><div id="redeemResult"></div></div>
 </div>
 
 <div id="page-crypto" class="page">
 <div class="card"><h3 style="margin-top:0">₿ My Crypto Wallet - Hold / Receive / Send</h3><div class="flex"><div class="stat">USDT<br><b id="cryptoUSDT">0.00</b></div><div class="stat">BTC<br><b id="cryptoBTC">0.00000000</b></div><div class="stat">ETH<br><b id="cryptoETH">0.000000</b></div></div><div class="flex"><input id="myWallet" placeholder="My Wallet Address"><button class="btn dark" onclick="saveMyWallet()">Save My Wallet</button></div><div id="walletResult"></div></div>
+<div id="cryptoBlocked" class="blockedBox" style="display:none">⛔ Crypto is currently PAUSED by Admin.</div>
+<div id="cryptoContent">
 <div class="card"><h3 style="margin-top:0">➕ Deposit Crypto - Request</h3><div class="flex"><select id="cryptoDepCoin"><option>USDT</option><option>BTC</option><option>ETH</option></select><input id="cryptoDepAmt" type="number" placeholder="Amount"><input id="cryptoDepTx" placeholder="TX Hash - Required"></div><button class="btn" onclick="requestCryptoDeposit()">Request Crypto Deposit</button><div id="cryptoDepResult"></div></div>
 <div class="card"><h3 style="margin-top:0">↗ Send Crypto To External Wallet - Request</h3><div class="flex"><select id="cryptoWdCoin"><option>USDT</option><option>BTC</option><option>ETH</option></select><input id="cryptoWdAmt" type="number" placeholder="Amount"><input id="cryptoWdWallet" placeholder="External Wallet Address"></div><button class="btn" onclick="requestCryptoWithdraw()">Request Crypto Withdrawal</button><div id="cryptoWdResult"></div></div>
+</div>
 <div class="card"><h3 style="margin-top:0">📜 My Crypto Transactions</h3><div id="myCryptoTx">Loading...</div></div>
 </div>
 
 <div id="page-kyc" class="page">
-<div class="card"><h3 style="margin-top:0">🪪 KYC Verification</h3><p class="small">Upload ID / Passport. Admin approves. If rejected, you can re-upload.</p><div id="kycStatus"></div><div class="flex"><select id="kycType"><option>National ID</option><option>Passport</option><option>Driving License</option></select><input id="kycUrl" placeholder="Document Link - Upload to Drive / Imgur and paste link"></div><button class="btn" onclick="submitKyc()">Submit KYC</button><div id="kycResult"></div><div id="myKyc" style="margin-top:10px"></div></div>
+<div class="card"><h3 style="margin-top:0">🪪 KYC Verification</h3><p class="small">Upload ID / Passport. Admin approves.</p><div id="kycStatus"></div><div class="flex"><select id="kycType"><option>National ID</option><option>Passport</option><option>Driving License</option></select><input id="kycUrl" placeholder="Document Link - Upload to Drive / Imgur and paste link"></div><button class="btn" onclick="submitKyc()">Submit KYC</button><div id="kycResult"></div><div id="myKyc" style="margin-top:10px"></div></div>
 </div>
 
 <div id="page-chat" class="page">
-<div class="card"><h3 style="margin-top:0">💬 Chat With Admin - Saved Forever</h3><p class="small">Ask about contract, deposit, withdrawal, staking. Admin replies here.</p><div id="chatBox" class="chatBox">Loading...</div><div class="flex"><input id="chatInput" placeholder="Type message to Admin..."><button class="btn" onclick="sendChat()">Send</button></div><button class="btn dark" onclick="loadAll()">↻ Refresh Chat</button></div>
+<div class="card"><h3 style="margin-top:0">💬 Chat With Admin - Saved Forever</h3><p class="small">Ask about contract, deposit, withdrawal, staking.</p><div id="chatBox" class="chatBox">Loading...</div><div class="flex"><input id="chatInput" placeholder="Type message to Admin..."><button class="btn" onclick="sendChat()">Send</button></div><button class="btn dark" onclick="loadAll()">↻ Refresh Chat</button></div>
+<div id="chatBlocked" class="blockedBox" style="display:none">⛔ Chat is currently PAUSED by Admin.</div>
 </div>
 
 <div id="page-statement" class="page">
@@ -100,10 +112,10 @@ const SUPABASE_URL = 'https://ipyvewpjtpgfuqfwizlr.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm';
 const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const ADMIN_EMAILS = ['ogwal.bemmanuel@gmail.com','cryptome2030@gmail.com'];
-const ADMIN_IDS = []; // filled after first chat - admin will be found via messages
 const ENGINE_LIST = ['Africa','Europe','Asia','America','Oceania'];
-const MIN_MEMBERSHIP = 300, MAX_MEMBERSHIP = 100000, DAILY_RATE = 0.0003, CONTRACT_DAYS = 1095;
-let currentUser=null, myProfile=null, myBalance=null, myContract=null, allContracts=[], myStakes=[], allRevenue=[], myCrypto=null, myCryptoTx=[], allMessages=[], myDeposits=[], myWithdrawals=[], myExchanges=[], myKyc=[], engines=[], healthData=null;
+let siteSettings = {maintenance_mode:false, maintenance_message:'', announcement:'', announcement_on:false, allow_signup:true, allow_deposit:true, allow_withdraw:true, allow_exchange:true, allow_crypto:true, allow_chat:true, allow_staking:true, allow_contract_request:true, daily_rate:0.0003, min_membership:300, max_membership:100000, contract_days:1095, revenue_share:0.80};
+let MIN_MEMBERSHIP=300, MAX_MEMBERSHIP=100000, DAILY_RATE=0.0003, CONTRACT_DAYS=1095, REVENUE_SHARE=0.80;
+let currentUser=null, myProfile=null, myBalance=null, myContract=null, allContracts=[], myStakes=[], allRevenue=[], myCrypto=null, myCryptoTx=[], allMessages=[], myDeposits=[], myWithdrawals=[], myExchanges=[], myKyc=[], engines=[];
 
 function showPage(id,btn){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById('page-'+id).classList.add('active'); document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); if(id==='contract') renderContractPage(); if(id==='staking') renderStakingPage(); if(id==='chat') renderChat(); if(id==='statement') renderStatement(); }
 function showMsg(t,c){ let el=document.getElementById('authMsg'); el.innerText=t; el.style.color=c||'#c00'; }
@@ -111,13 +123,86 @@ function daysLeft(endDate){ return Math.ceil((new Date(endDate)-new Date())/8640
 function daysPassed(startDate){ return Math.floor((new Date()-new Date(startDate))/86400000); }
 function formatCountdown(endDate){ let diff=new Date(endDate)-new Date(); if(diff<=0) return {text:'EXPIRED', expired:true}; let days=Math.floor(diff/86400000); let hrs=Math.floor(diff%86400000/3600000); let mins=Math.floor(diff%3600000/60000); let secs=Math.floor(diff%60000/1000); return {text: days+' Days : '+String(hrs).padStart(2,'0')+'h : '+String(mins).padStart(2,'0')+'m : '+String(secs).padStart(2,'0')+'s', expired:false}; }
 function getContractStatus(c){ let dl=daysLeft(c.end_date); if(dl<=0) return {label:'EXPIRED', color:'#c00'}; if(dl<=1) return {label:'EXPIRES TOMORROW', color:'#c00'}; if(dl<=7) return {label:'EXPIRES IN '+dl+' DAYS', color:'#c00'}; if(dl<=30) return {label:'EXPIRING SOON - '+dl+' DAYS', color:'#d9a400'}; return {label:'ACTIVE - '+dl+' DAYS LEFT', color:'#0a9d6e'}; }
+function isFrozen(){ return myProfile && myProfile.is_frozen; }
 
-async function doSignup(){ const email=document.getElementById('email').value.trim().toLowerCase(); const password=document.getElementById('password').value; if(!email||!password||password.length<6){ showMsg('Enter email + password min 6 chars'); return; } const {data,error}=await client.auth.signUp({email,password}); if(error){ showMsg('SIGNUP FAILED: '+error.message); return; } showMsg('Account created! Now Login. If email confirmation required, check your inbox.', '#0a9d6e'); }
+// ===== SITE SETTINGS - ADMIN CONTROLS THIS PAGE =====
+async function loadSiteSettings(){
+  try{ let {data}=await client.from('site_settings').select('*').eq('id',1).single(); if(data){ siteSettings=data; MIN_MEMBERSHIP=data.min_membership||300; MAX_MEMBERSHIP=data.max_membership||100000; DAILY_RATE=data.daily_rate||0.0003; CONTRACT_DAYS=data.contract_days||1095; REVENUE_SHARE=data.revenue_share||0.80; } }catch(e){}
+  applySiteSettings();
+}
+function applySiteSettings(){
+  let s=siteSettings;
+  // Maintenance - show maintenance box, hide auth + dash
+  let maint=document.getElementById('maintenanceBox');
+  if(s.maintenance_mode){
+    maint.style.display='block'; document.getElementById('maintenanceText').innerText=s.maintenance_message||'Under maintenance';
+    // If user is not admin, hide dash/auth - admin can still use Admin link at top
+    if(currentUser && !ADMIN_EMAILS.includes(currentUser.email.toLowerCase())){ document.getElementById('dashSection').style.display='none'; document.getElementById('authSection').style.display='none'; }
+    return;
+  } else { maint.style.display='none'; }
+  // Announcement
+  let ann=document.getElementById('announcementBox');
+  if(s.announcement_on && s.announcement){ ann.style.display='block'; document.getElementById('announcementTextShow').innerText=s.announcement; } else ann.style.display='none';
+  // Frozen
+  let fr=document.getElementById('frozenBox');
+  if(isFrozen()){ fr.style.display='block'; document.getElementById('frozenReasonText').innerText=myProfile.freeze_reason||'Contact Admin'; } else fr.style.display='none';
+  // Signup
+  document.getElementById('signupBtn').style.display= s.allow_signup ? 'block' : 'none';
+  document.getElementById('signupBlocked').style.display= s.allow_signup ? 'none' : 'block';
+  // Feature blocks
+  document.getElementById('depositCard').style.display= s.allow_deposit ? 'block' : 'none'; document.getElementById('depositBlocked').style.display= s.allow_deposit ? 'none' : 'block';
+  document.getElementById('withdrawCard').style.display= s.allow_withdraw ? 'block' : 'none'; document.getElementById('withdrawBlocked').style.display= s.allow_withdraw ? 'none' : 'block';
+  document.getElementById('exchangeCard').style.display= s.allow_exchange ? 'block' : 'none'; document.getElementById('exchangeBlocked').style.display= s.allow_exchange ? 'none' : 'block';
+  document.getElementById('cryptoContent').style.display= s.allow_crypto ? 'block' : 'none'; document.getElementById('cryptoBlocked').style.display= s.allow_crypto ? 'none' : 'block';
+  document.getElementById('contractRequestCard').style.display= s.allow_contract_request ? 'block' : 'none'; document.getElementById('contractBlocked').style.display= s.allow_contract_request ? 'none' : 'block';
+  document.getElementById('stakeRequestCard').style.display= s.allow_staking ? 'block' : 'none'; document.getElementById('stakeBlocked').style.display= s.allow_staking ? 'none' : 'block';
+  // Chat - hide input if blocked, but still show history
+  document.getElementById('chatBlocked').style.display= s.allow_chat ? 'none' : 'block';
+  // Labels from admin rates
+  document.getElementById('authSubtitle').innerText='Membership €'+MIN_MEMBERSHIP+' - €'+MAX_MEMBERSHIP+' • Agreement '+CONTRACT_DAYS+' Days • Daily '+(DAILY_RATE*100).toFixed(2)+'% INCLUSIVE';
+  document.querySelectorAll('.contractDaysLabel').forEach(el=>el.innerText=CONTRACT_DAYS);
+  document.getElementById('contractRangeLabel').innerText='€'+MIN_MEMBERSHIP+' - €'+MAX_MEMBERSHIP;
+  document.getElementById('dailyRateLabel').innerText=(DAILY_RATE*100).toFixed(2)+'% INCLUSIVE';
+  document.getElementById('membershipText').innerText='€'+MIN_MEMBERSHIP+' minimum, €'+MAX_MEMBERSHIP+' maximum.';
+  document.getElementById('dailyRateText').innerText=(DAILY_RATE*100).toFixed(2)+'%';
+  document.getElementById('stakingRateLabel').innerText=(DAILY_RATE*100).toFixed(2)+'%';
+  document.getElementById('contractAmt').placeholder='Amount €'+MIN_MEMBERSHIP+' - €'+MAX_MEMBERSHIP;
+  // Contract table - auto from rates
+  let amounts=[MIN_MEMBERSHIP, 1000, 10000, MAX_MEMBERSHIP];
+  // Deduplicate + sort
+  amounts=[...new Set(amounts)].sort((a,b)=>a-b);
+  document.getElementById('contractTableBody').innerHTML=amounts.map(amt=>{ let daily=amt*DAILY_RATE; return '<tr><td>€'+amt.toLocaleString()+'</td><td>€'+daily.toFixed(2)+' / day</td><td>€'+(daily*CONTRACT_DAYS).toFixed(2)+'</td><td>+ €'+amt.toLocaleString()+' principal back</td></tr>'; }).join('');
+}
+
+async function doSignup(){
+  if(!siteSettings.allow_signup){ showMsg('⛔ Signup is PAUSED by Admin'); return; }
+  const email=document.getElementById('email').value.trim().toLowerCase(); const password=document.getElementById('password').value; if(!email||!password||password.length<6){ showMsg('Enter email + password min 6 chars'); return; } const {data,error}=await client.auth.signUp({email,password}); if(error){ showMsg('SIGNUP FAILED: '+error.message); return; } showMsg('Account created! Now Login.', '#0a9d6e');
+}
 async function doLogin(){ const email=document.getElementById('email').value.trim().toLowerCase(); const password=document.getElementById('password').value; if(!email||!password){ showMsg('Enter email + password'); return; } const {data,error}=await client.auth.signInWithPassword({email,password}); if(error){ showMsg('LOGIN FAILED: '+error.message); return; } await afterLogin(); }
 async function doLogout(){ await client.auth.signOut(); location.reload(); }
-async function afterLogin(){ const {data}=await client.auth.getUser(); if(!data.user) return; currentUser=data.user; if(ADMIN_EMAILS.includes(currentUser.email.toLowerCase())){ window.location.href='admin.html'; return; } document.getElementById('userEmailTop').innerText='👤 '+currentUser.email; document.getElementById('logoutBtn').style.display='inline-block'; document.getElementById('authSection').style.display='none'; document.getElementById('dashSection').style.display='block'; await loadAll(); setInterval(updateCountdowns,1000); setInterval(()=>{ if(currentUser) loadAll(true); },60000); }
+async function afterLogin(){ const {data}=await client.auth.getUser(); if(!data.user) return; currentUser=data.user; if(ADMIN_EMAILS.includes(currentUser.email.toLowerCase())){ window.location.href='admin.html'; return; } document.getElementById('userEmailTop').innerText='👤 '+currentUser.email; document.getElementById('logoutBtn').style.display='inline-block'; document.getElementById('authSection').style.display='none'; document.getElementById('dashSection').style.display='block'; await loadSiteSettings(); await loadAll(); setInterval(updateCountdowns,1000); setInterval(()=>{ if(currentUser) loadAll(true); },60000); }
 
-async function loadAll(silent){ try{ let {data:prof}=await client.from('profiles').select('*').eq('id',currentUser.id).single(); myProfile=prof||{id:currentUser.id, email:currentUser.email, sub_engine:null}; if(!prof){ await client.from('profiles').insert({id:currentUser.id, email:currentUser.email}); myProfile={id:currentUser.id, email:currentUser.email, sub_engine:null}; } }catch(e){ myProfile={id:currentUser.id, email:currentUser.email, sub_engine:null}; } try{ let {data:bal}=await client.from('balances').select('*').eq('user_id',currentUser.id).single(); myBalance=bal||{available_balance:0,reserved_balance:0,earned_balance:0,central_reserve:0}; if(!bal){ await client.from('balances').insert({user_id:currentUser.id, available_balance:0, reserved_balance:0, earned_balance:0, central_reserve:0, amount:0}); } }catch(e){ myBalance={available_balance:0,reserved_balance:0,earned_balance:0}; } try{ let {data}=await client.from('contracts').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}); allContracts=data||[]; myContract=allContracts.find(c=>c.status==='active' && daysLeft(c.end_date)>0) || allContracts[0] || null; }catch(e){ allContracts=[]; } try{ let {data}=await client.from('stakes').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}); myStakes=data||[]; }catch(e){ myStakes=[]; } try{ let {data}=await client.from('revenue_pool').select('*').order('created_at',{ascending:false}).limit(50); allRevenue=data||[]; }catch(e){ allRevenue=[]; } try{ let {data}=await client.from('crypto_balances').select('*').eq('user_id',currentUser.id).single(); myCrypto=data||{usdt:0,btc:0,eth:0,wallet_address:''}; if(!data){ await client.from('crypto_balances').insert({user_id:currentUser.id, usdt:0, btc:0, eth:0}); } }catch(e){ myCrypto={usdt:0,btc:0,eth:0,wallet_address:''}; } try{ let {data}=await client.from('crypto_transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(50); myCryptoTx=data||[]; }catch(e){ myCryptoTx=[]; } try{ let {data}=await client.from('messages').select('*').or('sender_id.eq.'+currentUser.id+',receiver_id.eq.'+currentUser.id).order('created_at',{ascending:true}).limit(500); allMessages=data||[]; }catch(e){ allMessages=[]; } try{ let {data}=await client.from('deposits').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myDeposits=data||[]; }catch(e){ myDeposits=[]; } try{ let {data}=await client.from('withdrawals').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myWithdrawals=data||[]; }catch(e){ myWithdrawals=[]; } try{ let {data}=await client.from('exchanges').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myExchanges=data||[]; }catch(e){ myExchanges=[]; } try{ let {data}=await client.from('kyc_documents').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myKyc=data||[]; }catch(e){ myKyc=[]; } try{ let {data}=await client.from('sub_engines').select('*'); engines=data||[]; }catch(e){ engines=[]; } renderHome(); renderContractPage(); renderStakingPage(); renderMoney(); renderCrypto(); renderKyc(); renderChat(); renderStatement(); loadHealth(); }
+async function loadAll(silent){
+  await loadSiteSettings();
+  // If maintenance ON, stop - already handled in applySiteSettings
+  if(siteSettings.maintenance_mode) return;
+  try{ let {data:prof}=await client.from('profiles').select('*').eq('id',currentUser.id).single(); myProfile=prof||{id:currentUser.id, email:currentUser.email, sub_engine:null, is_frozen:false}; if(!prof){ await client.from('profiles').insert({id:currentUser.id, email:currentUser.email}); myProfile={id:currentUser.id, email:currentUser.email, sub_engine:null, is_frozen:false}; } }catch(e){ myProfile={id:currentUser.id, email:currentUser.email, sub_engine:null, is_frozen:false}; }
+  // Re-apply after profile load (frozen check)
+  applySiteSettings();
+  try{ let {data:bal}=await client.from('balances').select('*').eq('user_id',currentUser.id).single(); myBalance=bal||{available_balance:0,reserved_balance:0,earned_balance:0,central_reserve:0}; if(!bal){ await client.from('balances').insert({user_id:currentUser.id, available_balance:0, reserved_balance:0, earned_balance:0, central_reserve:0, amount:0}); } }catch(e){ myBalance={available_balance:0,reserved_balance:0,earned_balance:0}; }
+  try{ let {data}=await client.from('contracts').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}); allContracts=data||[]; myContract=allContracts.find(c=>c.status==='active' && daysLeft(c.end_date)>0) || allContracts[0] || null; }catch(e){ allContracts=[]; }
+  try{ let {data}=await client.from('stakes').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}); myStakes=data||[]; }catch(e){ myStakes=[]; }
+  try{ let {data}=await client.from('revenue_pool').select('*').order('created_at',{ascending:false}).limit(50); allRevenue=data||[]; }catch(e){ allRevenue=[]; }
+  try{ let {data}=await client.from('crypto_balances').select('*').eq('user_id',currentUser.id).single(); myCrypto=data||{usdt:0,btc:0,eth:0,wallet_address:''}; if(!data){ await client.from('crypto_balances').insert({user_id:currentUser.id, usdt:0, btc:0, eth:0}); } }catch(e){ myCrypto={usdt:0,btc:0,eth:0,wallet_address:''}; }
+  try{ let {data}=await client.from('crypto_transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(50); myCryptoTx=data||[]; }catch(e){ myCryptoTx=[]; }
+  try{ let {data}=await client.from('messages').select('*').or('sender_id.eq.'+currentUser.id+',receiver_id.eq.'+currentUser.id).order('created_at',{ascending:true}).limit(500); allMessages=data||[]; }catch(e){ allMessages=[]; }
+  try{ let {data}=await client.from('deposits').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myDeposits=data||[]; }catch(e){ myDeposits=[]; }
+  try{ let {data}=await client.from('withdrawals').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myWithdrawals=data||[]; }catch(e){ myWithdrawals=[]; }
+  try{ let {data}=await client.from('exchanges').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myExchanges=data||[]; }catch(e){ myExchanges=[]; }
+  try{ let {data}=await client.from('kyc_documents').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20); myKyc=data||[]; }catch(e){ myKyc=[]; }
+  try{ let {data}=await client.from('sub_engines').select('*'); engines=data||[]; }catch(e){ engines=[]; }
+  renderHome(); renderContractPage(); renderStakingPage(); renderMoney(); renderCrypto(); renderKyc(); renderChat(); renderStatement(); loadHealth();
+}
 
 function renderHome(){
   document.getElementById('statAvail').innerText='€'+parseFloat(myBalance.available_balance||0).toFixed(2);
@@ -132,50 +217,47 @@ function renderHome(){
   document.getElementById('engineTop').innerText='Engine: '+(myProfile.sub_engine||'-');
   let eng=engines.find(e=>e.name===myProfile.sub_engine); document.getElementById('statEngineReserve').innerText='Reserve €'+(eng?parseFloat(eng.reserve||0).toFixed(2):'0.00');
   document.getElementById('engineSelect').value=myProfile.sub_engine||'Africa';
-  // Contract countdown home
   if(myContract && myContract.status==='active'){
-    let cd=formatCountdown(myContract.end_date); let st=getContractStatus(myContract); let pct=Math.min(100, daysPassed(myContract.start_date)/1095*100);
+    let cd=formatCountdown(myContract.end_date); let st=getContractStatus(myContract); let pct=Math.min(100, daysPassed(myContract.start_date)/CONTRACT_DAYS*100);
     let alertHtml=''; let dl=daysLeft(myContract.end_date);
     if(dl<=0) alertHtml='<div class="alertBox red"><b>🔴 CONTRACT EXPIRED</b> - Contact Admin to return principal €'+parseFloat(myContract.amount||0).toFixed(2)+'</div>';
-    else if(dl<=7) alertHtml='<div class="alertBox red"><b>⏰ CONTRACT EXPIRES IN '+dl+' DAYS</b> - Contact Admin now. Principal €'+parseFloat(myContract.amount||0).toFixed(2)+' will be returned at end.</div>';
+    else if(dl<=7) alertHtml='<div class="alertBox red"><b>⏰ CONTRACT EXPIRES IN '+dl+' DAYS</b> - Contact Admin now. Principal €'+parseFloat(myContract.amount||0).toFixed(2)+' will be returned.</div>';
     else if(dl<=30) alertHtml='<div class="alertBox"><b>⚠️ CONTRACT EXPIRING IN '+dl+' DAYS</b> - Prepare for renewal / principal return.</div>';
     else alertHtml='<div class="alertBox green"><b>✅ Contract Active</b> - '+dl+' days left.</div>';
     document.getElementById('contractAlertHome').innerHTML=alertHtml;
     document.getElementById('contractBadgeNav').style.display= dl<=30 ? 'inline' : 'none'; document.getElementById('contractBadgeNav').innerText= dl<=0?'EXPIRED':dl+'d';
-    document.getElementById('contractCountdownHome').innerHTML='<div class="countBox"><div>⏰ CONTRACT COUNTDOWN - LIVE</div><b class="contractTimer" data-end="'+myContract.end_date+'">'+(cd.expired?'EXPIRED':cd.text)+'</b><div style="margin-top:8px">Contract: €'+parseFloat(myContract.amount||0).toFixed(2)+' • Daily €'+parseFloat(myContract.daily_earning||0).toFixed(2)+' INCLUSIVE • Day '+(daysPassed(myContract.start_date)+1)+' / 1095 • '+pct.toFixed(1)+'% • Ends '+(myContract.end_date||'').slice(0,10)+'</div><div style="font-size:13px;margin-top:6px">Earned: €'+parseFloat(myContract.total_earned||0).toFixed(2)+' • Paid: €'+parseFloat(myContract.total_paid||0).toFixed(2)+' • Principal returned at end</div></div>';
+    document.getElementById('contractCountdownHome').innerHTML='<div class="countBox"><div>⏰ CONTRACT COUNTDOWN - LIVE</div><b class="contractTimer" data-end="'+myContract.end_date+'">'+(cd.expired?'EXPIRED':cd.text)+'</b><div style="margin-top:8px">Contract: €'+parseFloat(myContract.amount||0).toFixed(2)+' • Daily €'+parseFloat(myContract.daily_earning||0).toFixed(2)+' INCLUSIVE • Day '+(daysPassed(myContract.start_date)+1)+' / '+CONTRACT_DAYS+' • '+pct.toFixed(1)+'% • Ends '+(myContract.end_date||'').slice(0,10)+'</div><div style="font-size:13px;margin-top:6px">Earned: €'+parseFloat(myContract.total_earned||0).toFixed(2)+' • Paid: €'+parseFloat(myContract.total_paid||0).toFixed(2)+' • Principal returned at end</div></div>';
   } else {
-    document.getElementById('contractAlertHome').innerHTML='<div class="alertBox"><b>❌ NO ACTIVE CONTRACT</b> - Go to Contracts tab, create €300 - €100,000 contract. Daily 0.03% INCLUSIVE starts after admin approval.</div>';
-    document.getElementById('contractCountdownHome').innerHTML='<div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;text-align:center"><b>No Contract Yet</b><br>Create in Contracts tab - €300 to €100,000 - 1095 Days</div>';
+    document.getElementById('contractAlertHome').innerHTML='<div class="alertBox"><b>❌ NO ACTIVE CONTRACT</b> - Go to Contracts tab, create €'+MIN_MEMBERSHIP+' - €'+MAX_MEMBERSHIP+' contract. Daily '+(DAILY_RATE*100).toFixed(2)+'% INCLUSIVE starts after admin approval.</div>';
+    document.getElementById('contractCountdownHome').innerHTML='<div style="background:rgba(255,255,255,.1);padding:14px;border-radius:10px;text-align:center"><b>No Contract Yet</b><br>Create in Contracts tab - €'+MIN_MEMBERSHIP+' to €'+MAX_MEMBERSHIP+' - '+CONTRACT_DAYS+' Days</div>';
   }
-  // Capacity
   document.getElementById('capacityBox').innerHTML=ENGINE_LIST.map(e=>{ let en=engines.find(x=>x.name===e); return '<div style="background:#f8fafc;color:#000;padding:10px;border-radius:10px;margin-top:6px"><b>'+e+'</b> • '+(en?(en.is_on?'🟢 ON':'🟣 PAUSED'):'-')+' • Reserve €'+(en?parseFloat(en.reserve||0).toFixed(2):'0.00')+'</div>'; }).join('');
-  // Last Tx
   (async()=>{ let {data}=await client.from('transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(10); document.getElementById('lastTx').innerHTML=(data||[]).map(t=>'<div style="padding:8px;border-bottom:1px solid #eee">'+(t.created_at||'').slice(0,19)+' • '+t.type+' • '+(t.note||'')+' • <b>€'+parseFloat(t.amount||0).toFixed(2)+'</b></div>').join('')||'No transactions yet'; })();
 }
 function updateCountdowns(){ document.querySelectorAll('.contractTimer').forEach(el=>{ let end=el.getAttribute('data-end'); if(!end) return; let cd=formatCountdown(end); el.innerText='⏰ '+(cd.expired?'EXPIRED - 0 Days Left':cd.text); }); }
-
 function renderContractPage(){
   if(!currentUser) return;
   document.getElementById('contractAlertPage').innerHTML=document.getElementById('contractAlertHome').innerHTML;
   if(myContract){
-    let st=getContractStatus(myContract); let cd=formatCountdown(myContract.end_date); let pct=Math.min(100, daysPassed(myContract.start_date)/1095*100);
-    document.getElementById('contractDetail').innerHTML='<div class="countBox"><div>⏰ LIVE COUNTDOWN</div><b class="contractTimer" data-end="'+myContract.end_date+'">'+(cd.expired?'EXPIRED':cd.text)+'</b><div style="margin-top:8px">Amount: €'+parseFloat(myContract.amount||0).toFixed(2)+' • Daily: €'+parseFloat(myContract.daily_earning||0).toFixed(2)+' INCLUSIVE • Day '+(daysPassed(myContract.start_date)+1)+' / 1095 • '+pct.toFixed(1)+'%</div><div>Start: '+(myContract.start_date||'').slice(0,10)+' → End: '+(myContract.end_date||'').slice(0,10)+' • Status: '+st.label+'</div><div>Earned: €'+parseFloat(myContract.total_earned||0).toFixed(2)+' • Paid: €'+parseFloat(myContract.total_paid||0).toFixed(2)+'</div></div>';
+    let st=getContractStatus(myContract); let cd=formatCountdown(myContract.end_date); let pct=Math.min(100, daysPassed(myContract.start_date)/CONTRACT_DAYS*100);
+    document.getElementById('contractDetail').innerHTML='<div class="countBox"><div>⏰ LIVE COUNTDOWN</div><b class="contractTimer" data-end="'+myContract.end_date+'">'+(cd.expired?'EXPIRED':cd.text)+'</b><div style="margin-top:8px">Amount: €'+parseFloat(myContract.amount||0).toFixed(2)+' • Daily: €'+parseFloat(myContract.daily_earning||0).toFixed(2)+' INCLUSIVE • Day '+(daysPassed(myContract.start_date)+1)+' / '+CONTRACT_DAYS+' • '+pct.toFixed(1)+'%</div><div>Start: '+(myContract.start_date||'').slice(0,10)+' → End: '+(myContract.end_date||'').slice(0,10)+' • Status: '+st.label+'</div><div>Earned: €'+parseFloat(myContract.total_earned||0).toFixed(2)+' • Paid: €'+parseFloat(myContract.total_paid||0).toFixed(2)+'</div></div>';
   } else {
-    document.getElementById('contractDetail').innerHTML='<div class="alertBox"><b>No Contract</b> - Create one below. €300 - €100,000, 1095 Days.</div>';
+    document.getElementById('contractDetail').innerHTML='<div class="alertBox"><b>No Contract</b> - Create one below. €'+MIN_MEMBERSHIP+' - €'+MAX_MEMBERSHIP+', '+CONTRACT_DAYS+' Days.</div>';
   }
   document.getElementById('contractsList').innerHTML=allContracts.length?allContracts.map(c=>{ let st=getContractStatus(c); let cd=formatCountdown(c.end_date); return '<div class="item"><span><b>€'+parseFloat(c.amount||0).toFixed(2)+'</b> • '+(c.start_date||'').slice(0,10)+' → '+(c.end_date||'').slice(0,10)+' • Daily €'+parseFloat(c.daily_earning||0).toFixed(2)+' • Earned €'+parseFloat(c.total_earned||0).toFixed(2)+'<br><b class="contractTimer" data-end="'+c.end_date+'">⏰ '+(cd.expired?'EXPIRED':cd.text)+'</b></span><span><span class="pill" style="background:'+st.color+'22;color:'+st.color+'">'+st.label+'</span> • '+c.status+'</span></div>'; }).join(''):'No contracts yet';
 }
-document.getElementById('contractAmt')?.addEventListener?.('input', ()=>{ let amt=parseFloat(document.getElementById('contractAmt').value); let start=document.getElementById('contractStart').value||new Date().toISOString().slice(0,10); if(!amt){ document.getElementById('contractPreview').innerHTML=''; return; } let end=new Date(start); end.setDate(end.getDate()+1095); let daily=amt*DAILY_RATE; let total=daily*1095; let valid=amt>=300 && amt<=100000; document.getElementById('contractPreview').innerHTML= valid ? '✅ Valid: €'+amt.toFixed(2)+' • Daily €'+daily.toFixed(2)+' INCLUSIVE • Total 1095 days: €'+total.toFixed(2)+' • '+start+' → '+end.toISOString().slice(0,10)+' • Principal returned at end' : '⛔ INVALID: €'+amt.toFixed(2)+' - Must be €300 to €100,000'; });
+document.getElementById('contractAmt')?.addEventListener?.('input', ()=>{ let amt=parseFloat(document.getElementById('contractAmt').value); let start=document.getElementById('contractStart').value||new Date().toISOString().slice(0,10); if(!amt){ document.getElementById('contractPreview').innerHTML=''; return; } let end=new Date(start); end.setDate(end.getDate()+CONTRACT_DAYS); let daily=amt*DAILY_RATE; let total=daily*CONTRACT_DAYS; let valid=amt>=MIN_MEMBERSHIP && amt<=MAX_MEMBERSHIP; document.getElementById('contractPreview').innerHTML= valid ? '✅ Valid: €'+amt.toFixed(2)+' • Daily €'+daily.toFixed(2)+' INCLUSIVE • Total '+CONTRACT_DAYS+' days: €'+total.toFixed(2)+' • '+start+' → '+end.toISOString().slice(0,10)+' • Principal returned at end' : '⛔ INVALID: €'+amt.toFixed(2)+' - Must be €'+MIN_MEMBERSHIP+' to €'+MAX_MEMBERSHIP; });
 async function requestContract(){
+  if(!siteSettings.allow_contract_request){ document.getElementById('contractRequestResult').innerText='⛔ Contract Requests PAUSED by Admin'; return; }
+  if(isFrozen()){ document.getElementById('contractRequestResult').innerText='⛔ Your account is FROZEN - Contact Admin'; return; }
   let amt=parseFloat(document.getElementById('contractAmt').value); let startVal=document.getElementById('contractStart').value;
   if(!amt){ document.getElementById('contractRequestResult').innerText='Enter amount'; return; }
-  if(amt<MIN_MEMBERSHIP){ document.getElementById('contractRequestResult').innerText='⛔ REJECTED - €'+amt.toFixed(2)+' BELOW €300 minimum'; return; }
-  if(amt>MAX_MEMBERSHIP){ document.getElementById('contractRequestResult').innerText='⛔ REJECTED - €'+amt.toFixed(2)+' ABOVE €100,000 maximum'; return; }
+  if(amt<MIN_MEMBERSHIP){ document.getElementById('contractRequestResult').innerText='⛔ REJECTED - €'+amt.toFixed(2)+' BELOW €'+MIN_MEMBERSHIP+' minimum'; return; }
+  if(amt>MAX_MEMBERSHIP){ document.getElementById('contractRequestResult').innerText='⛔ REJECTED - €'+amt.toFixed(2)+' ABOVE €'+MAX_MEMBERSHIP+' maximum'; return; }
   if(myContract && myContract.status==='active' && daysLeft(myContract.end_date)>0){ document.getElementById('contractRequestResult').innerText='You already have ACTIVE contract €'+parseFloat(myContract.amount||0).toFixed(2); return; }
-  if(parseFloat(myBalance.available_balance||0)<amt && myDeposits.filter(d=>d.status==='approved').reduce((s,d)=>s+parseFloat(d.amount||0),0)<amt){ if(!confirm('Your Available is €'+parseFloat(myBalance.available_balance||0).toFixed(2)+' - less than €'+amt+'. Do you want to still send request? Admin will ask you to deposit first.')) return; }
-  let start=startVal? new Date(startVal) : new Date(); let end=new Date(start); end.setDate(end.getDate()+1095); let daily=amt*DAILY_RATE;
-  await client.from('transactions').insert({user_id:currentUser.id, type:'contract_request', amount:amt, note:'REQUEST 1095-Day Contract €'+amt+' - Daily €'+daily.toFixed(2)+' - Start '+start.toISOString().slice(0,10)+' - Ends '+end.toISOString().slice(0,10)});
-  await sendChatToAdmin('Hello Admin, I request a 1095-Day Contract: €'+amt.toFixed(2)+' - Daily €'+daily.toFixed(2)+' INCLUSIVE - Start '+start.toISOString().slice(0,10)+' → End '+end.toISOString().slice(0,10)+' - Please approve.');
+  let start=startVal? new Date(startVal) : new Date(); let end=new Date(start); end.setDate(end.getDate()+CONTRACT_DAYS); let daily=amt*DAILY_RATE;
+  await client.from('transactions').insert({user_id:currentUser.id, type:'contract_request', amount:amt, note:'REQUEST '+CONTRACT_DAYS+'-Day Contract €'+amt+' - Daily €'+daily.toFixed(2)+' - Start '+start.toISOString().slice(0,10)+' - Ends '+end.toISOString().slice(0,10)});
+  await sendChatToAdmin('Hello Admin, I request a '+CONTRACT_DAYS+'-Day Contract: €'+amt.toFixed(2)+' - Daily €'+daily.toFixed(2)+' INCLUSIVE - Start '+start.toISOString().slice(0,10)+' → End '+end.toISOString().slice(0,10)+' - Please approve.');
   document.getElementById('contractRequestResult').innerText='✅ Request sent to Admin. Admin will create contract in admin.html. You will see countdown here once approved.';
   await loadAll();
 }
@@ -193,22 +275,23 @@ function renderStakingPage(){
   let revTotal=allRevenue.reduce((s,r)=>s+parseFloat(r.amount||0),0);
   let paidStakes=myStakes.reduce((s,x)=>s+parseFloat(x.total_reward_paid||0),0);
   let paidContracts=allContracts.reduce((s,c)=>s+parseFloat(c.total_paid||0),0);
-  // Global revenue available approx = total - paid (admin calculates exact, this is display)
   let revAvail=Math.max(0, revTotal - paidStakes - paidContracts);
-  let maxToday=revAvail*0.8;
+  let maxToday=revAvail*REVENUE_SHARE;
   document.getElementById('myStaked').innerText='€'+myStaked.toFixed(2);
   document.getElementById('revAvail').innerText='€'+revAvail.toFixed(2);
   document.getElementById('stakeMax').innerText='€'+maxToday.toFixed(2);
   document.getElementById('myStakeDaily').innerText='€'+(myStaked*DAILY_RATE).toFixed(2);
-  document.getElementById('stakingAlert').innerHTML= revAvail<=0 ? '<div class="alertBox"><b>⚠️ Revenue Pool = €0</b> - Staking / Contract payout will be €0 today. Cedars needs real revenue (fees, commissions) to pay.</div>' : '<div class="alertBox green"><b>✅ Revenue Pool Available: €'+revAvail.toFixed(2)+'</b> - Max payout today €'+maxToday.toFixed(2)+'</div>';
+  document.getElementById('stakingAlert').innerHTML= revAvail<=0 ? '<div class="alertBox"><b>⚠️ Revenue Pool = €0</b> - Staking / Contract payout will be €0 today.</div>' : '<div class="alertBox green"><b>✅ Revenue Pool Available: €'+revAvail.toFixed(2)+'</b> - Max payout today €'+maxToday.toFixed(2)+'</div>';
   document.getElementById('stakesList').innerHTML=myStakes.length?myStakes.map(s=>'<div class="item"><span>Staked €'+parseFloat(s.amount||0).toFixed(2)+' • '+s.lock_days+' days • Daily €'+(parseFloat(s.amount||0)*DAILY_RATE).toFixed(2)+' • Paid €'+parseFloat(s.total_reward_paid||0).toFixed(2)+' • Ends '+(s.end_date||'').slice(0,10)+'</span><span class="pill">'+s.status+'</span></div>').join(''):'No extra stakes - Your contract is main staking';
   document.getElementById('revList').innerHTML=allRevenue.length?allRevenue.slice(0,20).map(r=>'<div style="padding:8px;border-bottom:1px solid #eee"><b>+€'+parseFloat(r.amount||0).toFixed(2)+'</b> • '+r.source+' • '+(r.note||'')+' • '+(r.created_at||'').slice(0,16)+'</div>').join(''):'No revenue logged yet';
 }
 async function requestStake(){
+  if(!siteSettings.allow_staking){ document.getElementById('stakeResult').innerText='⛔ Staking PAUSED by Admin'; return; }
+  if(isFrozen()){ document.getElementById('stakeResult').innerText='⛔ Account FROZEN'; return; }
   let amt=parseFloat(document.getElementById('stakeAmt').value); let lockDays=document.getElementById('stakeLock').value;
   if(!amt||amt<=0){ document.getElementById('stakeResult').innerText='Enter amount'; return; }
   if(parseFloat(myBalance.available_balance||0)<amt){ document.getElementById('stakeResult').innerText='Not enough Available €'+parseFloat(myBalance.available_balance||0).toFixed(2); return; }
-  await sendChatToAdmin('Hello Admin, I request Extra Staking: €'+amt.toFixed(2)+' for '+lockDays+' days at 0.03% daily - Please lock it.');
+  await sendChatToAdmin('Hello Admin, I request Extra Staking: €'+amt.toFixed(2)+' for '+lockDays+' days at '+(DAILY_RATE*100).toFixed(2)+'% daily - Please lock it.');
   await client.from('transactions').insert({user_id:currentUser.id, type:'stake_request', amount:amt, note:'REQUEST Extra Stake €'+amt+' for '+lockDays+' days'});
   document.getElementById('stakeResult').innerText='✅ Stake request sent to Admin via Chat.';
 }
@@ -219,6 +302,8 @@ function renderMoney(){
   document.getElementById('myExchanges').innerHTML=myExchanges.length?myExchanges.map(x=>'<div class="item"><span>'+parseFloat(x.from_amount||0).toFixed(2)+' '+(x.from_currency||'')+' → '+parseFloat(x.to_amount||0).toFixed(2)+' '+(x.to_currency||'')+'</span><span>'+(x.created_at||'').slice(0,16)+'</span></div>').join(''):'No exchanges yet';
 }
 async function requestDeposit(){
+  if(!siteSettings.allow_deposit){ document.getElementById('depResult').innerText='⛔ Deposits PAUSED by Admin'; return; }
+  if(isFrozen()){ document.getElementById('depResult').innerText='⛔ Account FROZEN'; return; }
   let amt=parseFloat(document.getElementById('depAmt').value); let method=document.getElementById('depMethod').value; let proof=document.getElementById('depProof').value||'';
   if(!amt||amt<=0){ document.getElementById('depResult').innerText='Enter amount'; return; }
   let {error}=await client.from('deposits').insert({user_id:currentUser.id, amount:amt, method, proof_url:proof, status:'pending'});
@@ -228,6 +313,8 @@ async function requestDeposit(){
   await loadAll();
 }
 async function requestWithdraw(){
+  if(!siteSettings.allow_withdraw){ document.getElementById('wdResult').innerText='⛔ Withdrawals PAUSED by Admin'; return; }
+  if(isFrozen()){ document.getElementById('wdResult').innerText='⛔ Account FROZEN - Withdrawals paused'; return; }
   let amt=parseFloat(document.getElementById('wdAmt').value); let method=document.getElementById('wdMethod').value; let wallet=document.getElementById('wdWallet').value||'';
   if(!amt||amt<=0){ document.getElementById('wdResult').innerText='Enter amount'; return; }
   if(parseFloat(myBalance.available_balance||0)<amt){ document.getElementById('wdResult').innerText='Not enough Available €'+parseFloat(myBalance.available_balance||0).toFixed(2); return; }
@@ -238,6 +325,8 @@ async function requestWithdraw(){
   await loadAll();
 }
 async function requestExchange(){
+  if(!siteSettings.allow_exchange){ document.getElementById('exResult').innerText='⛔ Exchange PAUSED by Admin'; return; }
+  if(isFrozen()){ document.getElementById('exResult').innerText='⛔ Account FROZEN'; return; }
   let fromAmt=parseFloat(document.getElementById('exFromAmt').value); let from=document.getElementById('exFrom').value; let toAmt=parseFloat(document.getElementById('exToAmt').value)||fromAmt; let to=document.getElementById('exTo').value;
   if(!fromAmt||fromAmt<=0){ document.getElementById('exResult').innerText='Enter amount'; return; }
   let {error}=await client.from('exchanges').insert({user_id:currentUser.id, from_amount:fromAmt, from_currency:from, to_amount:toAmt, to_currency:to, status:'pending'});
@@ -247,6 +336,7 @@ async function requestExchange(){
   await loadAll();
 }
 async function redeemMyCode(){
+  if(isFrozen()){ document.getElementById('redeemResult').innerText='⛔ Account FROZEN'; return; }
   let code=document.getElementById('redeemCode').value.trim(); if(!code){ document.getElementById('redeemResult').innerText='Enter code'; return; }
   let {data:c}=await client.from('redemption_codes').select('*').eq('code',code).eq('status','active').single();
   if(!c){ document.getElementById('redeemResult').innerText='Invalid / used code'; return; }
@@ -272,6 +362,8 @@ async function saveMyWallet(){
   await loadAll();
 }
 async function requestCryptoDeposit(){
+  if(!siteSettings.allow_crypto){ document.getElementById('cryptoDepResult').innerText='⛔ Crypto PAUSED by Admin'; return; }
+  if(isFrozen()){ document.getElementById('cryptoDepResult').innerText='⛔ Account FROZEN'; return; }
   let coin=document.getElementById('cryptoDepCoin').value; let amt=parseFloat(document.getElementById('cryptoDepAmt').value); let tx=document.getElementById('cryptoDepTx').value.trim();
   if(!amt||!tx){ document.getElementById('cryptoDepResult').innerText='Enter amount + TX Hash (required)'; return; }
   let {error}=await client.from('crypto_transactions').insert({user_id:currentUser.id, coin, type:'deposit', amount:amt, tx_hash:tx, status:'pending'});
@@ -281,6 +373,8 @@ async function requestCryptoDeposit(){
   await loadAll();
 }
 async function requestCryptoWithdraw(){
+  if(!siteSettings.allow_crypto){ document.getElementById('cryptoWdResult').innerText='⛔ Crypto PAUSED by Admin'; return; }
+  if(isFrozen()){ document.getElementById('cryptoWdResult').innerText='⛔ Account FROZEN'; return; }
   let coin=document.getElementById('cryptoWdCoin').value; let amt=parseFloat(document.getElementById('cryptoWdAmt').value); let wallet=document.getElementById('cryptoWdWallet').value.trim();
   if(!amt||!wallet){ document.getElementById('cryptoWdResult').innerText='Enter amount + external wallet'; return; }
   let field=coin.toLowerCase(); if(parseFloat(myCrypto[field]||0)<amt){ document.getElementById('cryptoWdResult').innerText='Not enough '+coin; return; }
@@ -306,16 +400,13 @@ async function submitKyc(){
   await loadAll();
 }
 async function sendChatToAdmin(msg){
-  // Find admin via profiles - admin emails are known, try to find admin user id via messages or profiles
   let {data:admins}=await client.from('profiles').select('id,email').in('email', ADMIN_EMAILS);
   let adminId=admins && admins.length>0 ? admins[0].id : null;
-  if(!adminId){
-    // Fallback: send to first message receiver if exists, else store with receiver = currentUser (admin will see via transactions)
-    return;
-  }
+  if(!adminId) return;
   await client.from('messages').insert({sender_id:currentUser.id, receiver_id:adminId, sender_email:currentUser.email, message:msg});
 }
 async function sendChat(){
+  if(!siteSettings.allow_chat){ alert('⛔ Chat PAUSED by Admin'); return; }
   let text=document.getElementById('chatInput').value.trim(); if(!text) return;
   await sendChatToAdmin(text);
   document.getElementById('chatInput').value='';
@@ -328,7 +419,6 @@ function renderChat(){
   let box=document.getElementById('chatBox'); box.scrollTop=box.scrollHeight;
   let unread=allMessages.filter(m=>m.receiver_id===currentUser.id && !m.is_read).length;
   let badge=document.getElementById('chatBadge'); badge.style.display=unread>0?'inline':'none'; badge.innerText=unread;
-  // Mark admin messages as read when opening chat
   if(unread>0){ client.from('messages').update({is_read:true}).eq('receiver_id',currentUser.id).eq('is_read',false).then(()=>{}); }
 }
 async function renderStatement(){
@@ -336,23 +426,22 @@ async function renderStatement(){
   let from=document.getElementById('stmtFrom')?.value||''; let to=document.getElementById('stmtTo')?.value||'';
   let {data:tx}=await client.from('transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(200);
   let list=(tx||[]).filter(t=>{ if(from && (t.created_at||'')<from) return false; if(to && (t.created_at||'')>to+'T23:59:59') return false; return true; });
-  document.getElementById('statementSummary').innerHTML='<div class="totals"><b>'+currentUser.email+'</b> • Engine: '+(myProfile.sub_engine||'-')+' • Contract: '+(myContract?'€'+parseFloat(myContract.amount||0).toFixed(2)+' • 1095 Days • Ends '+(myContract.end_date||'').slice(0,10)+' • Daily €'+parseFloat(myContract.daily_earning||0).toFixed(2):'No Contract')+'<br>Available: €'+parseFloat(myBalance.available_balance||0).toFixed(2)+' • Earned: €'+parseFloat(myBalance.earned_balance||0).toFixed(2)+' • USDT: '+parseFloat(myCrypto.usdt||0).toFixed(2)+'</div>';
+  document.getElementById('statementSummary').innerHTML='<div class="totals"><b>'+currentUser.email+'</b> • Engine: '+(myProfile.sub_engine||'-')+' • Contract: '+(myContract?'€'+parseFloat(myContract.amount||0).toFixed(2)+' • '+CONTRACT_DAYS+' Days • Ends '+(myContract.end_date||'').slice(0,10)+' • Daily €'+parseFloat(myContract.daily_earning||0).toFixed(2):'No Contract')+'<br>Available: €'+parseFloat(myBalance.available_balance||0).toFixed(2)+' • Earned: €'+parseFloat(myBalance.earned_balance||0).toFixed(2)+' • USDT: '+parseFloat(myCrypto.usdt||0).toFixed(2)+'</div>';
   document.getElementById('statementTx').innerHTML=list.map(t=>'<div class="item"><span>'+(t.created_at||'').slice(0,19)+' • '+t.type+' • '+(t.note||'')+'</span><b>€'+parseFloat(t.amount||0).toFixed(2)+'</b></div>').join('')||'No transactions in period';
 }
 async function downloadCSV(){
   let from=document.getElementById('stmtFrom').value; let to=document.getElementById('stmtTo').value;
   let {data:tx}=await client.from('transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(500);
   let list=(tx||[]).filter(t=>{ if(from && (t.created_at||'')<from) return false; if(to && (t.created_at||'')>to+'T23:59:59') return false; return true; });
-  let rows=[['CEDARS EMPIRE - STATEMENT'],['Name', currentUser.email],['Engine', myProfile.sub_engine||''],['Contract', myContract?myContract.amount+' - 1095 Days - Ends '+myContract.end_date:'No Contract'],['Available', myBalance.available_balance],['Earned', myBalance.earned_balance],[''],['Date','Type','Amount','Note']];
+  let rows=[['CEDARS EMPIRE - STATEMENT'],['Name', currentUser.email],['Engine', myProfile.sub_engine||''],['Contract', myContract?myContract.amount+' - '+CONTRACT_DAYS+' Days - Ends '+myContract.end_date:'No Contract'],['Available', myBalance.available_balance],['Earned', myBalance.earned_balance],[''],['Date','Type','Amount','Note']];
   list.forEach(t=>rows.push([t.created_at||'', t.type||'', t.amount||0, (t.note||'').replace(/,/g,' ')]));
   let csv=rows.map(r=>r.join(',')).join('\n'); let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='statement_'+currentUser.email+'.csv'; a.click();
 }
 async function printStatement(){
   let {data:tx}=await client.from('transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(200);
-  let w=window.open('','','width=800,height=900'); w.document.write('<html><head><title>Statement</title><style>body{font-family:Arial;padding:30px} table{width:100%;border-collapse:collapse} td,th{border:1px solid #ddd;padding:8px}</style></head><body><h1>CEDARS EMPIRE</h1><h2>Account Statement</h2><p><b>'+currentUser.email+'</b><br>Engine: '+(myProfile.sub_engine||'')+'<br>Contract: '+(myContract?'€'+parseFloat(myContract.amount||0).toFixed(2)+' • 1095 Days • Ends '+(myContract.end_date||'').slice(0,10):'No Contract')+'</p><table><tr><th>Balance</th><th>Amount</th></tr><tr><td>Available</td><td>€'+parseFloat(myBalance.available_balance||0).toFixed(2)+'</td></tr><tr><td>Earned</td><td>€'+parseFloat(myBalance.earned_balance||0).toFixed(2)+'</td></tr><tr><td>USDT</td><td>'+parseFloat(myCrypto.usdt||0).toFixed(2)+'</td></tr></table><h3>Transactions</h3><table><tr><th>Date</th><th>Type</th><th>Amount</th></tr>'+(tx||[]).map(t=>'<tr><td>'+(t.created_at||'').slice(0,19)+'</td><td>'+t.type+'</td><td>€'+parseFloat(t.amount||0).toFixed(2)+'</td></tr>').join('')+'</table></body></html>'); w.document.close(); w.print();
+  let w=window.open('','','width=800,height=900'); w.document.write('<html><head><title>Statement</title><style>body{font-family:Arial;padding:30px} table{width:100%;border-collapse:collapse} td,th{border:1px solid #ddd;padding:8px}</style></head><body><h1>CEDARS EMPIRE</h1><h2>Account Statement</h2><p><b>'+currentUser.email+'</b><br>Engine: '+(myProfile.sub_engine||'')+'<br>Contract: '+(myContract?'€'+parseFloat(myContract.amount||0).toFixed(2)+' • '+CONTRACT_DAYS+' Days • Ends '+(myContract.end_date||'').slice(0,10):'No Contract')+'</p><table><tr><th>Balance</th><th>Amount</th></tr><tr><td>Available</td><td>€'+parseFloat(myBalance.available_balance||0).toFixed(2)+'</td></tr><tr><td>Earned</td><td>€'+parseFloat(myBalance.earned_balance||0).toFixed(2)+'</td></tr><tr><td>USDT</td><td>'+parseFloat(myCrypto.usdt||0).toFixed(2)+'</td></tr></table><h3>Transactions</h3><table><tr><th>Date</th><th>Type</th><th>Amount</th></tr>'+(tx||[]).map(t=>'<tr><td>'+(t.created_at||'').slice(0,19)+'</td><td>'+t.type+'</td><td>€'+parseFloat(t.amount||0).toFixed(2)+'</td></tr>').join('')+'</table></body></html>'); w.document.close(); w.print();
 }
 async function loadHealth(){
-  // Shareholder sees only Green/Yellow/Purple bar, no diagnosis - derived from engines + contracts + revenue
   try{
     let green=10, yellow=0, purple=0;
     let expiring=allContracts.filter(c=>{ let dl=daysLeft(c.end_date); return dl>0 && dl<=30 && c.status==='active'; }).length;
@@ -361,6 +450,7 @@ async function loadHealth(){
     if(expired>0) yellow+=1;
     if(expiring>0) yellow+=1;
     purple=paused;
+    if(siteSettings.maintenance_mode) purple+=1;
     let total=green+yellow+purple||1;
     let title= yellow>0 ? '🟡 '+yellow+' Warning(s) - Degraded, But Running' : purple>0 ? '🟣 Operational With '+purple+' Paused (Maintenance)' : '🟢 All Systems Operational';
     document.getElementById('healthTitle').innerText=title;
@@ -369,6 +459,8 @@ async function loadHealth(){
     document.getElementById('healthUptime').innerText=((green+purple)/total*100).toFixed(2)+'%';
   }catch(e){}
 }
+// Load settings on page load even before login - so signup / maintenance shows correctly
+loadSiteSettings();
 client.auth.getSession().then(({data})=>{ if(data.session) afterLogin(); });
 </script>
 </body>
