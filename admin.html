@@ -9,175 +9,209 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
 body{background:#0f172a;color:#fff;padding:14px;min-height:100vh}
 .top{background:linear-gradient(135deg,#1e293b,#0f172a);border:1px solid #334155;border-radius:16px;padding:16px;margin-bottom:12px}
-.top h1{font-size:22px}
-.top p{font-size:13px;opacity:.8;margin-top:4px;word-break:break-all}
+.top h1{font-size:22px}.top p{font-size:13px;opacity:.8;margin-top:4px;word-break:break-all}
 .badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;background:#334155}
-.badge.green{background:#14532d;color:#4ade80}
-.badge.red{background:#7f1d1d;color:#fca5a5}
-.badge.yellow{background:#713f12;color:#facc15}
+.badge.green{background:#14532d;color:#4ade80}.badge.red{background:#7f1d1d;color:#fca5a5}.badge.yellow{background:#713f12;color:#facc15}.badge.blue{background:#1e3a5f;color:#67e8f9}
 .btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;margin-bottom:10px}
-.btn-blue{background:#67e8f9;color:#000}
-.btn-green{background:#4ade80;color:#000}
-.btn-yellow{background:#facc15;color:#000}
-.btn-red{background:#f87171;color:#000}
-.btn-dark{background:#334155;color:#fff}
-.btn-small{width:auto;padding:8px 12px;font-size:12px;margin-bottom:0}
-.card{background:#1e293b;border-radius:16px;padding:16px;margin-bottom:12px;border:1px solid #334155}
-.card h3{margin-bottom:10px}
+.btn-blue{background:#67e8f9;color:#000}.btn-green{background:#4ade80;color:#000}.btn-yellow{background:#facc15;color:#000}.btn-red{background:#f87171;color:#000}.btn-dark{background:#334155;color:#fff}
+.btn-small{width:auto;padding:7px 10px;font-size:12px;margin:2px}
+.card{background:#1e293b;border-radius:16px;padding:16px;margin-bottom:12px;border:1px solid #334155}.card h3{margin-bottom:10px}
 input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#fff;margin-bottom:10px}
+.checkrow{display:flex;align-items:center;gap:8px;margin:6px 0 10px;font-size:13px}.checkrow input{width:auto;margin:0}
+.linkbtn{background:none;border:0;color:#67e8f9;cursor:pointer;font-size:13px;font-weight:700;padding:0;text-decoration:underline}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;opacity:.7;padding:8px 4px;border-bottom:1px solid #334155}
-td{padding:8px 4px;border-bottom:1px solid #1e293b;word-break:break-all}
+td{padding:8px 4px;border-bottom:1px solid #1e293b;word-break:break-all;vertical-align:top}
 .msg{padding:10px;border-radius:10px;margin-bottom:10px;font-size:13px;display:none}
-.msg.err{background:#7f1d1d;display:block}
-.msg.ok{background:#14532d;display:block}
-.msg.warn{background:#713f12;display:block}
+.msg.err{background:#7f1d1d;display:block}.msg.ok{background:#14532d;display:block}.msg.warn{background:#713f12;display:block}
 .small{font-size:12px;opacity:.7}
 .tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px}
-.tab{padding:10px 14px;border-radius:20px;background:#1e293b;border:1px solid #334155;cursor:pointer;white-space:nowrap;font-weight:700;font-size:13px}
-.tab.active{background:#67e8f9;color:#000}
+.tab{padding:10px 14px;border-radius:20px;background:#1e293b;border:1px solid #334155;cursor:pointer;white-space:nowrap;font-weight:700;font-size:13px}.tab.active{background:#67e8f9;color:#000}
 .engine{display:flex;justify-content:space-between;align-items:center;background:#0f172a;border:1px solid #334155;border-radius:12px;padding:12px;margin-bottom:8px}
-.engine b{font-size:14px}
-.engine span{font-size:12px;opacity:.7;display:block}
-.switch{width:52px;height:28px;background:#4ade80;border-radius:20px;position:relative;cursor:pointer;flex-shrink:0}
-.switch.off{background:#475569}
-.switch:after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:.2s}
-.switch.off:after{left:27px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:12px;text-align:center}
-.stat b{font-size:20px;display:block}
-.stat span{font-size:11px;opacity:.7}
+.engine b{font-size:14px}.engine span{font-size:12px;opacity:.7;display:block}
+.switch{width:52px;height:28px;background:#4ade80;border-radius:20px;position:relative;cursor:pointer;flex-shrink:0}.switch.off{background:#475569}.switch:after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:.2s}.switch.off:after{left:27px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid4{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:12px;text-align:center}.stat b{font-size:20px;display:block}.stat span{font-size:11px;opacity:.7}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:99;padding:14px}.modal.open{display:flex}.modalBox{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:16px;width:100%;max-width:480px}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN - NO EMAIL PREFILLED -->
 <div id="loginBox" class="card">
   <h2>🔐 CEDARS EMPIRE - Admin Login</h2>
-  <p class="small" style="margin:6px 0 10px">Use your Supabase admin account</p>
-  <input id="email" type="email" placeholder="Email" value="ogwal.bemmanuel@gmail.com">
-  <input id="password" type="password" placeholder="Password">
+  <p class="small" style="margin:6px 0 10px">Admin only. Your email is not shown for privacy.</p>
+  <input id="email" type="email" placeholder="Admin Email" autocomplete="email">
+  <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+  <label class="checkrow"><input id="rememberMe" type="checkbox" checked> Remember Me on this device</label>
   <button class="btn btn-blue" onclick="doLogin()">LOGIN</button>
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <button class="linkbtn" onclick="showReset()">Forgot Password?</button>
+    <button class="linkbtn" onclick="showRegister()">Create Admin Account</button>
+  </div>
   <div id="loginMsg" class="msg"></div>
-  <p class="small">If login says "Failed to fetch" = SUPABASE_URL / KEY wrong at top of file.</p>
+  <!-- RESET BOX -->
+  <div id="resetBox" style="display:none;margin-top:12px;border-top:1px solid #334155;padding-top:12px">
+    <h3 style="font-size:15px">Reset Password</h3>
+    <p class="small">Enter your admin email. Supabase will send you a reset link.</p>
+    <input id="resetEmail" type="email" placeholder="Your admin email">
+    <button class="btn btn-yellow" onclick="doResetPassword()">SEND RESET LINK</button>
+    <div id="resetMsg" class="msg"></div>
+  </div>
+  <!-- REGISTER BOX -->
+  <div id="registerBox" style="display:none;margin-top:12px;border-top:1px solid #334155;padding-top:12px">
+    <h3 style="font-size:15px">Create Admin Account</h3>
+    <input id="regEmail" type="email" placeholder="New admin email">
+    <input id="regPassword" type="password" placeholder="New password - min 6 chars">
+    <button class="btn btn-green" onclick="doRegister()">CREATE ACCOUNT</button>
+    <div id="registerMsg" class="msg"></div>
+  </div>
 </div>
 
 <!-- ADMIN -->
 <div id="adminBox" style="display:none">
   <div class="top">
     <h1>🌍 CEDARS EMPIRE - ADMIN</h1>
-    <p>Logged in as: <span id="adminEmail"></span></p>
-    <p>Global Engine: <span id="globalBadge" class="badge green">ON</span> &nbsp; AI Workers: <span id="aiBadge" class="badge green">RUNNING</span> &nbsp; Source: <span id="sourceLabel" class="badge">-</span></p>
+    <p>Logged in as: <span id="adminEmail"></span> <button class="linkbtn" onclick="doLogout()" style="color:#f87171">Logout</button></p>
+    <p>Global: <span id="globalBadge" class="badge green">ON</span> AI: <span id="aiBadge" class="badge green">RUNNING</span> Users Source: <span id="sourceLabel" class="badge">-</span> Pending Approvals: <span id="pendingBadge" class="badge yellow">0</span></p>
   </div>
-
   <div id="adminMsg" class="msg"></div>
 
-  <!-- TABS -->
   <div class="tabs">
-    <div class="tab active" onclick="showTab('engines',this)">🌍 Engines</div>
-    <div class="tab" onclick="showTab('users',this)">👥 Shareholders</div>
+    <div class="tab active" onclick="showTab('dashboard',this)">📊 Dashboard</div>
+    <div class="tab" onclick="showTab('approvals',this)">✅ Approvals <span id="tabPendingCount"></span></div>
+    <div class="tab" onclick="showTab('shareholders',this)">👥 Shareholder DB</div>
+    <div class="tab" onclick="showTab('users',this)">👤 All Users</div>
     <div class="tab" onclick="showTab('tasks',this)">📋 Tasks</div>
+    <div class="tab" onclick="showTab('payments',this)">💰 Payments</div>
+    <div class="tab" onclick="showTab('engines',this)">🌍 Engines</div>
     <div class="tab" onclick="showTab('health',this)">❤️ Health</div>
-    <div class="tab" onclick="showTab('actions',this)">⚙️ Actions</div>
   </div>
 
-  <!-- ENGINES -->
-  <div id="tab-engines">
-    <div class="card">
-      <h3>🌍 Global Engine - Master Control</h3>
-      <p class="small" style="margin-bottom:10px">If Global is OFF, ALL sub-engines and AI Workers pause. If ON, everything runs.</p>
-      <div class="engine" style="border-color:#67e8f9">
-        <div><b>🌍 Global Engine</b><span>Master switch - controls all 5 sub-engines</span></div>
-        <div class="switch" id="sw-global" onclick="toggleEngine('global')"></div>
-      </div>
-      <button class="btn btn-green" onclick="startAllEngines()">▶ START ALL ENGINES</button>
-      <button class="btn btn-red" onclick="stopAllEngines()">⏸ STOP ALL ENGINES</button>
+  <!-- DASHBOARD -->
+  <div id="tab-dashboard">
+    <div class="grid4">
+      <div class="stat"><b id="statUsers">0</b><span>Total Shareholders</span></div>
+      <div class="stat"><b id="statPending">0</b><span>Pending Approvals</span></div>
+      <div class="stat"><b id="statTasks">0</b><span>Total Tasks</span></div>
+      <div class="stat"><b id="statBalance">$0</b><span>Total Balance</span></div>
     </div>
-    <div class="card">
-      <h3>Sub-Engines (5)</h3>
-      <div id="enginesList"></div>
-      <p class="small">AI Verification Engine needs Global Engine ON to work.</p>
+    <div class="card" style="margin-top:12px"><h3>⚡ Quick Actions</h3>
+      <button class="btn btn-green" onclick="showTab('approvals',null);document.querySelectorAll('.tab')[1].classList.add('active')">✅ OPEN APPROVALS</button>
+      <button class="btn btn-blue" onclick="runAIWorkers(true)">🤖 RUN AI WORKERS NOW</button>
+      <button class="btn btn-yellow" onclick="runHealth();showTab('health',null)">❤️ RUN HEALTH CHECK</button>
     </div>
+    <div class="card"><h3>🕒 Recent Activity</h3><div id="activityLog" class="small">Loading...</div></div>
+  </div>
+
+  <!-- APPROVALS - THE MISSING PIECE -->
+  <div id="tab-approvals" style="display:none">
     <div class="card">
-      <h3>🤖 AI Workers - Task Verification</h3>
-      <p class="small">Auto-checks pending tasks every 30s. If task has proof, AI approves it.</p>
-      <div class="grid2" style="margin-top:10px">
-        <div class="stat"><b id="aiChecked">0</b><span>Tasks Checked</span></div>
-        <div class="stat"><b id="aiApproved">0</b><span>Auto-Approved</span></div>
+      <h3>✅ Approvals Center - All Pending In One Place</h3>
+      <p class="small">Shareholders + Tasks + Withdrawals + Deposits. Approve or Reject here, it updates the Shareholder Dashboard automatically.</p>
+      <div style="display:flex;gap:8px;margin:10px 0">
+        <select id="approvalFilter" onchange="renderApprovals()">
+          <option value="all">All Types</option><option value="shareholder">Shareholders Only</option><option value="task">Tasks Only</option><option value="withdrawal">Withdrawals Only</option><option value="deposit">Deposits Only</option>
+        </select>
+        <button class="btn btn-blue btn-small" onclick="loadApprovals()">REFRESH APPROVALS</button>
       </div>
-      <button class="btn btn-blue" style="margin-top:10px" onclick="runAIWorkers(true)">🤖 RUN AI WORKERS NOW</button>
-      <div id="aiLog" class="small" style="margin-top:8px;white-space:pre-wrap"></div>
+      <button class="btn btn-green" onclick="approveAllPending()">✅ APPROVE ALL PENDING</button>
+      <div style="overflow-x:auto"><table><thead><tr><th>Type</th><th>Who / What</th><th>Detail</th><th>Action</th></tr></thead><tbody id="approvalsList"><tr><td colspan="4">Click REFRESH APPROVALS</td></tr></tbody></table></div>
     </div>
   </div>
 
-  <!-- USERS -->
+  <!-- SHAREHOLDER DATABASE TABLE - FULL CRUD -->
+  <div id="tab-shareholders" style="display:none">
+    <div class="card">
+      <h3>👥 Shareholder Database Table</h3>
+      <p class="small">This is the master table. Source: <b id="shareholderTableName">-</b>. Edit balance, approve, reject, delete, add new.</p>
+      <input id="shSearch" placeholder="Search name, email, phone..." oninput="filterShareholders()">
+      <div style="display:flex;gap:8px">
+        <select id="shStatusFilter" onchange="filterShareholders()"><option value="all">All Status</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="suspended">Suspended</option></select>
+        <button class="btn btn-blue btn-small" onclick="loadShareholders()">REFRESH</button>
+        <button class="btn btn-green btn-small" onclick="exportCSV()">EXPORT CSV</button>
+      </div>
+      <div style="overflow-x:auto;margin-top:10px"><table><thead><tr><th>Name</th><th>Email / Phone</th><th>Balance</th><th>Shares</th><th>Status</th><th>Manage</th></tr></thead><tbody id="shareholdersTable"><tr><td colspan="6">Click REFRESH</td></tr></tbody></table></div>
+    </div>
+    <div class="card"><h3>➕ Add Shareholder Manually</h3>
+      <input id="newShName" placeholder="Full name"><input id="newShEmail" type="email" placeholder="Email"><input id="newShPhone" placeholder="Phone"><input id="newShBalance" type="number" placeholder="Starting Balance $"><input id="newShShares" type="number" placeholder="Shares e.g. 10">
+      <button class="btn btn-green" onclick="addShareholder()">ADD SHAREHOLDER</button>
+    </div>
+  </div>
+
+  <!-- ALL USERS -->
   <div id="tab-users" style="display:none">
-    <div class="card">
-      <h3>👥 All Users / Shareholders</h3>
+    <div class="card"><h3>👤 All Users (Fallback View)</h3>
       <input id="searchBox" placeholder="Search name or email..." oninput="filterUsers()">
       <button class="btn btn-blue" onclick="loadUsers()">REFRESH USERS</button>
-      <button class="btn btn-green" onclick="approveAll()">APPROVE ALL</button>
-      <div style="overflow-x:auto">
-      <table><thead><tr><th>Name</th><th>Email</th><th>Balance</th><th>Status</th></tr></thead>
-      <tbody id="adminUsers"><tr><td colspan="4">Click REFRESH USERS</td></tr></tbody></table>
-      </div>
-      <p class="small" style="margin-top:8px">Auto-tries: profiles → shareholders → users. If profiles cache error, it uses shareholders.</p>
+      <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Email</th><th>Balance</th><th>Status</th></tr></thead><tbody id="adminUsers"><tr><td colspan="4">Click REFRESH USERS</td></tr></tbody></table></div>
     </div>
   </div>
 
   <!-- TASKS -->
   <div id="tab-tasks" style="display:none">
-    <div class="card">
-      <h3>📋 Tasks & Verification</h3>
+    <div class="card"><h3>📋 Tasks & Verification</h3>
       <button class="btn btn-blue" onclick="loadTasks()">REFRESH TASKS</button>
-      <div style="overflow-x:auto">
-      <table><thead><tr><th>Title</th><th>User</th><th>Status</th><th>Action</th></tr></thead>
-      <tbody id="tasksList"><tr><td colspan="4">Click REFRESH TASKS</td></tr></tbody></table>
-      </div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Title</th><th>User</th><th>Status</th><th>Action</th></tr></thead><tbody id="tasksList"><tr><td colspan="4">Click REFRESH TASKS</td></tr></tbody></table></div>
     </div>
-    <div class="card">
-      <h3>➕ Create Task</h3>
-      <input id="newTaskTitle" placeholder="Task title - e.g. Watch video">
-      <input id="newTaskReward" type="number" placeholder="Reward $ e.g. 2">
+    <div class="card"><h3>➕ Create Task</h3>
+      <input id="newTaskTitle" placeholder="Task title"><input id="newTaskReward" type="number" placeholder="Reward $">
       <button class="btn btn-green" onclick="createTask()">CREATE TASK</button>
+    </div>
+  </div>
+
+  <!-- PAYMENTS -->
+  <div id="tab-payments" style="display:none">
+    <div class="card"><h3>💰 Payments - Deposits & Withdrawals</h3>
+      <button class="btn btn-blue" onclick="loadPayments()">REFRESH PAYMENTS</button>
+      <div style="overflow-x:auto"><table><thead><tr><th>Type</th><th>User</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody id="paymentsList"><tr><td colspan="5">Click REFRESH</td></tr></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ENGINES -->
+  <div id="tab-engines" style="display:none">
+    <div class="card"><h3>🌍 Global Engine - Master Control</h3>
+      <div class="engine" style="border-color:#67e8f9"><div><b>🌍 Global Engine</b><span>Master switch - controls all 5 sub-engines</span></div><div class="switch" id="sw-global" onclick="toggleEngine('global')"></div></div>
+      <button class="btn btn-green" onclick="startAllEngines()">▶ START ALL ENGINES</button>
+      <button class="btn btn-red" onclick="stopAllEngines()">⏸ STOP ALL ENGINES</button>
+    </div>
+    <div class="card"><h3>Sub-Engines (5)</h3><div id="enginesList"></div></div>
+    <div class="card"><h3>🤖 AI Workers</h3>
+      <div class="grid2"><div class="stat"><b id="aiChecked">0</b><span>Checked</span></div><div class="stat"><b id="aiApproved">0</b><span>Auto-Approved</span></div></div>
+      <button class="btn btn-blue" style="margin-top:10px" onclick="runAIWorkers(true)">🤖 RUN AI WORKERS NOW</button>
+      <div id="aiLog" class="small" style="margin-top:8px;white-space:pre-wrap"></div>
     </div>
   </div>
 
   <!-- HEALTH -->
   <div id="tab-health" style="display:none">
-    <div class="card">
-      <h3>❤️ Health Check</h3>
-      <button class="btn btn-blue" onclick="runHealth()">RUN FULL CHECK</button>
-      <div id="healthResult"></div>
-    </div>
-  </div>
-
-  <!-- ACTIONS -->
-  <div id="tab-actions" style="display:none">
-    <div class="card">
-      <h3>⚙️ Admin Actions</h3>
-      <button class="btn btn-blue" onclick="exportCSV()">EXPORT CSV</button>
-      <button class="btn btn-yellow" onclick="doLogout()">LOGOUT</button>
-      <p class="small">Global Engine state is saved in this browser. Clear cache = resets to ON.</p>
-    </div>
+    <div class="card"><h3>❤️ Health Check</h3><button class="btn btn-blue" onclick="runHealth()">RUN FULL CHECK</button><div id="healthResult"></div></div>
+    <div class="card"><h3>⚙️ Admin Actions</h3><button class="btn btn-yellow" onclick="doLogout()">LOGOUT</button><button class="btn btn-dark" onclick="clearRemember()">FORGET REMEMBERED EMAIL</button></div>
   </div>
 </div>
 
-<script>
-// ======== REPLACE THESE 2 LINES WITH YOUR REAL KEYS ========
-var SUPABASE_URL = "var SUPABASE_URL = "https://ipyvewpjtpgfugfwizlr.supabase.co";
-var SUPABASE_KEY = "sb_publishable_VAHMj985hPKE8nPyO8Btcg_Sgmmr3Rm";
-// ============================================================
+<!-- EDIT MODAL -->
+<div id="editModal" class="modal"><div class="modalBox">
+  <h3>Edit Shareholder</h3>
+  <input id="editName" placeholder="Name"><input id="editEmail" placeholder="Email"><input id="editPhone" placeholder="Phone"><input id="editBalance" type="number" placeholder="Balance"><input id="editShares" type="number" placeholder="Shares">
+  <select id="editStatus"><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="suspended">Suspended</option></select>
+  <button class="btn btn-green" onclick="saveShareholderEdit()">SAVE CHANGES</button>
+  <button class="btn btn-dark" onclick="closeModal()">CANCEL</button>
+</div></div>
 
+<script>
+var SUPABASE_URL = "https://ipyvewpjtpgfugfwizlr.supabase.co";
+var SUPABASE_KEY = "PASTE_YOUR_ANON_KEY_HERE";
 var supabase = null;
 var allUsers = [];
+var shareholders = [];
 var allTasks = [];
-var currentTable = "";
-var aiInterval = null;
-var aiCheckedCount = 0;
-var aiApprovedCount = 0;
+var allPayments = [];
+var approvals = [];
+var currentTable = "shareholders";
+var editingId = null;
+var aiInterval = null, aiCheckedCount=0, aiApprovedCount=0;
 
-// --- ENGINES: 1 Global + 5 Sub ---
 var engines = [
   { id:'global', name:'🌍 Global Engine', desc:'Master control - ON = all engines run', key:'global_engine' },
   { id:'task', name:'📋 Task Engine', desc:'Creates / manages tasks', key:'engine_task' },
@@ -187,268 +221,323 @@ var engines = [
   { id:'notify', name:'🔔 Notification Engine', desc:'Alerts / messages', key:'engine_notify' },
 ];
 
-function showErr(m, boxId){
-  var el=document.getElementById(boxId||'adminMsg'); el.className='msg err'; el.style.display='block'; el.textContent=m;
-}
-function showOk(m, boxId){
-  var el=document.getElementById(boxId||'adminMsg'); el.className='msg ok'; el.style.display='block'; el.textContent=m;
-}
+function showErr(m, boxId){ var el=document.getElementById(boxId||'adminMsg'); el.className='msg err'; el.style.display='block'; el.textContent=m; }
+function showOk(m, boxId){ var el=document.getElementById(boxId||'adminMsg'); el.className='msg ok'; el.style.display='block'; el.textContent=m; }
 function hideMsg(boxId){ var el=document.getElementById(boxId||'adminMsg'); el.style.display='none'; }
+function logActivity(msg){ var el=document.getElementById('activityLog'); if(!el) return; el.innerHTML = new Date().toLocaleTimeString()+' - '+msg+'<br>'+el.innerHTML; }
 
 function showTab(name, el){
-  ['engines','users','tasks','health','actions'].forEach(function(t){
-    document.getElementById('tab-'+t).style.display = (t===name?'block':'none');
-  });
+  ['dashboard','approvals','shareholders','users','tasks','payments','engines','health'].forEach(function(t){ var e=document.getElementById('tab-'+t); if(e) e.style.display=(t===name?'block':'none'); });
   document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
   if(el) el.classList.add('active');
+  if(name==='shareholders') loadShareholders();
+  if(name==='approvals') loadApprovals();
   if(name==='users') loadUsers();
   if(name==='tasks') loadTasks();
+  if(name==='payments') loadPayments();
+  if(name==='dashboard') loadDashboard();
   if(name==='health') runHealth();
 }
 
+// ===== LOGIN - REMEMBER ME + RESET =====
 function init(){
-  if(SUPABASE_URL.indexOf('YOUR-PROJECT')!==-1){
-    showErr('ERROR: Replace SUPABASE_URL / SUPABASE_KEY at top of file with your real keys from Supabase > Settings > API','loginMsg'); return;
-  }
-  try{ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }
-  catch(e){ showErr('Supabase init: '+e.message,'loginMsg'); return; }
+  // Remember Me - load saved email only, never password, never show by default if not remembered
+  var saved = localStorage.getItem('admin_remember_email') || '';
+  if(saved){ document.getElementById('email').value = saved; document.getElementById('rememberMe').checked = true; }
+  if(SUPABASE_KEY === "PASTE_YOUR_ANON_KEY_HERE" || SUPABASE_KEY.length < 20){ showErr('ERROR: Paste your ANON KEY where it says PASTE_YOUR_ANON_KEY_HERE. Supabase > Settings > API Keys > anon public','loginMsg'); return; }
+  try{ supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }catch(e){ showErr('Supabase init: '+e.message,'loginMsg'); return; }
   renderEngines();
-  supabase.auth.getSession().then(function(res){
-    if(res.data && res.data.session && res.data.session.user) showAdmin(res.data.session.user.email);
+  supabase.auth.getSession().then(function(res){ if(res.data && res.data.session && res.data.session.user) showAdmin(res.data.session.user.email); });
+  // Handle password recovery link - if user clicked reset email link, Supabase will send them back with type=recovery
+  supabase.auth.onAuthStateChange(function(event, session){
+    if(event==='PASSWORD_RECOVERY'){ showErr('You clicked reset link. Please enter new password below.','loginMsg'); showResetPasswordForm(); }
   });
 }
-
+function showReset(){ document.getElementById('resetBox').style.display='block'; document.getElementById('registerBox').style.display='none'; var em=document.getElementById('email').value; if(em) document.getElementById('resetEmail').value=em; }
+function showRegister(){ document.getElementById('registerBox').style.display='block'; document.getElementById('resetBox').style.display='none'; }
+function showResetPasswordForm(){
+  // Simple: ask for new password and update it
+  var np = prompt('Enter your NEW password (min 6 chars):');
+  if(!np || np.length < 6){ alert('Password too short'); return; }
+  supabase.auth.updateUser({password: np}).then(function(r){ if(r.error) alert('Reset failed: '+r.error.message); else alert('Password updated! Now login with new password.'); });
+}
 async function doLogin(){
   hideMsg('loginMsg');
   var email=document.getElementById('email').value.trim();
   var pass=document.getElementById('password').value;
+  var remember=document.getElementById('rememberMe').checked;
   if(!email||!pass){ showErr('Enter email and password','loginMsg'); return; }
   var r=await supabase.auth.signInWithPassword({email:email,password:pass});
   if(r.error){ showErr('Login failed: '+r.error.message,'loginMsg'); return; }
+  // Remember Me - save ONLY email, never password
+  if(remember) localStorage.setItem('admin_remember_email', email); else localStorage.removeItem('admin_remember_email');
+  // Clear password from field for privacy
+  document.getElementById('password').value='';
   showAdmin(r.data.user.email);
 }
+async function doResetPassword(){
+  var email=document.getElementById('resetEmail').value.trim() || document.getElementById('email').value.trim();
+  if(!email){ showErr('Enter your email first','resetMsg'); return; }
+  var redirect = window.location.origin + window.location.pathname;
+  var r=await supabase.auth.resetPasswordForEmail(email, {redirectTo: redirect});
+  if(r.error) showErr('Reset failed: '+r.error.message+' - Make sure this email exists in Supabase > Authentication > Users','resetMsg');
+  else showOk('Reset link sent to '+email+'. Check inbox + spam. Click link, then you will be asked for new password.','resetMsg');
+}
+async function doRegister(){
+  var email=document.getElementById('regEmail').value.trim();
+  var pass=document.getElementById('regPassword').value;
+  if(!email||!pass||pass.length<6){ showErr('Enter valid email and password min 6 chars','registerMsg'); return; }
+  var r=await supabase.auth.signUp({email:email,password:pass});
+  if(r.error) showErr('Create failed: '+r.error.message,'registerMsg');
+  else showOk('Account created for '+email+'. If email confirmation is ON in Supabase, check email to confirm, then login.','registerMsg');
+}
+function clearRemember(){ localStorage.removeItem('admin_remember_email'); document.getElementById('email').value=''; showOk('Remembered email forgotten.'); }
 function showAdmin(email){
   document.getElementById('loginBox').style.display='none';
   document.getElementById('adminBox').style.display='block';
   document.getElementById('adminEmail').textContent=email||'';
-  renderEngines();
-  loadUsers();
-  startAIWorkers();
+  renderEngines(); loadDashboard(); loadShareholders(); loadApprovals(); startAIWorkers();
 }
-async function doLogout(){
-  if(supabase) await supabase.auth.signOut();
-  stopAIWorkers();
-  document.getElementById('adminBox').style.display='none';
-  document.getElementById('loginBox').style.display='block';
-  document.getElementById('password').value='';
-}
+async function doLogout(){ if(supabase) await supabase.auth.signOut(); stopAIWorkers(); document.getElementById('adminBox').style.display='none'; document.getElementById('loginBox').style.display='block'; document.getElementById('password').value=''; }
 
 // ===== ENGINES =====
 function isEngineOn(key){ return localStorage.getItem(key) !== 'off'; }
 function renderEngines(){
-  var globalOn = isEngineOn('global_engine');
-  var gb=document.getElementById('globalBadge');
-  if(gb){ gb.textContent = globalOn?'ON':'OFF'; gb.className='badge '+(globalOn?'green':'red'); }
-  var ab=document.getElementById('aiBadge');
-  var aiOn = globalOn && isEngineOn('engine_ai');
-  if(ab){ ab.textContent = aiOn?'RUNNING':'PAUSED'; ab.className='badge '+(aiOn?'green':'red'); }
-  var sw=document.getElementById('sw-global');
-  if(sw) sw.className='switch'+(globalOn?'':' off');
-  var html='';
-  engines.slice(1).forEach(function(e){
-    var on = globalOn && isEngineOn(e.key);
-    html+='<div class="engine"><div><b>'+e.name+'</b><span>'+e.desc+'</span></div><div class="switch '+(on?'':'off')+'" onclick="toggleEngine(\''+e.id+'\')"></div></div>';
-  });
-  var list=document.getElementById('enginesList');
-  if(list) list.innerHTML=html;
+  var globalOn=isEngineOn('global_engine');
+  var gb=document.getElementById('globalBadge'); if(gb){ gb.textContent=globalOn?'ON':'OFF'; gb.className='badge '+(globalOn?'green':'red'); }
+  var ab=document.getElementById('aiBadge'); var aiOn=globalOn&&isEngineOn('engine_ai'); if(ab){ ab.textContent=aiOn?'RUNNING':'PAUSED'; ab.className='badge '+(aiOn?'green':'red'); }
+  var sw=document.getElementById('sw-global'); if(sw) sw.className='switch'+(globalOn?'':' off');
+  var html=''; engines.slice(1).forEach(function(e){ var on=globalOn&&isEngineOn(e.key); html+='<div class="engine"><div><b>'+e.name+'</b><span>'+e.desc+'</span></div><div class="switch '+(on?'':'off')+'" onclick="toggleEngine(\''+e.id+'\')"></div></div>'; });
+  var list=document.getElementById('enginesList'); if(list) list.innerHTML=html;
 }
-function toggleEngine(id){
-  var e = engines.find(function(x){ return x.id===id; });
-  if(!e) return;
-  var isOn = isEngineOn(e.key);
-  localStorage.setItem(e.key, isOn?'off':'on');
-  renderEngines();
-  if(id==='global'){
-    if(isEngineOn('global_engine')) startAIWorkers(); else stopAIWorkers();
-  }
-  if(id==='ai_verify'){
-    if(isEngineOn('global_engine') && isEngineOn('engine_ai')) startAIWorkers(); else stopAIWorkers();
-  }
-  showOk(e.name+' is now '+(isEngineOn(e.key)?'ON':'OFF'));
-}
-function startAllEngines(){
-  engines.forEach(function(e){ localStorage.setItem(e.key,'on'); });
-  renderEngines(); startAIWorkers(); showOk('All engines STARTED - Global + 5 sub-engines ON');
-}
-function stopAllEngines(){
-  engines.forEach(function(e){ localStorage.setItem(e.key,'off'); });
-  renderEngines(); stopAIWorkers(); showOk('All engines STOPPED');
+function toggleEngine(id){ var e=engines.find(function(x){ return x.id===id; }); if(!e) return; var isOn=isEngineOn(e.key); localStorage.setItem(e.key, isOn?'off':'on'); renderEngines(); if(id==='global'){ if(isEngineOn('global_engine')) startAIWorkers(); else stopAIWorkers(); } if(id==='ai_verify'){ if(isEngineOn('global_engine')&&isEngineOn('engine_ai')) startAIWorkers(); else stopAIWorkers(); } showOk(e.name+' is now '+(isEngineOn(e.key)?'ON':'OFF')); }
+function startAllEngines(){ engines.forEach(function(e){ localStorage.setItem(e.key,'on'); }); renderEngines(); startAIWorkers(); showOk('All engines STARTED'); }
+function stopAllEngines(){ engines.forEach(function(e){ localStorage.setItem(e.key,'off'); }); renderEngines(); stopAIWorkers(); showOk('All engines STOPPED'); }
+
+// ===== DASHBOARD =====
+async function loadDashboard(){
+  if(!supabase) return;
+  await loadShareholders(true);
+  await loadTasks(true);
+  await loadApprovals(true);
+  var totalBal = shareholders.reduce(function(s,u){ return s + parseFloat(u.balance||u.total_balance||u.wallet_balance||0); },0);
+  document.getElementById('statUsers').textContent=shareholders.length;
+  document.getElementById('statPending').textContent=approvals.length;
+  document.getElementById('statTasks').textContent=allTasks.length;
+  document.getElementById('statBalance').textContent='$'+totalBal.toFixed(2);
+  logActivity('Dashboard refreshed - '+shareholders.length+' shareholders, '+approvals.length+' pending');
 }
 
-// ===== USERS - Fallback profiles -> shareholders =====
-async function loadUsers(){
+// ===== SHAREHOLDER DATABASE TABLE - FULL CRUD =====
+async function loadShareholders(silent){
   if(!supabase) return;
-  hideMsg();
-  document.getElementById('adminUsers').innerHTML='<tr><td colspan="4">Loading...</td></tr>';
-  var tables=['profiles','shareholders','users','members'];
-  for(var i=0;i<tables.length;i++){
-    var t=tables[i];
-    try{
-      var r=await supabase.from(t).select('*').limit(200);
-      if(!r.error){
-        currentTable=t; allUsers=r.data||[];
-        document.getElementById('sourceLabel').textContent=t;
-        renderUsers(allUsers);
-        if(allUsers.length===0) showOk("Loaded from '"+t+"' - table is empty, no users registered yet");
-        else showOk("Loaded "+allUsers.length+" users from: "+t);
-        return;
-      }
-      console.log(t+' failed:',r.error.message);
-    }catch(e){ console.log(t+' exception:',e.message); }
-  }
-  document.getElementById('adminUsers').innerHTML='<tr><td colspan="4">No table found. Tried profiles, shareholders, users. Run in Supabase SQL: NOTIFY pgrst, \'reload schema\';</td></tr>';
-  showErr('Could not load users. Check Supabase RLS - profiles and shareholders must allow SELECT for authenticated.');
-}
-function renderUsers(list){
-  if(!list||!list.length){ document.getElementById('adminUsers').innerHTML='<tr><td colspan="4">No users found</td></tr>'; return; }
-  document.getElementById('adminUsers').innerHTML=list.map(function(u){
-    var nm=u.name||u.full_name||u.username||'-';
-    var em=u.email||u.user_email||'-';
-    var bal=(u.balance??u.total_balance??u.wallet_balance??0);
-    var st=u.status||(u.is_approved?'approved':'pending');
-    return '<tr><td>'+nm+'</td><td>'+em+'</td><td>$'+bal+'</td><td><span class="badge">'+st+'</span></td></tr>';
-  }).join('');
-}
-function filterUsers(){
-  var q=document.getElementById('searchBox').value.toLowerCase();
-  if(!q){ renderUsers(allUsers); return; }
-  renderUsers(allUsers.filter(function(u){ return ((u.name||'')+' '+(u.full_name||'')+' '+(u.email||'')).toLowerCase().indexOf(q)!==-1; }));
-}
-async function approveAll(){
-  if(!currentTable){ showErr('Load users first'); return; }
-  if(!confirm('Approve ALL in '+currentTable+'?')) return;
-  var cols=['status','is_approved','approved'];
-  for(var c of cols){
-    var p={}; if(c==='status') p={status:'approved'}; else p[c]=true;
-    var r=await supabase.from(currentTable).update(p).neq('id','00000000-0000-0000-0000-000000000000');
-    if(!r.error){ showOk('Approved all in '+currentTable); loadUsers(); return; }
-  }
-  showErr('Approve failed - no status column in '+currentTable);
-}
-function exportCSV(){
-  if(!allUsers.length){ showErr('No users to export'); return; }
-  var rows=[['Name','Email','Balance','Status']];
-  allUsers.forEach(function(u){ rows.push([(u.name||u.full_name||''),(u.email||''),(u.balance??0),(u.status||'')]); });
-  var csv=rows.map(function(r){ return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
-  var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='users_'+currentTable+'.csv'; a.click();
-}
-
-// ===== TASKS =====
-async function loadTasks(){
-  if(!supabase) return;
-  document.getElementById('tasksList').innerHTML='<tr><td colspan="4">Loading...</td></tr>';
-  var tables=['tasks','user_tasks','submissions'];
+  if(!silent) document.getElementById('shareholdersTable').innerHTML='<tr><td colspan="6">Loading...</td></tr>';
+  var tables=['shareholders','profiles','users','members'];
   for(var t of tables){
-    var r=await supabase.from(t).select('*').limit(100).order('created_at',{ascending:false});
+    var r=await supabase.from(t).select('*').limit(500).order('created_at',{ascending:false});
     if(!r.error){
-      allTasks=r.data||[];
-      if(!allTasks.length){ document.getElementById('tasksList').innerHTML='<tr><td colspan="4">No tasks in '+t+'</td></tr>'; return; }
-      document.getElementById('tasksList').innerHTML=allTasks.map(function(x){
-        var title=x.title||x.task_title||x.name||'Task';
-        var user=x.user_email||x.email||x.user_id||'-';
-        var st=x.status||'pending';
-        return '<tr><td>'+title+'</td><td>'+user+'</td><td><span class="badge">'+st+'</span></td><td><button class="btn btn-small btn-green" onclick="setTaskStatus(\''+x.id+'\',\''+t+'\',\'approved\')">Approve</button> <button class="btn btn-small btn-red" onclick="setTaskStatus(\''+x.id+'\',\''+t+'\',\'rejected\')">Reject</button></td></tr>';
-      }).join('');
+      currentTable=t; shareholders=r.data||[];
+      document.getElementById('shareholderTableName').textContent=t;
+      document.getElementById('sourceLabel').textContent=t;
+      renderShareholders(shareholders);
+      if(!silent) showOk('Loaded '+shareholders.length+' shareholders from: '+t);
       return;
     }
   }
-  document.getElementById('tasksList').innerHTML='<tr><td colspan="4">Tasks table not found. Create table "tasks" in Supabase. Error was: profiles cache or missing tasks table.</td></tr>';
+  if(!silent){ document.getElementById('shareholdersTable').innerHTML='<tr><td colspan="6">No shareholder table found. Run in Supabase SQL: NOTIFY pgrst, \'reload schema\';</td></tr>'; showErr('Could not load shareholders. Check RLS.'); }
 }
-async function setTaskStatus(id, table, status){
-  var r=await supabase.from(table).update({status:status, verified_by:'Admin', verified_at:new Date().toISOString()}).eq('id',id);
-  if(r.error) showErr('Update failed: '+r.error.message); else { showOk('Task '+status); loadTasks(); }
+function renderShareholders(list){
+  if(!list||!list.length){ document.getElementById('shareholdersTable').innerHTML='<tr><td colspan="6">No shareholders found</td></tr>'; return; }
+  document.getElementById('shareholdersTable').innerHTML=list.map(function(u){
+    var nm=u.name||u.full_name||u.username||'-';
+    var em=u.email||u.user_email||'-'; var ph=u.phone||u.phone_number||'';
+    var bal=parseFloat(u.balance??u.total_balance??u.wallet_balance??0);
+    var shares=u.shares||u.total_shares||u.share_count||0;
+    var st=(u.status||(u.is_approved?'approved':'pending')||'pending').toLowerCase();
+    var badge = st==='approved'?'green':st==='rejected'?'red':st==='suspended'?'yellow':'yellow';
+    return '<tr><td><b>'+nm+'</b></td><td>'+em+'<br><span class="small">'+ph+'</span></td><td>$'+bal.toFixed(2)+'</td><td>'+shares+'</td><td><span class="badge '+badge+'">'+st+'</span></td><td><button class="btn btn-small btn-green" onclick="approveShareholder(\''+u.id+'\')">Approve</button><button class="btn btn-small btn-red" onclick="rejectShareholder(\''+u.id+'\')">Reject</button><br><button class="btn btn-small btn-blue" onclick="openEdit(\''+u.id+'\')">Edit</button><button class="btn btn-small btn-dark" onclick="deleteShareholder(\''+u.id+'\',\''+nm+'\')">Delete</button></td></tr>';
+  }).join('');
 }
-async function createTask(){
-  var title=document.getElementById('newTaskTitle').value.trim();
-  var reward=parseFloat(document.getElementById('newTaskReward').value||0);
-  if(!title){ showErr('Enter task title'); return; }
-  var r=await supabase.from('tasks').insert([{title:title, reward:reward, status:'active', created_at:new Date().toISOString()}]);
-  if(r.error) showErr('Create task failed: '+r.error.message+' - Make sure tasks table exists'); else { showOk('Task created'); document.getElementById('newTaskTitle').value=''; loadTasks(); }
+function filterShareholders(){
+  var q=(document.getElementById('shSearch').value||'').toLowerCase();
+  var sf=document.getElementById('shStatusFilter').value;
+  var filtered=shareholders.filter(function(u){
+    var st=((u.status||(u.is_approved?'approved':'pending'))||'').toLowerCase();
+    var matchStatus = sf==='all' || st===sf;
+    var matchQ = !q || ((u.name||'')+' '+(u.full_name||'')+' '+(u.email||'')+' '+(u.phone||'')).toLowerCase().indexOf(q)!==-1;
+    return matchStatus && matchQ;
+  });
+  renderShareholders(filtered);
+}
+async function addShareholder(){
+  var name=document.getElementById('newShName').value.trim(); var email=document.getElementById('newShEmail').value.trim(); var phone=document.getElementById('newShPhone').value.trim(); var bal=parseFloat(document.getElementById('newShBalance').value||0); var shares=parseInt(document.getElementById('newShShares').value||0);
+  if(!name||!email){ showErr('Name and Email required'); return; }
+  var r=await supabase.from(currentTable).insert([{name:name, full_name:name, email:email, phone:phone, balance:bal, total_balance:bal, shares:shares, status:'pending', created_at:new Date().toISOString()}]);
+  if(r.error) {
+    // Try simpler insert if columns differ
+    var r2=await supabase.from(currentTable).insert([{name:name, email:email, balance:bal, status:'pending'}]);
+    if(r2.error) showErr('Add failed: '+r2.error.message); else { showOk('Shareholder added'); loadShareholders(); }
+  } else { showOk('Shareholder added - now in Approvals as Pending'); loadShareholders(); loadApprovals(); }
+  ['newShName','newShEmail','newShPhone','newShBalance','newShShares'].forEach(function(id){ document.getElementById(id).value=''; });
+}
+function openEdit(id){
+  var u=shareholders.find(function(x){ return String(x.id)===String(id); }); if(!u) return;
+  editingId=id;
+  document.getElementById('editName').value=u.name||u.full_name||''; document.getElementById('editEmail').value=u.email||''; document.getElementById('editPhone').value=u.phone||''; document.getElementById('editBalance').value=u.balance??u.total_balance??0; document.getElementById('editShares').value=u.shares||0; document.getElementById('editStatus').value=(u.status||'pending').toLowerCase();
+  document.getElementById('editModal').classList.add('open');
+}
+function closeModal(){ document.getElementById('editModal').classList.remove('open'); editingId=null; }
+async function saveShareholderEdit(){
+  if(!editingId) return;
+  var payload={name:document.getElementById('editName').value, full_name:document.getElementById('editName').value, email:document.getElementById('editEmail').value, phone:document.getElementById('editPhone').value, balance:parseFloat(document.getElementById('editBalance').value||0), total_balance:parseFloat(document.getElementById('editBalance').value||0), shares:parseInt(document.getElementById('editShares').value||0), status:document.getElementById('editStatus').value, is_approved: document.getElementById('editStatus').value==='approved'};
+  var r=await supabase.from(currentTable).update(payload).eq('id',editingId);
+  if(r.error){
+    var r2=await supabase.from(currentTable).update({name:payload.name, email:payload.email, balance:payload.balance, status:payload.status}).eq('id',editingId);
+    if(r2.error) showErr('Save failed: '+r2.error.message); else { showOk('Saved'); closeModal(); loadShareholders(); loadApprovals(); }
+  } else { showOk('Shareholder updated'); closeModal(); loadShareholders(); loadApprovals(); }
+}
+async function approveShareholder(id){
+  var r=await supabase.from(currentTable).update({status:'approved', is_approved:true, approved_at:new Date().toISOString()}).eq('id',id);
+  if(r.error){ var r2=await supabase.from(currentTable).update({status:'approved'}).eq('id',id); if(r2.error) showErr('Approve failed: '+r2.error.message); else { showOk('Shareholder APPROVED'); loadShareholders(); loadApprovals(); } }
+  else { showOk('Shareholder APPROVED - now visible as approved in Shareholder Dashboard'); loadShareholders(); loadApprovals(); logActivity('Approved shareholder '+id); }
+}
+async function rejectShareholder(id){
+  if(!confirm('Reject this shareholder?')) return;
+  var r=await supabase.from(currentTable).update({status:'rejected', is_approved:false}).eq('id',id);
+  if(r.error) showErr('Reject failed: '+r.error.message); else { showOk('Shareholder REJECTED'); loadShareholders(); loadApprovals(); }
+}
+async function deleteShareholder(id, name){
+  if(!confirm('DELETE '+name+' permanently? This cannot be undone.')) return;
+  var r=await supabase.from(currentTable).delete().eq('id',id);
+  if(r.error) showErr('Delete failed: '+r.error.message+' - Check RLS DELETE policy'); else { showOk('Deleted'); loadShareholders(); loadApprovals(); }
+}
+
+// ===== APPROVALS CENTER =====
+async function loadApprovals(silent){
+  if(!supabase) return;
+  approvals=[];
+  // 1. Shareholders pending
+  try{
+    var r=await supabase.from(currentTable).select('*').eq('status','pending').limit(100);
+    if(!r.error) (r.data||[]).forEach(function(u){ approvals.push({type:'shareholder', id:u.id, table:currentTable, title:(u.name||u.full_name||u.email), detail:u.email||'', raw:u}); });
+    else {
+      // Fallback: is_approved false
+      var r2=await supabase.from(currentTable).select('*').eq('is_approved',false).limit(100);
+      if(!r2.error) (r2.data||[]).forEach(function(u){ approvals.push({type:'shareholder', id:u.id, table:currentTable, title:(u.name||u.full_name||u.email), detail:u.email||'', raw:u}); });
+    }
+  }catch(e){}
+  // 2. Tasks pending
+  try{
+    var rt=await supabase.from('tasks').select('*').eq('status','pending').limit(100);
+    if(!rt.error) (rt.data||[]).forEach(function(t){ approvals.push({type:'task', id:t.id, table:'tasks', title:t.title||t.task_title||'Task', detail:'User: '+(t.user_email||t.user_id||'')+' | Reward $'+(t.reward||0), raw:t}); });
+  }catch(e){}
+  // 3. Withdrawals / Deposits - try multiple table names
+  for(var tn of ['withdrawals','deposits','transactions','payments']){
+    try{
+      var rp=await supabase.from(tn).select('*').eq('status','pending').limit(50);
+      if(!rp.error) (rp.data||[]).forEach(function(p){ var typ=(p.type||tn).toLowerCase().indexOf('withdraw')!==-1?'withdrawal':(p.type||tn); approvals.push({type:typ, id:p.id, table:tn, title:(p.type||tn)+' $'+(p.amount||0), detail:'User: '+(p.user_email||p.user_id||'')+' | Method: '+(p.method||p.payment_method||''), raw:p}); });
+    }catch(e){}
+  }
+  document.getElementById('pendingBadge').textContent=approvals.length;
+  document.getElementById('tabPendingCount').textContent=approvals.length?'('+approvals.length+')':'';
+  document.getElementById('statPending').textContent=approvals.length;
+  if(!silent) renderApprovals();
+}
+function renderApprovals(){
+  var f=document.getElementById('approvalFilter').value;
+  var list=approvals.filter(function(a){ return f==='all'||a.type===f; });
+  if(!list.length){ document.getElementById('approvalsList').innerHTML='<tr><td colspan="4">✅ No pending approvals - all clear!</td></tr>'; return; }
+  document.getElementById('approvalsList').innerHTML=list.map(function(a){
+    return '<tr><td><span class="badge blue">'+a.type+'</span></td><td><b>'+a.title+'</b></td><td>'+a.detail+'</td><td><button class="btn btn-small btn-green" onclick="approveItem(\''+a.type+'\',\''+a.id+'\',\''+a.table+'\')">Approve</button><button class="btn btn-small btn-red" onclick="rejectItem(\''+a.type+'\',\''+a.id+'\',\''+a.table+'\')">Reject</button></td></tr>';
+  }).join('');
+}
+async function approveItem(type, id, table){
+  var upd={status:'approved', is_approved:true, verified_by:'Admin', verified_at:new Date().toISOString(), approved_at:new Date().toISOString()};
+  var r=await supabase.from(table).update(upd).eq('id',id);
+  if(r.error){ var r2=await supabase.from(table).update({status:'approved'}).eq('id',id); if(r2.error) showErr('Approve failed: '+r2.error.message); else { showOk(type+' APPROVED'); loadApprovals(); loadShareholders(); } }
+  else { showOk(type+' APPROVED'); loadApprovals(); loadShareholders(); loadTasks(); logActivity('Approved '+type+' '+id); }
+}
+async function rejectItem(type, id, table){
+  if(!confirm('Reject this '+type+'?')) return;
+  var r=await supabase.from(table).update({status:'rejected', is_approved:false}).eq('id',id);
+  if(r.error) showErr('Reject failed: '+r.error.message); else { showOk(type+' REJECTED'); loadApprovals(); loadShareholders(); loadTasks(); }
+}
+async function approveAllPending(){
+  if(!approvals.length){ showOk('No pending to approve'); return; }
+  if(!confirm('Approve ALL '+approvals.length+' pending items?')) return;
+  for(var a of approvals){ await supabase.from(a.table).update({status:'approved', is_approved:true}).eq('id',a.id); }
+  showOk('All '+approvals.length+' approved'); loadApprovals(); loadShareholders(); loadTasks();
+}
+async function approveAll(){ approveAllPending(); }
+
+// ===== ALL USERS (FALLBACK) =====
+async function loadUsers(){
+  if(!supabase) return; document.getElementById('adminUsers').innerHTML='<tr><td colspan="4">Loading...</td></tr>';
+  for(var t of ['profiles','shareholders','users','members']){
+    var r=await supabase.from(t).select('*').limit(200); if(!r.error){ allUsers=r.data||[]; renderUsers(allUsers); return; }
+  }
+  document.getElementById('adminUsers').innerHTML='<tr><td colspan="4">No table found</td></tr>';
+}
+function renderUsers(list){ if(!list.length){ document.getElementById('adminUsers').innerHTML='<tr><td colspan="4">No users</td></tr>'; return; } document.getElementById('adminUsers').innerHTML=list.map(function(u){ return '<tr><td>'+(u.name||u.full_name||'-')+'</td><td>'+(u.email||'-')+'</td><td>$'+(u.balance??u.total_balance??0)+'</td><td>'+(u.status||'pending')+'</td></tr>'; }).join(''); }
+function filterUsers(){ var q=document.getElementById('searchBox').value.toLowerCase(); if(!q){ renderUsers(allUsers); return; } renderUsers(allUsers.filter(function(u){ return ((u.name||'')+' '+(u.email||'')).toLowerCase().indexOf(q)!==-1; })); }
+function exportCSV(){
+  var src=shareholders.length?shareholders:allUsers; if(!src.length){ showErr('No data to export'); return; }
+  var rows=[['Name','Email','Phone','Balance','Shares','Status']];
+  src.forEach(function(u){ rows.push([(u.name||u.full_name||''),(u.email||''),(u.phone||''),(u.balance??u.total_balance??0),(u.shares||0),(u.status||'')]); });
+  var csv=rows.map(function(r){ return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+  var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='shareholders_'+currentTable+'.csv'; a.click();
+}
+
+// ===== TASKS =====
+async function loadTasks(silent){
+  if(!supabase) return; if(!silent) document.getElementById('tasksList').innerHTML='<tr><td colspan="4">Loading...</td></tr>';
+  for(var t of ['tasks','user_tasks','submissions']){
+    var r=await supabase.from(t).select('*').limit(100).order('created_at',{ascending:false});
+    if(!r.error){ allTasks=r.data||[]; if(!silent){ if(!allTasks.length) document.getElementById('tasksList').innerHTML='<tr><td colspan="4">No tasks in '+t+'</td></tr>'; else document.getElementById('tasksList').innerHTML=allTasks.map(function(x){ return '<tr><td>'+(x.title||x.task_title||'Task')+'</td><td>'+(x.user_email||x.user_id||'-')+'</td><td><span class="badge">'+(x.status||'pending')+'</span></td><td><button class="btn btn-small btn-green" onclick="setTaskStatus(\''+x.id+'\',\''+t+'\',\'approved\')">Approve</button><button class="btn btn-small btn-red" onclick="setTaskStatus(\''+x.id+'\',\''+t+'\',\'rejected\')">Reject</button></td></tr>'; }).join(''); } return; }
+  }
+  if(!silent) document.getElementById('tasksList').innerHTML='<tr><td colspan="4">Tasks table not found</td></tr>';
+}
+async function setTaskStatus(id, table, status){ var r=await supabase.from(table).update({status:status, verified_by:'Admin', verified_at:new Date().toISOString()}).eq('id',id); if(r.error) showErr('Update failed: '+r.error.message); else { showOk('Task '+status); loadTasks(); loadApprovals(); } }
+async function createTask(){ var title=document.getElementById('newTaskTitle').value.trim(); var reward=parseFloat(document.getElementById('newTaskReward').value||0); if(!title){ showErr('Enter task title'); return; } var r=await supabase.from('tasks').insert([{title:title, reward:reward, status:'active', created_at:new Date().toISOString()}]); if(r.error) showErr('Create failed: '+r.error.message); else { showOk('Task created'); document.getElementById('newTaskTitle').value=''; loadTasks(); } }
+
+// ===== PAYMENTS =====
+async function loadPayments(){
+  if(!supabase) return; document.getElementById('paymentsList').innerHTML='<tr><td colspan="5">Loading...</td></tr>'; allPayments=[];
+  for(var tn of ['withdrawals','deposits','transactions','payments']){
+    var r=await supabase.from(tn).select('*').limit(100).order('created_at',{ascending:false});
+    if(!r.error){ (r.data||[]).forEach(function(p){ allPayments.push({table:tn, data:p}); }); }
+  }
+  if(!allPayments.length){ document.getElementById('paymentsList').innerHTML='<tr><td colspan="5">No payments found</td></tr>'; return; }
+  document.getElementById('paymentsList').innerHTML=allPayments.map(function(item){ var p=item.data; return '<tr><td>'+(p.type||item.table)+'</td><td>'+(p.user_email||p.user_id||'-')+'</td><td>$'+(p.amount||0)+'</td><td>'+(p.status||'pending')+'</td><td><button class="btn btn-small btn-green" onclick="approveItem(\'payment\',\''+p.id+'\',\''+item.table+'\')">Approve</button><button class="btn btn-small btn-red" onclick="rejectItem(\'payment\',\''+p.id+'\',\''+item.table+'\')">Reject</button></td></tr>'; }).join('');
 }
 
 // ===== AI WORKERS =====
-function startAIWorkers(){
-  if(!isEngineOn('global_engine') || !isEngineOn('engine_ai')){
-    stopAIWorkers(); renderEngines();
-    var log=document.getElementById('aiLog'); if(log) log.textContent='AI Workers PAUSED - Turn ON Global Engine + AI Verification Engine';
-    return;
-  }
-  if(aiInterval) clearInterval(aiInterval);
-  runAIWorkers(false);
-  aiInterval=setInterval(function(){ runAIWorkers(false); }, 30000);
-  renderEngines();
-}
+function startAIWorkers(){ if(!isEngineOn('global_engine')||!isEngineOn('engine_ai')){ stopAIWorkers(); renderEngines(); return; } if(aiInterval) clearInterval(aiInterval); runAIWorkers(false); aiInterval=setInterval(function(){ runAIWorkers(false); },30000); renderEngines(); }
 function stopAIWorkers(){ if(aiInterval) clearInterval(aiInterval); aiInterval=null; renderEngines(); }
 async function runAIWorkers(manual){
-  if(!supabase) return;
-  if(!isEngineOn('global_engine') || !isEngineOn('engine_ai')){
-    document.getElementById('aiLog').textContent='AI Workers PAUSED - Global or AI Engine OFF';
-    return;
-  }
-  var log=document.getElementById('aiLog');
-  log.textContent='🤖 AI Workers running... checking pending tasks...';
+  if(!supabase) return; if(!isEngineOn('global_engine')||!isEngineOn('engine_ai')){ document.getElementById('aiLog').textContent='AI PAUSED - Global or AI Engine OFF'; return; }
+  var log=document.getElementById('aiLog'); log.textContent='🤖 AI Workers running...';
   try{
     var r=await supabase.from('tasks').select('*').eq('status','pending').limit(20);
-    if(r.error){ log.textContent='AI Worker error: '+r.error.message+'\nTip: If table is tasks, make sure it exists. If error is "profiles in schema cache", run NOTIFY pgrst, \'reload schema\' in Supabase SQL.'; return; }
-    if(!r.data||!r.data.length){ log.textContent='✅ AI Workers: No pending tasks to verify. (Checked '+new Date().toLocaleTimeString()+')'; return; }
-    var approvedNow=0;
-    for(var task of r.data){
-      aiCheckedCount++;
-      var hasProof = task.proof_url || task.screenshot || task.submission || task.proof || task.image_url;
-      if(hasProof){
-        var up=await supabase.from('tasks').update({status:'approved', verified_by:'AI Worker', verified_at:new Date().toISOString()}).eq('id',task.id);
-        if(!up.error){ approvedNow++; aiApprovedCount++; }
-      }
-    }
-    document.getElementById('aiChecked').textContent=aiCheckedCount;
-    document.getElementById('aiApproved').textContent=aiApprovedCount;
-    log.textContent='✅ AI checked '+r.data.length+' pending tasks, auto-approved '+approvedNow+' with proof. '+new Date().toLocaleTimeString();
-    if(manual) showOk('AI Workers ran: '+approvedNow+' approved');
-    loadTasks();
-  }catch(e){ log.textContent='AI Worker exception: '+e.message; }
+    if(r.error){ log.textContent='AI error: '+r.error.message; return; }
+    if(!r.data||!r.data.length){ log.textContent='✅ No pending tasks. Checked '+new Date().toLocaleTimeString(); return; }
+    var approvedNow=0; for(var task of r.data){ aiCheckedCount++; var hasProof=task.proof_url||task.screenshot||task.submission||task.proof||task.image_url; if(hasProof){ var up=await supabase.from('tasks').update({status:'approved', verified_by:'AI Worker', verified_at:new Date().toISOString()}).eq('id',task.id); if(!up.error){ approvedNow++; aiApprovedCount++; } } }
+    document.getElementById('aiChecked').textContent=aiCheckedCount; document.getElementById('aiApproved').textContent=aiApprovedCount;
+    log.textContent='✅ Checked '+r.data.length+', approved '+approvedNow+' with proof. '+new Date().toLocaleTimeString();
+    if(manual) showOk('AI Workers ran: '+approvedNow+' approved'); loadTasks(); loadApprovals();
+  }catch(e){ log.textContent='AI exception: '+e.message; }
 }
 
 // ===== HEALTH =====
 async function runHealth(){
-  if(!supabase) return;
-  var el=document.getElementById('healthResult');
-  el.innerHTML='Checking...';
-  var checks=[
-    {name:'Supabase Database', table:'profiles', alt:'shareholders'},
-    {name:'Tasks Table', table:'tasks', alt:null},
-    {name:'Shareholders Table', table:'shareholders', alt:'profiles'},
-    {name:'Global Engine', table:null, alt:null},
-    {name:'AI Workers', table:null, alt:null},
-  ];
-  var html='';
-  for(var c of checks){
-    if(c.table){
-      var r=await supabase.from(c.table).select('id').limit(1);
-      if(!r.error) html+='<p>✅ '+c.name+' - UP ('+c.table+')</p>';
-      else if(c.alt){
-        var r2=await supabase.from(c.alt).select('id').limit(1);
-        if(!r2.error) html+='<p>⚠️ '+c.name+' - UP via fallback ('+c.alt+') - Original error: '+r.error.message+'</p>';
-        else html+='<p>❌ '+c.name+' - DOWN: '+r.error.message+'<br><small>Fix: Run NOTIFY pgrst, \'reload schema\' in Supabase SQL Editor</small></p>';
-      } else html+='<p>❌ '+c.name+' - DOWN: '+r.error.message+'</p>';
-    } else if(c.name==='Global Engine'){
-      html+='<p>'+(isEngineOn('global_engine')?'✅ Global Engine - ON':'❌ Global Engine - OFF')+'</p>';
-    } else if(c.name==='AI Workers'){
-      html+='<p>'+((isEngineOn('global_engine')&&isEngineOn('engine_ai'))?'✅ AI Workers - RUNNING':'❌ AI Workers - PAUSED')+'</p>';
-    }
+  if(!supabase) return; var el=document.getElementById('healthResult'); el.innerHTML='Checking...'; var html='';
+  for(var c of [{name:'Shareholders DB',table:'shareholders',alt:'profiles'},{name:'Profiles',table:'profiles',alt:'shareholders'},{name:'Tasks',table:'tasks',alt:null},{name:'Withdrawals',table:'withdrawals',alt:'transactions'},{name:'Global Engine',table:null},{name:'AI Workers',table:null}]){
+    if(c.table){ var r=await supabase.from(c.table).select('id').limit(1); if(!r.error) html+='<p>✅ '+c.name+' - UP ('+c.table+')</p>'; else if(c.alt){ var r2=await supabase.from(c.alt).select('id').limit(1); if(!r2.error) html+='<p>⚠️ '+c.name+' - UP via fallback ('+c.alt+')</p>'; else html+='<p>❌ '+c.name+' - DOWN: '+r.error.message+'<br><small>Fix: NOTIFY pgrst, \'reload schema\'</small></p>'; } else html+='<p>❌ '+c.name+' - DOWN: '+r.error.message+'</p>'; }
+    else if(c.name==='Global Engine') html+='<p>'+(isEngineOn('global_engine')?'✅ Global - ON':'❌ Global - OFF')+'</p>';
+    else html+='<p>'+((isEngineOn('global_engine')&&isEngineOn('engine_ai'))?'✅ AI - RUNNING':'❌ AI - PAUSED')+'</p>';
   }
   el.innerHTML=html;
 }
-
 init();
 </script>
 </body>
