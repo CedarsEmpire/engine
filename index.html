@@ -1,100 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Member Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+    * { box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; margin: 0; background: #f8f8f8; color: #111; }
+  
+  /* HEADER */
+  header { background: #fff; border-bottom: 1px solid #ddd; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; }
+  header h1 { font-size: 20px; margin: 0; }
+  header .right { display: flex; gap: 12px; align-items: center; }
+  header button { padding: 8px 16px; cursor: pointer; }
+
+  /* LAYOUT */
+  main { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  h2 { margin-top: 0; }
+
+  /* OVERVIEW - Best practice: 3 in a row on desktop, stack on mobile */
+  .overview { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .stat { background: #fff; border: 1px solid #ddd; padding: 20px; }
+  .stat small { color: #666; }
+  .stat strong { display: block; font-size: 28px; margin-top: 8px; }
+
+  /* REFERRAL BAR */
+  .referral { background: #fff; border: 1px solid #ddd; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
+
+  /* ACTIONS - Best practice: 2x2 grid */
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { background: #fff; border: 1px solid #ddd; padding: 20px; }
+  .card h3 { margin-top: 0; }
+  .card label { display: block; margin: 12px 0 4px; font-size: 14px; }
+  .card input, .card select { width: 100%; padding: 10px; border: 1px solid #ccc; }
+  .card button { width: 100%; padding: 12px; margin-top: 16px; cursor: pointer; }
+
+  #msg { text-align: center; margin: 20px 0; font-weight: bold; }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 20px; color: #666; font-size: 14px; border-top: 1px solid #ddd; background: #fff; margin-top: 24px; }
+
+  /* MOBILE */
+  @media (max-width: 700px) {
+    .overview { grid-template-columns: 1fr; }
+    .actions { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
+</style>
 </head>
 <body>
 
-<h2>Member Dashboard</h2>
-<p id="userEmail"></p>
-<button id="logoutBtn">Logout</button>
-<hr>
+<!-- HEADER -->
+<header>
+  <h1>Member Dashboard</h1>
+  <div class="right">
+    <span id="userEmail">Loading...</span>
+    <button id="logoutBtn">Logout</button>
+  </div>
+</header>
 
-<h3>Available Balance</h3>
-<p id="balance">£0.00</p>
+<!-- DASHBOARD -->
+<main>
+  <!-- OVERVIEW -->
+  <div class="overview">
+    <div class="stat">
+      <small>Available Balance</small>
+      <strong id="balance">£0.00</strong>
+    </div>
+    <div class="stat">
+      <small>Total Deposited</small>
+      <strong id="totalDeposited">£0.00</strong>
+    </div>
+    <div class="stat">
+      <small>Total Withdrawn</small>
+      <strong id="totalWithdrawn">£0.00</strong>
+    </div>
+  </div>
 
-<h3>Total Deposited</h3>
-<p id="totalDeposited">£0.00</p>
+  <!-- REFERRAL -->
+  <div class="referral">
+    <div>
+      <strong>Your Referral Code</strong><br>
+      <span id="referralCode">-</span>
+    </div>
+    <small>Share this code. Referrals are tracked in Supabase.</small>
+  </div>
 
-<h3>Total Withdrawn</h3>
-<p id="totalWithdrawn">£0.00</p>
+  <p id="msg"></p>
 
-<h3>Your Referral Code</h3>
-<p id="referralCode">-</p>
-<p>Share this code. Referrals are tracked in Supabase.</p>
-<hr>
+  <!-- ACTIONS -->
+  <div class="actions">
+    <!-- DEPOSIT -->
+    <div class="card">
+      <h3>Deposit</h3>
+      <form id="depositForm">
+        <label>Amount £</label>
+        <input type="number" id="depositAmount" placeholder="Amount £" required>
+        <label>Method</label>
+        <select id="depositMethod">
+          <option>Bank Transfer</option>
+          <option>Crypto</option>
+          <option>Cash</option>
+        </select>
+        <button type="submit">Request Deposit</button>
+      </form>
+    </div>
 
-<!-- DEPOSIT -->
-<h3>Deposit</h3>
-<form id="depositForm">
-  <label>Amount £</label><br>
-  <input type="number" id="depositAmount" placeholder="Amount £" required><br><br>
-  <label>Method</label><br>
-  <select id="depositMethod">
-    <option>Bank Transfer</option>
-    <option>Crypto</option>
-    <option>Cash</option>
-  </select><br><br>
-  <button type="submit">Request Deposit</button>
-</form>
-<hr>
+    <!-- WITHDRAW -->
+    <div class="card">
+      <h3>Withdraw</h3>
+      <form id="withdrawForm">
+        <label>Amount £</label>
+        <input type="number" id="withdrawAmount" placeholder="Amount £" required>
+        <label>Destination - bank / wallet address</label>
+        <input type="text" id="withdrawDest" placeholder="Destination - bank / wallet address" required>
+        <button type="submit">Request Withdrawal</button>
+      </form>
+    </div>
 
-<!-- WITHDRAW -->
-<h3>Withdraw</h3>
-<form id="withdrawForm">
-  <label>Amount £</label><br>
-  <input type="number" id="withdrawAmount" placeholder="Amount £" required><br><br>
-  <label>Destination - bank / wallet address</label><br>
-  <input type="text" id="withdrawDest" placeholder="Destination - bank / wallet address" required><br><br>
-  <button type="submit">Request Withdrawal</button>
-</form>
-<p>Fee is calculated from your settings table, not hard-coded.</p>
-<hr>
+    <!-- SEND -->
+    <div class="card">
+      <h3>Send Crypto</h3>
+      <form id="sendForm">
+        <label>Amount</label>
+        <input type="number" id="sendAmount" placeholder="Amount" required>
+        <label>Currency</label>
+        <select id="sendCurrency">
+          <option>BTC</option>
+          <option>ETH</option>
+          <option>USDT</option>
+        </select>
+        <label>Recipient wallet address</label>
+        <input type="text" id="sendTo" placeholder="Recipient wallet address" required>
+        <button type="submit">Send</button>
+      </form>
+    </div>
 
-<!-- SEND CRYPTO -->
-<h3>Send Crypto</h3>
-<form id="sendForm">
-  <label>Amount</label><br>
-  <input type="number" id="sendAmount" placeholder="Amount" required><br><br>
-  <label>Currency</label><br>
-  <select id="sendCurrency">
-    <option>BTC</option>
-    <option>ETH</option>
-    <option>USDT</option>
-  </select><br><br>
-  <label>Recipient wallet address</label><br>
-  <input type="text" id="sendTo" placeholder="Recipient wallet address" required><br><br>
-  <button type="submit">Send</button>
-</form>
-<hr>
+    <!-- EXCHANGE -->
+    <div class="card">
+      <h3>Exchange</h3>
+      <form id="exchangeForm">
+        <label>Amount</label>
+        <input type="number" id="exchangeAmount" placeholder="Amount" required>
+        <label>From</label>
+        <select id="exchangeFrom">
+          <option>GBP</option>
+          <option>BTC</option>
+          <option>ETH</option>
+          <option>USDT</option>
+        </select>
+        <label>To</label>
+        <select id="exchangeTo">
+          <option>BTC</option>
+          <option>GBP</option>
+          <option>ETH</option>
+          <option>USDT</option>
+        </select>
+        <button type="submit">Create Exchange Request</button>
+      </form>
+    </div>
+  </div>
+</main>
 
-<!-- EXCHANGE -->
-<h3>Exchange</h3>
-<form id="exchangeForm">
-  <label>Amount</label><br>
-  <input type="number" id="exchangeAmount" placeholder="Amount" required><br><br>
-  <label>From</label><br>
-  <select id="exchangeFrom">
-    <option>GBP</option>
-    <option>BTC</option>
-    <option>ETH</option>
-    <option>USDT</option>
-  </select><br><br>
-  <label>To</label><br>
-  <select id="exchangeTo">
-    <option>BTC</option>
-    <option>GBP</option>
-    <option>ETH</option>
-    <option>USDT</option>
-  </select><br><br>
-  <button type="submit">Create Exchange Request</button>
-</form>
-<hr>
-
-<p id="msg"></p>
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2026 Member Dashboard - All rights reserved</p>
+</footer>
 
 <script>
 const SUPABASE_URL = "YOUR_SUPABASE_URL";
@@ -105,7 +177,6 @@ async function loadUser(){
   const { data: { user } } = await supabaseClient.auth.getUser();
   if(!user){ window.location.href = "login.html"; return; }
   document.getElementById('userEmail').innerText = user.email;
-
   const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', user.id).single();
   if(profile){
     document.getElementById('balance').innerText = "£" + (profile.balance || 0);
@@ -124,50 +195,28 @@ document.getElementById('logoutBtn').onclick = async () => {
 document.getElementById('depositForm').onsubmit = async (e) => {
   e.preventDefault();
   const { data: { user } } = await supabaseClient.auth.getUser();
-  const { error } = await supabaseClient.from('deposits').insert([{
-    user_id: user.id,
-    amount: parseFloat(document.getElementById('depositAmount').value),
-    method: document.getElementById('depositMethod').value,
-    status: 'pending'
-  }]);
+  const { error } = await supabaseClient.from('deposits').insert([{ user_id: user.id, amount: parseFloat(document.getElementById('depositAmount').value), method: document.getElementById('depositMethod').value, status: 'pending' }]);
   document.getElementById('msg').innerText = error ? error.message : "Deposit request created";
 };
 
 document.getElementById('withdrawForm').onsubmit = async (e) => {
   e.preventDefault();
   const { data: { user } } = await supabaseClient.auth.getUser();
-  const { error } = await supabaseClient.from('withdrawals').insert([{
-    user_id: user.id,
-    amount: parseFloat(document.getElementById('withdrawAmount').value),
-    destination: document.getElementById('withdrawDest').value,
-    status: 'pending'
-  }]);
+  const { error } = await supabaseClient.from('withdrawals').insert([{ user_id: user.id, amount: parseFloat(document.getElementById('withdrawAmount').value), destination: document.getElementById('withdrawDest').value, status: 'pending' }]);
   document.getElementById('msg').innerText = error ? error.message : "Withdrawal request created";
 };
 
 document.getElementById('sendForm').onsubmit = async (e) => {
   e.preventDefault();
   const { data: { user } } = await supabaseClient.auth.getUser();
-  const { error } = await supabaseClient.from('transfers').insert([{
-    user_id: user.id,
-    amount: parseFloat(document.getElementById('sendAmount').value),
-    currency: document.getElementById('sendCurrency').value,
-    recipient_address: document.getElementById('sendTo').value,
-    status: 'pending'
-  }]);
+  const { error } = await supabaseClient.from('transfers').insert([{ user_id: user.id, amount: parseFloat(document.getElementById('sendAmount').value), currency: document.getElementById('sendCurrency').value, recipient_address: document.getElementById('sendTo').value, status: 'pending' }]);
   document.getElementById('msg').innerText = error ? error.message : "Send request created";
 };
 
 document.getElementById('exchangeForm').onsubmit = async (e) => {
   e.preventDefault();
   const { data: { user } } = await supabaseClient.auth.getUser();
-  const { error } = await supabaseClient.from('exchanges').insert([{
-    user_id: user.id,
-    amount: parseFloat(document.getElementById('exchangeAmount').value),
-    from_currency: document.getElementById('exchangeFrom').value,
-    to_currency: document.getElementById('exchangeTo').value,
-    status: 'pending'
-  }]);
+  const { error } = await supabaseClient.from('exchanges').insert([{ user_id: user.id, amount: parseFloat(document.getElementById('exchangeAmount').value), from_currency: document.getElementById('exchangeFrom').value, to_currency: document.getElementById('exchangeTo').value, status: 'pending' }]);
   document.getElementById('msg').innerText = error ? error.message : "Exchange request created";
 };
 </script>
