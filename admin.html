@@ -1,74 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cedars Empire - ADMIN - MASTER</title>
-    <style>
-        /* CSS styles for the admin dashboard */
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            width: 80%;
-            margin: 40px auto;
-        }
-        /* More styles for various sections */
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cedars Empire - ADMIN</title>
+<style>
+  *{box-sizing:border-box} body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;padding:20px}
+  .box{max-width:900px;margin:0 auto;background:#1e293b;padding:20px;border-radius:12px}
+  h1,h2{margin:0 0 12px} input,select,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:0}
+  input,select{background:#0f172a;color:#fff;border:1px solid #334155}
+  button{background:#22c55e;color:#000;font-weight:700;cursor:pointer}
+  button.red{background:#ef4444;color:#fff} button.blue{background:#3b82f6;color:#fff}
+  .row{display:flex;gap:10px} .row>*{flex:1}
+  .card{background:#0f172a;padding:14px;border-radius:10px;margin:10px 0}
+  .flex{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .badge{padding:4px 10px;border-radius:20px;font-size:12px;background:#334155}
+  .badge.green{background:#22c55e;color:#000} .badge.yellow{background:#eab308;color:#000}
+  .hidden{display:none} small{color:#94a3b8}
+  table{width:100%;border-collapse:collapse} td,th{padding:8px;text-align:left;border-bottom:1px solid #334155;font-size:14px}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- Admin login section -->
-        <div id="admin-login">
-            <h2>Admin Login</h2>
-            <input id="admin-email" type="email" placeholder="Email">
-            <input id="admin-pass" type="password" placeholder="Password">
-            <input id="admin-code" type="text" placeholder="Secret Code">
-            <button onclick="adminLogin()">Login</button>
-        </div>
-        <!-- Admin dashboard section -->
-        <div id="admin-app" style="display:none">
-            <h2>Dashboard</h2>
-            <div id="dash-workers"></div>
-            <div id="dash-tasks"></div>
-            <div id="dash-verify"></div>
-            <div id="dash-load-txt"></div>
-            <!-- More dashboard content -->
-            <!-- Engine control section -->
-            <h2>Engine Control</h2>
-            <button onclick="engineStart()">Start Engine</button>
-            <button onclick="enginePause()">Pause Engine</button>
-            <!-- More engine control content -->
-            <!-- Staking section -->
-            <h2>Staking</h2>
-            <div id="stake-list"></div>
-            <!-- More staking content -->
-            <!-- Redemption codes section -->
-            <h2>Redeem Codes</h2>
-            <div id="redeem-list"></div>
-            <!-- More redemption codes content -->
-            <!-- Other sections like deposits, withdrawals, KYC, P2P, users, profit history -->
-        </div>
+<div class="box">
+  <h1>🌲 Cedars Empire - ADMIN</h1>
+  <small id="status">Not logged in</small>
+
+  <!-- LOGIN -->
+  <div id="loginBox" class="card">
+    <h2>Admin Login</h2>
+    <input id="email" placeholder="Email" value="admin@cedars.com">
+    <input id="pass" type="password" placeholder="Password">
+    <input id="code" placeholder="Secret Code">
+    <button onclick="doLogin()">Login</button>
+    <p id="loginMsg" style="color:#f87171"></p>
+    <small>First time? Use Admin123 / CEDARS2026</small>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashBox" class="hidden">
+    <div class="row">
+      <div class="card"><h3 id="totalMembers">0</h3><small>Total Members</small></div>
+      <div class="card"><h3 id="pendingCount">0</h3><small>Pending Approval</small></div>
+      <div class="card"><h3 id="approvedCount">0</h3><small>Approved</small></div>
     </div>
 
-    <script>
-        // JavaScript code for the admin dashboard
-        function el(id){ return document.getElementById(id); }
-        function setText(id,txt){ var e=el(id); if(e) e.innerText=txt; }
-        function setHTML(id,html){ var e=el(id); if(e) e.innerHTML=html; }
-        // More JavaScript functions and logic
-        try{ 
-            // Code for rendering admin dashboard
-            var totalDep=0, pendingDep=0, totalWd=0, fees=0;
-            // More code for calculations and rendering
-        }catch(e){ console.log(e); }
-        setInterval(function(){
-            try{
-                // Code for updating engine stats and syncing data
-            }catch(e){}
-        },5000);
-        checkAdminLogin();
-        renderAdmin();
-    </script>
+    <div class="card">
+      <h2>Add Member</h2>
+      <input id="mName" placeholder="Full Name">
+      <input id="mPhone" placeholder="Phone / WhatsApp">
+      <input id="mAmount" type="number" placeholder="Amount UGX">
+      <button onclick="addMember()">Add Member</button>
+    </div>
+
+    <div class="card">
+      <h2>Members & Approvals</h2>
+      <div id="memberList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Tasks</h2>
+      <input id="taskTitle" placeholder="New Task Title">
+      <button class="blue" onclick="addTask()">Add Task</button>
+      <div id="taskList"></div>
+    </div>
+
+    <button class="red" onclick="doLogout()">Logout</button>
+    <button onclick="exportData()">Export Backup (Download)</button>
+    <small>Backup saves your approvals to a file. Keep it safe.</small>
+  </div>
+</div>
+
+<script>
+const ADMIN = { email:"admin@cedars.com", pass:"Admin123", code:"CEDARS2026" };
+let data = JSON.parse(localStorage.getItem("cedars_data") || '{"members":[],"tasks":[]}');
+function save(){ localStorage.setItem("cedars_data", JSON.stringify(data)); render(); }
+function doLogin(){
+  const e=document.getElementById("email").value.trim();
+  const p=document.getElementById("pass").value.trim();
+  const c=document.getElementById("code").value.trim();
+  if(e===ADMIN.email && p===ADMIN.pass && c===ADMIN.code){
+    localStorage.setItem("cedars_admin","1");
+    showDash();
+  } else {
+    document.getElementById("loginMsg").innerText="Wrong email / password / code. Try again.";
+  }
+}
+function showDash(){
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("dashBox").classList.remove("hidden");
+  document.getElementById("status").innerText="Logged in as Admin";
+  render();
+}
+function doLogout(){ localStorage.removeItem("cedars_admin"); location.reload(); }
+function addMember(){
+  const name=document.getElementById("mName").value.trim();
+  const phone=document.getElementById("mPhone").value.trim();
+  const amt=document.getElementById("mAmount").value.trim();
+  if(!name) return alert("Enter name");
+  data.members.push({id:Date.now(), name, phone, amount:amt||0, status:"pending"});
+  document.getElementById("mName").value=""; document.getElementById("mPhone").value=""; document.getElementById("mAmount").value="";
+  save();
+}
+function approve(id){ const m=data.members.find(x=>x.id===id); if(m) m.status="approved"; save(); }
+function reject(id){ data.members=data.members.filter(x=>x.id!==id); save(); }
+function addTask(){
+  const t=document.getElementById("taskTitle").value.trim();
+  if(!t) return;
+  data.tasks.push({id:Date.now(), title:t, done:false});
+  document.getElementById("taskTitle").value=""; save();
+}
+function toggleTask(id){ const t=data.tasks.find(x=>x.id===id); if(t) t.done=!t.done; save(); }
+function exportData(){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="cedars-backup.json"; a.click();
+}
+function render(){
+  document.getElementById("totalMembers").innerText=data.members.length;
+  document.getElementById("pendingCount").innerText=data.members.filter(m=>m.status==="pending").length;
+  document.getElementById("approvedCount").innerText=data.members.filter(m=>m.status==="approved").length;
+  document.getElementById("memberList").innerHTML = data.members.length===0 ? "<p>No members yet.</p>" : data.members.map(m=>`
+    <div class="flex card"><div><b>${m.name}</b><br><small>${m.phone} - UGX ${m.amount}</small></div>
+    <span class="badge ${m.status==="approved"?"green":"yellow"}">${m.status}</span>
+    <div style="display:flex;gap:6px"><button onclick="approve(${m.id})">Approve</button><button class="red" onclick="reject(${m.id})">Delete</button></div></div>`).join("");
+  document.getElementById("taskList").innerHTML = data.tasks.map(t=>`<div class="flex card"><span>${t.done?"✅":"⬜"} ${t.title}</span><button class="blue" onclick="toggleTask(${t.id})">Done</button></div>`).join("") || "<p>No tasks</p>";
+}
+if(localStorage.getItem("cedars_admin")==="1"){ showDash(); }
+</script>
 </body>
 </html>
