@@ -5,11 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cedars Empire - Member Dashboard</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f8fafc;color:#111827}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f8fafc;color:#111827;padding-bottom:80px}
 header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #e5e7eb;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 header b{font-size:19px}header small{color:#6b7280}
 nav{display:flex;gap:6px;flex-wrap:wrap}nav button{padding:9px 13px;border:1px solid #e5e7eb;background:#fff;border-radius:999px;cursor:pointer;font-weight:600;font-size:13px}
 nav button.active{background:#111827;color:#fff;border-color:#111827}
+.ticker{background:#111827;color:#fff;overflow:hidden;white-space:nowrap;padding:8px 0;font-size:13px;font-weight:600;position:sticky;top:60px;z-index:99}
+.ticker span{display:inline-block;padding-left:100%;animation:scroll 25s linear infinite}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 .wrap{max-width:900px;margin:0 auto;padding:16px}
 .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:14px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -31,6 +34,19 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 .code-box{background:#111827;color:#fff;padding:12px;border-radius:10px;font-family:monospace;word-break:break-all;font-size:13px}
 .hidden{display:none}
 .warn{background:#fffbeb;border:1px solid #fde68a;padding:12px;border-radius:10px;font-size:13px;line-height:1.6;color:#92400e;margin-top:10px}
+.live-dot{display:inline-block;width:9px;height:9px;background:#22c55e;border-radius:50%;margin-right:6px;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.up{color:#15803d;font-weight:700}.down{color:#dc2626;font-weight:700}
+.market-box{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
+@media(max-width:640px){.market-box{grid-template-columns:1fr}}
+.coin{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:12px;text-align:center}
+.coin b{font-size:16px}
+/* DISCLAIMER SLIDE FOOTER */
+#disclaimer-slide{position:fixed;left:0;right:0;bottom:0;z-index:200;background:#fffbeb;border-top:2px solid #f59e0b;padding:14px 16px 16px;transform:translateY(110%);transition:transform .6s ease;box-shadow:0 -10px 30px rgba(0,0,0,.15)}
+#disclaimer-slide.show{transform:translateY(0)}
+#disclaimer-slide p{margin:4px 0;font-size:13px;line-height:1.5;color:#92400e}
+#disc-progress{height:4px;background:#fde68a;border-radius:999px;overflow:hidden;margin-top:8px}
+#disc-progress i{display:block;height:100%;background:#f59e0b;width:100%;transition:width 1s linear}
 </style>
 </head>
 <body>
@@ -47,14 +63,24 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 <button onclick="logout()">Logout</button>
 </nav>
 </header>
+<div class="ticker"><span id="ticker-text">● LIVE MARKET LOADING... • BTC • ETH • USDT • Cedars Empire — Profit Variable, Not Guaranteed •</span></div>
 
 <div class="wrap">
-<div class="card" style="padding:12px 18px"><b>Fees:</b> <span class="muted">Exchange 2% • Withdraw 20% • P2P 5% • Referral 10%</span></div>
+<div class="card" style="padding:12px 18px"><b>Fees:</b> <span class="muted">Exchange 2% • Withdraw 20% • P2P 5% • Referral 10%</span> <button class="btn btn-light" style="width:auto;padding:6px 12px;margin-top:0;float:right" onclick="showDisclaimerNow()">Show Disclaimer</button></div>
 
 <!-- OVERVIEW -->
 <div id="tab-overview">
-<div class="card"><h2 style="margin:0">Welcome back 👋</h2><p class="muted">Earnings in GBP (£). Exchange to crypto to withdraw.</p><div style="background:#fefce8;padding:10px 12px;border-radius:8px;font-size:14px" id="live-market">Loading live market...</div>
-<div class="warn"><b>⚠️ Disclaimer — Please Read</b><br>Cedars Empire is a membership / shareholder platform. Profit shares are <b>Variable, Not Guaranteed</b> and may be 0% on some days. Capital is at risk and you may lose part or all of your deposit.<br>This is <b>not financial advice</b>. Do not invest money you cannot afford to lose.<br>Fees: Exchange 2% • Withdraw 20% (Min £50 / Max £10,000) • P2P 5% • Referral 10%.<br>Contract term: 1095 days. Locked funds cannot be withdrawn until contract conditions are met.<br>Always verify wallet addresses before withdrawal. Cedars Empire is not responsible for wrong addresses.</div>
+<div class="card"><h2 style="margin:0">Welcome back 👋</h2><p class="muted">Earnings in GBP (£). Exchange to crypto to withdraw.</p>
+<div style="background:#fefce8;padding:12px;border-radius:10px">
+<div><span class="live-dot"></span><b>LIVE MARKET</b> <span class="muted" id="market-time">Updating...</span> <span style="float:right" id="market-refresh">● LIVE</span></div>
+<div class="market-box">
+<div class="coin"><div>₿ BTC / GBP</div><b id="btc-price">£--</b><div id="btc-change">--</div><div class="muted" id="btc-ind">--</div></div>
+<div class="coin"><div>Ξ ETH / GBP</div><b id="eth-price">£--</b><div id="eth-change">--</div><div class="muted" id="eth-ind">--</div></div>
+<div class="coin"><div>₮ USDT / GBP</div><b id="usdt-price">£--</b><div id="usdt-change">--</div><div class="muted" id="usdt-ind">--</div></div>
+</div>
+<div class="muted" style="margin-top:8px">Auto-refresh every 30 seconds • Source: CoinGecko • Indicators: ▲ Up / ▼ Down</div>
+</div>
+<div class="warn"><b>⚠️ Disclaimer — Please Read</b><br>Cedars Empire is a membership / shareholder platform. Profit shares are <b>Variable, Not Guaranteed</b> and may be 0% on some days. Capital is at risk. This is <b>not financial advice</b>. Fees: Exchange 2% • Withdraw 20% (Min £50 / Max £10,000) • P2P 5% • Referral 10%. Contract: 1095 days.</div>
 </div>
 <div class="card"><div class="muted">Total Earnings (GBP)</div><div class="big" id="total-earnings">£0.00</div><button class="btn btn-green" onclick="showTab('wallet')">Exchange & Withdraw →</button></div>
 <div class="grid">
@@ -84,13 +110,7 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 <!-- PROFILE + FULL KYC -->
 <div id="tab-profile" style="display:none">
 <div class="card"><h3 style="margin:0">Profile & KYC</h3><p class="muted">Status: <span class="pill" id="kyc-pill">Not Started</span> • Progress: <b id="kyc-percent2">0%</b></p><div class="bar"><i id="kyc-bar2" style="width:0%"></i></div></div>
-<div class="card"><div class="step" id="step1"><b>Step 1 — Personal Information</b>
-<label>Full Name (as on ID)</label><input id="kyc-name" value="Ogwal Emmanuel">
-<label>Date of Birth</label><input id="kyc-dob" type="date">
-<label>Country</label><select id="kyc-country"><option>Uganda</option><option>Kenya</option><option>Nigeria</option><option>United Kingdom</option><option>United States</option><option>Other</option></select>
-<label>Address</label><input id="kyc-address" placeholder="Street, City, District">
-<label>Phone</label><input id="kyc-phone" placeholder="+256 ...">
-<button class="btn btn-dark" onclick="saveStep1()">Save Step 1</button></div>
+<div class="card"><div class="step" id="step1"><b>Step 1 — Personal Information</b><label>Full Name (as on ID)</label><input id="kyc-name" value="Ogwal Emmanuel"><label>Date of Birth</label><input id="kyc-dob" type="date"><label>Country</label><select id="kyc-country"><option>Uganda</option><option>Kenya</option><option>Nigeria</option><option>United Kingdom</option><option>United States</option><option>Other</option></select><label>Address</label><input id="kyc-address" placeholder="Street, City, District"><label>Phone</label><input id="kyc-phone" placeholder="+256 ..."><button class="btn btn-dark" onclick="saveStep1()">Save Step 1</button></div>
 <div class="step" id="step2"><b>Step 2 — Profile Photo</b><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'photo-prev')"><img id="photo-prev"></div><button class="btn btn-dark" onclick="saveStep2()">Save Photo</button></div>
 <div class="step" id="step3"><b>Step 3 — ID Document</b><label>ID Type</label><select id="id-type"><option>National ID</option><option>Passport</option><option>Driving Licence</option></select><label>ID Number</label><input id="id-number" placeholder="Enter ID number"><label>ID Expiry Date</label><input id="id-expiry" type="date"><label>ID Front</label><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'idfront-prev')"><img id="idfront-prev"></div><label>ID Back</label><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'idback-prev')"><img id="idback-prev"></div><button class="btn btn-dark" onclick="saveStep3()">Save ID Document</button></div>
 <div class="step" id="step4"><b>Step 4 — Selfie + Liveness</b><label>Selfie Holding ID</label><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'selfie-prev')"><img id="selfie-prev"></div><label><input type="checkbox" id="live-blink" style="width:auto"> I blinked for liveness check</label><label><input type="checkbox" id="live-turn" style="width:auto"> I turned head left / right</label><button class="btn btn-dark" onclick="saveStep4()">Save Selfie</button></div>
@@ -137,11 +157,20 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 </div>
 
 <div class="card" style="text-align:center"><p class="muted" style="font-size:12px;line-height:1.6"><b>Cedars Empire — Disclaimer</b><br>All earnings are variable and not guaranteed. Past performance does not guarantee future results.<br>Crypto prices are volatile. P2P trades are between members. Always confirm payment before releasing crypto.<br>By using this platform you agree to the 1095-day contract terms, fees and KYC policy.<br>© 2026 Cedars Empire. All rights reserved.</p></div>
-
 </div>
+
+<!-- DISCLAIMER SLIDE FOOTER - EVERY 6 HOURS FOR 30 SECONDS -->
+<div id="disclaimer-slide">
+<div class="row"><b>⚠️ DISCLAIMER — Cedars Empire</b><span><span id="disc-count">30s</span> • <button onclick="hideDisclaimer()" style="border:none;background:#111827;color:#fff;padding:6px 12px;border-radius:999px;cursor:pointer">Close ✕</button></span></div>
+<p>Profit shares are <b>Variable, Not Guaranteed</b> and may be 0% on some days. Capital is at risk. This is <b>not financial advice</b>. Do not invest money you cannot afford to lose. Fees: Exchange 2% • Withdraw 20% (Min £50 / Max £10,000) • P2P 5% • Referral 10%. Contract: 1095 days. Always verify wallet addresses.</p>
+<div id="disc-progress"><i id="disc-bar"></i></div>
+<div class="muted" style="font-size:11px;margin-top:4px">This notice appears every 6 hours for 30 seconds. Next show: <span id="disc-next">-</span></div>
+</div>
+
 <script>
 let state = JSON.parse(localStorage.getItem('cedars_v5')||'null') || {deposits:[],withdrawals:[],exchanges:[],refs:[],p2p:[],profit:0,available:0,locked:0,plan:'-',startDate:null,kyc:'Not Started',kycSteps:{s1:false,s2:false,s3:false,s4:false,s5:false},tfa:'Off',emailVerified:false,phoneVerified:false,sessions:[{device:'This device - Chrome • Kampala',time:'Now',current:true}],logs:['Account created'],emailCode:'',phoneCode:'',backupCodes:[]};
 let pendingDeposit=null, lastResult="";
+let prevPrices={bitcoin:0,ethereum:0,tether:0};
 function save(){ localStorage.setItem('cedars_v5', JSON.stringify(state)); render(); }
 function showTab(id){ ['overview','plans','profile','wallet','p2p','referral','auth'].forEach(t=>{ let el=document.getElementById('tab-'+t); if(el) el.style.display=t===id?'block':'none'; let b=document.getElementById('btn-'+t); if(b) b.classList.toggle('active',t===id); }); window.scrollTo(0,0); }
 function logout(){ alert('Logged out.'); location.reload(); }
@@ -153,16 +182,16 @@ function saveStep4(){ if(document.getElementById('selfie-prev').style.display!==
 function saveStep5(){ if(document.getElementById('poa-prev').style.display!=='block'){ alert('Upload Proof of Address'); return; } state.kycSteps.s5=true; document.getElementById('step5').classList.add('done'); save(); alert('Step 5 Saved ✅'); }
 function kycProgress(){ let c=Object.values(state.kycSteps).filter(v=>v).length; return c*20; }
 function submitKYC(){ if(kycProgress()<100){ alert('Complete all 5 steps first. Progress: '+kycProgress()+'%'); return; } state.kyc='Pending Review'; state.logs.push('KYC submitted for review - '+new Date().toLocaleString()); save(); alert('Full KYC Submitted! Status: Pending Review'); }
-function simulateReview(){ if(state.kyc!=='Pending Review' && state.kyc!=='Under Review'){ alert('Submit KYC first'); return; } state.kyc='Approved'; state.logs.push('KYC Approved by Admin - '+new Date().toLocaleString()); save(); alert('🎉 KYC APPROVED! You can now deposit, withdraw and trade P2P.'); }
+function simulateReview(){ if(state.kyc!=='Pending Review' && state.kyc!=='Under Review'){ alert('Submit KYC first'); return; } state.kyc='Approved'; state.logs.push('KYC Approved by Admin - '+new Date().toLocaleString()); save(); alert('🎉 KYC APPROVED!'); }
 function resetKYC(){ if(!confirm('Reset KYC?')) return; state.kyc='Not Started'; state.kycSteps={s1:false,s2:false,s3:false,s4:false,s5:false}; ['step1','step2','step3','step4','step5'].forEach(id=>document.getElementById(id).classList.remove('done')); save(); alert('KYC Reset'); }
 function doLogin(){ let e=document.getElementById('login-email').value, p=document.getElementById('login-pass').value; if(!e||!p){ alert('Enter email and password'); return; } if(state.tfa!=='Off'){ let code=prompt('Enter your 2FA code (demo: 123456)'); if(code!=='123456'){ alert('Wrong 2FA code'); state.logs.push('Failed login - wrong 2FA - '+new Date().toLocaleString()); save(); return; } } state.logs.push('Login successful - '+new Date().toLocaleString()); save(); alert('Login successful! Welcome back.'); showTab('overview'); }
 function forgotPassword(){ document.getElementById('forgot-box').classList.remove('hidden'); }
 function sendReset(){ document.getElementById('reset-msg').classList.remove('hidden'); document.getElementById('reset-msg').innerText='Reset link sent to '+document.getElementById('reset-email').value+'. Check your email. (Demo)'; }
 function checkStrength(){ let p=document.getElementById('su-pass').value; let s='Weak'; if(p.length>=8 && /[0-9]/.test(p)) s='Medium'; if(p.length>=10 && /[0-9]/.test(p) && /[A-Z]/.test(p)) s='Strong ✅'; document.getElementById('strength').innerText='Strength: '+s; }
 function doSignup(){ let n=document.getElementById('su-name').value, e=document.getElementById('su-email').value, ph=document.getElementById('su-phone').value, p=document.getElementById('su-pass').value, p2=document.getElementById('su-pass2').value; if(!n||!e||!ph||!p){ alert('Fill all signup fields'); return; } if(p!==p2){ alert('Passwords do not match'); return; } if(p.length<8){ alert('Password must be at least 8 characters'); return; } state.logs.push('New account created for '+e+' - '+new Date().toLocaleString()); save(); alert('Account created for '+e+'! Please verify your email.'); }
-function sendEmailCode(){ state.emailCode='123456'; let el=document.getElementById('email-code-hint'); el.classList.remove('hidden'); el.innerText='Demo code sent: 123456 (In real app, check your email)'; }
+function sendEmailCode(){ state.emailCode='123456'; let el=document.getElementById('email-code-hint'); el.classList.remove('hidden'); el.innerText='Demo code sent: 123456'; }
 function verifyEmail(){ if(document.getElementById('email-code').value===state.emailCode && state.emailCode!==''){ state.emailVerified=true; state.logs.push('Email verified - '+new Date().toLocaleString()); save(); alert('Email Verified ✅'); } else alert('Wrong code. Click Send Email Code first, then enter 123456'); }
-function sendPhoneCode(){ state.phoneCode='654321'; let el=document.getElementById('phone-code-hint'); el.classList.remove('hidden'); el.innerText='Demo SMS code: 654321 (In real app, check SMS)'; }
+function sendPhoneCode(){ state.phoneCode='654321'; let el=document.getElementById('phone-code-hint'); el.classList.remove('hidden'); el.innerText='Demo SMS code: 654321'; }
 function verifyPhone(){ if(document.getElementById('phone-code').value===state.phoneCode && state.phoneCode!==''){ state.phoneVerified=true; state.logs.push('Phone verified - '+new Date().toLocaleString()); save(); alert('Phone Verified ✅'); } else alert('Wrong code. Click Send SMS Code first, then enter 654321'); }
 function changePassword(){ let cur=document.getElementById('cur-pass').value, np=document.getElementById('new-pass').value, np2=document.getElementById('new-pass2').value; if(!cur||!np||!np2){ alert('Fill all password fields'); return; } if(np!==np2){ alert('New passwords do not match'); return; } if(np.length<6){ alert('At least 6 characters'); return; } state.logs.push('Password changed - '+new Date().toLocaleString()); save(); alert('Password changed successfully!'); }
 function setup2FA(){ document.getElementById('tfa-box').classList.remove('hidden'); let secret='CEDARS-'+Math.random().toString(36).substring(2,10).toUpperCase(); document.getElementById('tfa-secret').innerText='Secret: '+secret+'\nDemo code: 123456'; state.backupCodes=Array.from({length:10},()=>Math.random().toString(36).substring(2,8).toUpperCase()); document.getElementById('backup-codes').classList.remove('hidden'); document.getElementById('backup-codes').innerHTML='<b>Backup Codes (save them):</b><br>'+state.backupCodes.join(' • '); }
@@ -224,10 +253,71 @@ document.getElementById('p2p-my').innerHTML=my||'<p class="muted">No trades yet.
 let elist=''; state.exchanges.forEach(e=>elist+='<div style="padding:6px 0;border-bottom:1px solid #eee">'+e.text+'</div>');
 if(elist) document.getElementById('exchange-history').innerHTML='<b>Exchange History:</b>'+elist;
 }
-async function loadMarket(){ try{ const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp'); const d=await r.json(); document.getElementById('live-market').innerHTML='Live Market: BTC £'+d.bitcoin.gbp+' | ETH £'+d.ethereum.gbp+' | USDT £'+d.tether.gbp; document.getElementById('portfolio-usdt').innerText=((state.locked+state.available)/d.tether.gbp).toFixed(2)+' USDT'; }catch(e){ document.getElementById('live-market').innerText='Live market temporarily unavailable'; } }
-loadMarket(); setInterval(loadMarket,60000);
+// LIVE MARKET WITH INDICATORS
+function formatInd(id, price, change, prev){
+  let el=document.getElementById(id);
+  let arrow = change>=0 ? '▲' : '▼';
+  let cls = change>=0 ? 'up' : 'down';
+  let move = prev>0 ? (price>prev ? '▲ Rising' : price<prev ? '▼ Falling' : '● Stable') : '● Live';
+  el.innerHTML='<span class="'+cls+'">'+arrow+' '+Math.abs(change).toFixed(2)+'% (24h)</span> • '+move;
+}
+async function loadMarket(){
+  try{
+    const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp&include_24hr_change=true');
+    const d=await r.json();
+    document.getElementById('btc-price').innerText='£'+d.bitcoin.gbp.toLocaleString();
+    document.getElementById('eth-price').innerText='£'+d.ethereum.gbp.toLocaleString();
+    document.getElementById('usdt-price').innerText='£'+d.tether.gbp.toFixed(6);
+    document.getElementById('btc-change').innerHTML = d.bitcoin.gbp_24h_change>=0 ? '<span class="up">▲ '+d.bitcoin.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.bitcoin.gbp_24h_change.toFixed(2)+'%</span>';
+    document.getElementById('eth-change').innerHTML = d.ethereum.gbp_24h_change>=0 ? '<span class="up">▲ '+d.ethereum.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.ethereum.gbp_24h_change.toFixed(2)+'%</span>';
+    document.getElementById('usdt-change').innerHTML = d.tether.gbp_24h_change>=0 ? '<span class="up">▲ '+d.tether.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.tether.gbp_24h_change.toFixed(2)+'%</span>';
+    formatInd('btc-ind', d.bitcoin.gbp, d.bitcoin.gbp_24h_change, prevPrices.bitcoin);
+    formatInd('eth-ind', d.ethereum.gbp, d.ethereum.gbp_24h_change, prevPrices.ethereum);
+    formatInd('usdt-ind', d.tether.gbp, d.tether.gbp_24h_change, prevPrices.tether);
+    document.getElementById('ticker-text').innerText='● LIVE • BTC £'+d.bitcoin.gbp.toLocaleString()+' ('+d.bitcoin.gbp_24h_change.toFixed(2)+'%) • ETH £'+d.ethereum.gbp.toLocaleString()+' ('+d.ethereum.gbp_24h_change.toFixed(2)+'%) • USDT £'+d.tether.gbp.toFixed(4)+' ('+d.tether.gbp_24h_change.toFixed(2)+'%) • Cedars Empire — Profit Variable, Not Guaranteed • Withdraw Min £50 / Max £10,000 • ';
+    document.getElementById('market-time').innerText='Updated '+new Date().toLocaleTimeString();
+    document.getElementById('portfolio-usdt').innerText=((state.locked+state.available)/d.tether.gbp).toFixed(2)+' USDT';
+    prevPrices={bitcoin:d.bitcoin.gbp,ethereum:d.ethereum.gbp,tether:d.tether.gbp};
+  }catch(e){ document.getElementById('market-time').innerText='Live market temporarily unavailable'; }
+}
+loadMarket(); setInterval(loadMarket,30000);
 async function getRate(){ let amt=parseFloat(document.getElementById('ex-amount').value); let to=document.getElementById('ex-to').value; let el=document.getElementById('ex-result'); if(!amt||amt<=0){ el.innerText='Enter valid amount'; return; } el.innerText='Fetching live rate...'; try{ const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+to+'&vs_currencies=gbp'); const d=await r.json(); let rate=d[to].gbp; let gross=amt/rate; let fee=gross*0.02; let net=gross-fee; let label=to==='tether'?'USDT':to.toUpperCase(); lastResult=amt+' GBP = '+net.toFixed(6)+' '+label+' (Fee 2%)'; el.innerText=lastResult; let fe=document.getElementById('ex-fee'); fe.style.display='block'; fe.innerHTML='Gross '+gross.toFixed(6)+' '+label+' • Fee 2% -'+fee.toFixed(6)+' • <b>You get '+net.toFixed(6)+' '+label+'</b>'; }catch(e){ el.innerText='Failed. Try again.'; lastResult=""; } }
 function confirmExchange(){ if(!lastResult){ alert('Get live rate first'); return; } state.exchanges.unshift({text:lastResult,date:new Date().toLocaleString()}); save(); alert('Exchange confirmed!'); }
+// DISCLAIMER SLIDE - EVERY 6 HOURS FOR 30 SECONDS
+let discTimer=null, discCountTimer=null;
+function showDisclaimerNow(){
+  let slide=document.getElementById('disclaimer-slide');
+  slide.classList.add('show');
+  let sec=30;
+  document.getElementById('disc-count').innerText=sec+'s';
+  document.getElementById('disc-bar').style.width='100%';
+  clearInterval(discCountTimer); clearTimeout(discTimer);
+  discCountTimer=setInterval(()=>{
+    sec--; document.getElementById('disc-count').innerText=sec+'s';
+    document.getElementById('disc-bar').style.width=(sec/30*100)+'%';
+    if(sec<=0){ clearInterval(discCountTimer); }
+  },1000);
+  discTimer=setTimeout(()=>{ hideDisclaimer(); },30000);
+  localStorage.setItem('cedars_last_disc', Date.now().toString());
+  let next=new Date(Date.now()+6*60*60*1000);
+  document.getElementById('disc-next').innerText=next.toLocaleString();
+}
+function hideDisclaimer(){
+  document.getElementById('disclaimer-slide').classList.remove('show');
+  clearInterval(discCountTimer); clearTimeout(discTimer);
+}
+function checkDisclaimerSchedule(){
+  let last=parseInt(localStorage.getItem('cedars_last_disc')||'0');
+  let now=Date.now();
+  let sixHours=6*60*60*1000;
+  if(!last || (now-last)>=sixHours){ showDisclaimerNow(); }
+  else { let next=new Date(last+sixHours); document.getElementById('disc-next').innerText=next.toLocaleString(); }
+  setInterval(()=>{
+    let l=parseInt(localStorage.getItem('cedars_last_disc')||'0');
+    if(Date.now()-l>=sixHours){ showDisclaimerNow(); }
+  },60000);
+}
+checkDisclaimerSchedule();
 render();
 </script>
 </body>
