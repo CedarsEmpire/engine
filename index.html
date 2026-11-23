@@ -9,14 +9,24 @@
     </style>
 </head>
 <body>
-    <!-- Your existing topbar and tabs -->
-    
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <b>Cedars Empire</b>
+        <span>ogwal.bemmanuel@gmail.com</span>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button onclick="showTab('overview')">Overview</button>
+        <button onclick="showTab('plans')">Shareholder Plans</button>
+        <button onclick="showTab('profile')">Profile & KYC</button>
+        <button onclick="showTab('wallet')">Wallet & Exchange</button>
+    </div>
+
     <!-- OVERVIEW TAB -->
     <div id="tab-overview">
-        <!-- Your existing content -->
-        <div id="live-market" style="background:#fef3c7;color:#92400e;padding:10px 14px;border-radius:8px;margin-bottom:14px;font-size:14px;">
-            Loading live market...
-        </div>
+        <div id="live-market" style="background:#fef3c7;color:#92400e;padding:10px 14px;border-radius:8px;margin-bottom:14px;">Loading live market...</div>
+        <!-- Your existing overview content -->
     </div>
 
     <!-- WALLET & EXCHANGE TAB -->
@@ -37,14 +47,16 @@
             <button onclick="confirmExchange()" style="width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:8px;">Confirm Exchange</button>
             <div id="exchange-history" style="margin-top:12px;font-size:14px;"></div>
         </div>
+        <button onclick="goToWallet()" style="width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:16px;">Exchange & Withdraw</button>
     </div>
 
     <script>
-        // Your existing tab switching function
+        // TAB SWITCHING
         function showTab(id){
-            // Your existing code
+            // Your existing tab switching code
         }
 
+        // LIVE MARKET
         async function loadMarket(){
             try{
                 const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp');
@@ -56,6 +68,7 @@
         }
         loadMarket();
 
+        // QUICK EXCHANGE
         let lastResult = "";
         let exHistory = [];
         async function getRate(){
@@ -69,7 +82,7 @@
                 const d = await r.json();
                 const rate = d[to].gbp;
                 const got = amt / rate;
-                const {label,formatted} = formatLabel(to);
+                const label = to==='tether' ? 'USDT' : to.toUpperCase();
                 lastResult = amt+" GBP = "+got.toFixed(6)+" "+label+" (1 "+label+" = £"+rate+")";
                 el.innerText = lastResult;
             }catch(e){ el.innerText="Failed to fetch rate. Try again."; lastResult=""; }
@@ -80,10 +93,8 @@
             document.getElementById('exchange-history').innerHTML = '<b>Exchange History:</b><br>' + exHistory.map(h=>'<div style="padding:6px 0;border-bottom:1px solid #334155;">'+h+'</div>').join('');
             alert('Exchange confirmed!');
         }
-        function formatLabel(to){
-            const label = to==='tether' ? 'USDT' : to.toUpperCase();
-            return {label, formatted: label};
-        }
+
+        // EXCHANGE & WITHDRAW BUTTON
         function goToWallet(){
             document.querySelectorAll('button').forEach(b=>{ if(b.innerText.includes('Wallet')) b.click(); });
             window.scrollTo(0,0);
