@@ -1,12 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+body { background: #f1f5f9; color: #111; }
+header { background: #0f172a; color: #fff; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
+header h1 { font-size: 20px; }
+header span { background: #dc2626; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+.container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.card h3 { font-size: 13px; color: #64748b; margin-bottom: 8px; text-transform: uppercase; }
+.card p { font-size: 26px; font-weight: bold; }
+.card small { color: #16a34a; }
+.box { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px; }
+.box h2 { font-size: 17px; margin-bottom: 15px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 12px 8px; border-bottom: 1px solid #e2e8f0; }
+th { color: #64748b; font-size: 12px; text-transform: uppercase; }
+button { border: 0; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+.approve { background: #16a34a; color: #fff; }
+.reject { background: #fee2e2; color: #991b1b; }
+.view { background: #0f172a; color: #fff; }
+input, select { width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 10px; }
+.actions { display: flex; gap: 15px; flex-wrap: wrap; }
+.actions a { background: #fff; padding: 14px 18px; border-radius: 10px; text-decoration: none; color: #111; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+</style>
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
-    <!-- Add your admin dashboard content here -->
+
+<header>
+  <h1>Admin Dashboard</h1>
+  <span>ADMIN ONLY</span>
+</header>
+
+<div class="container">
+
+  <div class="cards">
+    <div class="card"><h3>Total Members</h3><p id="totalMembers">0</p><small>Active group members</small></div>
+    <div class="card"><h3>Total Savings</h3><p id="totalSavings">UGX 0</p><small>All members combined</small></div>
+    <div class="card"><h3>Pending Loans</h3><p id="pendingLoans">0</p><small>Waiting approval</small></div>
+    <div class="card"><h3>Pending Members</h3><p id="pendingMembers">0</p><small>Waiting approval</small></div>
+  </div>
+
+  <div class="actions">
+    <a href="/">← Back to Member Dashboard</a>
+    <a href="#" onclick="exportData()">⬇ Export Members</a>
+    <a href="#" onclick="location.reload()">↻ Refresh Data</a>
+  </div>
+  <br>
+
+  <div class="box">
+    <h2>Pending Member Approvals</h2>
+    <table>
+      <thead><tr><th>Name</th><th>Phone</th><th>Date Joined</th><th>Action</th></tr></thead>
+      <tbody id="pendingTable"><tr><td colspan="4">No pending members. Add a test member below to see it work.</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="box">
+    <h2>All Members</h2>
+    <table>
+      <thead><tr><th>Name</th><th>Phone</th><th>Savings</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="membersTable"></tbody>
+    </table>
+  </div>
+
+  <div class="box">
+    <h2>Add / Test Member (Admin Only)</h2>
+    <input id="newName" placeholder="Full Name e.g. John Kato">
+    <input id="newPhone" placeholder="Phone e.g. 0770000000">
+    <input id="newSavings" type="number" placeholder="Savings e.g. 50000">
+    <button class="view" style="width:100%; padding:12px;" onclick="addMember()">Add Member</button>
+  </div>
+
+</div>
+
+<script>
+let members = JSON.parse(localStorage.getItem('admin_members') || '[]');
+if(members.length === 0){
+  members = [
+    {name: "Test Member 1", phone: "0771111111", savings: 150000, status: "Approved"},
+    {name: "Test Member 2", phone: "0772222222", savings: 80000, status: "Pending"}
+  ];
+  save();
+}
+function save(){ localStorage.setItem('admin_members', JSON.stringify(members)); render(); }
+function render(){
+  let approved = members.filter(m => m.status === 'Approved');
+  let pending = members.filter(m => m.status === 'Pending');
+  document.getElementById('totalMembers').innerText = members.length;
+  document.getElementById('totalSavings').innerText = 'UGX ' + approved.reduce((s,m)=>s+Number(m.savings||0),0).toLocaleString();
+  document.getElementById('pendingMembers').innerText = pending.length;
+  document.getElementById('pendingLoans').innerText = 0;
+
+  document.getElementById('pendingTable').innerHTML = pending.length ? pending.map((m,i)=>{
+    let idx = members.indexOf(m);
+    return `<tr><td>${m.name}</td><td>${m.phone}</td><td>Today</td><td><button class="approve" onclick="approveMember(${idx})">Approve</button> <button class="reject" onclick="removeMember(${idx})">Reject</button></td></tr>`;
+  }).join('') : '<tr><td colspan="4">No pending members.</td></tr>';
+
+  document.getElementById('membersTable').innerHTML = members.map((m,i)=>{
+    return `<tr><td>${m.name}</td><td>${m.phone}</td><td>UGX ${Number(m.savings||0).toLocaleString()}</td><td>${m.status}</td><td><button class="reject" onclick="removeMember(${i})">Remove</button></td></tr>`;
+  }).join('');
+}
+function addMember(){
+  let name = document.getElementById('newName').value.trim();
+  let phone = document.getElementById('newPhone').value.trim();
+  let savings = document.getElementById('newSavings').value || 0;
+  if(!name || !phone){ alert('Enter name and phone'); return; }
+  members.push({name, phone, savings: Number(savings), status: "Pending"});
+  save();
+  document.getElementById('newName').value=''; document.getElementById('newPhone').value=''; document.getElementById('newSavings').value='';
+  alert('Member added as Pending');
+}
+function approveMember(i){ members[i].status='Approved'; save(); }
+function removeMember(i){ if(confirm('Remove this member?')){ members.splice(i,1); save(); } }
+function exportData(){ alert(JSON.stringify(members, null, 2)); }
+render();
+</script>
+
 </body>
 </html>
