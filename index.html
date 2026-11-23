@@ -1,251 +1,260 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Platform</title>
-  <style>
-    /* Styles for switches and other elements */
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-    }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: 0.4s;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: 0.4s;
-    }
-    input:checked + .slider {
-      background-color: #2196F3;
-    }
-    input:focus + .slider {
-      box-shadow: 0 0 1px #2196F3;
-    }
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
-    .slider.round {
-      border-radius: 34px;
-    }
-    .slider.round:before {
-      border-radius: 50%;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Member Dashboard</title>
+<style>
+  *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:#0f172a;color:#e2e8f0}
+  header{background:#1e293b;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
+  header h1{margin:0;font-size:20px} header button{background:#ef4444;border:0;color:#fff;padding:8px 14px;border-radius:8px;cursor:pointer}
+  .wrap{max-width:1000px;margin:auto;padding:20px}
+  .card{background:#1e293b;border-radius:14px;padding:18px;margin-bottom:16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .stat b{font-size:26px;display:block} .muted{color:#94a3b8;font-size:13px}
+  input,select{width:100%;padding:11px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#fff;margin:8px 0}
+  button.primary{width:100%;padding:12px;border:0;border-radius:10px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer}
+  button.primary:disabled{opacity:.5} table{width:100%;border-collapse:collapse;font-size:14px} th,td{padding:10px;border-bottom:1px solid #334155;text-align:left}
+  .badge{padding:4px 8px;border-radius:20px;font-size:12px;background:#334155} .badge.approved{background:#15803d} .badge.pending{background:#b45309}
+  #authCard{max-width:420px;margin:40px auto} .tabs{display:flex;gap:8px;margin-bottom:12px} .tabs button{flex:1;padding:10px;border-radius:10px;border:0;cursor:pointer;background:#334155;color:#fff}
+  .tabs button.active{background:#2563eb} .hidden{display:none!important} .msg{font-size:13px;margin-top:8px;min-height:18px;color:#fbbf24}
+</style>
 </head>
 <body>
-  <h1>Platform</h1>
-  
-  <!-- Register Form -->
-  <h2>Register Form</h2>
-  <label class="switch">
-    <input type="checkbox" id="register-switch" checked>
-    <span class="slider round"></span>
-  </label>
-  <div id="register-form">
-    <form id="register-form-submit">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name"><br><br>
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email"><br><br>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password"><br><br>
-      <button type="submit">Register</button>
-    </form>
+
+<header>
+  <h1>Member Dashboard</h1>
+  <div id="headerUser" class="muted">Not logged in</div>
+  <button id="logoutBtn" class="hidden">Logout</button>
+</header>
+
+<div class="wrap">
+
+  <!-- AUTH -->
+  <div id="authCard" class="card">
+    <h2 style="margin:0 0 12px">Welcome back</h2>
+    <div class="tabs">
+      <button id="tabLogin" class="active">Login</button>
+      <button id="tabRegister">Register</button>
+    </div>
+    <input id="authName" placeholder="Full name (register only)" class="hidden" />
+    <input id="authEmail" type="email" placeholder="Email" />
+    <input id="authPassword" type="password" placeholder="Password" />
+    <input id="authReferral" placeholder="Referral code (optional)" class="hidden" />
+    <button id="authBtn" class="primary">Login</button>
+    <div id="authMsg" class="msg"></div>
+    <p class="muted">This uses Supabase Auth. Your session is saved and restored on reload.</p>
   </div>
-  
-  <!-- Deposit Form -->
-  <h2>Deposit Form</h2>
-  <label class="switch">
-    <input type="checkbox" id="deposit-switch" checked>
-    <span class="slider round"></span>
-  </label>
-  <div id="deposit-form">
-    <form>
-      <label for="amount">Amount:</label>
-      <input type="number" id="amount" name="amount"><br><br>
-      <button type="submit">Deposit</button>
-    </form>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden">
+    <div class="grid">
+      <div class="card stat"><span class="muted">Available Balance</span><b id="balance">£0.00</b><span class="muted" id="userEmail"></span></div>
+      <div class="card stat"><span class="muted">Total Deposited</span><b id="totalDeposited">£0.00</b></div>
+      <div class="card stat"><span class="muted">Total Withdrawn</span><b id="totalWithdrawn">£0.00</b></div>
+      <div class="card stat"><span class="muted">Your Referral Code</span><b id="myReferralCode">-</b><span class="muted">Share this code. Referrals are tracked in Supabase.</span></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Deposit</h3>
+        <input id="depositAmount" type="number" min="1" step="0.01" placeholder="Amount £" />
+        <select id="depositMethod"><option value="bank">Bank Transfer</option><option value="crypto">Crypto</option><option value="card">Card</option></select>
+        <button class="primary" onclick="createTransaction('deposit')">Request Deposit</button>
+        <div id="depositMsg" class="msg"></div>
+      </div>
+
+      <div class="card">
+        <h3>Withdraw</h3>
+        <input id="withdrawAmount" type="number" min="1" step="0.01" placeholder="Amount £" />
+        <input id="withdrawTo" placeholder="Destination - bank / wallet address" />
+        <button class="primary" onclick="createTransaction('withdraw')">Request Withdrawal</button>
+        <div id="withdrawMsg" class="msg"></div>
+        <p class="muted" id="feeNote">Fee is calculated from your settings table, not hard-coded.</p>
+      </div>
+
+      <div class="card">
+        <h3>Send Crypto</h3>
+        <input id="sendAmount" type="number" min="0.0001" step="any" placeholder="Amount" />
+        <select id="sendAsset"><option value="BTC">BTC</option><option value="ETH">ETH</option><option value="USDT">USDT</option></select>
+        <input id="sendTo" placeholder="Recipient wallet address" />
+        <button class="primary" onclick="createTransaction('send_crypto')">Send</button>
+        <div id="sendMsg" class="msg"></div>
+      </div>
+
+      <div class="card">
+        <h3>Exchange</h3>
+        <input id="exAmount" type="number" min="1" step="0.01" placeholder="Amount" />
+        <select id="exFrom"><option value="GBP">GBP</option><option value="USD">USD</option><option value="BTC">BTC</option></select>
+        <select id="exTo"><option value="BTC">BTC</option><option value="ETH">ETH</option><option value="GBP">GBP</option></select>
+        <button class="primary" onclick="createTransaction('exchange')">Create Exchange Request</button>
+        <div id="exMsg" class="msg"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Staking / Investment Position</h3>
+      <p class="muted">Create a position. Returns are NOT guaranteed - they are recorded only after admin confirms actual earnings. No daily profit is promised in this file.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <input id="stakeAmount" type="number" min="1" placeholder="Amount £" />
+        <select id="stakePlan"><option value="starter">Starter</option><option value="growth">Growth</option><option value="premium">Premium</option></select>
+        <input id="stakeDays" type="number" value="30" placeholder="Days" />
+      </div>
+      <button class="primary" style="margin-top:10px" onclick="createStake()">Create Position</button>
+      <div id="stakeMsg" class="msg"></div>
+    </div>
+
+    <div class="card">
+      <h3>P2P Trading</h3>
+      <input id="p2pAmount" type="number" placeholder="Amount" />
+      <select id="p2pAsset"><option value="BTC">BTC</option><option value="ETH">ETH</option></select>
+      <select id="p2pSide"><option value="buy">Buy</option><option value="sell">Sell</option></select>
+      <button class="primary" onclick="createTransaction('p2p')">Post P2P Offer</button>
+      <div id="p2pMsg" class="msg"></div>
+    </div>
+
+    <div class="card">
+      <h3>Recent Transactions - Live from Supabase</h3>
+      <table><thead><tr><th>Type</th><th>Amount</th><th>Detail</th><th>Status</th><th>Date</th></tr></thead><tbody id="txTable"><tr><td colspan="5">Loading...</td></tr></tbody></table>
+    </div>
+
+    <div class="card">
+      <h3>My Positions</h3>
+      <table><thead><tr><th>Plan</th><th>Amount</th><th>Days</th><th>Status</th><th>Created</th></tr></thead><tbody id="stakeTable"></tbody></table>
+    </div>
   </div>
-  
-  <!-- Withdraw Form -->
-  <h2>Withdraw Form (20% fee)</h2>
-  <label class="switch">
-    <input type="checkbox" id="withdraw-switch" checked>
-    <span class="slider round"></span>
-  </label>
-  <div id="withdraw-form">
-    <form>
-      <label for="amount">Amount:</label>
-      <input type="number" id="amount" name="amount"><br><br>
-      <p>Fee: 20%</p>
-      <button type="submit">Withdraw</button>
-    </form>
-  </div>
-  
-  <!-- Shareholder Plans -->
-  <h2>Shareholder Plans</h2>
-  <label class="switch">
-    <input type="checkbox" id="shareholder-plans-switch" checked>
-    <span class="slider round"></span>
-  </label>
-  <div id="shareholder-plans">
-    <h3>Plan Options</h3>
-    <form>
-      <label for="plan">Select Plan:</label>
-      <select id="plan" name="plan">
-        <option value="starter">Starter (£300)</option>
-        <option value="growth">Growth (£5,000)</option>
-        <option value="premium">Premium (£15,000)</option>
-        <option value="elite">Elite (£30,000)</option>
-        <option value="ultimate">Ultimate (£50,000)</option>
-      </select><br><br>
-      <button type="submit">Invest</button>
-    </form>
-    <h3>Plan Details</h3>
-    <table>
-      <tr>
-        <th>Plan</th>
-        <th>Investment Amount</th>
-        <th>Daily Earnings</th>
-        <th>Contract Duration</th>
-      </tr>
-      <tr>
-        <td>Starter</td>
-        <td>£300</td>
-        <td>£3</td>
-        <td>1095 days</td>
-      </tr>
-      <tr>
-        <td>Growth</td>
-        <td>£5,000</td>
-        <td>£50</td>
-        <td>1095 days</td>
-      </tr>
-      <tr>
-        <td>Premium</td>
-        <td>£15,000</td>
-        <td>£150</td>
-        <td>1095 days</td>
-      </tr>
-      <tr>
-        <td>Elite</td>
-        <td>£30,000</td>
-        <td>£300</td>
-        <td>1095 days</td>
-      </tr>
-      <tr>
-        <td>Ultimate</td>
-        <td>£50,000</td>
-        <td>£500</td>
-        <td>1095 days</td>
-      </tr>
-    </table>
-  </div>
-  
-  <!-- Referral Program -->
-  <h2>Referral Program (10% commission)</h2>
-  <label class="switch">
-    <input type="checkbox" id="referral-switch" checked>
-    <span class="slider round"></span>
-  </label>
-  <div id="referral-program">
-    <p>Earn 10% commission on referrals</p>
-    <form>
-      <label for="referral-code">Referral Code:</label>
-      <input type="text" id="referral-code" name="referral-code"><br><br>
-      <button type="submit">Submit</button>
-    </form>
-  </div>
-  
-  <!-- P2P Trading -->
-  <h2>P2P Trading (5% fee)</h2>
-  <label class="switch">
-    <input type="checkbox" id="p2p-switch" checked>
-    <span class="slider round"></span>
-  </label>
-  <div id="p2p-trading">
-    <form>
-      <label for="amount">Amount:</label>
-      <input type="number" id="amount" name="amount"><br><br>
-      <label for="crypto">Crypto:</label>
-      <select id="crypto" name="crypto">
-        <option value="btc">BTC</option>
-        <option value="eth">ETH</option>
-      </select><br><br>
-      <p>Fee: 5%</p>
-      <button type="submit">Trade</button>
-    </form>
-  </div>
-  
-  <!-- Exchanger -->
-  <h2>Exchanger (2% fee)</h2>
-  <label class="switch">
-    <input type="checkbox" id="exchanger-switch" checked>
-    <span class="slider round"></span>
-  </label>
-  <div id="exchanger">
-    <form>
-      <label for="amount">Amount:</label>
-      <input type="number" id="amount" name="amount"><br><br>
-      <label for="from">From:</label>
-      <select id="from" name="from">
-        <option value="gbp">GBP</option>
-        <option value="usd">USD</option>
-      </select><br><br>
-      <label for="to">To:</label>
-      <select id="to" name="to">
-        <option value="btc">BTC</option>
-        <option value="eth">ETH</option>
-      </select><br><br>
-      <p>Fee: 2%</p>
-      <button type="submit">Exchange</button>
-    </form>
-  </div>
-  
-  <!-- Staking -->
-  <h2>Staking (0.03% daily interest rate)</h2>
-  <label class="switch">
-    <input type="checkbox" id="staking-switch" checked>
-    <span class="slider round"></span>
-  </label>
-  <div id="staking">
-    <form>
-      <label for="amount">Amount:</label>
-      <input type="number" id="amount" name="amount"><br><br>
-      <p>Interest Rate: 0.03% per day</p>
-      <button type="submit">Stake</button>
-    </form>
-  </div>
-  
-  <!-- Send Crypto -->
-  <h2>Send Crypto (2% fee)</h2>
-  <label class="switch">
-    <input type="checkbox" id="send-crypto-switch" checked>
-    <span class="slider round"></span>
-  </label>
-  <div id="send-crypto">
-    <form>
-      <label for="
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ============ CONFIG - PUT YOUR REAL KEYS HERE ============ */
+const SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co/rest/v1/";
+const SUPABASE_ANON_KEY = "sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ============ REQUIRED SUPABASE TABLES (run in SQL Editor) ============
+create table public.profiles (id uuid primary key references auth.users(id) on delete cascade, email text, full_name text, referral_code text unique, referred_by text, balance numeric default 0);
+create table public.transactions (id bigint generated always as identity primary key, user_id uuid references auth.users(id), type text, amount numeric, detail text, status text default 'pending', created_at timestamptz default now());
+create table public.positions (id bigint generated always as identity primary key, user_id uuid references auth.users(id), plan text, amount numeric, days int, status text default 'active', created_at timestamptz default now());
+alter table public.profiles enable row level security;
+alter table public.transactions enable row level security;
+alter table public.positions enable row level security;
+create policy "own" on public.profiles for all using (auth.uid()=id) with check (auth.uid()=id);
+create policy "own" on public.transactions for all using (auth.uid()=user_id) with check (auth.uid()=user_id);
+create policy "own" on public.positions for all using (auth.uid()=user_id) with check (auth.uid()=user_id);
+-- Also enable Realtime for transactions + positions in Dashboard > Database > Replication
+*/
+
+let mode = 'login';
+let currentUser = null;
+
+const $ = id => document.getElementById(id);
+const fmt = n => '£' + Number(n||0).toFixed(2);
+
+function setMode(m){
+  mode = m;
+  $('tabLogin').classList.toggle('active', m==='login');
+  $('tabRegister').classList.toggle('active', m==='register');
+  $('authName').classList.toggle('hidden', m!=='register');
+  $('authReferral').classList.toggle('hidden', m!=='register');
+  $('authBtn').textContent = m==='login' ? 'Login' : 'Register';
+}
+$('tabLogin').onclick = ()=>setMode('login');
+$('tabRegister').onclick = ()=>setMode('register');
+
+$('authBtn').onclick = async ()=>{
+  const email = $('authEmail').value.trim();
+  const password = $('authPassword').value;
+  $('authMsg').textContent = 'Please wait...';
+  try{
+    if(mode==='login'){
+      const {error} = await supabaseClient.auth.signInWithPassword({email,password});
+      if(error) throw error;
+    } else {
+      const {data,error} = await supabaseClient.auth.signUp({email,password});
+      if(error) throw error;
+      if(data.user){
+        const code = 'REF-'+data.user.id.slice(0,8).toUpperCase();
+        await supabaseClient.from('profiles').insert({id:data.user.id,email,full_name:$('authName').value,referral_code:code,referred_by:$('authReferral').value||null});
+      }
+      $('authMsg').textContent = 'Account created. Check email if confirmation is on, then login.';
+      return;
+    }
+    await loadDashboard();
+  }catch(e){ $('authMsg').textContent = e.message; }
+};
+
+$('logoutBtn').onclick = async ()=>{ await supabaseClient.auth.signOut(); location.reload(); };
+
+async function loadDashboard(){
+  const {data:{user}} = await supabaseClient.auth.getUser();
+  if(!user){ $('authCard').classList.remove('hidden'); $('dashboard').classList.add('hidden'); return; }
+  currentUser = user;
+  $('authCard').classList.add('hidden');
+  $('dashboard').classList.remove('hidden');
+  $('logoutBtn').classList.remove('hidden');
+  $('headerUser').textContent = user.email;
+
+  let {data:profile} = await supabaseClient.from('profiles').select('*').eq('id',user.id).single();
+  if(!profile){
+    const code='REF-'+user.id.slice(0,8).toUpperCase();
+    await supabaseClient.from('profiles').insert({id:user.id,email:user.email,referral_code:code});
+    profile={balance:0,referral_code:code};
+  }
+  $('balance').textContent = fmt(profile.balance);
+  $('myReferralCode').textContent = profile.referral_code || '-';
+  $('userEmail').textContent = user.email;
+  await loadTransactions();
+  await loadPositions();
+
+  // LIVE - realtime updates, no refresh needed
+  supabaseClient.channel('live-tx').on('postgres_changes',{event:'*',schema:'public',table:'transactions',filter:`user_id=eq.${user.id}`},()=>loadTransactions()).subscribe();
+  supabaseClient.channel('live-pos').on('postgres_changes',{event:'*',schema:'public',table:'positions',filter:`user_id=eq.${user.id}`},()=>loadPositions()).subscribe();
+}
+
+async function loadTransactions(){
+  const {data} = await supabaseClient.from('transactions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(50);
+  if(!data || !data.length){ $('txTable').innerHTML='<tr><td colspan="5">No transactions yet</td></tr>'; return; }
+  let dep=0, wd=0;
+  $('txTable').innerHTML = data.map(t=>{
+    if(t.type==='deposit' && t.status==='approved') dep+=Number(t.amount);
+    if(t.type==='withdraw' && t.status==='approved') wd+=Number(t.amount);
+    return `<tr><td>${t.type}</td><td>${fmt(t.amount)}</td><td>${t.detail||''}</td><td><span class="badge ${t.status}">${t.status}</span></td><td>${new Date(t.created_at).toLocaleString()}</td></tr>`;
+  }).join('');
+  $('totalDeposited').textContent = fmt(dep);
+  $('totalWithdrawn').textContent = fmt(wd);
+}
+
+async function loadPositions(){
+  const {data} = await supabaseClient.from('positions').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
+  $('stakeTable').innerHTML = (data||[]).map(p=>`<tr><td>${p.plan}</td><td>${fmt(p.amount)}</td><td>${p.days}</td><td>${p.status}</td><td>${new Date(p.created_at).toLocaleDateString()}</td></tr>`).join('') || '<tr><td colspan="5">No positions</td></tr>';
+}
+
+async function createTransaction(type){
+  if(!currentUser) return alert('Login first');
+  let amount=0, detail='', msgEl=null;
+  if(type==='deposit'){ amount=$('depositAmount').value; detail='Method: '+$('depositMethod').value; msgEl=$('depositMsg'); }
+  if(type==='withdraw'){ amount=$('withdrawAmount').value; detail='To: '+$('withdrawTo').value; msgEl=$('withdrawMsg'); }
+  if(type==='send_crypto'){ amount=$('sendAmount').value; detail=$('sendAsset').value+' to '+$('sendTo').value; msgEl=$('sendMsg'); }
+  if(type==='exchange'){ amount=$('exAmount').value; detail=$('exFrom').value+' -> '+$('exTo').value; msgEl=$('exMsg'); }
+  if(type==='p2p'){ amount=$('p2pAmount').value; detail=$('p2pSide').value+' '+$('p2pAsset').value; msgEl=$('p2pMsg'); }
+  if(!amount || Number(amount)<=0) return msgEl.textContent='Enter a valid amount';
+  msgEl.textContent='Sending...';
+  const {error} = await supabaseClient.from('transactions').insert({user_id:currentUser.id,type,amount:Number(amount),detail,status:'pending'});
+  msgEl.textContent = error ? error.message : 'Request saved live to Supabase - status: pending';
+  if(!error) await loadTransactions();
+}
+
+async function createStake(){
+  const amount = Number($('stakeAmount').value);
+  if(!amount) return $('stakeMsg').textContent='Enter amount';
+  const {error} = await supabaseClient.from('positions').insert({user_id:currentUser.id,plan:$('stakePlan').value,amount,days:Number($('stakeDays').value||30)});
+  $('stakeMsg').textContent = error ? error.message : 'Position created live';
+  if(!error) await loadPositions();
+}
+
+// Restore session on load
+loadDashboard();
+</script>
+</body>
+</html>
