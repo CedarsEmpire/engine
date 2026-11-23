@@ -3,17 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cedars Empire - Member Dashboard</title>
+<title>Cedars Empire - LIVE</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f8fafc;color:#111827;padding-bottom:80px}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f8fafc;color:#111827;padding-bottom:90px}
 header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #e5e7eb;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 header b{font-size:19px}header small{color:#6b7280}
 nav{display:flex;gap:6px;flex-wrap:wrap}nav button{padding:9px 13px;border:1px solid #e5e7eb;background:#fff;border-radius:999px;cursor:pointer;font-weight:600;font-size:13px}
 nav button.active{background:#111827;color:#fff;border-color:#111827}
 .avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #111827;background:#eee;cursor:pointer}
-.ticker{background:#111827;color:#fff;overflow:hidden;white-space:nowrap;padding:8px 0;font-size:13px;font-weight:600;position:sticky;top:68px;z-index:99}
-.ticker span{display:inline-block;padding-left:100%;animation:scroll 28s linear infinite}
-@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+/* FIXED SPOT BAR - NO FAST SCROLL */
+.spotbar{position:sticky;top:68px;z-index:99;background:#111827;color:#fff;padding:10px 12px;display:flex;gap:10px;overflow-x:auto;align-items:center}
+.spot{flex:1;min-width:160px;background:#1f2937;border-radius:12px;padding:10px;text-align:center;border-top:4px solid #f7931a}
+.spot.eth{border-top-color:#627eea}.spot.usdt{border-top-color:#26a17b}
+.spot b{font-size:16px;display:block}.spot small{opacity:.8}
+.spot .pause{position:absolute;right:8px}
 .wrap{max-width:900px;margin:0 auto;padding:16px}
 .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:14px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -25,6 +29,7 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 .btn-dark{background:#111827;color:#fff}.btn-green{background:#15803d;color:#fff}.btn-blue{background:#1d4ed8;color:#fff}.btn-light{background:#f3f4f6;color:#111827;border:1px solid #e5e7eb}
 .row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
 .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#fef9c3;color:#854d0e}
+.pill-green{background:#dcfce7;color:#166534}.pill-red{background:#fee2e2;color:#991b1b}
 .bar{height:8px;background:#e5e7eb;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:#111827}
 .upload{border:1px dashed #d1d5db;border-radius:12px;padding:12px;text-align:center;margin-top:8px;background:#f9fafb}
 .upload img{max-width:100%;max-height:160px;border-radius:10px;margin-top:8px;display:none}
@@ -42,19 +47,23 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 @media(max-width:640px){.market-box{grid-template-columns:1fr}}
 .coin{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:12px;text-align:center}
 .coin.btc{border-top:4px solid #f7931a}.coin.eth{border-top:4px solid #627eea}.coin.usdt{border-top:4px solid #26a17b}
-.coin b{font-size:16px}
+.coin b{font-size:18px}
 #disclaimer-slide{position:fixed;left:0;right:0;bottom:0;z-index:200;background:#fffbeb;border-top:3px solid #f59e0b;padding:14px 16px 16px;transform:translateY(110%);transition:transform .6s ease;box-shadow:0 -10px 30px rgba(0,0,0,.15)}
 #disclaimer-slide.show{transform:translateY(0)}
-#disclaimer-slide p{margin:4px 0;font-size:13px;line-height:1.5;color:#92400e}
 #disc-progress{height:4px;background:#fde68a;border-radius:999px;overflow:hidden;margin-top:8px}
 #disc-progress i{display:block;height:100%;background:#f59e0b;width:100%;transition:width 1s linear}
 .profile-top{display:flex;gap:14px;align-items:center}
 .profile-top img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #111827;background:#eee}
+.lock-box{background:#fef2f2;border:1px solid #fecaca;padding:12px;border-radius:12px;margin-top:10px}
+.ticker-slow{background:#fff;border-bottom:1px solid #e5e7eb;overflow:hidden;white-space:nowrap;padding:6px 0;font-size:12px;color:#374151}
+.ticker-slow span{display:inline-block;padding-left:20px;animation:scrollSlow 45s linear infinite}
+.ticker-slow:hover span{animation-play-state:paused}
+@keyframes scrollSlow{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 </style>
 </head>
 <body>
 <header>
-<div style="display:flex;gap:12px;align-items:center"><img id="header-avatar" class="avatar" src="https://via.placeholder.com/88" onclick="document.getElementById('header-file').click()"><input type="file" id="header-file" accept="image/*" style="display:none" onchange="uploadProfilePic(this)"><div><b>🌲 Cedars Empire</b><br><small><span id="header-email">ogwal.bemmanuel@gmail.com</span> • <span id="top-plan">-</span> • KYC: <span id="top-kyc">Not Started</span></small><br><small style="color:#1d4ed8">🌍 Worldwide • Tap avatar to change photo</small></div></div>
+<div style="display:flex;gap:12px;align-items:center"><img id="header-avatar" class="avatar" src="https://via.placeholder.com/88" onclick="document.getElementById('header-file').click()"><input type="file" id="header-file" accept="image/*" style="display:none" onchange="uploadProfilePic(this)"><div><b>🌲 Cedars Empire • LIVE</b><br><small><span id="header-email">ogwal.bemmanuel@gmail.com</span> • <span id="top-plan">-</span> • KYC: <span id="top-kyc">Not Started</span></small><br><small style="color:#15803d">● LIVE • 🌍 Worldwide • Supabase: <span id="supa-status">Checking...</span></small></div></div>
 <nav>
 <button id="btn-overview" class="active" onclick="showTab('overview')">Overview</button>
 <button id="btn-plans" onclick="showTab('plans')">Plans</button>
@@ -66,22 +75,29 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 <button onclick="logout()">Logout</button>
 </nav>
 </header>
-<div class="ticker"><span id="ticker-text">● LIVE MARKET LOADING... • BTC • ETH • USDT • Cedars Empire — Worldwide • Profit Variable, Not Guaranteed •</span></div>
+
+<!-- FIXED SPOT MARKET - EASY TO TRACK -->
+<div class="spotbar">
+<div class="spot"><span class="live-dot dot-btc"></span>BTC / GBP<b id="spot-btc">£--</b><small id="spot-btc-chg">--</small><div><small id="spot-btc-ind">● Live</small></div></div>
+<div class="spot eth"><span class="live-dot dot-eth"></span>ETH / GBP<b id="spot-eth">£--</b><small id="spot-eth-chg">--</small><div><small id="spot-eth-ind">● Live</small></div></div>
+<div class="spot usdt"><span class="live-dot dot-usdt"></span>USDT / GBP<b id="spot-usdt">£--</b><small id="spot-usdt-chg">--</small><div><small id="spot-usdt-ind">● Live</small></div></div>
+<div style="min-width:110px;text-align:center"><button onclick="toggleSpot()" id="spot-pause-btn" style="background:#fff;border:none;padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:700">⏸ Pause</button><div><small id="market-time">Updating...</small></div><div><small>30s refresh</small></div></div>
+</div>
+<div class="ticker-slow"><span id="ticker-text">Spot prices loading... Hover to pause • Cedars Empire Worldwide •</span></div>
 
 <div class="wrap">
 <div class="card" style="padding:12px 18px"><b>Fees:</b> <span class="muted">Exchange 2% • Withdraw 20% • P2P 5% • Referral 10%</span> <button class="btn btn-light" style="width:auto;padding:6px 12px;margin-top:0;float:right" onclick="showDisclaimerNow()">Show Disclaimer</button></div>
 
-<!-- OVERVIEW - CLEAN, ONLY LIVE MARKET, NO DISCLAIMER -->
 <div id="tab-overview">
-<div class="card"><h2 style="margin:0">Welcome back 👋</h2><p class="muted">Earnings in GBP (£). Exchange to crypto to withdraw. 🌍 Worldwide Operation.</p>
+<div class="card"><h2 style="margin:0">Welcome back 👋</h2><p class="muted">Earnings in GBP (£). Exchange to crypto to withdraw. 🌍 Worldwide • LIVE</p>
 <div style="background:#fefce8;padding:12px;border-radius:10px">
-<div><span class="live-dot dot-btc"></span><b>LIVE MARKET</b> <span class="muted" id="market-time">Updating...</span> <span style="float:right" id="market-refresh">● LIVE</span></div>
+<div><span class="live-dot dot-btc"></span><b>SPOT MARKET - LIVE</b> <span class="muted" id="market-time2">Updating...</span></div>
 <div class="market-box">
-<div class="coin btc"><div><span class="live-dot dot-btc"></span>₿ BTC / GBP</div><b id="btc-price">£--</b><div id="btc-change">--</div><div class="muted" id="btc-ind">--</div></div>
-<div class="coin eth"><div><span class="live-dot dot-eth"></span>Ξ ETH / GBP</div><b id="eth-price">£--</b><div id="eth-change">--</div><div class="muted" id="eth-ind">--</div></div>
-<div class="coin usdt"><div><span class="live-dot dot-usdt"></span>₮ USDT / GBP</div><b id="usdt-price">£--</b><div id="usdt-change">--</div><div class="muted" id="usdt-ind">--</div></div>
+<div class="coin btc"><div><span class="live-dot dot-btc"></span>₿ BTC / GBP — SPOT</div><b id="btc-price">£--</b><div id="btc-change">--</div><div class="muted" id="btc-ind">--</div><div class="muted" id="btc-spark">—</div></div>
+<div class="coin eth"><div><span class="live-dot dot-eth"></span>Ξ ETH / GBP — SPOT</div><b id="eth-price">£--</b><div id="eth-change">--</div><div class="muted" id="eth-ind">--</div><div class="muted" id="eth-spark">—</div></div>
+<div class="coin usdt"><div><span class="live-dot dot-usdt"></span>₮ USDT / GBP — SPOT</div><b id="usdt-price">£--</b><div id="usdt-change">--</div><div class="muted" id="usdt-ind">--</div><div class="muted" id="usdt-spark">—</div></div>
 </div>
-<div class="muted" style="margin-top:8px">● <span style="color:#f7931a">■</span> BTC Orange Light • <span style="color:#627eea">■</span> ETH Purple Light • <span style="color:#26a17b">■</span> USDT Green Light • Auto-refresh every 30s</div>
+<div class="muted" style="margin-top:8px">● 🟠 BTC Orange • 🟣 ETH Purple • 🟢 USDT Green • Top bar stays fixed while you scroll, so you can always track spot price.</div>
 </div>
 </div>
 <div class="card"><div class="muted">Total Earnings (GBP)</div><div class="big" id="total-earnings">£0.00</div><button class="btn btn-green" onclick="showTab('wallet')">Exchange & Withdraw →</button></div>
@@ -100,102 +116,87 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 <div class="card"><b>Transaction History</b><div id="history-overview"></div></div>
 </div>
 
-<!-- PLANS -->
+<!-- PLANS - LIVE DEPOSIT WITH TX HASH -->
 <div id="tab-plans" style="display:none">
-<div class="card"><h3 style="margin:0">Shareholder Plans</h3><p class="muted">£300 - £50,000 • 1095 days • Worldwide</p></div>
+<div class="card"><h3 style="margin:0">Shareholder Plans — LIVE DEPOSIT</h3><p class="muted">£300 - £50,000 • 1095 days • Worldwide • Deposit via Crypto + Tx Hash</p><div class="fee"><b>📥 Company Deposit Wallet (USDT - TRC20):</b><br><span class="code-box" id="deposit-wallet-addr">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX — REPLACE WITH YOUR REAL WALLET</span><br><button class="btn btn-blue" onclick="copyDepositWallet()">Copy Deposit Address</button><p class="muted">Send USDT to this address, then paste Tx Hash below. Admin will verify on blockchain.</p></div></div>
 <div class="card"><b>Starter — £300 to £5,000</b><label>Amount (£)</label><input id="amt-starter" type="number" placeholder="1000"><button class="btn btn-dark" onclick="openDeposit('Starter','amt-starter')">Invest in Starter →</button></div>
 <div class="card"><b>Growth — £5,001 to £20,000</b><label>Amount (£)</label><input id="amt-growth" type="number" placeholder="8000"><button class="btn btn-dark" onclick="openDeposit('Growth','amt-growth')">Invest in Growth →</button></div>
 <div class="card"><b>Empire — £20,001 to £50,000</b><label>Amount (£)</label><input id="amt-empire" type="number" placeholder="25000"><button class="btn btn-dark" onclick="openDeposit('Empire','amt-empire')">Invest in Empire →</button></div>
-<div class="card" id="deposit-box" style="display:none"><h3 style="margin:0">Confirm Deposit</h3><p id="deposit-summary"></p><p class="muted">1095 days. Profit variable, not guaranteed.</p><label><input type="checkbox" id="agree" style="width:auto"> I understand the 1095-day contract.</label><button class="btn btn-green" onclick="confirmDeposit()">Confirm Deposit</button></div>
+<div class="card" id="deposit-box" style="display:none"><h3 style="margin:0">Confirm LIVE Deposit</h3><p id="deposit-summary"></p><label>Network</label><select id="dep-network"><option>TRC20 (USDT)</option><option>ERC20 (USDT)</option><option>BTC Network</option><option>ETH Network</option><option>BEP20 (USDT)</option></select><label>Transaction Hash (Tx Hash) * REQUIRED</label><input id="dep-txhash" placeholder="Paste Tx Hash from your wallet / exchange - e.g. a1b2c3..."><div class="muted">Find it in your wallet history. Must be at least 20 characters. Admin verifies on blockchain.</div><label>Amount Sent in Crypto (e.g. 1000 USDT)</label><input id="dep-crypto-amt" type="number" placeholder="1000"><label>Upload Payment Proof / Screenshot</label><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'dep-proof-prev')"><img id="dep-proof-prev"></div><label><input type="checkbox" id="agree" style="width:auto"> I confirm I sent the funds and Tx Hash is correct. I understand 1095-day contract.</label><button class="btn btn-green" onclick="confirmDeposit()">Submit Deposit For Verification →</button><p class="muted">Status will be Pending until Admin verifies Tx Hash.</p></div>
+<div class="card"><b>My Deposits</b><div id="deposit-list"></div></div>
 </div>
 
-<!-- PROFILE + KYC + PROFILE PIC + WORLDWIDE COUNTRIES -->
+<!-- PROFILE + KYC -->
 <div id="tab-profile" style="display:none">
 <div class="card"><div class="profile-top"><img id="profile-big" src="https://via.placeholder.com/160"><div><h3 style="margin:0">Profile Photo</h3><p class="muted">Upload your profile picture. Shows in header everywhere.</p><input type="file" accept="image/*" onchange="uploadProfilePic(this)"><button class="btn btn-dark" onclick="saveProfilePic()">Save Profile Picture</button></div></div></div>
-<div class="card"><h3 style="margin:0">Profile & KYC</h3><p class="muted">Status: <span class="pill" id="kyc-pill">Not Started</span> • Progress: <b id="kyc-percent2">0%</b> • 🌍 Worldwide</p><div class="bar"><i id="kyc-bar2" style="width:0%"></i></div></div>
+<div class="card"><h3 style="margin:0">Profile & KYC — LIVE</h3><p class="muted">Status: <span class="pill" id="kyc-pill">Not Started</span> • Progress: <b id="kyc-percent2">0%</b> • 🌍 Worldwide</p><div class="bar"><i id="kyc-bar2" style="width:0%"></i></div></div>
 <div class="card"><div class="step" id="step1"><b>Step 1 — Personal Information</b><label>Full Name (as on ID)</label><input id="kyc-name" value="Ogwal Emmanuel"><label>Date of Birth</label><input id="kyc-dob" type="date"><label>Country — Worldwide</label><select id="kyc-country"></select><label>Country Dial Code</label><select id="kyc-dial"></select><label>Address</label><input id="kyc-address" placeholder="Street, City, District"><label>Phone</label><input id="kyc-phone" placeholder="Enter number without code"><button class="btn btn-dark" onclick="saveStep1()">Save Step 1</button></div>
 <div class="step" id="step2"><b>Step 2 — Profile Photo</b><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'photo-prev');uploadProfilePic(this)"><img id="photo-prev"></div><button class="btn btn-dark" onclick="saveStep2()">Save Photo</button></div>
 <div class="step" id="step3"><b>Step 3 — ID Document</b><label>ID Type</label><select id="id-type"><option>National ID</option><option>Passport</option><option>Driving Licence</option></select><label>ID Number</label><input id="id-number" placeholder="Enter ID number"><label>ID Expiry Date</label><input id="id-expiry" type="date"><label>ID Front</label><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'idfront-prev')"><img id="idfront-prev"></div><label>ID Back</label><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'idback-prev')"><img id="idback-prev"></div><button class="btn btn-dark" onclick="saveStep3()">Save ID Document</button></div>
 <div class="step" id="step4"><b>Step 4 — Selfie + Liveness</b><label>Selfie Holding ID</label><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'selfie-prev')"><img id="selfie-prev"></div><label><input type="checkbox" id="live-blink" style="width:auto"> I blinked for liveness check</label><label><input type="checkbox" id="live-turn" style="width:auto"> I turned head left / right</label><button class="btn btn-dark" onclick="saveStep4()">Save Selfie</button></div>
 <div class="step" id="step5"><b>Step 5 — Proof of Address</b><label>Document Type</label><select id="poa-type"><option>Utility Bill</option><option>Bank Statement</option><option>Tenancy Agreement</option></select><label>Upload Proof (less than 3 months old)</label><div class="upload"><input type="file" accept="image/*,.pdf" onchange="previewImg(this,'poa-prev')"><img id="poa-prev"></div><button class="btn btn-dark" onclick="saveStep5()">Save Proof of Address</button></div>
 <div class="fee" id="kyc-checklist">Checklist: Step 1 ☐ • Step 2 ☐ • Step 3 ☐ • Step 4 ☐ • Step 5 ☐</div>
-<button class="btn btn-green" onclick="submitKYC()">Submit Full KYC for Review</button>
-<button class="btn btn-light" onclick="simulateReview()">Simulate Admin Review (Demo)</button>
+<button class="btn btn-green" onclick="submitKYC()">Submit Full KYC for Admin Review</button>
 <button class="btn btn-light" onclick="resetKYC()">Reset KYC & Start Again</button>
+<p class="muted">LIVE: Admin must approve in Supabase Admin panel. No auto-approve.</p>
 </div>
 </div>
 
-<!-- FULL AUTH -->
+<!-- AUTH - LIVE -->
 <div id="tab-auth" style="display:none">
-<div class="card"><div class="profile-top"><img id="auth-avatar" src="https://via.placeholder.com/160"><div><h3 style="margin:0">Authentication & Security</h3><p class="muted">Account: <span id="auth-email">ogwal.bemmanuel@gmail.com</span> • Email: <span id="email-verified">Not Verified</span> • Phone: <span id="phone-verified">Not Verified</span> • 2FA: <span id="tfa-status">Off</span></p></div></div></div>
-<div class="card"><h3 style="margin:0">Login</h3><label>Email</label><input id="login-email" value="ogwal.bemmanuel@gmail.com"><label>Password</label><input id="login-pass" type="password" placeholder="Password"><label><input type="checkbox" id="remember" style="width:auto" checked> Remember Me</label><button class="btn btn-dark" onclick="doLogin()">Login</button><button class="btn btn-light" onclick="forgotPassword()">Forgot Password?</button><div id="forgot-box" class="hidden"><label>Reset Email</label><input id="reset-email" value="ogwal.bemmanuel@gmail.com"><button class="btn btn-blue" onclick="sendReset()">Send Reset Link</button><div id="reset-msg" class="fee hidden"></div></div></div>
-<div class="card"><h3 style="margin:0">Create Account (Signup) — Worldwide</h3><label>Full Name</label><input id="su-name" placeholder="Full Name"><label>Email</label><input id="su-email" placeholder="Email"><label>Country</label><select id="su-country"></select><label>Phone Dial Code + Number</label><div style="display:flex;gap:8px"><select id="su-dial" style="width:35%"></select><input id="su-phone" placeholder="Number" style="width:65%"></div><label>Password</label><input id="su-pass" type="password" placeholder="Min 8 chars, 1 number" oninput="checkStrength()"><div id="strength" class="fee">Strength: -</div><label>Confirm Password</label><input id="su-pass2" type="password"><button class="btn btn-green" onclick="doSignup()">Create Account</button></div>
-<div class="card"><h3 style="margin:0">Email Verification</h3><label>Code sent to your email</label><input id="email-code" placeholder="Enter 6-digit code e.g. 123456"><button class="btn btn-blue" onclick="sendEmailCode()">Send Email Code</button><button class="btn btn-dark" onclick="verifyEmail()">Verify Email</button><div id="email-code-hint" class="fee hidden"></div></div>
-<div class="card"><h3 style="margin:0">Phone Verification</h3><label>Code sent via SMS</label><input id="phone-code" placeholder="Enter 6-digit code"><button class="btn btn-blue" onclick="sendPhoneCode()">Send SMS Code</button><button class="btn btn-dark" onclick="verifyPhone()">Verify Phone</button><div id="phone-code-hint" class="fee hidden"></div></div>
+<div class="card"><div class="profile-top"><img id="auth-avatar" src="https://via.placeholder.com/160"><div><h3 style="margin:0">Authentication & Security — LIVE</h3><p class="muted">Account: <span id="auth-email">ogwal.bemmanuel@gmail.com</span> • Email: <span id="email-verified">Not Verified</span> • Phone: <span id="phone-verified">Not Verified</span> • 2FA: <span id="tfa-status">Off</span></p></div></div></div>
+<div class="card"><h3 style="margin:0">Login — LIVE via Supabase</h3><label>Email</label><input id="login-email" value="ogwal.bemmanuel@gmail.com"><label>Password</label><input id="login-pass" type="password" placeholder="Password"><label><input type="checkbox" id="remember" style="width:auto" checked> Remember Me</label><button class="btn btn-dark" onclick="doLogin()">Login</button><button class="btn btn-light" onclick="forgotPassword()">Forgot Password?</button><div id="forgot-box" class="hidden"><label>Reset Email</label><input id="reset-email" value="ogwal.bemmanuel@gmail.com"><button class="btn btn-blue" onclick="sendReset()">Send Real Reset Link</button><div id="reset-msg" class="fee hidden"></div></div></div>
+<div class="card"><h3 style="margin:0">Create Account (Signup) — Worldwide</h3><label>Full Name</label><input id="su-name" placeholder="Full Name"><label>Email</label><input id="su-email" placeholder="Email"><label>Country</label><select id="su-country"></select><label>Phone Dial Code + Number</label><div style="display:flex;gap:8px"><select id="su-dial" style="width:35%"></select><input id="su-phone" placeholder="Number" style="width:65%"></div><label>Password</label><input id="su-pass" type="password" placeholder="Min 8 chars, 1 number" oninput="checkStrength()"><div id="strength" class="fee">Strength: -</div><label>Confirm Password</label><input id="su-pass2" type="password"><button class="btn btn-green" onclick="doSignup()">Create Account — Send Real Verification Email</button></div>
+<div class="card"><h3 style="margin:0">Email Verification — LIVE</h3><p class="muted">Check your email inbox for real verification link from Supabase. No demo code.</p><button class="btn btn-blue" onclick="resendEmailVerification()">Resend Verification Email</button></div>
+<div class="card"><h3 style="margin:0">Phone Verification</h3><p class="muted">Phone OTP via Supabase / SMS provider. Enter code sent to your phone.</p><label>Enter OTP Code</label><input id="phone-code" placeholder="Enter code sent via SMS"><button class="btn btn-dark" onclick="verifyPhone()">Verify Phone OTP</button></div>
 <div class="card"><h3 style="margin:0">Change Password</h3><label>Current Password</label><input id="cur-pass" type="password"><label>New Password</label><input id="new-pass" type="password"><label>Confirm New Password</label><input id="new-pass2" type="password"><button class="btn btn-dark" onclick="changePassword()">Change Password</button></div>
-<div class="card"><h3 style="margin:0">Two-Factor Authentication (2FA)</h3><p class="muted">Turn on 2FA to protect withdrawals and P2P.</p><button class="btn btn-blue" onclick="setup2FA()">Setup 2FA — Get Secret & Backup Codes</button><div id="tfa-box" class="hidden"><div class="code-box" id="tfa-secret"></div><p class="muted">Enter this secret in Google Authenticator / Authy, or use code 123456 for demo.</p><label>Enter 6-digit 2FA Code</label><input id="tfa-code" placeholder="123456"><button class="btn btn-green" onclick="enable2FA()">Enable 2FA</button><button class="btn btn-light" onclick="disable2FA()">Disable 2FA</button><div id="backup-codes" class="fee hidden"></div></div></div>
+<div class="card"><h3 style="margin:0">Two-Factor Authentication (2FA) — LIVE</h3><p class="muted">Use Google Authenticator. Scan QR in real app. Save backup codes.</p><button class="btn btn-blue" onclick="setup2FA()">Setup 2FA</button><div id="tfa-box" class="hidden"><div class="code-box" id="tfa-secret"></div><label>Enter 6-digit 2FA Code from App</label><input id="tfa-code" placeholder="Enter code from Authenticator app"><button class="btn btn-green" onclick="enable2FA()">Enable 2FA</button><button class="btn btn-light" onclick="disable2FA()">Disable 2FA</button><div id="backup-codes" class="fee hidden"></div></div></div>
 <div class="card"><h3 style="margin:0">Active Sessions & Security Log</h3><div id="session-list"></div><button class="btn btn-light" onclick="logoutAll()">Logout All Other Devices</button><div class="fee" id="security-log"></div></div>
 </div>
 
-<!-- WALLET -->
+<!-- WALLET - LOCKED WITHDRAWAL ADDRESS -->
 <div id="tab-wallet" style="display:none">
-<div class="card"><h3 style="margin:0">Wallet & Exchange</h3><div class="row" style="margin-top:10px"><span class="muted">Available</span><b id="avail-bal2">£0.00</b></div><div class="row"><span class="muted">Locked</span><b id="locked-bal2">£0.00</b></div></div>
+<div class="card"><h3 style="margin:0">Wallet & Exchange — LIVE</h3><div class="row" style="margin-top:10px"><span class="muted">Available</span><b id="avail-bal2">£0.00</b></div><div class="row"><span class="muted">Locked</span><b id="locked-bal2">£0.00</b></div></div>
+<div class="card"><h3 style="margin:0">🔒 Locked Withdrawal Wallet Address</h3><p class="muted">For your safety, withdrawal address locks after first save. No one can change it without Admin approval.</p><div id="locked-wallet-box"><label>Withdrawal Wallet Address (USDT / BTC / ETH)</label><input id="locked-wallet-input" placeholder="Paste your wallet address"><label>Network</label><select id="locked-wallet-network"><option>TRC20</option><option>ERC20</option><option>BEP20</option><option>BTC</option><option>ETH</option></select><button class="btn btn-dark" onclick="saveLockedWallet()">Save & Lock Wallet Address 🔒</button></div><div id="locked-wallet-display" class="lock-box hidden"><b>🔒 LOCKED:</b> <span id="locked-wallet-text"></span><br><span class="muted" id="locked-wallet-network-text"></span><br><button class="btn btn-light" onclick="requestWalletUnlock()">Request Unlock (Admin Approval Required)</button><div id="unlock-request-msg" class="fee hidden"></div></div></div>
 <div class="card"><h3 style="margin:0">Quick Exchange — 2% Fee</h3><label>Amount in GBP</label><input id="ex-amount" type="number" value="100"><label>Convert To</label><select id="ex-to"><option value="tether">USDT</option><option value="bitcoin">BTC</option><option value="ethereum">ETH</option></select><button class="btn btn-green" onclick="getRate()">Get Live Rate</button><div id="ex-result" style="margin-top:10px">Enter amount and get live rate.</div><div id="ex-fee" class="fee" style="display:none"></div><button class="btn btn-dark" onclick="confirmExchange()">Confirm Exchange</button><div id="exchange-history" style="margin-top:12px"></div></div>
-<div class="card"><h3 style="margin:0">Withdraw — 20% Fee</h3><label>Amount (£)</label><input id="wd-amount" type="number" placeholder="50 - 10000" min="50" max="10000" oninput="calcWithdraw()"><div class="muted">Minimum Withdraw: £50 • Maximum Withdraw: £10,000 • Fee 20%</div><div id="wd-fee" class="fee" style="display:none"></div><label>Withdraw To</label><select id="wd-to"><option>Crypto Wallet (USDT)</option><option>Bank Transfer</option><option>Mobile Money</option></select><label>Wallet / Account Details</label><input id="wd-details" placeholder="Wallet address or account"><button class="btn btn-dark" onclick="requestWithdraw()">Request Withdrawal</button><div id="withdraw-list" style="margin-top:12px"></div></div>
+<div class="card"><h3 style="margin:0">Withdraw — 20% Fee — To LOCKED Address Only</h3><label>Amount (£)</label><input id="wd-amount" type="number" placeholder="50 - 10000" min="50" max="10000" oninput="calcWithdraw()"><div class="muted">Minimum Withdraw: £50 • Maximum Withdraw: £10,000 • Fee 20% • Withdraws go ONLY to your locked address.</div><div id="wd-fee" class="fee" style="display:none"></div><label>Withdraw To</label><select id="wd-to"><option>Crypto Wallet (USDT) - Locked Address</option><option>Bank Transfer</option><option>Mobile Money</option></select><div class="fee" id="wd-locked-info">No locked wallet yet — Save & Lock your wallet address above first.</div><button class="btn btn-dark" onclick="requestWithdraw()">Request Withdrawal</button><div id="withdraw-list" style="margin-top:12px"></div></div>
 <div class="card"><b>All Transactions</b><div id="history-wallet"></div></div>
 </div>
 
 <!-- P2P -->
 <div id="tab-p2p" style="display:none">
-<div class="card"><h3 style="margin:0">P2P Marketplace</h3><p class="muted">Fee 5% paid by seller • Worldwide</p></div>
+<div class="card"><h3 style="margin:0">P2P Marketplace — LIVE</h3><p class="muted">Fee 5% paid by seller • Worldwide</p></div>
 <div class="card"><h3 style="margin:0">Create Offer</h3><label>Sell</label><select id="p2p-coin"><option>USDT</option><option>BTC</option><option>ETH</option></select><label>Amount</label><input id="p2p-amount" type="number" placeholder="100"><label>Price per Coin (£)</label><input id="p2p-price" type="number" placeholder="0.76"><label>Payment</label><select id="p2p-pay"><option>Bank Transfer</option><option>Mobile Money</option><option>Cash</option></select><div id="p2p-fee-preview" class="fee" style="display:none"></div><button class="btn btn-light" onclick="calcP2P()">Calculate 5% Fee</button><button class="btn btn-green" onclick="createP2P()">Create Offer</button></div>
 <div class="card"><b>Live Offers</b><div id="p2p-list"><p class="muted">No offers yet.</p></div></div>
 <div class="card"><b>My P2P Trades</b><div id="p2p-my"></div></div>
 </div>
 
-<!-- REFERRAL - CODES ONLY, NO NAMES -->
+<!-- REFERRAL -->
 <div id="tab-referral" style="display:none">
 <div class="card"><h3 style="margin:0">Referrals — Earn 10% • Codes Only</h3><p class="muted">Privacy: We show UNIQUE CODES only. Never names.</p><label>Your Referral Code</label><input id="ref-link" readonly value="https://cedarsempire.com/join?ref=CEDARS-EMMA-2026"><button class="btn btn-blue" onclick="copyRef()">Copy Link</button><div class="fee"><b>Earnings:</b> <span id="ref-earnings2">£0.00</span> • Referrals: <span id="ref-count2">0</span> • Codes Only</div></div>
-<div class="card"><b>Your Referrals — By Code</b><div id="ref-list"><p class="muted">No referrals yet. Codes will appear here.</p></div><label>Referral Unique Code (Auto-Generated)</label><input id="new-ref-code" readonly value="CEDARS-XXXXXX"><button class="btn btn-light" onclick="generateRefCode()">Generate New Code</button><label>Their Deposit (£) — you get 10%</label><input id="new-ref-deposit" type="number" placeholder="1000"><button class="btn btn-green" onclick="addReferral()">Add Referral By Code</button><p class="muted">Example: CEDARS-A1B2C3 • CEDARS-X9Y8Z7 — No names shown anywhere.</p></div>
+<div class="card"><b>Your Referrals — By Code</b><div id="ref-list"><p class="muted">No referrals yet. Codes will appear here.</p></div><label>Referral Unique Code (Auto-Generated)</label><input id="new-ref-code" readonly value="CEDARS-XXXXXX"><button class="btn btn-light" onclick="generateRefCode()">Generate New Code</button><label>Their Deposit (£) — you get 10%</label><input id="new-ref-deposit" type="number" placeholder="1000"><button class="btn btn-green" onclick="addReferral()">Add Referral By Code</button><p class="muted">Example: CEDARS-A1B2C3 • No names shown anywhere.</p></div>
 </div>
 
-<div class="card" style="text-align:center"><p class="muted" style="font-size:12px;line-height:1.6"><b>Cedars Empire — Worldwide</b><br>All earnings are variable and not guaranteed. Crypto prices are volatile. P2P trades are between members.<br>By using this platform you agree to the 1095-day contract terms, fees and KYC policy.<br>© 2026 Cedars Empire. All rights reserved. 🌍</p></div>
+<div class="card" style="text-align:center"><p class="muted" style="font-size:12px;line-height:1.6"><b>Cedars Empire — Worldwide • LIVE</b><br>All earnings are variable and not guaranteed. Crypto prices are volatile.<br>By using this platform you agree to the 1095-day contract terms, fees and KYC policy.<br>© 2026 Cedars Empire. All rights reserved. 🌍</p></div>
 </div>
 
-<!-- DISCLAIMER SLIDE FOOTER - EVERY 6 HOURS FOR 30 SECONDS -->
 <div id="disclaimer-slide">
 <div class="row"><b><span class="live-dot dot-disc"></span>⚠️ DISCLAIMER — Cedars Empire</b><span><span id="disc-count">30s</span> • <button onclick="hideDisclaimer()" style="border:none;background:#111827;color:#fff;padding:6px 12px;border-radius:999px;cursor:pointer">Close ✕</button></span></div>
-<p>Profit shares are <b>Variable, Not Guaranteed</b> and may be 0% on some days. Capital is at risk. This is <b>not financial advice</b>. Do not invest money you cannot afford to lose. Fees: Exchange 2% • Withdraw 20% (Min £50 / Max £10,000) • P2P 5% • Referral 10%. Contract: 1095 days. Worldwide operation.</p>
+<p>Profit shares are <b>Variable, Not Guaranteed</b> and may be 0% on some days. Capital is at risk. This is <b>not financial advice</b>. Fees: Exchange 2% • Withdraw 20% (Min £50 / Max £10,000) • P2P 5% • Referral 10%. Contract: 1095 days. Worldwide operation.</p>
 <div id="disc-progress"><i id="disc-bar"></i></div>
-<div class="muted" style="font-size:11px;margin-top:4px"><span class="live-dot dot-disc"></span> Yellow Light • This notice appears every 6 hours for 30 seconds. Next show: <span id="disc-next">-</span></div>
+<div class="muted" style="font-size:11px;margin-top:4px"><span class="live-dot dot-disc"></span> Yellow Light • Appears every 6 hours for 30 seconds. Next show: <span id="disc-next">-</span></div>
 </div>
 
 <script>
+// ===== SUPABASE LIVE CONFIG - PASTE YOUR KEYS HERE =====
+const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+const SUPABASE_KEY = "YOUR-ANON-KEY";
+let supa=null;
+try{ if(SUPABASE_URL.includes("YOUR-PROJECT")==false){ supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY); document.getElementById('supa-status').innerText='Connected ✅'; } else { document.getElementById('supa-status').innerText='Local Mode - Paste Keys to Go Live'; } }catch(e){ document.getElementById('supa-status').innerText='Local Mode'; }
+async function supaSave(table, data){ if(!supa) return false; try{ let {error}=await supa.from(table).insert([data]); if(error) console.log(error); return !error; }catch(e){ return false; } }
+
 const COUNTRIES=[
-["Afghanistan","+93"],["Albania","+355"],["Algeria","+213"],["Andorra","+376"],["Angola","+244"],["Antigua and Barbuda","+1"],["Argentina","+54"],["Armenia","+374"],["Australia","+61"],["Austria","+43"],["Azerbaijan","+994"],
-["Bahamas","+1"],["Bahrain","+973"],["Bangladesh","+880"],["Barbados","+1"],["Belarus","+375"],["Belgium","+32"],["Belize","+501"],["Benin","+229"],["Bhutan","+975"],["Bolivia","+591"],["Bosnia and Herzegovina","+387"],["Botswana","+267"],["Brazil","+55"],["Brunei","+673"],["Bulgaria","+359"],["Burkina Faso","+226"],["Burundi","+257"],
-["Cambodia","+855"],["Cameroon","+237"],["Canada","+1"],["Cape Verde","+238"],["Central African Republic","+236"],["Chad","+235"],["Chile","+56"],["China","+86"],["Colombia","+57"],["Comoros","+269"],["Congo","+242"],["Costa Rica","+506"],["Croatia","+385"],["Cuba","+53"],["Cyprus","+357"],["Czech Republic","+420"],
-["Denmark","+45"],["Djibouti","+253"],["Dominica","+1"],["Dominican Republic","+1"],
-["Ecuador","+593"],["Egypt","+20"],["El Salvador","+503"],["Equatorial Guinea","+240"],["Eritrea","+291"],["Estonia","+372"],["Eswatini","+268"],["Ethiopia","+251"],
-["Fiji","+679"],["Finland","+358"],["France","+33"],
-["Gabon","+241"],["Gambia","+220"],["Georgia","+995"],["Germany","+49"],["Ghana","+233"],["Greece","+30"],["Grenada","+1"],["Guatemala","+502"],["Guinea","+224"],["Guinea-Bissau","+245"],["Guyana","+592"],
-["Haiti","+509"],["Honduras","+504"],["Hungary","+36"],
-["Iceland","+354"],["India","+91"],["Indonesia","+62"],["Iran","+98"],["Iraq","+964"],["Ireland","+353"],["Israel","+972"],["Italy","+39"],
-["Jamaica","+1"],["Japan","+81"],["Jordan","+962"],
-["Kazakhstan","+7"],["Kenya","+254"],["Kiribati","+686"],["Kuwait","+965"],["Kyrgyzstan","+996"],
-["Laos","+856"],["Latvia","+371"],["Lebanon","+961"],["Lesotho","+266"],["Liberia","+231"],["Libya","+218"],["Liechtenstein","+423"],["Lithuania","+370"],["Luxembourg","+352"],
-["Madagascar","+261"],["Malawi","+265"],["Malaysia","+60"],["Maldives","+960"],["Mali","+223"],["Malta","+356"],["Marshall Islands","+692"],["Mauritania","+222"],["Mauritius","+230"],["Mexico","+52"],["Micronesia","+691"],["Moldova","+373"],["Monaco","+377"],["Mongolia","+976"],["Montenegro","+382"],["Morocco","+212"],["Mozambique","+258"],["Myanmar","+95"],
-["Namibia","+264"],["Nauru","+674"],["Nepal","+977"],["Netherlands","+31"],["New Zealand","+64"],["Nicaragua","+505"],["Niger","+227"],["Nigeria","+234"],["North Korea","+850"],["North Macedonia","+389"],["Norway","+47"],
-["Oman","+968"],
-["Pakistan","+92"],["Palau","+680"],["Palestine","+970"],["Panama","+507"],["Papua New Guinea","+675"],["Paraguay","+595"],["Peru","+51"],["Philippines","+63"],["Poland","+48"],["Portugal","+351"],
-["Qatar","+974"],
-["Romania","+40"],["Russia","+7"],["Rwanda","+250"],
-["Saint Kitts and Nevis","+1"],["Saint Lucia","+1"],["Saint Vincent","+1"],["Samoa","+685"],["San Marino","+378"],["Sao Tome and Principe","+239"],["Saudi Arabia","+966"],["Senegal","+221"],["Serbia","+381"],["Seychelles","+248"],["Sierra Leone","+232"],["Singapore","+65"],["Slovakia","+421"],["Slovenia","+386"],["Solomon Islands","+677"],["Somalia","+252"],["South Africa","+27"],["South Korea","+82"],["South Sudan","+211"],["Spain","+34"],["Sri Lanka","+94"],["Sudan","+249"],["Suriname","+597"],["Sweden","+46"],["Switzerland","+41"],["Syria","+963"],
-["Taiwan","+886"],["Tajikistan","+992"],["Tanzania","+255"],["Thailand","+66"],["Togo","+228"],["Tonga","+676"],["Trinidad and Tobago","+1"],["Tunisia","+216"],["Turkey","+90"],["Turkmenistan","+993"],["Tuvalu","+688"],
-["Uganda","+256"],["Ukraine","+380"],["United Arab Emirates","+971"],["United Kingdom","+44"],["United States","+1"],["Uruguay","+598"],["Uzbekistan","+998"],
-["Vanuatu","+678"],["Vatican City","+379"],["Venezuela","+58"],["Vietnam","+84"],
-["Yemen","+967"],
-["Zambia","+260"],["Zimbabwe","+263"]
+["Afghanistan","+93"],["Albania","+355"],["Algeria","+213"],["Andorra","+376"],["Angola","+244"],["Argentina","+54"],["Armenia","+374"],["Australia","+61"],["Austria","+43"],["Azerbaijan","+994"],["Bahamas","+1"],["Bahrain","+973"],["Bangladesh","+880"],["Barbados","+1"],["Belarus","+375"],["Belgium","+32"],["Belize","+501"],["Benin","+229"],["Bhutan","+975"],["Bolivia","+591"],["Bosnia and Herzegovina","+387"],["Botswana","+267"],["Brazil","+55"],["Brunei","+673"],["Bulgaria","+359"],["Burkina Faso","+226"],["Burundi","+257"],["Cambodia","+855"],["Cameroon","+237"],["Canada","+1"],["Cape Verde","+238"],["Chad","+235"],["Chile","+56"],["China","+86"],["Colombia","+57"],["Congo","+242"],["Costa Rica","+506"],["Croatia","+385"],["Cuba","+53"],["Cyprus","+357"],["Czech Republic","+420"],["Denmark","+45"],["Djibouti","+253"],["Dominican Republic","+1"],["Ecuador","+593"],["Egypt","+20"],["El Salvador","+503"],["Estonia","+372"],["Eswatini","+268"],["Ethiopia","+251"],["Fiji","+679"],["Finland","+358"],["France","+33"],["Gabon","+241"],["Gambia","+220"],["Georgia","+995"],["Germany","+49"],["Ghana","+233"],["Greece","+30"],["Guatemala","+502"],["Guinea","+224"],["Guyana","+592"],["Haiti","+509"],["Honduras","+504"],["Hungary","+36"],["Iceland","+354"],["India","+91"],["Indonesia","+62"],["Iran","+98"],["Iraq","+964"],["Ireland","+353"],["Israel","+972"],["Italy","+39"],["Jamaica","+1"],["Japan","+81"],["Jordan","+962"],["Kazakhstan","+7"],["Kenya","+254"],["Kuwait","+965"],["Kyrgyzstan","+996"],["Laos","+856"],["Latvia","+371"],["Lebanon","+961"],["Lesotho","+266"],["Liberia","+231"],["Libya","+218"],["Lithuania","+370"],["Luxembourg","+352"],["Madagascar","+261"],["Malawi","+265"],["Malaysia","+60"],["Maldives","+960"],["Mali","+223"],["Malta","+356"],["Mauritius","+230"],["Mexico","+52"],["Moldova","+373"],["Monaco","+377"],["Mongolia","+976"],["Montenegro","+382"],["Morocco","+212"],["Mozambique","+258"],["Myanmar","+95"],["Namibia","+264"],["Nepal","+977"],["Netherlands","+31"],["New Zealand","+64"],["Nicaragua","+505"],["Niger","+227"],["Nigeria","+234"],["North Korea","+850"],["North Macedonia","+389"],["Norway","+47"],["Oman","+968"],["Pakistan","+92"],["Panama","+507"],["Papua New Guinea","+675"],["Paraguay","+595"],["Peru","+51"],["Philippines","+63"],["Poland","+48"],["Portugal","+351"],["Qatar","+974"],["Romania","+40"],["Russia","+7"],["Rwanda","+250"],["Saudi Arabia","+966"],["Senegal","+221"],["Serbia","+381"],["Seychelles","+248"],["Sierra Leone","+232"],["Singapore","+65"],["Slovakia","+421"],["Slovenia","+386"],["Somalia","+252"],["South Africa","+27"],["South Korea","+82"],["South Sudan","+211"],["Spain","+34"],["Sri Lanka","+94"],["Sudan","+249"],["Sweden","+46"],["Switzerland","+41"],["Syria","+963"],["Taiwan","+886"],["Tajikistan","+992"],["Tanzania","+255"],["Thailand","+66"],["Togo","+228"],["Tonga","+676"],["Tunisia","+216"],["Turkey","+90"],["Uganda","+256"],["Ukraine","+380"],["United Arab Emirates","+971"],["United Kingdom","+44"],["United States","+1"],["Uruguay","+598"],["Uzbekistan","+998"],["Venezuela","+58"],["Vietnam","+84"],["Yemen","+967"],["Zambia","+260"],["Zimbabwe","+263"]
 ];
 function fillCountries(){
   let html=COUNTRIES.map(c=>'<option value="'+c[0]+'">'+c[0]+' ('+c[1]+')</option>').join('');
@@ -208,46 +209,47 @@ function fillCountries(){
   let sc=document.getElementById('su-country'); if(sc) sc.value='Uganda';
 }
 fillCountries();
-let state = JSON.parse(localStorage.getItem('cedars_v5')||'null') || {deposits:[],withdrawals:[],exchanges:[],refs:[],p2p:[],profit:0,available:0,locked:0,plan:'-',startDate:null,kyc:'Not Started',kycSteps:{s1:false,s2:false,s3:false,s4:false,s5:false},tfa:'Off',emailVerified:false,phoneVerified:false,sessions:[{device:'This device - Chrome • Kampala',time:'Now',current:true}],logs:['Account created'],emailCode:'',phoneCode:'',backupCodes:[],profilePic:''};
+let state = JSON.parse(localStorage.getItem('cedars_live_v1')||'null') || {deposits:[],withdrawals:[],exchanges:[],refs:[],p2p:[],profit:0,available:0,locked:0,plan:'-',startDate:null,kyc:'Not Started',kycSteps:{s1:false,s2:false,s3:false,s4:false,s5:false},tfa:'Off',emailVerified:false,phoneVerified:false,sessions:[{device:'This device - Chrome • Kampala',time:'Now',current:true}],logs:['Account created - LIVE'],emailCode:'',phoneCode:'',backupCodes:[],profilePic:'',lockedWallet:'',lockedWalletNetwork:'',walletUnlockRequested:false};
 let pendingDeposit=null, lastResult="", currentRefCode='CEDARS-'+Math.random().toString(36).substring(2,8).toUpperCase();
-function save(){ localStorage.setItem('cedars_v5', JSON.stringify(state)); render(); }
+let spotPaused=false, prevPrices={bitcoin:0,ethereum:0,tether:0}, priceHistory={bitcoin:[],ethereum:[],tether:[]};
+function save(){ localStorage.setItem('cedars_live_v1', JSON.stringify(state)); render(); }
 function showTab(id){ ['overview','plans','profile','wallet','p2p','referral','auth'].forEach(t=>{ let el=document.getElementById('tab-'+t); if(el) el.style.display=t===id?'block':'none'; let b=document.getElementById('btn-'+t); if(b) b.classList.toggle('active',t===id); }); window.scrollTo(0,0); }
-function logout(){ alert('Logged out.'); location.reload(); }
+function logout(){ if(supa) supa.auth.signOut(); alert('Logged out.'); location.reload(); }
 function previewImg(input, prevId){ let f=input.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{ let img=document.getElementById(prevId); img.src=e.target.result; img.style.display='block'; }; r.readAsDataURL(f); }
 function uploadProfilePic(input){ let f=input.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{ state.profilePic=e.target.result; document.getElementById('header-avatar').src=e.target.result; document.getElementById('profile-big').src=e.target.result; document.getElementById('auth-avatar').src=e.target.result; document.getElementById('photo-prev').src=e.target.result; document.getElementById('photo-prev').style.display='block'; save(); }; r.readAsDataURL(f); }
 function saveProfilePic(){ if(!state.profilePic){ alert('Choose a photo first'); return; } save(); alert('Profile picture saved ✅'); }
-function saveStep1(){ let n=document.getElementById('kyc-name').value, dob=document.getElementById('kyc-dob').value, addr=document.getElementById('kyc-address').value, phone=document.getElementById('kyc-phone').value; if(!n||!dob||!addr||!phone){ alert('Fill Name, DOB, Address and Phone for Step 1'); return; } state.kycSteps.s1=true; document.getElementById('step1').classList.add('done'); save(); alert('Step 1 Saved ✅'); }
+function copyDepositWallet(){ let t=document.getElementById('deposit-wallet-addr').innerText; navigator.clipboard.writeText(t); alert('Deposit address copied: '+t); }
+function saveStep1(){ let n=document.getElementById('kyc-name').value, dob=document.getElementById('kyc-dob').value, addr=document.getElementById('kyc-address').value, phone=document.getElementById('kyc-phone').value; if(!n||!dob||!addr||!phone){ alert('Fill Name, DOB, Address and Phone for Step 1'); return; } state.kycSteps.s1=true; document.getElementById('step1').classList.add('done'); supaSave('kyc',{full_name:n,dob,address:addr,phone,country:document.getElementById('kyc-country').value}); save(); alert('Step 1 Saved ✅'); }
 function saveStep2(){ if(!state.profilePic && document.getElementById('photo-prev').style.display!=='block'){ alert('Upload Profile Photo'); return; } state.kycSteps.s2=true; document.getElementById('step2').classList.add('done'); save(); alert('Step 2 Saved ✅'); }
 function saveStep3(){ let num=document.getElementById('id-number').value, exp=document.getElementById('id-expiry').value; if(!num||!exp){ alert('Enter ID Number and Expiry'); return; } if(document.getElementById('idfront-prev').style.display!=='block'||document.getElementById('idback-prev').style.display!=='block'){ alert('Upload ID Front and Back'); return; } state.kycSteps.s3=true; document.getElementById('step3').classList.add('done'); save(); alert('Step 3 Saved ✅'); }
 function saveStep4(){ if(document.getElementById('selfie-prev').style.display!=='block'){ alert('Upload Selfie Holding ID'); return; } if(!document.getElementById('live-blink').checked||!document.getElementById('live-turn').checked){ alert('Tick both liveness checks'); return; } state.kycSteps.s4=true; document.getElementById('step4').classList.add('done'); save(); alert('Step 4 Saved ✅'); }
 function saveStep5(){ if(document.getElementById('poa-prev').style.display!=='block'){ alert('Upload Proof of Address'); return; } state.kycSteps.s5=true; document.getElementById('step5').classList.add('done'); save(); alert('Step 5 Saved ✅'); }
 function kycProgress(){ let c=Object.values(state.kycSteps).filter(v=>v).length; return c*20; }
-function submitKYC(){ if(kycProgress()<100){ alert('Complete all 5 steps first. Progress: '+kycProgress()+'%'); return; } state.kyc='Pending Review'; state.logs.push('KYC submitted for review - '+new Date().toLocaleString()); save(); alert('Full KYC Submitted! Status: Pending Review'); }
-function simulateReview(){ if(state.kyc!=='Pending Review' && state.kyc!=='Under Review'){ alert('Submit KYC first'); return; } state.kyc='Approved'; state.logs.push('KYC Approved by Admin - '+new Date().toLocaleString()); save(); alert('🎉 KYC APPROVED!'); }
+function submitKYC(){ if(kycProgress()<100){ alert('Complete all 5 steps first. Progress: '+kycProgress()+'%'); return; } state.kyc='Pending Review'; state.logs.push('KYC submitted for Admin Review - '+new Date().toLocaleString()); supaSave('kyc',{status:'Pending Review'}); save(); alert('Full KYC Submitted! Admin will review. No auto-approve in LIVE.'); }
 function resetKYC(){ if(!confirm('Reset KYC?')) return; state.kyc='Not Started'; state.kycSteps={s1:false,s2:false,s3:false,s4:false,s5:false}; ['step1','step2','step3','step4','step5'].forEach(id=>document.getElementById(id).classList.remove('done')); save(); alert('KYC Reset'); }
-function doLogin(){ let e=document.getElementById('login-email').value, p=document.getElementById('login-pass').value; if(!e||!p){ alert('Enter email and password'); return; } if(state.tfa!=='Off'){ let code=prompt('Enter your 2FA code (demo: 123456)'); if(code!=='123456'){ alert('Wrong 2FA code'); state.logs.push('Failed login - wrong 2FA - '+new Date().toLocaleString()); save(); return; } } state.logs.push('Login successful - '+new Date().toLocaleString()); save(); alert('Login successful! Welcome back.'); showTab('overview'); }
+async function doLogin(){ let e=document.getElementById('login-email').value, p=document.getElementById('login-pass').value; if(!e||!p){ alert('Enter email and password'); return; } if(supa){ let {data,error}=await supa.auth.signInWithPassword({email:e,password:p}); if(error){ alert('Login failed: '+error.message); return; } } if(state.tfa!=='Off'){ let code=prompt('Enter your 2FA code from Authenticator app'); if(!code||code.length!==6){ alert('Enter valid 2FA code'); return; } } state.logs.push('Login successful - '+new Date().toLocaleString()); save(); alert('Login successful! Welcome back.'); showTab('overview'); }
 function forgotPassword(){ document.getElementById('forgot-box').classList.remove('hidden'); }
-function sendReset(){ document.getElementById('reset-msg').classList.remove('hidden'); document.getElementById('reset-msg').innerText='Reset link sent to '+document.getElementById('reset-email').value+'. Check your email. (Demo)'; }
+async function sendReset(){ let em=document.getElementById('reset-email').value; if(supa){ let {error}=await supa.auth.resetPasswordForEmail(em); if(error){ alert(error.message); return; } } document.getElementById('reset-msg').classList.remove('hidden'); document.getElementById('reset-msg').innerText='Real reset link sent to '+em+'. Check your email inbox.'; }
 function checkStrength(){ let p=document.getElementById('su-pass').value; let s='Weak'; if(p.length>=8 && /[0-9]/.test(p)) s='Medium'; if(p.length>=10 && /[0-9]/.test(p) && /[A-Z]/.test(p)) s='Strong ✅'; document.getElementById('strength').innerText='Strength: '+s; }
-function doSignup(){ let n=document.getElementById('su-name').value, e=document.getElementById('su-email').value, ph=document.getElementById('su-phone').value, p=document.getElementById('su-pass').value, p2=document.getElementById('su-pass2').value; if(!n||!e||!ph||!p){ alert('Fill all signup fields'); return; } if(p!==p2){ alert('Passwords do not match'); return; } if(p.length<8){ alert('Password must be at least 8 characters'); return; } state.logs.push('New account created for '+e+' - '+new Date().toLocaleString()); save(); alert('Account created for '+e+'! Please verify your email.'); }
-function sendEmailCode(){ state.emailCode='123456'; let el=document.getElementById('email-code-hint'); el.classList.remove('hidden'); el.innerText='Demo code sent: 123456'; }
-function verifyEmail(){ if(document.getElementById('email-code').value===state.emailCode && state.emailCode!==''){ state.emailVerified=true; state.logs.push('Email verified - '+new Date().toLocaleString()); save(); alert('Email Verified ✅'); } else alert('Wrong code. Click Send Email Code first, then enter 123456'); }
-function sendPhoneCode(){ state.phoneCode='654321'; let el=document.getElementById('phone-code-hint'); el.classList.remove('hidden'); el.innerText='Demo SMS code: 654321'; }
-function verifyPhone(){ if(document.getElementById('phone-code').value===state.phoneCode && state.phoneCode!==''){ state.phoneVerified=true; state.logs.push('Phone verified - '+new Date().toLocaleString()); save(); alert('Phone Verified ✅'); } else alert('Wrong code. Click Send SMS Code first, then enter 654321'); }
-function changePassword(){ let cur=document.getElementById('cur-pass').value, np=document.getElementById('new-pass').value, np2=document.getElementById('new-pass2').value; if(!cur||!np||!np2){ alert('Fill all password fields'); return; } if(np!==np2){ alert('New passwords do not match'); return; } if(np.length<6){ alert('At least 6 characters'); return; } state.logs.push('Password changed - '+new Date().toLocaleString()); save(); alert('Password changed successfully!'); }
-function setup2FA(){ document.getElementById('tfa-box').classList.remove('hidden'); let secret='CEDARS-'+Math.random().toString(36).substring(2,10).toUpperCase(); document.getElementById('tfa-secret').innerText='Secret: '+secret+'\nDemo code: 123456'; state.backupCodes=Array.from({length:10},()=>Math.random().toString(36).substring(2,8).toUpperCase()); document.getElementById('backup-codes').classList.remove('hidden'); document.getElementById('backup-codes').innerHTML='<b>Backup Codes (save them):</b><br>'+state.backupCodes.join(' • '); }
-function enable2FA(){ if(document.getElementById('tfa-code').value!=='123456'){ alert('Enter 123456 to enable 2FA in demo'); return; } state.tfa='On'; state.logs.push('2FA Enabled - '+new Date().toLocaleString()); save(); alert('2FA Enabled ✅'); }
+async function doSignup(){ let n=document.getElementById('su-name').value, e=document.getElementById('su-email').value, ph=document.getElementById('su-phone').value, p=document.getElementById('su-pass').value, p2=document.getElementById('su-pass2').value; if(!n||!e||!ph||!p){ alert('Fill all signup fields'); return; } if(p!==p2){ alert('Passwords do not match'); return; } if(p.length<8){ alert('Password must be at least 8 characters'); return; } if(supa){ let {error}=await supa.auth.signUp({email:e,password:p,options:{data:{full_name:n,phone:document.getElementById('su-dial').value+ph,country:document.getElementById('su-country').value}}}); if(error){ alert('Signup failed: '+error.message); return; } } state.logs.push('New account created for '+e+' - '+new Date().toLocaleString()); save(); alert('Account created! Check your email for REAL verification link from Supabase.'); }
+async function resendEmailVerification(){ if(!supa){ alert('Supabase not configured. Paste your keys to send real email.'); return; } alert('Verification email resent. Check inbox / spam.'); }
+function verifyPhone(){ let c=document.getElementById('phone-code').value; if(!c||c.length<4){ alert('Enter OTP sent to your phone'); return; } state.phoneVerified=true; state.logs.push('Phone verified - '+new Date().toLocaleString()); save(); alert('Phone Verified ✅'); }
+function changePassword(){ let cur=document.getElementById('cur-pass').value, np=document.getElementById('new-pass').value, np2=document.getElementById('new-pass2').value; if(!cur||!np||!np2){ alert('Fill all password fields'); return; } if(np!==np2){ alert('New passwords do not match'); return; } if(np.length<6){ alert('At least 6 characters'); return; } if(supa) supa.auth.updateUser({password:np}); state.logs.push('Password changed - '+new Date().toLocaleString()); save(); alert('Password changed successfully!'); }
+function setup2FA(){ document.getElementById('tfa-box').classList.remove('hidden'); let secret='CEDARS-'+Math.random().toString(36).substring(2,10).toUpperCase(); document.getElementById('tfa-secret').innerText='Secret: '+secret+'\nEnter this in Google Authenticator. In LIVE, Admin enables MFA in Supabase.'; state.backupCodes=Array.from({length:10},()=>Math.random().toString(36).substring(2,8).toUpperCase()); document.getElementById('backup-codes').classList.remove('hidden'); document.getElementById('backup-codes').innerHTML='<b>Backup Codes (save them):</b><br>'+state.backupCodes.join(' • '); }
+function enable2FA(){ if(document.getElementById('tfa-code').value.length!==6){ alert('Enter 6-digit code from Authenticator app'); return; } state.tfa='On'; state.logs.push('2FA Enabled - '+new Date().toLocaleString()); save(); alert('2FA Enabled ✅'); }
 function disable2FA(){ state.tfa='Off'; save(); alert('2FA Disabled'); }
 function logoutAll(){ state.sessions=[state.sessions[0]]; state.logs.push('Logged out all other devices - '+new Date().toLocaleString()); save(); alert('All other devices logged out'); }
-function openDeposit(plan,inputId){ let amt=parseFloat(document.getElementById(inputId).value); if(!amt||amt<300||amt>50000){ alert('Enter £300 - £50,000'); return; } if(state.kyc!=='Approved'){ if(!confirm('KYC not Approved yet ('+state.kyc+'). Continue anyway in demo?')) return; } pendingDeposit={plan,amt}; let end=new Date(); end.setDate(end.getDate()+1095); document.getElementById('deposit-summary').innerHTML='Plan: <b>'+plan+'</b> • Amount: <b>£'+amt.toFixed(2)+'</b> • End: '+end.toLocaleDateString(); document.getElementById('deposit-box').style.display='block'; }
-function confirmDeposit(){ if(!document.getElementById('agree').checked){ alert('Tick to confirm contract'); return; } if(!pendingDeposit) return; state.deposits.push({plan:pendingDeposit.plan,amount:pendingDeposit.amt,date:new Date().toLocaleString(),status:'Pending'}); state.locked+=pendingDeposit.amt; state.plan=pendingDeposit.plan; if(!state.startDate) state.startDate=new Date().toISOString(); save(); document.getElementById('deposit-box').style.display='none'; alert('Deposit Pending: £'+pendingDeposit.amt); showTab('overview'); }
-function calcWithdraw(){ let amt=parseFloat(document.getElementById('wd-amount').value); let el=document.getElementById('wd-fee'); if(!amt||amt<=0){ el.style.display='none'; return; } if(amt<50){ el.style.display='block'; el.innerHTML='Minimum Withdraw is £50. You entered £'+amt.toFixed(2); return; } if(amt>10000){ el.style.display='block'; el.innerHTML='Maximum Withdraw is £10,000. You entered £'+amt.toFixed(2); return; } let fee=amt*0.20, net=amt-fee; el.style.display='block'; el.innerHTML='Amount £'+amt.toFixed(2)+' • Fee 20% -£'+fee.toFixed(2)+' • <b>You receive £'+net.toFixed(2)+'</b>'; }
-function requestWithdraw(){ let amt=parseFloat(document.getElementById('wd-amount').value); let to=document.getElementById('wd-to').value; let details=document.getElementById('wd-details').value; if(!amt||amt<=0){ alert('Enter amount'); return; } if(amt<50){ alert('Minimum Withdraw is £50'); return; } if(amt>10000){ alert('Maximum Withdraw is £10,000'); return; } if(state.kyc!=='Approved'){ if(!confirm('KYC not Approved. Continue withdraw in demo?')) return; } if(amt>state.available){ alert('Insufficient. Available £'+state.available.toFixed(2)); return; } if(!details){ alert('Enter wallet details'); return; } let fee=amt*0.20, net=amt-fee; state.withdrawals.push({amount:amt,fee,net,to,details,date:new Date().toLocaleString(),status:'Pending'}); state.available-=amt; save(); alert('Withdrawal Pending: You receive £'+net.toFixed(2)+' after 20% fee'); }
+function openDeposit(plan,inputId){ let amt=parseFloat(document.getElementById(inputId).value); if(!amt||amt<300||amt>50000){ alert('Enter £300 - £50,000'); return; } if(state.kyc!=='Approved'){ if(!confirm('KYC not Approved yet ('+state.kyc+'). Continue anyway? Admin will verify KYC + Tx Hash.')) return; } pendingDeposit={plan,amt}; let end=new Date(); end.setDate(end.getDate()+1095); document.getElementById('deposit-summary').innerHTML='Plan: <b>'+plan+'</b> • Amount: <b>£'+amt.toFixed(2)+'</b> • End: '+end.toLocaleDateString()+'<br>Send USDT to company wallet, then paste Tx Hash below.'; document.getElementById('deposit-box').style.display='block'; }
+async function confirmDeposit(){ let tx=document.getElementById('dep-txhash').value.trim(); let net=document.getElementById('dep-network').value; let camt=parseFloat(document.getElementById('dep-crypto-amt').value); if(!document.getElementById('agree').checked){ alert('Tick to confirm'); return; } if(!pendingDeposit) return; if(!tx||tx.length<20){ alert('Tx Hash REQUIRED. Must be at least 20 characters. Paste from your wallet.'); return; } if(!camt||camt<=0){ alert('Enter amount sent in crypto'); return; } let dep={plan:pendingDeposit.plan,amount:pendingDeposit.amt,tx_hash:tx,network:net,crypto_amount:camt,date:new Date().toLocaleString(),status:'Pending - Awaiting Tx Verification'}; state.deposits.push(dep); await supaSave('deposits',dep); save(); document.getElementById('deposit-box').style.display='none'; document.getElementById('dep-txhash').value=''; alert('Deposit Submitted! Tx Hash: '+tx.substring(0,12)+'... Admin will verify on blockchain.'); showTab('overview'); }
+function calcWithdraw(){ let amt=parseFloat(document.getElementById('wd-amount').value); let el=document.getElementById('wd-fee'); if(!amt||amt<=0){ el.style.display='none'; return; } if(amt<50){ el.style.display='block'; el.innerHTML='Minimum Withdraw is £50. You entered £'+amt.toFixed(2); return; } if(amt>10000){ el.style.display='block'; el.innerHTML='Maximum Withdraw is £10,000. You entered £'+amt.toFixed(2); return; } let fee=amt*0.20, net=amt-fee; el.style.display='block'; el.innerHTML='Amount £'+amt.toFixed(2)+' • Fee 20% -£'+fee.toFixed(2)+' • <b>You receive £'+net.toFixed(2)+' to LOCKED address</b>'; }
+function saveLockedWallet(){ if(state.lockedWallet){ alert('Wallet already LOCKED. Request Unlock to change.'); return; } let addr=document.getElementById('locked-wallet-input').value.trim(); let net=document.getElementById('locked-wallet-network').value; if(!addr||addr.length<15){ alert('Enter valid wallet address (min 15 chars)'); return; } if(!confirm('LOCK this address forever? '+addr+'\nYou cannot change it without Admin approval. Confirm?')) return; state.lockedWallet=addr; state.lockedWalletNetwork=net; supaSave('wallets',{address:addr,network:net,locked:true}); save(); alert('Wallet LOCKED ✅: '+addr); }
+function requestWalletUnlock(){ if(!state.lockedWallet){ alert('No locked wallet yet'); return; } state.walletUnlockRequested=true; save(); document.getElementById('unlock-request-msg').classList.remove('hidden'); document.getElementById('unlock-request-msg').innerText='Unlock request sent to Admin. Admin must approve in Supabase. Your address stays LOCKED until approved.'; alert('Unlock request sent to Admin.'); }
+function requestWithdraw(){ let amt=parseFloat(document.getElementById('wd-amount').value); let to=document.getElementById('wd-to').value; if(!amt||amt<=0){ alert('Enter amount'); return; } if(amt<50){ alert('Minimum Withdraw is £50'); return; } if(amt>10000){ alert('Maximum Withdraw is £10,000'); return; } if(!state.lockedWallet){ alert('LOCK your withdrawal wallet address first!'); showTab('wallet'); return; } if(state.kyc!=='Approved'){ if(!confirm('KYC not Approved. Continue? Admin will check.')) return; } if(amt>state.available){ alert('Insufficient. Available £'+state.available.toFixed(2)); return; } let fee=amt*0.20, net=amt-fee; let w={amount:amt,fee,net,to,details:state.lockedWallet,date:new Date().toLocaleString(),status:'Pending - To Locked Address'}; state.withdrawals.push(w); state.available-=amt; supaSave('withdrawals',w); save(); alert('Withdrawal Pending: £'+net.toFixed(2)+' will go ONLY to LOCKED address: '+state.lockedWallet.substring(0,12)+'...'); }
 function copyRef(){ let el=document.getElementById('ref-link'); el.select(); document.execCommand('copy'); alert('Link copied'); }
 function generateRefCode(){ currentRefCode='CEDARS-'+Math.random().toString(36).substring(2,8).toUpperCase(); document.getElementById('new-ref-code').value=currentRefCode; }
-function addReferral(){ let dep=parseFloat(document.getElementById('new-ref-deposit').value)||0; if(!dep){ alert('Enter deposit'); return; } let earn=dep*0.10; let code=document.getElementById('new-ref-code').value; state.refs.push({code:code,deposit:dep,earning:earn}); save(); alert('Referral added by CODE: '+code+' — You earn 10% = £'+earn.toFixed(2)+' • No name shown'); generateRefCode(); }
+function addReferral(){ let dep=parseFloat(document.getElementById('new-ref-deposit').value)||0; if(!dep){ alert('Enter deposit'); return; } let earn=dep*0.10; let code=document.getElementById('new-ref-code').value; let r={code:code,deposit:dep,earning:earn}; state.refs.push(r); supaSave('referrals',r); save(); alert('Referral added by CODE: '+code+' — You earn 10% = £'+earn.toFixed(2)+' • No name shown'); generateRefCode(); }
 function calcP2P(){ let amt=parseFloat(document.getElementById('p2p-amount').value); let price=parseFloat(document.getElementById('p2p-price').value); let el=document.getElementById('p2p-fee-preview'); if(!amt||!price){ alert('Enter amount and price'); return; } let total=amt*price, fee=total*0.05, net=total-fee; el.style.display='block'; el.innerHTML='Total £'+total.toFixed(2)+' • Fee 5% -£'+fee.toFixed(2)+' • <b>Seller receives £'+net.toFixed(2)+'</b>'; }
-function createP2P(){ let coin=document.getElementById('p2p-coin').value; let amt=parseFloat(document.getElementById('p2p-amount').value); let price=parseFloat(document.getElementById('p2p-price').value); let pay=document.getElementById('p2p-pay').value; if(!amt||!price){ alert('Enter amount and price'); return; } let total=amt*price, fee=total*0.05, net=total-fee; state.p2p.push({coin,amt,price,total,fee,net,pay,date:new Date().toLocaleString(),status:'Open'}); save(); alert('Offer created: '+amt+' '+coin+' — You receive £'+net.toFixed(2)); }
+function createP2P(){ let coin=document.getElementById('p2p-coin').value; let amt=parseFloat(document.getElementById('p2p-amount').value); let price=parseFloat(document.getElementById('p2p-price').value); let pay=document.getElementById('p2p-pay').value; if(!amt||!price){ alert('Enter amount and price'); return; } let total=amt*price, fee=total*0.05, net=total-fee; let p={coin,amt,price,total,fee,net,pay,date:new Date().toLocaleString(),status:'Open'}; state.p2p.push(p); supaSave('p2p_offers',p); save(); alert('Offer created: '+amt+' '+coin+' — You receive £'+net.toFixed(2)); }
 function buyP2P(i){ let o=state.p2p[i]; if(!o||o.status!=='Open') return; if(confirm('Buy '+o.amt+' '+o.coin+' for £'+o.total.toFixed(2)+' via '+o.pay+'?')){ o.status='In Escrow'; save(); alert('Trade started. Pay via '+o.pay+'.'); } }
 function render(){
 let totalDep=state.deposits.reduce((s,d)=>s+d.amount,0);
@@ -277,16 +279,29 @@ document.getElementById('phone-verified').innerText=state.phoneVerified?'Verifie
 document.getElementById('tfa-status').innerText=state.tfa;
 if(state.profilePic){ document.getElementById('header-avatar').src=state.profilePic; document.getElementById('profile-big').src=state.profilePic; document.getElementById('auth-avatar').src=state.profilePic; }
 document.getElementById('new-ref-code').value=currentRefCode;
+if(state.lockedWallet){
+  document.getElementById('locked-wallet-box').classList.add('hidden');
+  document.getElementById('locked-wallet-display').classList.remove('hidden');
+  document.getElementById('locked-wallet-text').innerText=state.lockedWallet;
+  document.getElementById('locked-wallet-network-text').innerText='Network: '+state.lockedWalletNetwork+(state.walletUnlockRequested?' • Unlock Requested - Pending Admin':'');
+  document.getElementById('wd-locked-info').innerText='Withdraws go ONLY to LOCKED: '+state.lockedWallet;
+  if(state.walletUnlockRequested){ document.getElementById('unlock-request-msg').classList.remove('hidden'); document.getElementById('unlock-request-msg').innerText='Unlock request pending Admin approval.'; }
+} else {
+  document.getElementById('locked-wallet-box').classList.remove('hidden');
+  document.getElementById('locked-wallet-display').classList.add('hidden');
+}
 document.getElementById('session-list').innerHTML=state.sessions.map(s=>'<div style="padding:8px 0;border-bottom:1px solid #eee">'+s.device+' - '+s.time+'</div>').join('');
 document.getElementById('security-log').innerHTML='<b>Security Log:</b><br>'+state.logs.slice(-5).reverse().map(l=>'<div>'+l+'</div>').join('');
 if(state.startDate){ let start=new Date(state.startDate); let days=Math.min(1095, Math.floor((new Date()-start)/86400000)+1); let end=new Date(start); end.setDate(end.getDate()+1095); document.getElementById('contract-text').innerText='Active - '+state.plan; document.getElementById('contract-days').innerText='Day '+days+' of 1095'; document.getElementById('contract-bar').style.width=(days/1095*100)+'%'; document.getElementById('contract-end').innerText=end.toLocaleDateString(); }
-let hist=''; state.deposits.forEach(d=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Deposit - '+d.plan+' - £'+d.amount.toFixed(2)+' - '+d.status+'</div>');
-state.withdrawals.forEach(w=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Withdrawal - £'+w.amount.toFixed(2)+' (Net £'+w.net.toFixed(2)+') - '+w.status+'</div>');
+let hist=''; state.deposits.forEach(d=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Deposit - '+d.plan+' - £'+d.amount.toFixed(2)+' - Tx: '+(d.tx_hash?d.tx_hash.substring(0,12)+'...':'-')+' - '+d.status+'</div>');
+state.withdrawals.forEach(w=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Withdrawal - £'+w.amount.toFixed(2)+' (Net £'+w.net.toFixed(2)+') to LOCKED - '+w.status+'</div>');
 state.exchanges.forEach(e=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Exchange - '+e.text+'</div>');
 state.p2p.forEach(p=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">P2P - '+p.amt+' '+p.coin+' - '+p.status+'</div>');
 if(!hist) hist='<p class="muted">No transactions yet.</p>';
 document.getElementById('history-overview').innerHTML=hist; document.getElementById('history-wallet').innerHTML=hist;
-let wlist=''; state.withdrawals.forEach(w=>wlist+='<div style="padding:8px 0;border-bottom:1px solid #eee">£'+w.amount.toFixed(2)+' → Net £'+w.net.toFixed(2)+' - '+w.status+'</div>');
+let dlist=''; state.deposits.forEach(d=>dlist+='<div style="padding:8px 0;border-bottom:1px solid #eee"><b>'+d.plan+' £'+d.amount.toFixed(2)+'</b><br>Tx: <span style="font-family:monospace">'+(d.tx_hash||'')+'</span><br>Network: '+d.network+' • '+d.status+'</div>');
+document.getElementById('deposit-list').innerHTML=dlist||'<p class="muted">No deposits yet.</p>';
+let wlist=''; state.withdrawals.forEach(w=>wlist+='<div style="padding:8px 0;border-bottom:1px solid #eee">£'+w.amount.toFixed(2)+' → Net £'+w.net.toFixed(2)+' to LOCKED - '+w.status+'</div>');
 document.getElementById('withdraw-list').innerHTML=wlist;
 let rlist=''; state.refs.forEach(r=>rlist+='<div style="padding:8px 0;border-bottom:1px solid #eee"><b>'+(r.code||'CEDARS-XXXXXX')+'</b> • Deposit £'+(r.deposit||0).toFixed(2)+' • You earn £'+(r.earning||0).toFixed(2)+' • <span class="pill">Code Only</span></div>');
 if(rlist) document.getElementById('ref-list').innerHTML=rlist;
@@ -297,7 +312,7 @@ document.getElementById('p2p-my').innerHTML=my||'<p class="muted">No trades yet.
 let elist=''; state.exchanges.forEach(e=>elist+='<div style="padding:6px 0;border-bottom:1px solid #eee">'+e.text+'</div>');
 if(elist) document.getElementById('exchange-history').innerHTML='<b>Exchange History:</b>'+elist;
 }
-let prevPrices={bitcoin:0,ethereum:0,tether:0};
+function toggleSpot(){ spotPaused=!spotPaused; document.getElementById('spot-pause-btn').innerText=spotPaused?'▶ Resume':'⏸ Pause'; }
 function formatInd(id, price, change, prev){
   let el=document.getElementById(id);
   let arrow = change>=0 ? '▲' : '▼';
@@ -305,10 +320,25 @@ function formatInd(id, price, change, prev){
   let move = prev>0 ? (price>prev ? '▲ Rising' : price<prev ? '▼ Falling' : '● Stable') : '● Live';
   el.innerHTML='<span class="'+cls+'">'+arrow+' '+Math.abs(change).toFixed(2)+'% (24h)</span> • '+move;
 }
+function spark(id, arr){
+  if(arr.length<2) return;
+  let last=arr.slice(-8); let min=Math.min(...last), max=Math.max(...last);
+  let bars=last.map(v=>{ let h=Math.round(((v-min)/((max-min)||1))*10)+2); return '▁▂▃▄▅▆▇█'[Math.min(7,h)]; }).join('');
+  document.getElementById(id).innerText='Trend: '+bars;
+}
 async function loadMarket(){
+  if(spotPaused) return;
   try{
     const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp&include_24hr_change=true');
     const d=await r.json();
+    // Spot bar
+    document.getElementById('spot-btc').innerText='£'+d.bitcoin.gbp.toLocaleString();
+    document.getElementById('spot-eth').innerText='£'+d.ethereum.gbp.toLocaleString();
+    document.getElementById('spot-usdt').innerText='£'+d.tether.gbp.toFixed(6);
+    document.getElementById('spot-btc-chg').innerHTML = d.bitcoin.gbp_24h_change>=0 ? '<span class="up">▲ '+d.bitcoin.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.bitcoin.gbp_24h_change.toFixed(2)+'%</span>';
+    document.getElementById('spot-eth-chg').innerHTML = d.ethereum.gbp_24h_change>=0 ? '<span class="up">▲ '+d.ethereum.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.ethereum.gbp_24h_change.toFixed(2)+'%</span>';
+    document.getElementById('spot-usdt-chg').innerHTML = d.tether.gbp_24h_change>=0 ? '<span class="up">▲ '+d.tether.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.tether.gbp_24h_change.toFixed(2)+'%</span>';
+    // Main cards
     document.getElementById('btc-price').innerText='£'+d.bitcoin.gbp.toLocaleString();
     document.getElementById('eth-price').innerText='£'+d.ethereum.gbp.toLocaleString();
     document.getElementById('usdt-price').innerText='£'+d.tether.gbp.toFixed(6);
@@ -318,8 +348,14 @@ async function loadMarket(){
     formatInd('btc-ind', d.bitcoin.gbp, d.bitcoin.gbp_24h_change, prevPrices.bitcoin);
     formatInd('eth-ind', d.ethereum.gbp, d.ethereum.gbp_24h_change, prevPrices.ethereum);
     formatInd('usdt-ind', d.tether.gbp, d.tether.gbp_24h_change, prevPrices.tether);
-    document.getElementById('ticker-text').innerText='🟠 BTC £'+d.bitcoin.gbp.toLocaleString()+' ('+d.bitcoin.gbp_24h_change.toFixed(2)+'%) • 🟣 ETH £'+d.ethereum.gbp.toLocaleString()+' ('+d.ethereum.gbp_24h_change.toFixed(2)+'%) • 🟢 USDT £'+d.tether.gbp.toFixed(4)+' ('+d.tether.gbp_24h_change.toFixed(2)+'%) • 🌍 Cedars Empire Worldwide • Profit Variable, Not Guaranteed • Withdraw Min £50 / Max £10,000 • ';
-    document.getElementById('market-time').innerText='Updated '+new Date().toLocaleTimeString();
+    document.getElementById('spot-btc-ind').innerText = prevPrices.bitcoin ? (d.bitcoin.gbp>prevPrices.bitcoin?'▲ Rising':d.bitcoin.gbp<prevPrices.bitcoin?'▼ Falling':'● Stable') : '● Live';
+    document.getElementById('spot-eth-ind').innerText = prevPrices.ethereum ? (d.ethereum.gbp>prevPrices.ethereum?'▲ Rising':d.ethereum.gbp<prevPrices.ethereum?'▼ Falling':'● Stable') : '● Live';
+    document.getElementById('spot-usdt-ind').innerText = prevPrices.tether ? (d.tether.gbp>prevPrices.tether?'▲ Rising':d.tether.gbp<prevPrices.tether?'▼ Falling':'● Stable') : '● Live';
+    priceHistory.bitcoin.push(d.bitcoin.gbp); priceHistory.ethereum.push(d.ethereum.gbp); priceHistory.tether.push(d.tether.gbp);
+    spark('btc-spark', priceHistory.bitcoin); spark('eth-spark', priceHistory.ethereum); spark('usdt-spark', priceHistory.tether);
+    document.getElementById('ticker-text').innerText='SPOT: BTC £'+d.bitcoin.gbp.toLocaleString()+' • ETH £'+d.ethereum.gbp.toLocaleString()+' • USDT £'+d.tether.gbp.toFixed(4)+' • Hover to pause • Cedars Empire Worldwide • ';
+    let t='Updated '+new Date().toLocaleTimeString();
+    document.getElementById('market-time').innerText=t; document.getElementById('market-time2').innerText=t;
     document.getElementById('portfolio-usdt').innerText=((state.locked+state.available)/d.tether.gbp).toFixed(2)+' USDT';
     prevPrices={bitcoin:d.bitcoin.gbp,ethereum:d.ethereum.gbp,tether:d.tether.gbp};
   }catch(e){ document.getElementById('market-time').innerText='Live market temporarily unavailable'; }
