@@ -1,129 +1,37 @@
-<!-- Inside Wallet & Exchange tab -->
-<div id="exchange-engine">
-  <h2>Exchange</h2>
-  <form id="exchange-form">
-    <label>From:</label>
-    <select id="from-currency">
-      <option value="GBP">GBP</option>
-    </select>
-    <label>To:</label>
-    <select id="to-currency">
-      <option value="USDT">USDT</option>
-      <option value="BTC">BTC</option>
-      <option value="ETH">ETH</option>
-    </select>
-    <label>Amount:</label>
-    <input type="number" id="amount" placeholder="Enter amount" />
-    <button id="exchange-btn">Exchange</button>
-  </form>
-  <p id="exchange-rate"></p>
-  <p id="exchange-result"></p>
-  <h3>Transaction History</h3>
-  <ul id="transaction-history"></ul>
+<!-- SAFE EXCHANGE - SMALL ADD ONLY -->
+<div style="background:#111827; padding:16px; border-radius:12px; margin-top:12px;">
+  <h3 style="color:white; margin:0;">Quick Exchange</h3>
+  <p style="color:#9ca3af; font-size:13px;">GBP to USDT / BTC / ETH - Live Rate</p>
+  
+  <label style="color:white; font-size:13px;">Amount in GBP</label>
+  <input id="ex-amount" type="number" placeholder="100" style="width:100%; padding:10px; margin:6px 0; border-radius:8px; border:1px solid #374151; background:#1f2937; color:white;" />
+  
+  <label style="color:white; font-size:13px;">Convert To</label>
+  <select id="ex-to" style="width:100%; padding:10px; margin:6px 0; border-radius:8px; background:#1f2937; color:white;">
+    <option value="tether">USDT</option>
+    <option value="bitcoin">BTC</option>
+    <option value="ethereum">ETH</option>
+  </select>
+  
+  <button onclick="doExchange()" style="width:100%; padding:12px; background:#10b981; color:white; border:none; border-radius:8px; font-weight:bold;">Get Live Rate</button>
+  <p id="ex-result" style="color:white; margin-top:10px;">Result will show here...</p>
 </div>
 
 <script>
-  // Supabase URL and anon key
-  const supabaseUrl = 'https://your-supabase-url.supabase.co';
-  const supabaseAnonKey = 'your-supabase-anon-key';
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-  // CoinGecko API URL
-  const apiUrl = 'https://api.coingecko.com/api/v3/simple/price';
-
-  // Fetch live rates
-  async function getExchangeRate(fromCurrency, toCurrency) {
-    try {
-      const response = await fetch(`${apiUrl}?ids=${toCurrency.toLowerCase()}&vs_currencies=${fromCurrency.toLowerCase()}`);
-      const data = await response.json();
-      return data[toCurrency.toLowerCase()][fromCurrency.toLowerCase()];
-    } catch (error) {
-      console.error('Error fetching exchange rate:', error);
-    }
+async function doExchange(){
+  const amt = document.getElementById('ex-amount').value || 0;
+  const to = document.getElementById('ex-to').value;
+  const resEl = document.getElementById('ex-result');
+  resEl.innerText = "Fetching live rate...";
+  try{
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+to+'&vs_currencies=gbp');
+    const d = await r.json();
+    const rate = d[to].gbp;
+    const got = amt / rate;
+    resEl.innerText = amt + " GBP = " + got.toFixed(6) + " " + to.toUpperCase() + "  (1 " + to.toUpperCase() + " = £" + rate + ")";
+  }catch(e){
+    resEl.innerText = "Rate failed, try again. Check internet.";
   }
-
-  // Fetch user's current wallet balance
-  async function getWalletBalance(userId) {
-    try {
-      const { data, error } = await supabase
-        .from('wallets')
-        .select('balance')
-        .eq('user_id', userId);
-      if (error) throw error;
-      return data[0].balance;
-    } catch (error) {
-      console.error('Error fetching wallet balance:', error);
-    }
-  }
-
-  // Update wallet balance after exchange
-  async function updateWalletBalance(userId, newBalance) {
-    try {
-      const { data, error } = await supabase
-        .from('wallets')
-        .update({ balance: newBalance })
-        .eq('user_id', userId);
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error updating wallet balance:', error);
-    }
-  }
-
-  // Add transaction to history
-  async function addTransaction(userId, transaction) {
-    try {
-      const { data, error } = await supabase
-        .from('transactions')
-        .insert([transaction]);
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error adding transaction:', error);
-    }
-  }
-
-  // Handle exchange form submission
-  document.getElementById('exchange-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const userId = 'CURRENT_USER_ID'; // Replace with current user's ID
-    const fromCurrency = document.getElementById('from-currency').value;
-    const toCurrency = document.getElementById('to-currency').value;
-    const amount = parseFloat(document.getElementById('amount').value);
-    const rate = await getExchangeRate(fromCurrency, toCurrency);
-    const exchangedAmount = amount / rate;
-    const fee = exchangedAmount * 0.005; // 0.5% fee
-    const finalAmount = exchangedAmount - fee;
-    const currentBalance = await getWalletBalance(userId);
-    if (currentBalance >= amount) {
-      const newBalance = currentBalance - amount + finalAmount;
-      await updateWalletBalance(userId, newBalance);
-      const transaction = {
-        user_id: userId,
-        from_currency: fromCurrency,
-        to_currency: toCurrency,
-        amount: amount,
-        exchanged_amount: finalAmount,
-        fee: fee,
-        timestamp: new Date().toISOString(),
-      };
-      await addTransaction(userId, transaction);
-      document.getElementById('exchange-result').innerText = `Exchange successful! New balance: ${newBalance}`;
-      // Update transaction history
-      const transactionHistory = document.getElementById('transaction-history');
-      const transactionListItem = document.createElement('li');
-      transactionListItem.textContent = `Exchanged ${amount} ${fromCurrency} for ${finalAmount} ${toCurrency}`;
-      transactionHistory.appendChild(transactionListItem);
-    } else {
-      document.getElementById('exchange-result').innerText = 'Insufficient balance';
-    }
-  });
-
-  // Display live exchange rates
-  setInterval(async () => {
-    const fromCurrency = document.getElementById('from-currency').value;
-    const toCurrency = document.getElementById('to-currency').value;
-    const rate = await getExchangeRate(fromCurrency, toCurrency);
-    document.getElementById('exchange-rate').innerText = `1 ${toCurrency} = ${rate} ${fromCurrency}`;
-  }, 10000); // Update every 10 seconds
+}
 </script>
+<!-- END SAFE EXCHANGE -->
