@@ -1,115 +1,134 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cedars Empire - ADMIN FULL</title>
+<title>Cedars Empire - ADMIN MASTER</title>
 <style>
-body{font-family:Arial;background:#0f172a;color:#fff;margin:0;padding:14px}
-.box{max-width:1000px;margin:auto;background:#1e293b;padding:16px;border-radius:12px}
-input,select,button,textarea{width:100%;padding:11px;margin:5px 0;border-radius:8px;border:0}
-input,select,textarea{background:#0f172a;color:#fff;border:1px solid #334155}
-button{background:#22c55e;color:#000;font-weight:700;cursor:pointer}
-.red{background:#ef4444;color:#fff}.blue{background:#3b82f6;color:#fff}.yellow{background:#eab308}
-.card{background:#0f172a;padding:12px;border-radius:10px;margin:10px 0}
-.flex{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
-.hidden{display:none}.badge{padding:4px 10px;border-radius:20px;background:#eab308;color:#000;font-size:12px}.green{background:#22c55e}
-.small{font-size:12px;color:#94a3b8}.btns{display:flex;gap:6px}.btns button{width:auto;padding:8px 12px;font-size:13px}
-.tabs{display:flex;gap:6px}.tabs button{background:#334155;color:#fff}.tabs button.active{background:#22c55e;color:#000}
+body{font-family:Arial;background:#0a0f1e;color:#fff;margin:0;padding:14px}.box{max-width:1100px;margin:auto}
+.card{background:#131a2e;padding:14px;border-radius:12px;margin:10px 0}input,select,button,textarea{width:100%;padding:11px;margin:5px 0;border-radius:8px;border:0}input,select,textarea{background:#0a0f1e;color:#fff;border:1px solid #334155}button{background:#00d084;color:#000;font-weight:700;cursor:pointer}.red{background:#ef4444;color:#fff}.blue{background:#3b82f6;color:#fff}.yellow{background:#eab308}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.flex{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}.hidden{display:none}.badge{padding:4px 10px;border-radius:20px;background:#eab308;color:#000;font-size:12px}.green{background:#00d084}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button{background:#1e293b;color:#fff;width:auto}.tabs button.active{background:#00d084;color:#000}.small{font-size:12px;color:#94a3b8}.btns{display:flex;gap:6px}.btns button{width:auto;padding:8px 10px;font-size:13px}.grid47{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}.grid47 div{background:#0a0f1e;padding:10px;text-align:center;border-radius:8px;border:1px solid #334155;font-size:12px}
+@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
 </style></head>
 <body><div class="box">
-<h1>🌲 Cedars Empire - ADMIN</h1><small id="status">Not logged in</small>
+<h1>🌲 Cedars Empire</h1><h2>ADMIN MASTER</h2><small id="status">Not logged in</small>
 
-<div id="loginBox" class="card">
-<h2>Admin Login</h2>
+<div id="loginBox" class="card"><h3>Admin Login</h3>
 <input id="email" value="admin@cedars.com"><input id="pass" type="password" placeholder="Password"><input id="code" placeholder="Secret Code">
-<button onclick="doLogin()">Login</button><p id="loginMsg" style="color:#f87171"></p>
-<small>Default: Admin123 / CEDARS2026 - Change in Settings after login</small>
-</div>
+<button onclick="doLogin()">Login</button><p id="loginMsg" style="color:#f87171"></p><small>Default: Admin123 / CEDARS2026</small></div>
 
 <div id="dashBox" class="hidden">
 <div class="tabs">
-<button class="active" onclick="showTab('overview',this)">Overview</button>
-<button onclick="showTab('members',this)">Members</button>
-<button onclick="showTab('tasks',this)">Tasks</button>
-<button onclick="showTab('engines',this)">Engines</button>
-<button onclick="showTab('backup',this)">Backup / Settings</button>
+<button class="active" onclick="showTab('dash',this)">Dashboard</button><button onclick="showTab('engine',this)">Global Engine</button><button onclick="showTab('sub',this)">5 Sub-Engines</button><button onclick="showTab('staking',this)">Staking</button><button onclick="showTab('redeem',this)">Redemption Codes</button><button onclick="showTab('deposits',this)">Deposits</button><button onclick="showTab('kyc',this)">KYC</button><button onclick="showTab('withdraw',this)">Withdrawals</button><button onclick="showTab('wallet',this)">Wallet Unlock</button><button onclick="showTab('p2p',this)">P2P</button><button onclick="showTab('users',this)">Users</button><button onclick="showTab('profit',this)">Profit Share</button><button onclick="showTab('crypto',this)">Cryptology 47 Grids</button>
 </div>
 
-<div id="tab-overview">
-<div class="flex">
-<div class="card" style="flex:1"><h2 id="t1">0</h2>Total Members</div>
-<div class="card" style="flex:1"><h2 id="t2">0</h2>Pending</div>
-<div class="card" style="flex:1"><h2 id="t3">0</h2>Approved</div>
-<div class="card" style="flex:1"><h2 id="t4">0</h2>Total Balance UGX</div>
+<!-- DASHBOARD -->
+<div id="tab-dash">
+<div class="grid">
+<div class="card"><h3 id="sDep">£0</h3><small>Total Deposits</small></div><div class="card"><h3 id="sPend">£0</h3><small>Pending Deposits</small></div><div class="card"><h3 id="sStake">£0</h3><small>Total Staked</small></div><div class="card"><h3 id="sCode">0</h3><small>Redemption Codes</small></div>
+<div class="card"><h3 id="sWith">£0</h3><small>Total Withdrawals</small></div><div class="card"><h3 id="sFee">£0</h3><small>Fees Earned</small></div><div class="card"><h3 id="sLock">£0</h3><small>Locked / In Contract</small></div><div class="card"><h3 id="sKyc">0 / 0</h3><small>KYC Verified</small></div>
 </div>
-<div class="card"><h3>📢 Announcement (Members see this)</h3>
-<textarea id="annText" placeholder="Write announcement..."></textarea>
-<button class="blue" onclick="saveAnn()">Save Announcement</button></div>
-<div class="card"><h3>📜 Activity Log</h3><div id="logList"></div></div>
+<div class="card"><h3>Integration Check</h3><p id="integ">Checking...</p><small>index.html reads this: Engine Running, Staking APY, Balances from same storage key <b>cedars_data</b></small></div>
+<div class="card"><h3>📢 Announcement</h3><textarea id="annText"></textarea><button class="blue" onclick="saveAnn()">Save Announcement</button></div>
+<div class="card"><h3>Backup</h3><div class="flex"><button onclick="exportData()">Export Backup</button><input type="file" id="impFile" accept=".json"><button class="blue" onclick="importData()">Import Backup</button></div></div>
 </div>
 
-<div id="tab-members" class="hidden">
-<div class="card">
-<div class="flex"><input id="search" placeholder="Search name / phone" oninput="render()"><select id="filter" onchange="render()" style="max-width:180px"><option value="all">All</option><option value="pending">Pending</option><option value="approved">Approved</option></select></div>
-<button class="blue" onclick="approveAll()">Approve All Pending</button>
-<div id="memberList"></div></div>
-</div>
+<!-- GLOBAL ENGINE -->
+<div id="tab-engine" class="hidden"><div class="card"><h3>🌍 Global Engine</h3><p>Status: <b id="gStatus">STOPPED</b> | Workers: <b id="gWorkers">2000</b></p>
+<label>Workers</label><input id="gWorkersIn" type="number" value="2000"><label>Global Speed %</label><input id="gSpeed" type="number" value="100">
+<button onclick="toggleGlobal()">START / STOP Global Engine</button><button class="blue" onclick="saveGlobal()">Save Settings</button>
+<p class="small">Global Engine ON = Sub-Engines can run. OFF = all paused. No fake earnings - it only controls visibility / tasks.</p></div></div>
 
-<div id="tab-tasks" class="hidden">
-<div class="card"><h3>Add Task</h3><input id="taskTitle" placeholder="Task title"><input id="taskReward" type="number" placeholder="Reward UGX"><button class="blue" onclick="addTask()">Add Task</button>
-<div id="taskList"></div></div>
-</div>
+<!-- SUB ENGINES -->
+<div id="tab-sub" class="hidden"><div class="card"><h3>5 Sub-Engines</h3><div id="subList"></div></div></div>
 
-<div id="tab-engines" class="hidden">
-<div class="card"><h3>⚙️ Engines - Real Control</h3><div id="engineList"></div>
-<small>ON = Members see RUNNING. OFF = Members see STOPPED. No fake numbers.</small></div>
-</div>
+<!-- STAKING -->
+<div id="tab-staking" class="hidden"><div class="card"><h3>Staking - 12% APY</h3><label>APY %</label><input id="apy" type="number" value="12"><button class="blue" onclick="saveApy()">Save APY</button>
+<div class="grid2"><input id="stakeUser" placeholder="User Phone"><input id="stakeAmt" type="number" placeholder="Amount £"></div><button onclick="addStake()">Add Stake</button><div id="stakeList"></div></div></div>
 
-<div id="tab-backup" class="hidden">
-<div class="card"><h3>Backup</h3>
-<button onclick="exportData()">Export Backup JSON</button>
-<input type="file" id="importFile" accept=".json"><button class="blue" onclick="importData()">Import Backup</button>
-<button class="red" onclick="clearAll()">Clear All Data (Danger)</button></div>
-<div class="card"><h3>Change Admin Login</h3>
-<input id="newPass" placeholder="New Password"><input id="newCode" placeholder="New Secret Code">
-<button class="yellow" onclick="changeAdmin()">Save New Login</button></div>
+<!-- REDEMPTION -->
+<div id="tab-redeem" class="hidden"><div class="card"><h3>Redemption Codes</h3><div class="flex"><input id="codeVal" placeholder="Code e.g CEDARS100"><input id="codeAmt" type="number" placeholder="Amount £"></div><button onclick="addCode()">Create Code</button><div id="codeList"></div></div></div>
+
+<!-- DEPOSITS -->
+<div id="tab-deposits" class="hidden"><div class="card"><h3>Deposits</h3><div class="flex"><input id="depUser" placeholder="User Phone"><input id="depAmt" type="number" placeholder="Amount £"></div><button onclick="addDeposit()">Add Deposit (Pending)</button><div id="depList"></div></div></div>
+
+<!-- KYC -->
+<div id="tab-kyc" class="hidden"><div class="card"><h3>KYC</h3><div id="kycList"></div></div></div>
+
+<!-- WITHDRAWALS -->
+<div id="tab-withdraw" class="hidden"><div class="card"><h3>Withdrawals</h3><div class="flex"><input id="withUser" placeholder="User Phone"><input id="withAmt" type="number" placeholder="Amount £"></div><button onclick="addWithdraw()">Add Withdrawal Request</button><div id="withList"></div></div></div>
+
+<!-- WALLET -->
+<div id="tab-wallet" class="hidden"><div class="card"><h3>Wallet Unlock</h3><input id="walletUser" placeholder="User Phone"><button onclick="unlockWallet()">Unlock Wallet</button><div id="walletList"></div></div></div>
+
+<!-- P2P -->
+<div id="tab-p2p" class="hidden"><div class="card"><h3>P2P</h3><div class="flex"><input id="p2pFrom" placeholder="From Phone"><input id="p2pTo" placeholder="To Phone"><input id="p2pAmt" type="number" placeholder="Amount £"></div><button onclick="addP2P()">Create P2P Transfer</button><div id="p2pList"></div></div></div>
+
+<!-- USERS -->
+<div id="tab-users" class="hidden"><div class="card"><h3>Users / Members + Balances</h3><input id="search" placeholder="Search name / phone" oninput="render()"><select id="filter" onchange="render()"><option value="all">All</option><option value="pending">Pending</option><option value="approved">Approved</option></select><button class="blue" onclick="approveAll()">Approve All Pending</button><div id="userList"></div></div></div>
+
+<!-- PROFIT -->
+<div id="tab-profit" class="hidden"><div class="card"><h3>Profit Share + History</h3><label>Profit to Share £</label><input id="profitAmt" type="number" placeholder="e.g 100"><button onclick="shareProfit()">Share Equally to Approved Users</button><div id="profitList"></div></div></div>
+
+<!-- CRYPTO 47 -->
+<div id="tab-crypto" class="hidden"><div class="card"><h3>Cryptology Engine - 47 Grids</h3><p>47 grids = 47 slots for verification tasks. Click a grid to toggle Active / Idle.</p><div class="grid47" id="grid47"></div></div></div>
+
 <button class="red" onclick="logout()">Logout</button>
-</div>
 </div></div>
 
 <script>
-const DEFAULT_ADMIN={email:"admin@cedars.com",pass:"Admin123",code:"CEDARS2026"};
-function getAdmin(){return JSON.parse(localStorage.getItem("cedars_admin_cfg")||JSON.stringify(DEFAULT_ADMIN))}
-function getData(){let d=JSON.parse(localStorage.getItem("cedars_data")||'{}'); if(!d.members) d.members=[]; if(!d.tasks) d.tasks=[]; if(!d.engines) d.engines=[{id:1,name:"Verification Engine",on:true,desc:"Approves members"},{id:2,name:"Task Engine",on:true,desc:"Shows tasks"},{id:3,name:"Growth Engine",on:false,desc:"Growth / referrals"}]; if(!d.ann) d.ann=""; if(!d.logs) d.logs=[]; return d}
+const ADMIN={email:"admin@cedars.com",pass:"Admin123",code:"CEDARS2026"};
+function getData(){let d=JSON.parse(localStorage.getItem("cedars_data")||'{}'); if(!d.members)d.members=[]; if(!d.deposits)d.deposits=[]; if(!d.withdrawals)d.withdrawals=[]; if(!d.stakes)d.stakes=[]; if(!d.codes)d.codes=[]; if(!d.p2p)d.p2p=[]; if(!d.logs)d.logs=[]; if(!d.grids)d.grids=Array.from({length:47},(_,i)=>({id:i+1,on:i<10})); if(!d.global)d.global={on:true,workers:2000,speed:100,apy:12}; if(!d.ann)d.ann=""; if(!d.sub)d.sub=[{id:1,name:"Verification Engine",on:true},{id:2,name:"Task Engine",on:true},{id:3,name:"Growth Engine",on:false},{id:4,name:"Staking Engine",on:true},{id:5,name:"Payout Engine",on:false}]; return d}
 function save(d){localStorage.setItem("cedars_data",JSON.stringify(d)); render()}
-function log(msg){let d=getData(); d.logs.unshift(new Date().toLocaleString()+" - "+msg); d.logs=d.logs.slice(0,30); localStorage.setItem("cedars_data",JSON.stringify(d)); render()}
-function showTab(id,btn){["overview","members","tasks","engines","backup"].forEach(t=>document.getElementById("tab-"+t).classList.add("hidden")); document.getElementById("tab-"+id).classList.remove("hidden"); document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active")); btn.classList.add("active")}
-function doLogin(){let a=getAdmin(); let e=document.getElementById("email").value.trim(),p=document.getElementById("pass").value.trim(),c=document.getElementById("code").value.trim(); if(e===a.email&&p===a.pass&&c===a.code){localStorage.setItem("cedars_admin","1"); showDash()} else document.getElementById("loginMsg").innerText="Wrong email / password / code"}
-function showDash(){document.getElementById("loginBox").classList.add("hidden"); document.getElementById("dashBox").classList.remove("hidden"); document.getElementById("status").innerText="Logged in as Admin"; document.getElementById("annText").value=getData().ann; render()}
+function log(m){let d=getData(); d.logs.unshift(new Date().toLocaleString()+" - "+m); d.logs=d.logs.slice(0,40); localStorage.setItem("cedars_data",JSON.stringify(d)); render()}
+function showTab(id,btn){["dash","engine","sub","staking","redeem","deposits","kyc","withdraw","wallet","p2p","users","profit","crypto"].forEach(t=>document.getElementById("tab-"+t).classList.add("hidden")); document.getElementById("tab-"+id).classList.remove("hidden"); document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active")); btn.classList.add("active")}
+function doLogin(){let e=document.getElementById("email").value.trim(),p=document.getElementById("pass").value.trim(),c=document.getElementById("code").value.trim(); if(e===ADMIN.email&&p===ADMIN.pass&&c===ADMIN.code){localStorage.setItem("cedars_admin","1"); showDash()} else document.getElementById("loginMsg").innerText="Wrong email / password / code"}
+function showDash(){document.getElementById("loginBox").classList.add("hidden"); document.getElementById("dashBox").classList.remove("hidden"); document.getElementById("status").innerText="Logged in as Admin"; document.getElementById("annText").value=getData().ann; document.getElementById("gWorkersIn").value=getData().global.workers; document.getElementById("gSpeed").value=getData().global.speed; document.getElementById("apy").value=getData().global.apy; render()}
 function logout(){localStorage.removeItem("cedars_admin"); location.reload()}
-function approve(id){let d=getData(); let m=d.members.find(x=>x.id===id); if(m){m.status="approved"; save(d); log("Approved "+m.name)}}
-function approveAll(){let d=getData(); d.members.forEach(m=>m.status="approved"); save(d); log("Approved all pending")}
-function reject(id){let d=getData(); let m=d.members.find(x=>x.id===id); d.members=d.members.filter(x=>x.id!==id); save(d); if(m) log("Deleted "+m.name)}
-function addBal(id,sign){let amt=prompt((sign>0?"Add":"Subtract")+" balance UGX?"); if(!amt) return; let d=getData(); let m=d.members.find(x=>x.id===id); m.balance=(m.balance||0)+sign*Number(amt); save(d); log((sign>0?"Added ":"Subtracted ")+amt+" to "+m.name)}
-function payout(id){let d=getData(); let m=d.members.find(x=>x.id===id); if(!m.balance||m.balance<=0) return alert("No balance"); if(!confirm("Mark UGX "+m.balance+" as PAID to "+m.name+"?")) return; log("Paid UGX "+m.balance+" to "+m.name); m.balance=0; save(d)}
-function toggleEngine(id){let d=getData(); let e=d.engines.find(x=>x.id===id); e.on=!e.on; save(d); log(e.name+" turned "+(e.on?"ON":"OFF"))}
-function addTask(){let t=document.getElementById("taskTitle").value.trim(),r=Number(document.getElementById("taskReward").value||0); if(!t) return alert("Enter task"); let d=getData(); d.tasks.push({id:Date.now(),title:t,reward:r}); document.getElementById("taskTitle").value=""; save(d); log("Added task: "+t)}
-function delTask(id){let d=getData(); d.tasks=d.tasks.filter(x=>x.id!==id); save(d)}
-function saveAnn(){let d=getData(); d.ann=document.getElementById("annText").value; save(d); log("Updated announcement")}
-function exportData(){let blob=new Blob([JSON.stringify(getData(),null,2)],{type:"application/json"}); let a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="cedars-backup.json"; a.click()}
-function importData(){let f=document.getElementById("importFile").files[0]; if(!f) return alert("Choose file"); let r=new FileReader(); r.onload=e=>{localStorage.setItem("cedars_data",e.target.result); render(); alert("Imported")}; r.readAsText(f)}
-function clearAll(){if(!confirm("Delete ALL members/tasks?")) return; localStorage.removeItem("cedars_data"); render()}
-function changeAdmin(){let p=document.getElementById("newPass").value.trim(),c=document.getElementById("newCode").value.trim(); if(!p||!c) return alert("Fill both"); let a=getAdmin(); a.pass=p; a.code=c; localStorage.setItem("cedars_admin_cfg",JSON.stringify(a)); alert("Saved. Next login use new Password/Code")}
+function toggleGlobal(){let d=getData(); d.global.on=!d.global.on; save(d); log("Global Engine "+(d.global.on?"STARTED":"STOPPED"))}
+function saveGlobal(){let d=getData(); d.global.workers=Number(document.getElementById("gWorkersIn").value||2000); d.global.speed=Number(document.getElementById("gSpeed").value||100); save(d)}
+function toggleSub(id){let d=getData(); let s=d.sub.find(x=>x.id===id); s.on=!s.on; save(d); log(s.name+" "+(s.on?"ON":"OFF"))}
+function saveApy(){let d=getData(); d.global.apy=Number(document.getElementById("apy").value||12); save(d)}
+function addStake(){let ph=document.getElementById("stakeUser").value.trim(),amt=Number(document.getElementById("stakeAmt").value||0); if(!ph||!amt) return alert("Fill user + amount"); let d=getData(); let m=d.members.find(x=>x.phone===ph); if(!m) return alert("User not found - add in Users first"); d.stakes.push({id:Date.now(),phone:ph,amount:amt,apy:d.global.apy}); m.balance=(m.balance||0)+amt; save(d); log("Staked £"+amt+" for "+ph)}
+function addCode(){let c=document.getElementById("codeVal").value.trim(),amt=Number(document.getElementById("codeAmt").value||0); if(!c) return alert("Enter code"); let d=getData(); d.codes.push({id:Date.now(),code:c,amount:amt,used:false}); save(d)}
+function delCode(id){let d=getData(); d.codes=d.codes.filter(x=>x.id!==id); save(d)}
+function addDeposit(){let ph=document.getElementById("depUser").value.trim(),amt=Number(document.getElementById("depAmt").value||0); if(!ph||!amt) return alert("Fill"); let d=getData(); d.deposits.push({id:Date.now(),phone:ph,amount:amt,status:"pending"}); save(d)}
+function approveDep(id){let d=getData(); let dep=d.deposits.find(x=>x.id===id); dep.status="approved"; let m=d.members.find(x=>x.phone===dep.phone); if(m) m.balance=(m.balance||0)+dep.amount; save(d); log("Approved deposit £"+dep.amount+" "+dep.phone)}
+function addWithdraw(){let ph=document.getElementById("withUser").value.trim(),amt=Number(document.getElementById("withAmt").value||0); if(!ph||!amt) return alert("Fill"); let d=getData(); d.withdrawals.push({id:Date.now(),phone:ph,amount:amt,status:"pending"}); save(d)}
+function approveWith(id){let d=getData(); let w=d.withdrawals.find(x=>x.id===id); w.status="paid"; let m=d.members.find(x=>x.phone===w.phone); if(m) m.balance=Math.max(0,(m.balance||0)-w.amount); save(d); log("Paid withdrawal £"+w.amount+" "+w.phone)}
+function unlockWallet(){let ph=document.getElementById("walletUser").value.trim(); if(!ph) return alert("Enter phone"); let d=getData(); let m=d.members.find(x=>x.phone===ph); if(!m) return alert("User not found"); m.walletUnlocked=true; save(d); log("Wallet unlocked "+ph)}
+function addP2P(){let f=document.getElementById("p2pFrom").value.trim(),t=document.getElementById("p2pTo").value.trim(),amt=Number(document.getElementById("p2pAmt").value||0); if(!f||!t||!amt) return alert("Fill all"); let d=getData(); let mf=d.members.find(x=>x.phone===f), mt=d.members.find(x=>x.phone===t); if(!mf||!mt) return alert("Both users must exist"); if((mf.balance||0)<amt) return alert("Sender has no balance"); mf.balance-=amt; mt.balance=(mt.balance||0)+amt; d.p2p.push({id:Date.now(),from:f,to:t,amount:amt}); save(d); log("P2P £"+amt+" "+f+" -> "+t)}
+function approveUser(id){let d=getData(); let m=d.members.find(x=>x.id===id); if(m) m.status="approved"; save(d); log("Approved "+m.name)}
+function approveAll(){let d=getData(); d.members.forEach(m=>m.status="approved"); save(d); log("Approved all")}
+function delUser(id){let d=getData(); let m=d.members.find(x=>x.id===id); d.members=d.members.filter(x=>x.id!==id); save(d); if(m) log("Deleted "+m.name)}
+function addBal(id,s){let amt=prompt((s>0?"Add":"Subtract")+" balance £?"); if(!amt) return; let d=getData(); let m=d.members.find(x=>x.id===id); m.balance=(m.balance||0)+s*Number(amt); save(d)}
+function verifyKyc(id){let d=getData(); let m=d.members.find(x=>x.id===id); m.kyc="verified"; save(d); log("KYC verified "+m.name)}
+function shareProfit(){let amt=Number(document.getElementById("profitAmt").value||0); if(!amt) return alert("Enter profit"); let d=getData(); let users=d.members.filter(m=>m.status==="approved"); if(!users.length) return alert("No approved users"); let per=amt/users.length; users.forEach(m=>m.balance=(m.balance||0)+per); save(d); log("Shared profit £"+amt+" = £"+per.toFixed(2)+" each")}
+function toggleGrid(id){let d=getData(); let g=d.grids.find(x=>x.id===id); g.on=!g.on; save(d)}
+function saveAnn(){let d=getData(); d.ann=document.getElementById("annText").value; save(d)}
+function exportData(){let b=new Blob([JSON.stringify(getData(),null,2)],{type:"application/json"}); let a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="cedars-backup.json"; a.click()}
+function importData(){let f=document.getElementById("impFile").files[0]; if(!f) return alert("Choose file"); let r=new FileReader(); r.onload=e=>{localStorage.setItem("cedars_data",e.target.result); render(); alert("Imported")}; r.readAsText(f)}
 function render(){
 let d=getData();
-document.getElementById("t1").innerText=d.members.length;
-document.getElementById("t2").innerText=d.members.filter(m=>m.status==="pending").length;
-document.getElementById("t3").innerText=d.members.filter(m=>m.status==="approved").length;
-document.getElementById("t4").innerText=d.members.reduce((s,m)=>s+(m.balance||0),0);
-document.getElementById("logList").innerHTML=d.logs.map(l=>`<div class="small">• ${l}</div>`).join("")||"No activity yet";
+document.getElementById("sDep").innerText="£"+d.deposits.filter(x=>x.status==="approved").reduce((s,x)=>s+x.amount,0);
+document.getElementById("sPend").innerText="£"+d.deposits.filter(x=>x.status==="pending").reduce((s,x)=>s+x.amount,0);
+document.getElementById("sStake").innerText="£"+d.stakes.reduce((s,x)=>s+x.amount,0);
+document.getElementById("sCode").innerText=d.codes.length;
+document.getElementById("sWith").innerText="£"+d.withdrawals.filter(x=>x.status==="paid").reduce((s,x)=>s+x.amount,0);
+document.getElementById("sFee").innerText="£"+(d.deposits.reduce((s,x)=>s+x.amount,0)*0.02).toFixed(2);
+document.getElementById("sLock").innerText="£"+d.stakes.reduce((s,x)=>s+x.amount,0);
+document.getElementById("sKyc").innerText=d.members.filter(m=>m.kyc==="verified").length+" / "+d.members.length;
+document.getElementById("gStatus").innerText=d.global.on?"RUNNING":"STOPPED"; document.getElementById("gWorkers").innerText=d.global.workers;
+document.getElementById("integ").innerText=d.global.on?`Engine Running ${d.global.workers} workers | Staking ${d.global.apy}% APY | Sub-Engines ${d.sub.filter(s=>s.on).length}/5 ON | Members ${d.members.length} | Grids ${d.grids.filter(g=>g.on).length}/47 Active`:"Engine STOPPED";
+document.getElementById("subList").innerHTML=d.sub.map(s=>`<div class="flex card"><b>${s.on?"🟢":"🔴"} ${s.name}</b><button class="${s.on?"red":""}" style="width:110px" onclick="toggleSub(${s.id})">${s.on?"STOP":"START"}</button></div>`).join("");
+document.getElementById("stakeList").innerHTML=d.stakes.map(s=>`<div class="card">£${s.amount} - ${s.phone} - ${s.apy}% APY</div>`).join("")||"No stakes";
+document.getElementById("codeList").innerHTML=d.codes.map(c=>`<div class="flex card"><b>${c.code} - £${c.amount} ${c.used?"(Used)":""}</b><button class="red" style="width:90px" onclick="delCode(${c.id})">Delete</button></div>`).join("")||"No codes";
+document.getElementById("depList").innerHTML=d.deposits.map(x=>`<div class="flex card"><span>${x.phone} - £${x.amount} - ${x.status}</span><div class="btns">${x.status==="pending"?`<button onclick="approveDep(${x.id})">Approve</button>`:""}</div></div>`).join("")||"No deposits";
+document.getElementById("kycList").innerHTML=d.members.map(m=>`<div class="flex card"><span>${m.name} - ${m.phone} - ${m.kyc||"pending"}</span><button class="blue" style="width:110px" onclick="verifyKyc(${m.id})">Verify KYC</button></div>`).join("")||"No users";
+document.getElementById("withList").innerHTML=d.withdrawals.map(w=>`<div class="flex card"><span>${w.phone} - £${w.amount} - ${w.status}</span>${w.status==="pending"?`<button style="width:110px" onclick="approveWith(${w.id})">Mark Paid</button>`:""}</div>`).join("")||"No withdrawals";
+document.getElementById("walletList").innerHTML=d.members.map(m=>`<div class="card">${m.name} - ${m.phone} - Wallet: ${m.walletUnlocked?"UNLOCKED":"LOCKED"}</div>`).join("")||"No users";
+document.getElementById("p2pList").innerHTML=d.p2p.map(p=>`<div class="card">£${p.amount} ${p.from} → ${p.to}</div>`).join("")||"No P2P";
 let q=(document.getElementById("search")?.value||"").toLowerCase(), f=document.getElementById("filter")?.value||"all";
 let list=d.members.filter(m=>(f==="all"||m.status===f)&&((m.name+" "+m.phone).toLowerCase().includes(q)));
-document.getElementById("memberList").innerHTML=list.length===0?"<p>No members</p>":list.map(m=>`<div class="flex card"><div><b>${m.name}</b><br><span class="small">${m.phone} | Bal: ${m.balance||0}</span></div><span class="badge ${m.status==="approved"?"green":""}">${m.status}</span><div class="btns"><button onclick="approve(${m.id})">Approve</button><button class="blue" onclick="addBal(${m.id},1)">+ Bal</button><button class="yellow" onclick="addBal(${m.id},-1)">- Bal</button><button class="blue" onclick="payout(${m.id})">Pay</button><button class="red" onclick="reject(${m.id})">Delete</button></div></div>`).join("");
-document.getElementById("taskList").innerHTML=d.tasks.map(t=>`<div class="flex card"><span>${t.title} - UGX ${t.reward}</span><button class="red" style="width:80px" onclick="delTask(${t.id})">Delete</button></div>`).join("")||"<p>No tasks</p>";
-document.getElementById("engineList").innerHTML=d.engines.map(e=>`<div class="flex card"><div><b>${e.on?"🟢":"🔴"} ${e.name}</b><br><span class="small">${e.desc}</span></div><button class="${e.on?"red":""}" style="width:110px" onclick="toggleEngine(${e.id})">${e.on?"STOP":"START"}</button></div>`).join("");
+document.getElementById("userList").innerHTML=list.map(m=>`<div class="flex card"><div><b>${m.name}</b><br><span class="small">${m.phone} | Bal £${m.balance||0} | KYC ${m.kyc||"pending"} | Wallet ${m.walletUnlocked?"Unlocked":"Locked"}</span></div><span class="badge ${m.status==="approved"?"green":""}">${m.status}</span><div class="btns"><button onclick="approveUser(${m.id})">Approve</button><button class="blue" onclick="addBal(${m.id},1)">+ Bal</button><button class="yellow" onclick="addBal(${m.id},-1)">- Bal</button><button class="red" onclick="delUser(${m.id})">Delete</button></div></div>`).join("")||"No users";
+document.getElementById("profitList").innerHTML=d.logs.map(l=>`<div class="small">• ${l}</div>`).join("")||"No history";
+document.getElementById("grid47").innerHTML=d.grids.map(g=>`<div onclick="toggleGrid(${g.id})" style="background:${g.on?"#00d084":"#0a0f1e"};color:${g.on?"#000":"#fff"}">Grid ${g.id}<br>${g.on?"Active":"Idle"}</div>`).join("");
 }
 if(localStorage.getItem("cedars_admin")==="1") showDash();
 </script></body></html>
