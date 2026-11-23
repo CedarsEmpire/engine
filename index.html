@@ -1,257 +1,53 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CEDARS EMPIRE - MEMBER</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CEDARS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}body{background:#050816;color:#fff;padding:12px;padding-bottom:90px}
-.top{background:#0f172a;padding:14px;border-radius:16px;text-align:center;border:2px solid #22c55e;max-width:960px;margin:0 auto}
-.card{background:#1e293b;padding:14px;border-radius:16px;margin:10px auto;max-width:960px;border:1px solid #334155}
-h1{font-size:22px}h2{font-size:15px;margin-bottom:8px}h3{font-size:13px;margin:12px 0 6px;color:#22c55e}
-.small{font-size:12px;opacity:.75}.green{color:#22c55e}.red{color:#f87171}.yellow{color:#facc15}
-input,select,button{width:100%;padding:11px;margin:5px 0;border-radius:12px;border:1px solid #475569;background:#0f172a;color:#fff;font-size:13px}
-button{background:#22c55e;color:#000;font-weight:800;border:0;cursor:pointer}button.blue{background:#38bdf8}button.yellow{background:#facc15}button.purple{background:#a855f7;color:#fff}button.red{background:#f87171}button.gray{background:#334155;color:#fff}button.orange{background:#fb923c;color:#000}
-.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat{background:#0f172a;padding:12px;border-radius:12px;text-align:center}.stat b{font-size:16px;display:block}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0}.tab{padding:9px 11px;border-radius:20px;background:#1e293b;border:1px solid #334155;cursor:pointer;font-size:11px;font-weight:700}.tab.active{background:#22c55e;color:#000}
-.page{display:none;max-width:960px;margin:0 auto}.page.active{display:block}.hidden{display:none}
-table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:6px;border-bottom:1px solid #334155;text-align:left;word-break:break-all}
-.msg{padding:10px;border-radius:10px;margin:8px 0;font-size:13px;display:none}.msg.err{background:#7f1d1d;display:block}.msg.ok{background:#14532d;display:block}.msg.warn{background:#713f12;display:block}
-.badge{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800;background:#334155}.badge.wait{background:#713f12;color:#facc15}
-.flex{display:flex;gap:6px}.flex button{flex:1}.announce{background:#713f12;border:1px solid #facc15;padding:12px;border-radius:12px;margin:8px 0;text-align:center;font-weight:700}
-a{color:#38bdf8}
-</style></head><body>
-<div class="top"><h1>🌲 CEDARS EMPIRE - MEMBER</h1><p class="small">NO FIAT - Duly Crypto Only | Earn € | €1=$1.10 | Exchange 2% | Withdraw 20% | P2P 5% | Staking 0.03%/24h</p>
-<p class="small">Logged in: <b id="curUser">-</b> | <span id="connStatus">Not connected</span> | Workers: <b>250/250 ACTIVE - 24/7</b> | Global: <b id="topGlobal">ON</b></p>
-<div id="globalAnnounce" class="announce hidden"></div>
-<div id="killBanner" class="hidden" style="border:2px solid #f87171;background:#450a0a;padding:12px;border-radius:12px;text-align:center">🚨 SYSTEM PAUSED BY ADMIN</div>
-</div>
-
-<div class="card" id="authCard"><h2>🔐 Login / Sign Up</h2>
-<input id="mEmail" placeholder="Your Email"><input id="mPass" type="password" placeholder="Password"><input id="mName" placeholder="Your Name (Sign Up Only)">
-<div class="flex"><button onclick="memberLogin()">LOGIN</button><button class="blue" onclick="memberSignup()">SIGN UP</button></div>
-<div class="flex"><button class="gray" onclick="testConnection()">TEST CONNECTION</button><button class="red" onclick="memberLogout()">LOGOUT</button></div>
-<div id="authBox" class="msg"></div><p class="small" id="debugBox"></p><p class="small">Admin? <a href="admin.html">Go to Admin - admin.html</a></p></div>
-
-<div id="memberMain" class="hidden">
-<div class="tabs">
-<div class="tab active" onclick="showPage('home',this)">HOME</div><div class="tab" onclick="showPage('tasks',this)">TASKS €0.50</div><div class="tab" onclick="showPage('exchange',this)">EXCHANGE 2%</div><div class="tab" onclick="showPage('p2p',this)">P2P 5%</div><div class="tab" onclick="showPage('staking',this)">STAKING 0.03%</div><div class="tab" onclick="showPage('withdraw',this)">WITHDRAW 20%</div><div class="tab" onclick="showPage('history',this)">HISTORY</div><div class="tab" onclick="showPage('accounts',this)">ACCOUNTS</div>
-</div>
-
-<div id="page-home" class="page active">
-<div class="card"><h2>💰 My Balances</h2><button class="blue" onclick="loadMe()">REFRESH BALANCES</button>
-<div class="grid4"><div class="stat"><b id="balEuro">€0.00</b><span class="small">Euro Balance - From Tasks</span></div><div class="stat"><b id="balCrypto">$0.00</b><span class="small">Crypto $ - After Exchange</span></div><div class="stat"><b id="balStaked">$0.00</b><span class="small">Staked $</span></div><div class="stat"><b id="balStakeDaily">$0.00</b><span class="small">Daily Staking 0.03%</span></div></div>
-<div class="grid3" style="margin-top:8px"><div class="stat"><b id="balTasks">0</b><span class="small">Tasks Done Today</span></div><div class="stat"><b id="balEarned">€0.00</b><span class="small">Earned Today</span></div><div class="stat"><b id="balPending">0</b><span class="small">Pending Approvals</span></div></div>
-<h3>250 AI Workers - Live</h3><p class="small">250 Workers = Africa 50 + Europe 50 + Asia 50 + Americas 50 + Oceania 50. Sourcing from Underground + Earth Planet + Cloud. Working 24/7 Non-Stop.</p>
-<div class="grid3"><div class="stat"><b id="wSourced">0</b><span class="small">Tasks Available Now</span></div><div class="stat"><b id="wVerified">0</b><span class="small">Verified Today</span></div><div class="stat"><b id="wActive">250/250</b><span class="small">Workers Active</span></div></div>
-<button class="yellow" onclick="loadTasks()">LOAD NEW TASKS FROM 250 WORKERS</button>
-<h3>My Messages From Admin</h3><div id="myMessages" style="font-size:12px;line-height:1.8">No messages yet</div>
-</div></div>
-
-<div id="page-tasks" class="page">
-<div class="card"><h2>🤖 Tasks - €0.50 Each - 250 Workers Sourcing</h2>
-<p class="small">Complete a task, AI Workers verify it, you get €0.50. Tasks come from Marketplace, Insurance, Savings, NGO.</p>
-<button class="blue" onclick="loadTasks()">REFRESH TASKS</button>
-<div id="taskList" style="margin-top:8px"></div>
-<p class="small" id="taskMsg"></p>
-</div></div>
-
-<div id="page-exchange" class="page">
-<div class="card"><h2>💱 Exchange € to $ - Fee 2% - Rate €1=$1.10</h2>
-<p class="small">You have: <b id="exBal">€0.00</b> | Rate: <b id="exRate">€1 = $1.10</b> | Fee: <b>2%</b></p>
-<input id="exAmt" type="number" placeholder="Amount in € e.g. 10"><p class="small" id="exPreview">Enter amount to see preview</p>
-<button onclick="doExchange()">EXCHANGE NOW - 2% FEE</button><p class="small" id="exMsg"></p>
-<p class="small">Example: Exchange €10 -> $11.00 - 2% Fee ($0.22) = You get $10.78</p>
-</div></div>
-
-<div id="page-p2p" class="page">
-<div class="card"><h2>🤝 P2P Send - Fee 5%</h2>
-<input id="p2pTo" placeholder="Receiver Email"><input id="p2pAmt" type="number" placeholder="Amount in $ e.g. 5"><p class="small" id="p2pPreview">Enter amount to see preview</p>
-<button onclick="doP2P()">SEND P2P - 5% FEE</button><p class="small" id="p2pMsg"></p>
-<p class="small">Example: Send $10 -> Receiver gets $9.50, Fee $0.50 to CEDARS</p>
-</div></div>
-
-<div id="page-staking" class="page">
-<div class="card"><h2>🔒 Staking - 0.03% Every 24h</h2>
-<p class="small">Staked: <b id="stBal">$0.00</b> | Daily Reward: <b id="stDaily">$0.00</b> | Available Crypto: <b id="stAvail">$0.00</b></p>
-<input id="stakeAmt" type="number" placeholder="Amount to Stake in $ e.g. 10">
-<div class="flex"><button onclick="doStake()">STAKE NOW</button><button class="yellow" onclick="doUnstake()">UNSTAKE ALL</button></div>
-<p class="small" id="stakeMsg"></p>
-<p class="small">Example: Stake $100 -> Earn $0.03 every 24h. Unstake anytime.</p>
-</div></div>
-
-<div id="page-withdraw" class="page">
-<div class="card"><h2>💸 Withdraw - Fee 20% - Duly Crypto Only - NO FIAT</h2>
-<p class="small">Available Crypto: <b id="wdBal">$0.00</b> | Fee: <b>20%</b> | You will receive 80%</p>
-<input id="wdAmt" type="number" placeholder="Amount in $ e.g. 20"><input id="wdWallet" placeholder="Your Crypto Wallet Address - Duly Crypto Only"><p class="small" id="wdPreview">Enter amount to see preview</p>
-<button class="red" onclick="doWithdraw()">REQUEST WITHDRAW - 20% FEE</button><p class="small" id="wdMsg"></p>
-<p class="small">Example: Withdraw $100 -> Fee $20 -> You receive $80 in Crypto. Admin must approve.</p>
-<h3>My Withdrawals</h3><div id="myWdList" style="font-size:12px;line-height:1.8"></div>
-</div></div>
-
-<div id="page-history" class="page">
-<div class="card"><h2>📜 My History</h2><button class="blue" onclick="loadHistory()">REFRESH HISTORY</button>
-<div style="overflow-x:auto"><table><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead><tbody id="histList"><tr><td colspan="4">Click REFRESH</td></tr></tbody></table></div>
-</div></div>
-
-<div id="page-accounts" class="page">
-<div class="card"><h2>🏦 My Fund Accounts</h2><p class="small">Your money is split by activity, same as Admin accounts.</p>
-<div class="grid3"><div class="stat"><b id="accTask">€0.00</b><span class="small">Task Earnings</span></div><div class="stat"><b id="accEx">$0.00</b><span class="small">Exchange Balance</span></div><div class="stat"><b id="accStake2">$0.00</b><span class="small">Staking Balance</span></div></div>
-<div class="grid3" style="margin-top:8px"><div class="stat"><b id="accMarket">€0.00</b><span class="small">Marketplace</span></div><div class="stat"><b id="accIns">€0.00</b><span class="small">Insurance</span></div><div class="stat"><b id="accSave">€0.00</b><span class="small">Savings</span></div></div>
-<div class="grid3" style="margin-top:8px"><div class="stat"><b id="accNgo">€0.00</b><span class="small">NGO</span></div><div class="stat"><b id="accP2P2">$0.00</b><span class="small">P2P Received</span></div><div class="stat"><b id="accTotal">€0.00</b><span class="small">Total</span></div></div>
-<p class="small" style="margin-top:10px;text-align:center"><a href="admin.html">Admin Login - admin.html</a> (Admin Only)</p>
-</div></div>
-
-</div>
-
+<style>body{margin:0;font-family:Arial;background:#FFFEF9}header{background:#0A1A12;color:#D4AF6A;text-align:center;padding:14px}header p{color:#888;font-size:11px}nav{display:flex;gap:6px;padding:10px;overflow-x:auto}nav button{padding:9px 12px;border-radius:99px;border:1px solid #E6D5A0;background:#fff;font-weight:700}nav button.on{background:#0A1A12;color:#D4AF6A}.wrap{max-width:600px;margin:0 auto;padding:0 10px 30px}.card{background:#fff;border:1px solid #EEE;border-radius:14px;padding:14px;margin-bottom:10px}.big{font-size:32px;font-weight:800}label{display:block;font-weight:700;font-size:13px;margin:12px 0 5px}input,select{width:100%;padding:12px;border:1px solid #DDD;border-radius:9px;box-sizing:border-box}.btn{background:#D4AF6A;border:none;width:100%;padding:13px;border-radius:10px;font-weight:800;margin-top:12px}.btn2{background:#0A1A12;color:#D4AF6A}.btnR{background:#FF6B6B;color:#fff}.btnG{background:#7ED491}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F5F5F5;font-size:14px}.row b{text-align:right;word-break:break-all}.term{background:#0A1A12;color:#D4FFD4;font-family:monospace;font-size:12px;padding:10px;border-radius:10px;min-height:100px}.hide{display:none}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0A1A12;color:#fff;padding:10px 16px;border-radius:99px;display:none;z-index:99}.flex{display:flex;gap:8px}.flex .btn{flex:1}.addr{background:#FFF8E6;border:1px dashed #D4AF6A;padding:10px;border-radius:9px;font-size:12px;word-break:break-all;text-align:center}.small{font-size:11px;color:#888;margin-top:6px;text-align:center}</style></head><body>
+<header><h1>✦ CEDARS EMPIRE ✦</h1><p>PERSONAL ONLY</p></header>
+<div class="wrap" style="padding-top:12px"><div class="card"><b>CONNECTION TEST</b><div class="small" id="connMsg">Not tested yet</div><button class="btn" onclick="testConn()">TEST CONNECTION</button></div></div>
+<div id="loginBox" class="wrap" style="padding-top:4px"><div class="card"><label>Email</label><input id="em" value="cedarsempire@proton.me"><label>Password</label><input id="pw" type="password" placeholder="Password"><button class="btn" onclick="doLogin()">LOGIN</button><button class="btn btn2" onclick="doSetup()">FIRST TIME - CREATE PASSWORD</button><div class="small" id="loginMsg">Tap FIRST TIME once, then LOGIN</div></div></div>
+<div id="app" class="hide"><nav><button class="on" id="n-home" onclick="showPage('home')">HOME</button><button id="n-deposit" onclick="showPage('deposit')">DEPOSIT</button><button id="n-workers" onclick="showPage('workers')">WORKERS</button><button id="n-staking" onclick="showPage('staking')">STAKING</button><button id="n-referral" onclick="showPage('referral')">REFERRAL</button><button id="n-withdraw" onclick="showPage('withdraw')">WITHDRAW</button></nav><div class="wrap">
+<div id="home" class="page"><div class="card"><div style="font-size:12px;color:#888">BALANCE</div><div class="big" id="bal">$4.00</div><div class="row"><span>Profit Today</span><b id="prof">+$0.000</b></div><div class="row"><span>Tasks</span><b id="tasks">0</b></div><div class="row"><span>Workers</span><b>8 • <span id="eng">ON</span></b></div><div class="row"><span>Compounding</span><b id="compTxt">ON</b></div><div class="row"><span>Staked</span><b id="stakedHome">$0.00</b></div><div class="row"><span>Network</span><b>Polygon + Tron</b></div><div class="flex"><button class="btn btnG" onclick="doStart()">START</button><button class="btn btnR" onclick="doStop()">STOP</button></div><button class="btn btn2" onclick="doComp()">COMPOUNDING: <span id="compBtn">ON</span></button></div><div class="card"><div class="term" id="term"></div><button class="btn" onclick="doTrade()">NEXT TASK</button></div></div>
+<div id="deposit" class="page hide"><div class="card"><b>DEPOSIT - ADD COIN</b><label>Select Wallet</label><select id="depNet" onchange="updQR()"><option value="polygon">Polygon - 0x0d4c...A77B</option><option value="tron">Tron - TE26...cz1u</option></select><div class="addr" id="depAddr" style="margin-top:12px">0x0d4c2B95e8FB7Be3DB9953bAcEf3A4Be643bA77B</div><button class="btn" onclick="copyAddr()">COPY ADDRESS</button><label>Amount You Sent $</label><input id="depAmt" type="number" placeholder="10"><button class="btn btn2" onclick="doDep()">I SENT - ADD TO BALANCE</button></div></div>
+<div id="workers" class="page hide"><div class="card"><b>AI WORKERS - LIVE</b><div id="wlist"></div><div class="small">8 Workers - Target only, profit NOT promised</div></div></div>
+<div id="staking" class="page hide"><div class="card"><b>STAKING</b><div class="row"><span>Balance</span><b id="stakeBal">$4.00</b></div><div class="row"><span>Staked</span><b id="staked">$0.00</b></div><div class="row"><span>Rate</span><b>5% / Year</b></div><label>Amount to Stake $</label><input id="stakeAmt" type="number" placeholder="1"><div class="flex"><button class="btn btnG" onclick="doStake()">STAKE</button><button class="btn btnR" onclick="doUnstake()">UNSTAKE</button></div></div></div>
+<div id="referral" class="page hide"><div class="card"><b>REFERRAL</b><div class="row"><span>Short Code</span><b>CEDARS-7K2</b></div><div class="addr">https://cedarsempire.app/r/CEDARS-7K2</div><button class="btn" onclick="copyRef()">COPY REFERRAL LINK</button></div></div>
+<div id="withdraw" class="page hide"><div class="card"><b>WITHDRAW</b><label>Network</label><select id="wdNet"><option value="polygon">Polygon</option><option value="tron">Tron</option></select><label>To Wallet</label><input id="wallet" placeholder="0x... / T..."><label>Amount $</label><input id="wd" type="number" placeholder="1" oninput="doCalc()"><div class="row"><span>Fee 20%</span><b id="fee">$0.00</b></div><div class="row"><span>You Get</span><b id="net">$0.00</b></div><button class="btn" onclick="doWd()">WITHDRAW</button></div></div>
+</div></div><div class="toast" id="toast"></div>
 <script>
-var SUPABASE_URL="https://ipyvewpjtpgfugfwizlr.supabase.co";
-var SUPABASE_KEY="sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
-var EUR_TO_USD=1.1, EX_FEE_PCT=2, WD_FEE_PCT=20, P2P_FEE_PCT=5;
-var dbClient=null, curEmail="", myBal={balance:0,total_balance:0,shares:0};
-function showPage(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');}
-function showMsg(id,txt,ok){var e=document.getElementById(id);e.className='msg '+(ok?'ok':'err');e.textContent=txt;e.style.display='block';}
-function init(){
-  try{let f=JSON.parse(localStorage.getItem('cedars_fees')||'{}');if(f.ex)EX_FEE_PCT=f.ex;if(f.wd)WD_FEE_PCT=f.wd;if(f.p2p)P2P_FEE_PCT=f.p2p;let r=parseFloat(localStorage.getItem('cedars_rate')||'1.1');if(r)EUR_TO_USD=r;let a=localStorage.getItem('cedars_announce')||'';if(a){document.getElementById('globalAnnounce').textContent='📢 '+a;document.getElementById('globalAnnounce').classList.remove('hidden');}let g=localStorage.getItem('cedars_global');if(g==='0'){document.getElementById('topGlobal').textContent='OFF';document.getElementById('killBanner').classList.remove('hidden');}let k=localStorage.getItem('cedars_kill')==='1';if(k)document.getElementById('killBanner').classList.remove('hidden');}catch(e){}
-  document.getElementById('exRate').textContent='€1 = $'+EUR_TO_USD.toFixed(2);
-  try{if(!window.supabase||!window.supabase.createClient){showMsg('authBox','Supabase library failed - Check internet',false);return;}dbClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){showMsg('authBox','Init failed: '+e.message,false);return;}
-  document.getElementById('connStatus').textContent='Supabase Ready - Login';
-  dbClient.auth.getSession().then(r=>{if(r.data&&r.data.session&&r.data.session.user){curEmail=r.data.session.user.email;document.getElementById('curUser').textContent=curEmail;document.getElementById('memberMain').classList.remove('hidden');loadMe();loadTasks();}});
-  document.getElementById('exAmt').addEventListener('input',()=>{let a=parseFloat(document.getElementById('exAmt').value||0);if(a>0){let usd=a*EUR_TO_USD,fee=usd*EX_FEE_PCT/100;document.getElementById('exPreview').textContent='You pay €'+a+' -> You get $'+(usd-fee).toFixed(2)+' (Fee '+EX_FEE_PCT+'% = $'+fee.toFixed(2)+')';}});
-  document.getElementById('p2pAmt').addEventListener('input',()=>{let a=parseFloat(document.getElementById('p2pAmt').value||0);if(a>0){let fee=a*P2P_FEE_PCT/100;document.getElementById('p2pPreview').textContent='You send $'+a+' -> Receiver gets $'+(a-fee).toFixed(2)+' (Fee '+P2P_FEE_PCT+'% = $'+fee.toFixed(2)+')';}});
-  document.getElementById('wdAmt').addEventListener('input',()=>{let a=parseFloat(document.getElementById('wdAmt').value||0);if(a>0){let fee=a*WD_FEE_PCT/100;document.getElementById('wdPreview').textContent='You withdraw $'+a+' -> You receive $'+(a-fee).toFixed(2)+' in Crypto (Fee '+WD_FEE_PCT+'% = $'+fee.toFixed(2)+')';}});
+const SUPABASE_URL = "PASTE_YOUR_COPIED_URL_HERE";
+const SUPABASE_KEY = "PASTE_YOUR_COPIED_ANON_KEY_HERE";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+async function testConn(){
+  var m = document.getElementById('connMsg');
+  m.textContent = "Testing...";
+  try{
+    const { data, error } = await supabase.from('members').select('*').limit(1);
+    if(error){ m.textContent = "FAILED: " + error.message; toast("FAILED: " + error.message); }
+    else{ m.textContent = "Connected! Members found: " + (data ? data.length : 0); toast("Connected!"); }
+  }catch(e){ m.textContent = "FAILED: " + e.message; toast("FAILED: " + e.message); }
 }
-async function testConnection(){try{let res=await fetch(SUPABASE_URL+'/auth/v1/health',{headers:{apikey:SUPABASE_KEY}});if(res.ok)showMsg('authBox','✅ Connection OK - Supabase is UP',true);else showMsg('authBox','❌ Supabase returned '+res.status+' - Project may be PAUSED',false);}catch(e){showMsg('authBox','❌ Failed to fetch - Project PAUSED or No Internet',false);}}
-async function memberSignup(){let email=document.getElementById('mEmail').value.trim(),pass=document.getElementById('mPass').value,name=document.getElementById('mName').value.trim()||email;if(!email||!pass){showMsg('authBox','Enter email + password',false);return;}showMsg('authBox','Creating account...',true);try{let r=await dbClient.auth.signUp({email,password:pass});if(r.error){showMsg('authBox',r.error.message,false);return;}await dbClient.from('shareholders').insert([{email:email,name:name,balance:0,total_balance:0,shares:0,status:'active'}]);curEmail=email;document.getElementById('curUser').textContent=email;document.getElementById('memberMain').classList.remove('hidden');showMsg('authBox','✅ Account Created - Welcome to CEDARS EMPIRE',true);loadMe();loadTasks();}catch(e){showMsg('authBox','❌ Failed to fetch - '+e.message,false);}}
-async function memberLogin(){let email=document.getElementById('mEmail').value.trim(),pass=document.getElementById('mPass').value;if(!email||!pass){showMsg('authBox','Enter email + password',false);return;}showMsg('authBox','Logging in...',true);try{let r=await dbClient.auth.signInWithPassword({email,password:pass});if(r.error){if(r.error.message.includes('Failed to fetch'))showMsg('authBox','❌ Failed to fetch - Project PAUSED or No Internet',false);else if(r.error.message.includes('Invalid login'))showMsg('authBox','❌ Invalid login - No account. Click SIGN UP first.',false);else showMsg('authBox',r.error.message,false);return;}curEmail=email;document.getElementById('curUser').textContent=email;document.getElementById('memberMain').classList.remove('hidden');showMsg('authBox','✅ Logged In - '+email,true);loadMe();loadTasks();}catch(e){showMsg('authBox','❌ Failed to fetch - '+e.message,false);}}
-async function memberLogout(){if(dbClient)await dbClient.auth.signOut();curEmail="";document.getElementById('memberMain').classList.add('hidden');document.getElementById('curUser').textContent='-';showMsg('authBox','Logged out',true);}
-async function loadMe(){
-  if(!curEmail)return;
-  let r=await dbClient.from('shareholders').select('*').eq('email',curEmail).limit(1);
-  if(r.error){showMsg('authBox',r.error.message,false);return;}
-  if(!r.data||!r.data.length){
-    await dbClient.from('shareholders').insert([{email:curEmail,name:curEmail,balance:0,total_balance:0,shares:0,status:'active'}]);
-    myBal={balance:0,total_balance:0,shares:0};
-  } else {myBal=r.data[0];}
-  let euro=parseFloat(myBal.balance||0),crypto=parseFloat(myBal.total_balance||0),staked=parseFloat(myBal.shares||0);
-  document.getElementById('balEuro').textContent='€'+euro.toFixed(2);
-  document.getElementById('balCrypto').textContent='$'+crypto.toFixed(2);
-  document.getElementById('balStaked').textContent='$'+staked.toFixed(2);
-  document.getElementById('balStakeDaily').textContent='$'+(staked*0.0003).toFixed(4);
-  document.getElementById('exBal').textContent='€'+euro.toFixed(2);
-  document.getElementById('stBal').textContent='$'+staked.toFixed(2);
-  document.getElementById('stDaily').textContent='$'+(staked*0.0003).toFixed(4);
-  document.getElementById('stAvail').textContent='$'+crypto.toFixed(2);
-  document.getElementById('wdBal').textContent='$'+crypto.toFixed(2);
-  document.getElementById('accTask').textContent='€'+euro.toFixed(2);
-  document.getElementById('accEx').textContent='$'+crypto.toFixed(2);
-  document.getElementById('accStake2').textContent='$'+staked.toFixed(2);
-  document.getElementById('accTotal').textContent='€'+(euro+crypto).toFixed(2);
-  let tx=await dbClient.from('transactions').select('*').eq('user_email',curEmail).order('created_at',{ascending:false}).limit(100);
-  if(tx.data){
-    let today=new Date().toDateString();
-    let done=tx.data.filter(t=>t.type==='task_verify'&&new Date(t.created_at).toDateString()===today).length;
-    let earned=done*0.50;
-    let pend=tx.data.filter(t=>t.status==='pending').length;
-    document.getElementById('balTasks').textContent=done;
-    document.getElementById('balEarned').textContent='€'+earned.toFixed(2);
-    document.getElementById('balPending').textContent=pend;
-    let msgs=tx.data.filter(t=>t.type.startsWith('admin_message')||t.type.startsWith('admin_bulk'));
-    document.getElementById('myMessages').innerHTML=msgs.slice(0,5).map(m=>'<div>• '+m.type.replace('admin_message: ','').replace('admin_bulk_message: ','')+'</div>').join('')||'No messages yet';
-  }
-  let wd=await dbClient.from('withdrawals').select('*').eq('user_email',curEmail).order('created_at',{ascending:false}).limit(10);
-  if(wd.data)document.getElementById('myWdList').innerHTML=wd.data.map(w=>'<div>• $'+w.amount+' -> '+(w.method||'')+' - '+w.status+'</div>').join('')||'No withdrawals yet';
-}
-async function loadTasks(){
-  let r=await dbClient.from('tasks').select('*').eq('status','active').order('created_at',{ascending:false}).limit(30);
-  if(r.error){document.getElementById('taskList').innerHTML='<p class="small">'+r.error.message+'</p>';return;}
-  document.getElementById('wSourced').textContent=r.data?r.data.length:0;
-  if(!r.data||!r.data.length){document.getElementById('taskList').innerHTML='<p class="small">No tasks yet - 250 Workers are sourcing. Ask Admin to click AI SOURCE TASKS NOW in admin.html, or wait 30 mins for Auto.</p>';return;}
-  document.getElementById('taskList').innerHTML=r.data.map(t=>'<div class="card" style="margin:6px 0;padding:10px"><b>'+(t.title||'Task')+'</b><br><span class="small">Reward: €0.50 | Source: 250 Workers - Underground / Earth / Cloud</span><br><button style="margin-top:6px" onclick="doTask(\''+t.id+'\',\''+(t.title||'').replace(/\'/g,'')+'\')">DO THIS TASK - EARN €0.50</button></div>').join('');
-}
-async function doTask(taskId,title){
-  if(!curEmail){alert('Login first');return;}
-  let r=await dbClient.from('transactions').insert([{user_email:curEmail,amount:0.50,type:'task_verify',status:'pending'}]);
-  if(r.error){alert(r.error.message);return;}
-  document.getElementById('taskMsg').textContent='✅ Task Submitted: '+title+' - AI Workers will verify + pay €0.50. Check History.';
-  alert('✅ Task Submitted - 250 Workers verifying. You will get €0.50 when approved.');
-  loadMe();loadHistory();
-}
-async function doExchange(){
-  if(!curEmail){alert('Login first');return;}
-  let amt=parseFloat(document.getElementById('exAmt').value||0);
-  if(!amt||amt<=0){document.getElementById('exMsg').textContent='Enter amount';return;}
-  let euro=parseFloat(myBal.balance||0);
-  if(amt>euro){document.getElementById('exMsg').textContent='Not enough € - You have €'+euro.toFixed(2);return;}
-  let usd=amt*EUR_TO_USD,fee=usd*EX_FEE_PCT/100,got=usd-fee;
-  if(!confirm('Exchange €'+amt+' -> $'+got.toFixed(2)+' (Fee '+EX_FEE_PCT+'%)?'))return;
-  let r1=await dbClient.from('shareholders').update({balance:euro-amt,total_balance:parseFloat(myBal.total_balance||0)+got}).eq('email',curEmail);
-  if(r1.error){document.getElementById('exMsg').textContent=r1.error.message;return;}
-  await dbClient.from('transactions').insert([{user_email:curEmail,amount:amt,type:'exchange',status:'approved'}]);
-  document.getElementById('exMsg').textContent='✅ Exchanged €'+amt+' -> $'+got.toFixed(2);
-  alert('✅ Exchange Done - You got $'+got.toFixed(2));
-  loadMe();
-}
-async function doP2P(){
-  if(!curEmail){alert('Login first');return;}
-  let to=document.getElementById('p2pTo').value.trim(),amt=parseFloat(document.getElementById('p2pAmt').value||0);
-  if(!to||!amt){document.getElementById('p2pMsg').textContent='Enter receiver + amount';return;}
-  if(to.toLowerCase()===curEmail.toLowerCase()){document.getElementById('p2pMsg').textContent='Cannot send to yourself';return;}
-  let crypto=parseFloat(myBal.total_balance||0);
-  if(amt>crypto){document.getElementById('p2pMsg').textContent='Not enough $ - You have $'+crypto.toFixed(2);return;}
-  let fee=amt*P2P_FEE_PCT/100,got=amt-fee;
-  if(!confirm('Send $'+amt+' to '+to+'? Receiver gets $'+got.toFixed(2)+' (Fee '+P2P_FEE_PCT+'%)'))return;
-  let rec=await dbClient.from('shareholders').select('*').eq('email',to).limit(1);
-  if(!rec.data||!rec.data.length){document.getElementById('p2pMsg').textContent='Receiver not found';return;}
-  await dbClient.from('shareholders').update({total_balance:crypto-amt}).eq('email',curEmail);
-  await dbClient.from('shareholders').update({total_balance:parseFloat(rec.data[0].total_balance||0)+got}).eq('email',to);
-  await dbClient.from('transactions').insert([{user_email:curEmail,amount:amt,type:'p2p_send',status:'approved'}]);
-  await dbClient.from('transactions').insert([{user_email:to,amount:got,type:'p2p_receive',status:'approved'}]);
-  document.getElementById('p2pMsg').textContent='✅ Sent $'+amt+' to '+to+' - They got $'+got.toFixed(2);
-  alert('✅ P2P Sent');
-  loadMe();
-}
-async function doStake(){
-  if(!curEmail){alert('Login first');return;}
-  let amt=parseFloat(document.getElementById('stakeAmt').value||0);
-  if(!amt||amt<=0){document.getElementById('stakeMsg').textContent='Enter amount';return;}
-  let crypto=parseFloat(myBal.total_balance||0);
-  if(amt>crypto){document.getElementById('stakeMsg').textContent='Not enough $ - You have $'+crypto.toFixed(2);return;}
-  await dbClient.from('shareholders').update({total_balance:crypto-amt,shares:parseFloat(myBal.shares||0)+amt}).eq('email',curEmail);
-  await dbClient.from('transactions').insert([{user_email:curEmail,amount:amt,type:'stake',status:'approved'}]);
-  document.getElementById('stakeMsg').textContent='✅ Staked $'+amt+' - Daily $'+(amt*0.0003).toFixed(4);
-  alert('✅ Staked $'+amt);
-  loadMe();
-}
-async function doUnstake(){
-  if(!curEmail){alert('Login first');return;}
-  let staked=parseFloat(myBal.shares||0);
-  if(staked<=0){document.getElementById('stakeMsg').textContent='Nothing staked';return;}
-  if(!confirm('Unstake $'+staked+'?'))return;
-  await dbClient.from('shareholders').update({total_balance:parseFloat(myBal.total_balance||0)+staked,shares:0}).eq('email',curEmail);
-  await dbClient.from('transactions').insert([{user_email:curEmail,amount:staked,type:'unstake',status:'approved'}]);
-  document.getElementById('stakeMsg').textContent='✅ Unstaked $'+staked;
-  loadMe();
-}
-async function doWithdraw(){
-  if(!curEmail){alert('Login first');return;}
-  let amt=parseFloat(document.getElementById('wdAmt').value||0),wallet=document.getElementById('wdWallet').value.trim();
-  if(!amt||!wallet){document.getElementById('wdMsg').textContent='Enter amount + wallet';return;}
-  let crypto=parseFloat(myBal.total_balance||0);
-  if(amt>crypto){document.getElementById('wdMsg').textContent='Not enough $ - You have $'+crypto.toFixed(2);return;}
-  let fee=amt*WD_FEE_PCT/100,got=amt-fee;
-  if(!confirm('Withdraw $'+amt+'? You receive $'+got.toFixed(2)+' in Crypto (Fee '+WD_FEE_PCT+'%) to '+wallet))return;
-  await dbClient.from('shareholders').update({total_balance:crypto-amt}).eq('email',curEmail);
-  let r=await dbClient.from('withdrawals').insert([{user_email:curEmail,amount:amt,method:wallet,status:'pending'}]);
-  if(r.error){document.getElementById('wdMsg').textContent=r.error.message;return;}
-  await dbClient.from('transactions').insert([{user_email:curEmail,amount:amt,type:'withdrawal',status:'pending'}]);
-  document.getElementById('wdMsg').textContent='✅ Withdraw Requested $'+amt+' - Waiting for Admin Approval. You will receive $'+got.toFixed(2);
-  alert('✅ Withdraw Requested - Admin will approve');
-  loadMe();
-}
-async function loadHistory(){
-  if(!curEmail)return;
-  let r=await dbClient.from('transactions').select('*').eq('user_email',curEmail).order('created_at',{ascending:false}).limit(50);
-  if(r.error){document.getElementById('histList').innerHTML='<tr><td colspan="4">'+r.error.message+'</td></tr>';return;}
-  document.getElementById('histList').innerHTML=(r.data||[]).map(t=>'<tr><td>'+new Date(t.created_at).toLocaleString()+'</td><td>'+t.type+'</td><td>$'+(t.amount||0)+'</td><td>'+(t.status||'')+'</td></tr>').join('')||'<tr><td colspan="4">No history yet</td></tr>';
-}
-init();
+var TREASURY="0x0d4c2B95e8FB7Be3DB9953bAcEf3A4Be643bA77B";var TRON="TE26B7zQjMbahYAWcxEsSPC6aZEr2Hcz1u";var BAL=4,PROF=0,TASKS=0,RUN=true,STAKED=0,COMP=true;var MEM_PW="";
+try{var q=localStorage.getItem('c9');if(q){var p=JSON.parse(q);if(p&&typeof p.bal==='number'){BAL=p.bal;PROF=p.prof||0;TASKS=p.tasks||0;STAKED=p.staked||0;COMP=p.comp!==false;}}MEM_PW=localStorage.getItem('ch')||"";}catch(e){}
+function save(){try{localStorage.setItem('c9',JSON.stringify({bal:BAL,prof:PROF,tasks:TASKS,staked:STAKED,comp:COMP}));}catch(e){}}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none';},2500);}
+function log(m){var t=document.getElementById('term');if(t){t.innerHTML+='['+new Date().toLocaleTimeString()+'] '+m+'<br>';t.scrollTop=9999;}}
+function el(id){return document.getElementById(id);}
+function render(){el('bal').textContent='$'+BAL.toFixed(3);el('prof').textContent='+$'+PROF.toFixed(3);el('tasks').textContent=TASKS;el('eng').textContent=RUN?'ON':'OFF';el('compTxt').textContent=COMP?'ON':'OFF';el('compBtn').textContent=COMP?'ON':'OFF';el('stakedHome').textContent='$'+STAKED.toFixed(2);el('stakeBal').textContent='$'+BAL.toFixed(2);el('staked').textContent='$'+STAKED.toFixed(2);var w=['W1 Forex','W2 Forex','W3 Crypto','W4 Crypto','W5 Arbitrage','W6 Arbitrage','W7 News Guard','W8 Risk'];el('wlist').innerHTML=w.map(function(x){return '<div class="row"><span>'+x+'</span><b>'+(RUN?'Working':'Paused')+'</b></div>';}).join('');}
+function showPage(p){var pages=['home','deposit','workers','staking','referral','withdraw'];pages.forEach(function(x){el(x).classList.add('hide');el('n-'+x).classList.remove('on');});el(p).classList.remove('hide');el('n-'+p).classList.add('on');}
+function doSetup(){var pw=el('pw').value;if(!pw||pw.length<8){toast('Password min 8 chars');return;}MEM_PW=el('em').value+'::'+pw;try{localStorage.setItem('ch',MEM_PW);}catch(e){}toast('Password created - Now LOGIN');el('loginMsg').textContent='Password created - Now LOGIN';}
+function doLogin(){var cur=el('em').value+'::'+el('pw').value;if(!MEM_PW){toast('Tap FIRST TIME first');return;}if(cur!==MEM_PW){toast('Wrong password');return;}el('loginBox').style.display='none';el('app').classList.remove('hide');log('Login OK');doStart();toast('Logged in');}
+function doTrade(){if(!RUN)return;var p=Math.random()<0.25?0:Math.round((0.001+Math.random()*0.008)*1000)/1000;var tot=p+(COMP?p*0.1:0);PROF+=tot;BAL+=tot;TASKS++;save();render();log('Task +$'+tot.toFixed(3)+' -> $'+BAL.toFixed(3));}
+var IV=null;function doStart(){if(IV)return;RUN=true;save();render();IV=setInterval(doTrade,10000);log('Workers ON');toast('Workers ON');}
+function doStop(){RUN=false;save();render();clearInterval(IV);IV=null;log('Workers OFF');toast('Workers OFF');}
+function doComp(){COMP=!COMP;save();render();toast('Compounding '+(COMP?'ON':'OFF'));}
+function updQR(){var n=el('depNet').value;el('depAddr').textContent=n==='tron'?TRON:TREASURY;}
+function copyAddr(){var a=el('depNet').value==='tron'?TRON:TREASURY;try{navigator.clipboard.writeText(a);}catch(e){}toast('Copied '+a.slice(0,10)+'...');}
+function doDep(){var v=parseFloat(el('depAmt').value)||0;if(v<1){toast('Min $1');return;}BAL+=v;save();render();toast('Deposit $'+v+' added');log('Deposit $'+v);}
+function doStake(){var v=parseFloat(el('stakeAmt').value)||0;if(v<1){toast('Min $1');return;}if(v>BAL){toast('Insufficient');return;}BAL-=v;STAKED+=v;save();render();toast('Staked $'+v);}
+function doUnstake(){if(STAKED<=0){toast('Nothing staked');return;}BAL+=STAKED;STAKED=0;save();render();toast('Unstaked');}
+function copyRef(){try{navigator.clipboard.writeText('https://cedarsempire.app/r/CEDARS-7K2');}catch(e){}toast('Referral copied');}
+function doCalc(){var v=parseFloat(el('wd').value)||0;el('fee').textContent='$'+(v*0.2).toFixed(2);el('net').textContent='$'+(v*0.8).toFixed(2);}
+function doWd(){var v=parseFloat(el('wd').value)||0;var w=el('wallet').value.trim();var n=el('wdNet').value;if(v<1){toast('Min $1');return;}if(v>BAL){toast('Insufficient');return;}if(!w){toast('Enter wallet');return;}BAL-=v;save();render();toast('Withdraw $'+v);}
+render();
 </script></body></html>
