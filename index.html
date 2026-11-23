@@ -5,30 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login - Cedars Empire</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>body{font-family:Arial,sans-serif;background:#f3f5f7;display:flex;justify-content:center;padding:40px} .card{background:#fff;padding:24px;border-radius:14px;width:100%;max-width:380px} input{width:100%;padding:11px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box} button{width:100%;padding:12px;background:#111;color:#fff;border:none;border-radius:8px;cursor:pointer} a{color:#1e40af}</style>
+<style>body{font-family:Arial,sans-serif;background:#f3f5f7;display:flex;justify-content:center;padding:40px;margin:0} .card{background:#fff;padding:24px;border-radius:14px;width:100%;max-width:380px;box-shadow:0 2px 10px rgba(0,0,0,.06)} input{width:100%;padding:11px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box} button{width:100%;padding:12px;background:#111;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:6px} .link{background:none;border:none;color:#1e40af;padding:6px;cursor:pointer;width:auto;font-size:13px} .row{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin:6px 0} #msg{text-align:center;font-weight:600;color:#b91c1c;min-height:18px}</style>
 </head>
 <body>
 <div class="card">
-<h2>Cedars Empire Login</h2>
-<p>Login to see your dashboard in £ GBP</p>
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
+<h2 style="margin:0">Cedars Empire Login</h2>
+<p style="color:#666;font-size:14px">Welcome back. Login to access your account.</p>
+<input id="email" type="email" placeholder="Email" autocomplete="email">
+<input id="password" type="password" placeholder="Password" autocomplete="current-password">
+<div class="row">
+<label><input type="checkbox" id="rememberMe" checked style="width:auto"> Remember Me</label>
+<button class="link" onclick="resetPassword()" type="button">Forgot Password?</button>
+</div>
 <button onclick="login()">Login</button>
-<button onclick="signup()" style="background:#fff;color:#111;border:1px solid #111;margin-top:10px">Create Account</button>
+<button onclick="signup()" style="background:#fff;color:#111;border:1px solid #111">Create Account</button>
 <p id="msg"></p>
+<p style="font-size:12px;color:#888;text-align:center">Earnings shown in £ GBP after login.<br>Withdrawals in Crypto Only.</p>
 </div>
 <script>
 const SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Auto-fill email if Remember Me was used
+const savedEmail = localStorage.getItem('cedars_email');
+if(savedEmail){ document.getElementById('email').value = savedEmail; }
+
+// If already logged in, go straight to dashboard
+supabaseClient.auth.getSession().then(({data})=>{
+  if(data.session) window.location.href="index.html";
+});
+
 async function login(){
- const {error} = await supabaseClient.auth.signInWithPassword({email:document.getElementById('email').value, password:document.getElementById('password').value});
- if(error) document.getElementById('msg').innerText = error.message;
- else window.location.href="index.html";
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const remember = document.getElementById('rememberMe').checked;
+  if(!email || !password){ document.getElementById('msg').innerText="Enter email and password"; return; }
+  document.getElementById('msg').innerText="Logging in...";
+  document.getElementById('msg').style.color="#111";
+  const {error} = await supabaseClient.auth.signInWithPassword({email, password});
+  if(error){ document.getElementById('msg').style.color="#b91c1c"; document.getElementById('msg').innerText=error.message; return; }
+  // Remember Me: save email only. Supabase keeps session automatically.
+  if(remember) localStorage.setItem('cedars_email', email);
+  else localStorage.removeItem('cedars_email');
+  window.location.href="index.html";
 }
 async function signup(){
- const {error} = await supabaseClient.auth.signUp({email:document.getElementById('email').value, password:document.getElementById('password').value});
- document.getElementById('msg').innerText = error ? error.message : "Check your email to confirm, then Login";
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  if(!email || !password){ document.getElementById('msg').innerText="Enter email and password to create account"; return; }
+  const {error} = await supabaseClient.auth.signUp({email, password});
+  document.getElementById('msg').style.color = error ? "#b91c1c" : "#15803d";
+  document.getElementById('msg').innerText = error ? error.message : "Account created! Check your email to confirm, then Login.";
+}
+async function resetPassword(){
+  const email = document.getElementById('email').value.trim();
+  if(!email){ document.getElementById('msg').innerText="Type your email first, then tap Forgot Password"; return; }
+  const {error} = await supabaseClient.auth.resetPasswordForEmail(email, {redirectTo: window.location.origin + "/login.html"});
+  document.getElementById('msg').style.color = error ? "#b91c1c" : "#15803d";
+  document.getElementById('msg').innerText = error ? error.message : "Reset link sent to " + email + ". Check inbox / spam.";
 }
 </script>
 </body>
