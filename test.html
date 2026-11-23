@@ -1,0 +1,8 @@
+<script>
+fetch("https://ipyvewpjtpgfugfwizlr.supabase.co/rest/v1/shareholders?select=id&limit=1", {
+  headers: {
+    "apikey": "sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj",
+    "Authorization": "Bearer sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj"
+  }
+}).then(r => r.text()).then(t => document.body.innerHTML = "<pre>" + t.slice(0,500) + "</pre>").catch(e => document.body.innerHTML = "FAILED: " + e.message);
+</script>
