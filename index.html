@@ -80,7 +80,7 @@ footer{text-align:center;padding:20px;color:#666;font-size:13px}
 // ===== YOUR REAL SUPABASE KEYS - INTEGRATED =====
 const SUPABASE_URL = "https://ipyvewpjtpgfuqfw1zl1.supabase.co";
 // PASTE YOUR FULL KEY HERE - replace the ... with the rest you copied
-const SUPABASE_KEY = "sb_publishable_0rA1G41KwNmToFlG91RbyQ_K8bJS_...";
+const SUPABASE_KEY = "sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let currentUser=null; let livePrices={BTC:0,ETH:0,USDT:1}; let gbpUsd=1.27;
 function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
