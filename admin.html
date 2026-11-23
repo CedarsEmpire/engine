@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cedars Empire - ADMIN - MASTER</title>
     <style>
-        /* Paste CSS styles from Part 1 here */
+        /* CSS styles for the admin dashboard */
         body {
             font-family: Arial, sans-serif;
         }
@@ -13,12 +13,12 @@
             width: 80%;
             margin: 40px auto;
         }
-        /* Add more styles as needed */
+        /* More styles for various sections */
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Paste HTML content from Part 1 here -->
+        <!-- Admin login section -->
         <div id="admin-login">
             <h2>Admin Login</h2>
             <input id="admin-email" type="email" placeholder="Email">
@@ -26,30 +26,39 @@
             <input id="admin-code" type="text" placeholder="Secret Code">
             <button onclick="adminLogin()">Login</button>
         </div>
+        <!-- Admin dashboard section -->
         <div id="admin-app" style="display:none">
-            <!-- Dashboard content -->
             <h2>Dashboard</h2>
             <div id="dash-workers"></div>
             <div id="dash-tasks"></div>
             <div id="dash-verify"></div>
             <div id="dash-load-txt"></div>
-            <div id="ge-workers"></div>
-            <div id="ge-tasks"></div>
-            <div id="ge-verify"></div>
-            <div id="ge-load-txt"></div>
             <!-- More dashboard content -->
+            <!-- Engine control section -->
+            <h2>Engine Control</h2>
+            <button onclick="engineStart()">Start Engine</button>
+            <button onclick="enginePause()">Pause Engine</button>
+            <!-- More engine control content -->
+            <!-- Staking section -->
+            <h2>Staking</h2>
+            <div id="stake-list"></div>
+            <!-- More staking content -->
+            <!-- Redemption codes section -->
+            <h2>Redeem Codes</h2>
+            <div id="redeem-list"></div>
+            <!-- More redemption codes content -->
+            <!-- Other sections like deposits, withdrawals, KYC, P2P, users, profit history -->
         </div>
-        <!-- Other sections like engine control, staking, redemption codes, etc. -->
     </div>
 
     <script>
-        // Paste JavaScript code from Part 2 and Part 3 here
+        // JavaScript code for the admin dashboard
         function el(id){ return document.getElementById(id); }
         function setText(id,txt){ var e=el(id); if(e) e.innerText=txt; }
         function setHTML(id,html){ var e=el(id); if(e) e.innerHTML=html; }
-        // Add more JavaScript functions and logic as needed
+        // More JavaScript functions and logic
         try{ 
-            // Code from Part 3 for rendering admin dashboard
+            // Code for rendering admin dashboard
             var totalDep=0, pendingDep=0, totalWd=0, fees=0;
             // More code for calculations and rendering
         }catch(e){ console.log(e); }
