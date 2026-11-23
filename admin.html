@@ -1,105 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cedars Empire - Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#0f172a;color:#fff}
+  header{background:#020617;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+  header h1{font-size:18px;margin:0} header h1 span{color:#f59e0b}
+  button{background:#f59e0b;border:0;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer}
+  .wrap{padding:20px;max-width:1100px;margin:auto}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:20px 0}
+  .card{background:#1e293b;padding:18px;border-radius:12px}
+  .card small{color:#94a3b8} .card h2{margin:8px 0 0}
+  .box{background:#1e293b;padding:16px;border-radius:12px;margin-bottom:16px;overflow-x:auto}
+  table{width:100%;border-collapse:collapse} th,td{padding:10px;text-align:left;border-bottom:1px solid #334155;font-size:14px}
+  input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:600px){.row{grid-template-columns:1fr}}
+  #loading{text-align:center;padding:40px}
+  .badge{padding:4px 8px;border-radius:20px;font-size:12px;background:#334155}
+  .badge.green{background:#166534} .badge.red{background:#991b1b}
+</style>
 </head>
 <body>
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Admin Dashboard</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Users</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Trades</a>
-            </li>
-          </ul>
-        </div>
+<header>
+  <h1>CEDARS EMPIRE <span>ADMIN</span></h1>
+  <div><span id="adminEmail"></span> &nbsp; <button onclick="logout()">Logout</button></div>
+</header>
+
+<div class="wrap">
+  <div id="loading">Checking admin access...</div>
+
+  <div id="adminContent" style="display:none">
+    <div class="cards">
+      <div class="card"><small>Total Members</small><h2 id="totalMembers">0</h2></div>
+      <div class="card"><small>Total Shares</small><h2 id="totalShares">0</h2></div>
+      <div class="card"><small>Total Earnings £</small><h2 id="totalEarnings">£0.00</h2></div>
+      <div class="card"><small>Pending KYC</small><h2 id="pendingKyc">0</h2></div>
+    </div>
+
+    <div class="row">
+      <div class="box">
+        <h3>Add / Update Member Earnings</h3>
+        <input id="earnEmail" placeholder="Member email">
+        <input id="earnAmount" type="number" placeholder="Amount £ e.g. 25">
+        <input id="earnNote" placeholder="Note e.g. Day 12 profit">
+        <button onclick="addEarning()">Add Earning</button>
+        <p id="earnMsg"></p>
       </div>
-    </nav>
-  </header>
-  <main>
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-md-6">
-          <h2>Users</h2>
-          <table class="table table-striped" id="user-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody id="user-table-body"></tbody>
-          </table>
-        </div>
-        <div class="col-md-6">
-          <h2>Trades</h2>
-          <table class="table table-striped" id="trade-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>User ID</th>
-                <th>Trade Type</th>
-              </tr>
-            </thead>
-            <tbody id="trade-table-body"></tbody>
-          </table>
-        </div>
+      <div class="box">
+        <h3>Approve KYC</h3>
+        <input id="kycEmail" placeholder="Member email to approve">
+        <select id="kycStatus"><option value="approved">approved</option><option value="rejected">rejected</option><option value="pending">pending</option></select>
+        <button onclick="updateKyc()">Update KYC</button>
+        <p id="kycMsg"></p>
       </div>
     </div>
-  </main>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.5/dist/umd/supabase.js"></script>
-  <script>
-    const supabaseUrl = 'https://your/bucket.supabase.co';
-    const supabaseKey = 'your-supabase-key';
-    const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch users and trades
-    supabase.from('users').select('*').then(data => {
-      const userTableBody = document.getElementById('user-table-body');
-      data.forEach(user => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${user.id}</td>
-          <td>${user.name}</td>
-          <td>${user.email}</td>
-        `;
-        userTableBody.appendChild(row);
-      });
-    });
+    <div class="box">
+      <h3>All Members</h3>
+      <input id="search" placeholder="Search email..." oninput="loadMembers()">
+      <table><thead><tr><th>Email</th><th>Shares</th><th>Earnings £</th><th>KYC</th><th>Admin</th></tr></thead><tbody id="membersBody"></tbody></table>
+    </div>
 
-    supabase.from('trades').select('*').then(data => {
-      const tradeTableBody = document.getElementById('trade-table-body');
-      data.forEach(trade => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${trade.id}</td>
-          <td>${trade.user_id}</td>
-          <td>${trade.trade_type}</td>
-        `;
-        tradeTableBody.appendChild(row);
-      });
-    });
-  </script>
+    <div class="box">
+      <h3>Recent Earnings</h3>
+      <table><thead><tr><th>Email</th><th>Amount</th><th>Note</th><th>Date</th></tr></thead><tbody id="earningsBody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = " https://ipyvewpjtpgfuqfwizlr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function init(){
+  const { data: { session } } = await supabase.auth.getSession();
+  if(!session){ window.location.href = "login.html"; return; }
+  document.getElementById("adminEmail").textContent = session.user.email;
+
+  // Check admin role from profiles table
+  const { data: profile, error } = await supabase.from("profiles").select("is_admin, email").eq("id", session.user.id).single();
+  if(error || !profile || !profile.is_admin){
+    alert("Not an admin. Redirecting to Member Dashboard.");
+    window.location.href = "dashboard.html";
+    return;
+  }
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("adminContent").style.display = "block";
+  loadMembers();
+  loadStats();
+  loadEarnings();
+}
+
+async function loadStats(){
+  const { data: members } = await supabase.from("profiles").select("shares, total_earnings, kyc_status");
+  if(!members) return;
+  document.getElementById("totalMembers").textContent = members.length;
+  document.getElementById("totalShares").textContent = members.reduce((a,m)=>a+(m.shares||0),0);
+  document.getElementById("totalEarnings").textContent = "£" + members.reduce((a,m)=>a+Number(m.total_earnings||0),0).toFixed(2);
+  document.getElementById("pendingKyc").textContent = members.filter(m=>m.kyc_status==="pending").length;
+}
+
+async function loadMembers(){
+  const q = document.getElementById("search")?.value || "";
+  let query = supabase.from("profiles").select("*").order("created_at",{ascending:false}).limit(50);
+  if(q) query = query.ilike("email", "%"+q+"%");
+  const { data } = await query;
+  document.getElementById("membersBody").innerHTML = (data||[]).map(m=>`<tr><td>${m.email||""}</td><td>${m.shares||0}</td><td>£${Number(m.total_earnings||0).toFixed(2)}</td><td><span class="badge ${m.kyc_status==="approved"?"green":""}">${m.kyc_status||"pending"}</span></td><td>${m.is_admin?"Yes":"No"}</td></tr>`).join("");
+}
+
+async function loadEarnings(){
+  const { data } = await supabase.from("earnings").select("*").order("created_at",{ascending:false}).limit(20);
+  document.getElementById("earningsBody").innerHTML = (data||[]).map(e=>`<tr><td>${e.email||e.user_id||""}</td><td>£${Number(e.amount||0).toFixed(2)}</td><td>${e.note||""}</td><td>${new Date(e.created_at).toLocaleDateString()}</td></tr>`).join("");
+}
+
+async function addEarning(){
+  const email = document.getElementById("earnEmail").value.trim();
+  const amount = Number(document.getElementById("earnAmount").value);
+  const note = document.getElementById("earnNote").value;
+  if(!email || !amount) return alert("Enter email and amount");
+  const { error } = await supabase.from("earnings").insert([{email, amount, note}]);
+  document.getElementById("earnMsg").textContent = error ? "Error: "+error.message : "Added!";
+  if(!error) loadEarnings();
+}
+
+async function updateKyc(){
+  const email = document.getElementById("kycEmail").value.trim();
+  const status = document.getElementById("kycStatus").value;
+  const { error } = await supabase.from("profiles").update({kyc_status: status}).eq("email", email);
+  document.getElementById("kycMsg").textContent = error ? "Error: "+error.message : "Updated!";
+  if(!error) loadMembers();
+}
+
+async function logout(){ await supabase.auth.signOut(); window.location.href="login.html"; }
+init();
+</script>
 </body>
 </html>
