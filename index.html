@@ -1,104 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cedars Empire - Member Dashboard</title>
-    <style>
-        /* Your existing styles */
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cedars Empire - Member Dashboard</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#0f172a}
+.topbar{background:#0f172a;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.topbar b{font-size:20px}.topbar small{opacity:.8}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.tabs button{padding:10px 16px;border:1px solid #cbd5e1;background:#fff;border-radius:999px;cursor:pointer;font-weight:700}
+.tabs button.active{background:#0f172a;color:#fff}
+.card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.big{font-size:26px;font-weight:900;margin:6px 0}.muted{color:#64748b;font-size:13px}
+.bar{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;width:0%;background:#2563eb}
+.btn{width:100%;padding:13px;border:none;border-radius:10px;font-weight:800;cursor:pointer;color:#fff}
+.btn-green{background:#16a34a}.btn-blue{background:#2563eb}.btn-dark{background:#0f172a}
+input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;margin:6px 0 12px 0}
+label{font-weight:700;font-size:14px}
+.dark{background:#0f172a;color:#fff}
+.plan{border:2px solid #e2e8f0;border-radius:14px;padding:16px;margin-bottom:12px}
+</style>
 </head>
 <body>
-    <!-- TOPBAR -->
-    <div class="topbar">
-        <b>Cedars Empire</b>
-        <span>ogwal.bemmanuel@gmail.com</span>
-    </div>
+<div class="topbar"><div><b>🌲 Cedars Empire</b><br><small>Member Dashboard</small></div><div style="text-align:right"><small>ogwal.bemmanuel@gmail.com</small><br><small>Plan: - &nbsp;|&nbsp; KYC: Pending</small></div></div>
+<div class="wrap">
+<div class="tabs">
+<button id="btn-overview" class="active" onclick="showTab('overview')">Overview</button>
+<button id="btn-plans" onclick="showTab('plans')">Shareholder Plans</button>
+<button id="btn-profile" onclick="showTab('profile')">Profile & KYC</button>
+<button id="btn-wallet" onclick="showTab('wallet')">Wallet & Exchange</button>
+</div>
 
-    <!-- TABS -->
-    <div class="tabs">
-        <button onclick="showTab('overview')">Overview</button>
-        <button onclick="showTab('plans')">Shareholder Plans</button>
-        <button onclick="showTab('profile')">Profile & KYC</button>
-        <button onclick="showTab('wallet')">Wallet & Exchange</button>
-    </div>
+<!-- OVERVIEW -->
+<div id="tab-overview">
+<div class="card"><h2 style="margin:0">Welcome back 👋</h2><p class="muted">Your earnings are in Pounds (£). Exchange to crypto when you withdraw.</p>
+<div id="live-market" style="background:#fef3c7;color:#92400e;padding:10px 14px;border-radius:8px;font-size:14px;">Loading live market...</div>
+</div>
+<div class="grid">
+<div class="card"><div class="muted">Portfolio Value</div><div class="big">£0.00</div><div class="muted">Total value of your shares</div></div>
+<div class="card"><div class="muted">Shares Owned</div><div class="big">0 Shares</div><div class="muted">Across all plans</div></div>
+<div class="card"><div class="muted">Referral Earnings</div><div class="big">£0.00</div><div class="muted">Earned from referrals</div></div>
+<div class="card"><div class="muted">Portfolio Growth</div><div class="big">0%</div><div class="muted">This month</div></div>
+</div>
+<div class="card"><b>Account Completion</b><div style="display:flex;justify-content:space-between"><span class="muted">Complete your profile to unlock</span><b>0%</b></div><div class="bar" style="margin-top:8px"><i id="prog"></i></div><br><button class="btn btn-dark" onclick="showTab('profile')">Complete Profile</button></div>
+<div class="card"><b>Quick Actions</b><br><br><button class="btn btn-blue" onclick="goToWallet()">Exchange & Withdraw →</button><br><br><button class="btn btn-green" onclick="showTab('plans')">View Shareholder Plans</button></div>
+</div>
 
-    <!-- OVERVIEW TAB -->
-    <div id="tab-overview">
-        <div id="live-market" style="background:#fef3c7;color:#92400e;padding:10px 14px;border-radius:8px;margin-bottom:14px;">Loading live market...</div>
-        <!-- Your existing overview content -->
-    </div>
+<!-- PLANS -->
+<div id="tab-plans" style="display:none">
+<div class="card"><h3 style="margin:0">Shareholder Plans</h3><p class="muted">Choose a plan to start earning.</p></div>
+<div class="plan"><h3>Starter - £100</h3><p class="muted">10 Shares • Beginner plan</p><button class="btn btn-blue" onclick="alert('Starter plan selected. Contact admin to activate.')">Select Starter</button></div>
+<div class="plan"><h3>Growth - £500</h3><p class="muted">55 Shares • Most popular</p><button class="btn btn-blue" onclick="alert('Growth plan selected. Contact admin to activate.')">Select Growth</button></div>
+<div class="plan"><h3>Empire - £1000</h3><p class="muted">120 Shares • Premium</p><button class="btn btn-blue" onclick="alert('Empire plan selected. Contact admin to activate.')">Select Empire</button></div>
+</div>
 
-    <!-- WALLET & EXCHANGE TAB -->
-    <div id="tab-wallet" style="display:none;">
-        <!-- Your existing wallet content -->
-        <div style="margin-top:16px;background:#0f172a;padding:16px;border-radius:12px;">
-            <h4 style="margin:0 0 10px 0;">Quick Exchange</h4>
-            <label>Amount in GBP</label>
-            <input id="ex-amount" type="number" value="100" style="width:100%;padding:10px;border-radius:8px;margin:6px 0 10px 0;">
-            <label>Convert To</label>
-            <select id="ex-to" style="width:100%;padding:10px;border-radius:8px;margin:6px 0 10px 0;">
-                <option value="tether">USDT</option>
-                <option value="bitcoin">BTC</option>
-                <option value="ethereum">ETH</option>
-            </select>
-            <button onclick="getRate()" style="width:100%;padding:12px;background:#16a34a;color:white;border:none;border-radius:8px;font-weight:bold;">Get Live Rate</button>
-            <div id="ex-result" style="margin-top:10px;font-size:14px;">Enter amount and get live rate.</div>
-            <button onclick="confirmExchange()" style="width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:8px;">Confirm Exchange</button>
-            <div id="exchange-history" style="margin-top:12px;font-size:14px;"></div>
-        </div>
-        <button onclick="goToWallet()" style="width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:16px;">Exchange & Withdraw</button>
-    </div>
+<!-- PROFILE -->
+<div id="tab-profile" style="display:none">
+<div class="card"><h3 style="margin:0">Profile & KYC</h3><p class="muted">KYC Status: <b>Pending</b></p><label>Full Name</label><input value="Ogwal Emmanuel"><label>Email</label><input value="ogwal.bemmanuel@gmail.com"><label>Phone</label><input placeholder="+256 ..."><button class="btn btn-blue" onclick="alert('Profile saved!')">Save Profile</button></div>
+</div>
 
-    <script>
-        // TAB SWITCHING
-        function showTab(id){
-            // Your existing tab switching code
-        }
+<!-- WALLET -->
+<div id="tab-wallet" style="display:none">
+<div class="card"><h3 style="margin:0">Wallet & Exchange</h3><p class="muted">Balance: <b>£0.00</b> • Exchange to crypto when you withdraw.</p></div>
+<div class="card dark"><h3 style="margin:0 0 12px 0">Quick Exchange — Live Rate</h3><label style="color:#fff">Amount in GBP</label><input id="ex-amount" type="number" value="100"><label style="color:#fff">Convert To</label><select id="ex-to"><option value="tether">USDT</option><option value="bitcoin">BTC</option><option value="ethereum">ETH</option></select><button class="btn btn-green" onclick="getRate()">Get Live Rate</button><div id="ex-result" style="margin:12px 0">Enter amount and get live rate.</div><button class="btn btn-blue" onclick="confirmExchange()">Confirm Exchange</button><div id="exchange-history" style="margin-top:12px"></div></div>
+<div class="card"><h3 style="margin:0">Withdraw</h3><p class="muted">Withdraw your GBP balance to crypto.</p><button class="btn btn-dark" onclick="alert('Withdrawal request sent. Admin will process.')">Request Withdrawal</button></div>
+</div>
 
-        // LIVE MARKET
-        async function loadMarket(){
-            try{
-                const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp');
-                const d = await r.json();
-                document.getElementById('live-market').innerHTML = 'Live Market: BTC £' + d.bitcoin.gbp + ' | ETH £' + d.ethereum.gbp + ' | USDT £' + d.tether.gbp;
-            }catch(e){
-                document.getElementById('live-market').innerText = 'Live market temporarily unavailable';
-            }
-        }
-        loadMarket();
-
-        // QUICK EXCHANGE
-        let lastResult = "";
-        let exHistory = [];
-        async function getRate(){
-            const amt = parseFloat(document.getElementById('ex-amount').value);
-            const to = document.getElementById('ex-to').value;
-            const el = document.getElementById('ex-result');
-            if(!amt || amt<=0){ el.innerText="Enter a valid amount"; return; }
-            el.innerText="Fetching live rate...";
-            try{
-                const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+to+'&vs_currencies=gbp');
-                const d = await r.json();
-                const rate = d[to].gbp;
-                const got = amt / rate;
-                const label = to==='tether' ? 'USDT' : to.toUpperCase();
-                lastResult = amt+" GBP = "+got.toFixed(6)+" "+label+" (1 "+label+" = £"+rate+")";
-                el.innerText = lastResult;
-            }catch(e){ el.innerText="Failed to fetch rate. Try again."; lastResult=""; }
-        }
-        function confirmExchange(){
-            if(!lastResult){ alert('Get live rate first'); return; }
-            exHistory.unshift(lastResult + " - " + new Date().toLocaleString());
-            document.getElementById('exchange-history').innerHTML = '<b>Exchange History:</b><br>' + exHistory.map(h=>'<div style="padding:6px 0;border-bottom:1px solid #334155;">'+h+'</div>').join('');
-            alert('Exchange confirmed!');
-        }
-
-        // EXCHANGE & WITHDRAW BUTTON
-        function goToWallet(){
-            document.querySelectorAll('button').forEach(b=>{ if(b.innerText.includes('Wallet')) b.click(); });
-            window.scrollTo(0,0);
-        }
-    </script>
+</div>
+<script>
+function showTab(id){
+['overview','plans','profile','wallet'].forEach(t=>{
+document.getElementById('tab-'+t).style.display = t===id ? 'block':'none';
+document.getElementById('btn-'+t).classList.toggle('active', t===id);
+});
+window.scrollTo(0,0);
+}
+function goToWallet(){ showTab('wallet'); }
+async function loadMarket(){
+try{
+const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp');
+const d=await r.json();
+document.getElementById('live-market').innerHTML='Live Market: BTC £'+d.bitcoin.gbp+' | ETH £'+d.ethereum.gbp+' | USDT £'+d.tether.gbp;
+}catch(e){document.getElementById('live-market').innerText='Live market temporarily unavailable';}
+}
+loadMarket(); setInterval(loadMarket,60000);
+let lastResult=""; let exHistory=[];
+async function getRate(){
+const amt=parseFloat(document.getElementById('ex-amount').value);
+const to=document.getElementById('ex-to').value;
+const el=document.getElementById('ex-result');
+if(!amt||amt<=0){el.innerText='Enter a valid amount';return;}
+el.innerText='Fetching live rate...';
+try{
+const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+to+'&vs_currencies=gbp');
+const d=await r.json(); const rate=d[to].gbp; const got=amt/rate;
+const label=to==='tether'?'USDT':to.toUpperCase();
+lastResult=amt+' GBP = '+got.toFixed(6)+' '+label+' (1 '+label+' = £'+rate+')';
+el.innerText=lastResult;
+}catch(e){el.innerText='Failed to fetch rate. Try again.'; lastResult="";}
+}
+function confirmExchange(){
+if(!lastResult){alert('Get live rate first');return;}
+exHistory.unshift(lastResult+' - '+new Date().toLocaleString());
+document.getElementById('exchange-history').innerHTML='<b>Exchange History:</b><br>'+exHistory.map(h=>'<div style="padding:6px 0;border-bottom:1px solid #334155;">'+h+'</div>').join('');
+alert('Exchange confirmed!');
+}
+</script>
 </body>
 </html>
