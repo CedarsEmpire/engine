@@ -1,59 +1,251 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CEDARS</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>body{margin:0;font-family:Arial;background:#FFFEF9}header{background:#0A1A12;color:#D4AF6A;text-align:center;padding:14px}header p{color:#888;font-size:11px}nav{display:flex;gap:6px;padding:10px;overflow-x:auto}nav button{padding:9px 12px;border-radius:99px;border:1px solid #E6D5A0;background:#fff;font-weight:700}nav button.on{background:#0A1A12;color:#D4AF6A}.wrap{max-width:600px;margin:0 auto;padding:0 10px 30px}.card{background:#fff;border:1px solid #EEE;border-radius:14px;padding:14px;margin-bottom:10px}.big{font-size:32px;font-weight:800}label{display:block;font-weight:700;font-size:13px;margin:12px 0 5px}input,select{width:100%;padding:12px;border:1px solid #DDD;border-radius:9px;box-sizing:border-box}.btn{background:#D4AF6A;border:none;width:100%;padding:13px;border-radius:10px;font-weight:800;margin-top:12px}.btn2{background:#0A1A12;color:#D4AF6A}.btnR{background:#FF6B6B;color:#fff}.btnG{background:#7ED491}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F5F5F5;font-size:14px}.row b{text-align:right;word-break:break-all}.term{background:#0A1A12;color:#D4FFD4;font-family:monospace;font-size:12px;padding:10px;border-radius:10px;min-height:100px}.hide{display:none}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0A1A12;color:#fff;padding:10px 16px;border-radius:99px;display:none;z-index:99}.flex{display:flex;gap:8px}.flex .btn{flex:1}.addr{background:#FFF8E6;border:1px dashed #D4AF6A;padding:10px;border-radius:9px;font-size:12px;word-break:break-all;text-align:center}.small{font-size:11px;color:#888;margin-top:6px;text-align:center}</style></head><body>
-<header><h1>✦ CEDARS EMPIRE ✦</h1><p>PERSONAL ONLY</p></header>
-<div class="wrap" style="padding-top:12px"><div class="card"><b>CONNECTION TEST</b><div class="small" id="connMsg">Not tested yet</div><button class="btn" onclick="testConn()">TEST CONNECTION</button></div></div>
-<div id="loginBox" class="wrap" style="padding-top:4px"><div class="card"><label>Email</label><input id="em" value="cedarsempire@proton.me"><label>Password</label><input id="pw" type="password" placeholder="Password"><button class="btn" onclick="doLogin()">LOGIN</button><button class="btn btn2" onclick="doSetup()">FIRST TIME - CREATE PASSWORD</button><div class="small" id="loginMsg">Tap FIRST TIME once, then LOGIN</div></div></div>
-<div id="app" class="hide"><nav><button class="on" id="n-home" onclick="showPage('home')">HOME</button><button id="n-deposit" onclick="showPage('deposit')">DEPOSIT</button><button id="n-workers" onclick="showPage('workers')">WORKERS</button><button id="n-staking" onclick="showPage('staking')">STAKING</button><button id="n-referral" onclick="showPage('referral')">REFERRAL</button><button id="n-withdraw" onclick="showPage('withdraw')">WITHDRAW</button></nav><div class="wrap">
-<div id="home" class="page"><div class="card"><div style="font-size:12px;color:#888">BALANCE</div><div class="big" id="bal">$4.00</div><div class="row"><span>Profit Today</span><b id="prof">+$0.000</b></div><div class="row"><span>Tasks</span><b id="tasks">0</b></div><div class="row"><span>Workers</span><b>8 • <span id="eng">ON</span></b></div><div class="row"><span>Compounding</span><b id="compTxt">ON</b></div><div class="row"><span>Staked</span><b id="stakedHome">$0.00</b></div><div class="row"><span>Network</span><b>Polygon + Tron</b></div><div class="flex"><button class="btn btnG" onclick="doStart()">START</button><button class="btn btnR" onclick="doStop()">STOP</button></div><button class="btn btn2" onclick="doComp()">COMPOUNDING: <span id="compBtn">ON</span></button></div><div class="card"><div class="term" id="term"></div><button class="btn" onclick="doTrade()">NEXT TASK</button></div></div>
-<div id="deposit" class="page hide"><div class="card"><b>DEPOSIT - ADD COIN</b><label>Select Wallet</label><select id="depNet" onchange="updQR()"><option value="polygon">Polygon - 0x0d4c...A77B</option><option value="tron">Tron - TE26...cz1u</option></select><div class="addr" id="depAddr" style="margin-top:12px">0x0d4c2B95e8FB7Be3DB9953bAcEf3A4Be643bA77B</div><button class="btn" onclick="copyAddr()">COPY ADDRESS</button><label>Amount You Sent $</label><input id="depAmt" type="number" placeholder="10"><button class="btn btn2" onclick="doDep()">I SENT - ADD TO BALANCE</button></div></div>
-<div id="workers" class="page hide"><div class="card"><b>AI WORKERS - LIVE</b><div id="wlist"></div><div class="small">8 Workers - Target only, profit NOT promised</div></div></div>
-<div id="staking" class="page hide"><div class="card"><b>STAKING</b><div class="row"><span>Balance</span><b id="stakeBal">$4.00</b></div><div class="row"><span>Staked</span><b id="staked">$0.00</b></div><div class="row"><span>Rate</span><b>5% / Year</b></div><label>Amount to Stake $</label><input id="stakeAmt" type="number" placeholder="1"><div class="flex"><button class="btn btnG" onclick="doStake()">STAKE</button><button class="btn btnR" onclick="doUnstake()">UNSTAKE</button></div></div></div>
-<div id="referral" class="page hide"><div class="card"><b>REFERRAL</b><div class="row"><span>Short Code</span><b>CEDARS-7K2</b></div><div class="addr">https://cedarsempire.app/r/CEDARS-7K2</div><button class="btn" onclick="copyRef()">COPY REFERRAL LINK</button></div></div>
-<div id="withdraw" class="page hide"><div class="card"><b>WITHDRAW</b><label>Network</label><select id="wdNet"><option value="polygon">Polygon</option><option value="tron">Tron</option></select><label>To Wallet</label><input id="wallet" placeholder="0x... / T..."><label>Amount $</label><input id="wd" type="number" placeholder="1" oninput="doCalc()"><div class="row"><span>Fee 20%</span><b id="fee">$0.00</b></div><div class="row"><span>You Get</span><b id="net">$0.00</b></div><button class="btn" onclick="doWd()">WITHDRAW</button></div></div>
-</div></div><div class="toast" id="toast"></div>
-<script>
-var SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co/rest/v1/";
-var SUPABASE_KEY = "sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
-var supabase = null;
-try{
-  if(window.supabase && SUPABASE_URL.indexOf("http")==0){
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
-  }
-}catch(e){ supabase = null; }
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none';},2500);}
-async function testConn(){
-  var m = document.getElementById('connMsg');
-  if(!supabase){ m.textContent = "FAILED: URL/KEY not pasted yet - replace PASTE_YOUR_... lines"; toast("Paste real URL + Key first"); return; }
-  m.textContent = "Testing...";
-  try{
-    const r = await supabase.from('members').select('*').limit(1);
-    if(r.error){ m.textContent = "FAILED: " + r.error.message; toast("FAILED: " + r.error.message); }
-    else{ m.textContent = "Connected! Members found: " + (r.data ? r.data.length : 0); toast("Connected!"); }
-  }catch(e){ m.textContent = "FAILED: " + e.message; toast("FAILED: " + e.message); }
-}
-var TREASURY="0x0d4c2B95e8FB7Be3DB9953bAcEf3A4Be643bA77B";var TRON="TE26B7zQjMbahYAWcxEsSPC6aZEr2Hcz1u";var BAL=4,PROF=0,TASKS=0,RUN=true,STAKED=0,COMP=true;var MEM_PW="";
-try{var q=localStorage.getItem('c9');if(q){var p=JSON.parse(q);if(p&&typeof p.bal==='number'){BAL=p.bal;PROF=p.prof||0;TASKS=p.tasks||0;STAKED=p.staked||0;COMP=p.comp!==false;}}MEM_PW=localStorage.getItem('ch')||"";}catch(e){}
-function save(){try{localStorage.setItem('c9',JSON.stringify({bal:BAL,prof:PROF,tasks:TASKS,staked:STAKED,comp:COMP}));}catch(e){}}
-function log(m){var t=document.getElementById('term');if(t){t.innerHTML+='['+new Date().toLocaleTimeString()+'] '+m+'<br>';t.scrollTop=9999;}}
-function el(id){return document.getElementById(id);}
-function render(){el('bal').textContent='$'+BAL.toFixed(3);el('prof').textContent='+$'+PROF.toFixed(3);el('tasks').textContent=TASKS;el('eng').textContent=RUN?'ON':'OFF';el('compTxt').textContent=COMP?'ON':'OFF';el('compBtn').textContent=COMP?'ON':'OFF';el('stakedHome').textContent='$'+STAKED.toFixed(2);el('stakeBal').textContent='$'+BAL.toFixed(2);el('staked').textContent='$'+STAKED.toFixed(2);var w=['W1 Forex','W2 Forex','W3 Crypto','W4 Crypto','W5 Arbitrage','W6 Arbitrage','W7 News Guard','W8 Risk'];el('wlist').innerHTML=w.map(function(x){return '<div class="row"><span>'+x+'</span><b>'+(RUN?'Working':'Paused')+'</b></div>';}).join('');}
-function showPage(p){var pages=['home','deposit','workers','staking','referral','withdraw'];pages.forEach(function(x){el(x).classList.add('hide');el('n-'+x).classList.remove('on');});el(p).classList.remove('hide');el('n-'+p).classList.add('on');}
-function doSetup(){var pw=el('pw').value;if(!pw||pw.length<8){toast('Password min 8 chars');return;}MEM_PW=el('em').value+'::'+pw;try{localStorage.setItem('ch',MEM_PW);}catch(e){}toast('Password created - Now LOGIN');el('loginMsg').textContent='Password created - Now LOGIN';}
-function doLogin(){var cur=el('em').value+'::'+el('pw').value;if(!MEM_PW){toast('Tap FIRST TIME first');return;}if(cur!==MEM_PW){toast('Wrong password');return;}el('loginBox').style.display='none';el('app').classList.remove('hide');log('Login OK');doStart();toast('Logged in');}
-function doTrade(){if(!RUN)return;var p=Math.random()<0.25?0:Math.round((0.001+Math.random()*0.008)*1000)/1000;var tot=p+(COMP?p*0.1:0);PROF+=tot;BAL+=tot;TASKS++;save();render();log('Task +$'+tot.toFixed(3)+' -> $'+BAL.toFixed(3));}
-var IV=null;function doStart(){if(IV)return;RUN=true;save();render();IV=setInterval(doTrade,10000);log('Workers ON');toast('Workers ON');}
-function doStop(){RUN=false;save();render();clearInterval(IV);IV=null;log('Workers OFF');toast('Workers OFF');}
-function doComp(){COMP=!COMP;save();render();toast('Compounding '+(COMP?'ON':'OFF'));}
-function updQR(){var n=el('depNet').value;el('depAddr').textContent=n==='tron'?TRON:TREASURY;}
-function copyAddr(){var a=el('depNet').value==='tron'?TRON:TREASURY;try{navigator.clipboard.writeText(a);}catch(e){}toast('Copied '+a.slice(0,10)+'...');}
-function doDep(){var v=parseFloat(el('depAmt').value)||0;if(v<1){toast('Min $1');return;}BAL+=v;save();render();toast('Deposit $'+v+' added');log('Deposit $'+v);}
-function doStake(){var v=parseFloat(el('stakeAmt').value)||0;if(v<1){toast('Min $1');return;}if(v>BAL){toast('Insufficient');return;}BAL-=v;STAKED+=v;save();render();toast('Staked $'+v);}
-function doUnstake(){if(STAKED<=0){toast('Nothing staked');return;}BAL+=STAKED;STAKED=0;save();render();toast('Unstaked');}
-function copyRef(){try{navigator.clipboard.writeText('https://cedarsempire.app/r/CEDARS-7K2');}catch(e){}toast('Referral copied');}
-function doCalc(){var v=parseFloat(el('wd').value)||0;el('fee').textContent='$'+(v*0.2).toFixed(2);el('net').textContent='$'+(v*0.8).toFixed(2);}
-function doWd(){var v=parseFloat(el('wd').value)||0;var w=el('wallet').value.trim();var n=el('wdNet').value;if(v<1){toast('Min $1');return;}if(v>BAL){toast('Insufficient');return;}if(!w){toast('Enter wallet');return;}BAL-=v;save();render();toast('Withdraw $'+v);}
-render();
-</script></body></html>
+<html>
+<head>
+  <title>Platform</title>
+  <style>
+    /* Styles for switches and other elements */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .slider.round {
+      border-radius: 34px;
+    }
+    .slider.round:before {
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Platform</h1>
+  
+  <!-- Register Form -->
+  <h2>Register Form</h2>
+  <label class="switch">
+    <input type="checkbox" id="register-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <div id="register-form">
+    <form id="register-form-submit">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name"><br><br>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email"><br><br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password"><br><br>
+      <button type="submit">Register</button>
+    </form>
+  </div>
+  
+  <!-- Deposit Form -->
+  <h2>Deposit Form</h2>
+  <label class="switch">
+    <input type="checkbox" id="deposit-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <div id="deposit-form">
+    <form>
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount"><br><br>
+      <button type="submit">Deposit</button>
+    </form>
+  </div>
+  
+  <!-- Withdraw Form -->
+  <h2>Withdraw Form (20% fee)</h2>
+  <label class="switch">
+    <input type="checkbox" id="withdraw-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <div id="withdraw-form">
+    <form>
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount"><br><br>
+      <p>Fee: 20%</p>
+      <button type="submit">Withdraw</button>
+    </form>
+  </div>
+  
+  <!-- Shareholder Plans -->
+  <h2>Shareholder Plans</h2>
+  <label class="switch">
+    <input type="checkbox" id="shareholder-plans-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <div id="shareholder-plans">
+    <h3>Plan Options</h3>
+    <form>
+      <label for="plan">Select Plan:</label>
+      <select id="plan" name="plan">
+        <option value="starter">Starter (£300)</option>
+        <option value="growth">Growth (£5,000)</option>
+        <option value="premium">Premium (£15,000)</option>
+        <option value="elite">Elite (£30,000)</option>
+        <option value="ultimate">Ultimate (£50,000)</option>
+      </select><br><br>
+      <button type="submit">Invest</button>
+    </form>
+    <h3>Plan Details</h3>
+    <table>
+      <tr>
+        <th>Plan</th>
+        <th>Investment Amount</th>
+        <th>Daily Earnings</th>
+        <th>Contract Duration</th>
+      </tr>
+      <tr>
+        <td>Starter</td>
+        <td>£300</td>
+        <td>£3</td>
+        <td>1095 days</td>
+      </tr>
+      <tr>
+        <td>Growth</td>
+        <td>£5,000</td>
+        <td>£50</td>
+        <td>1095 days</td>
+      </tr>
+      <tr>
+        <td>Premium</td>
+        <td>£15,000</td>
+        <td>£150</td>
+        <td>1095 days</td>
+      </tr>
+      <tr>
+        <td>Elite</td>
+        <td>£30,000</td>
+        <td>£300</td>
+        <td>1095 days</td>
+      </tr>
+      <tr>
+        <td>Ultimate</td>
+        <td>£50,000</td>
+        <td>£500</td>
+        <td>1095 days</td>
+      </tr>
+    </table>
+  </div>
+  
+  <!-- Referral Program -->
+  <h2>Referral Program (10% commission)</h2>
+  <label class="switch">
+    <input type="checkbox" id="referral-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <div id="referral-program">
+    <p>Earn 10% commission on referrals</p>
+    <form>
+      <label for="referral-code">Referral Code:</label>
+      <input type="text" id="referral-code" name="referral-code"><br><br>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  
+  <!-- P2P Trading -->
+  <h2>P2P Trading (5% fee)</h2>
+  <label class="switch">
+    <input type="checkbox" id="p2p-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <div id="p2p-trading">
+    <form>
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount"><br><br>
+      <label for="crypto">Crypto:</label>
+      <select id="crypto" name="crypto">
+        <option value="btc">BTC</option>
+        <option value="eth">ETH</option>
+      </select><br><br>
+      <p>Fee: 5%</p>
+      <button type="submit">Trade</button>
+    </form>
+  </div>
+  
+  <!-- Exchanger -->
+  <h2>Exchanger (2% fee)</h2>
+  <label class="switch">
+    <input type="checkbox" id="exchanger-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <div id="exchanger">
+    <form>
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount"><br><br>
+      <label for="from">From:</label>
+      <select id="from" name="from">
+        <option value="gbp">GBP</option>
+        <option value="usd">USD</option>
+      </select><br><br>
+      <label for="to">To:</label>
+      <select id="to" name="to">
+        <option value="btc">BTC</option>
+        <option value="eth">ETH</option>
+      </select><br><br>
+      <p>Fee: 2%</p>
+      <button type="submit">Exchange</button>
+    </form>
+  </div>
+  
+  <!-- Staking -->
+  <h2>Staking (0.03% daily interest rate)</h2>
+  <label class="switch">
+    <input type="checkbox" id="staking-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <div id="staking">
+    <form>
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount"><br><br>
+      <p>Interest Rate: 0.03% per day</p>
+      <button type="submit">Stake</button>
+    </form>
+  </div>
+  
+  <!-- Send Crypto -->
+  <h2>Send Crypto (2% fee)</h2>
+  <label class="switch">
+    <input type="checkbox" id="send-crypto-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <div id="send-crypto">
+    <form>
+      <label for="
