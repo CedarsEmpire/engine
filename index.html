@@ -3,68 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - Cedars Empire</title>
+<title>Cedars Empire</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>body{font-family:Arial,sans-serif;background:#f3f5f7;display:flex;justify-content:center;padding:40px;margin:0} .card{background:#fff;padding:24px;border-radius:14px;width:100%;max-width:380px;box-shadow:0 2px 10px rgba(0,0,0,.06)} input{width:100%;padding:11px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box} button{width:100%;padding:12px;background:#111;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:6px} .link{background:none;border:none;color:#1e40af;padding:6px;cursor:pointer;width:auto;font-size:13px} .row{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin:6px 0} #msg{text-align:center;font-weight:600;color:#b91c1c;min-height:18px}</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{box-sizing:border-box} body{font-family:Inter,Arial,sans-serif;margin:0;background:#f3f5f7;color:#111}
+.ticker{background:#0f172a;color:#fff;padding:8px 0;overflow:hidden;white-space:nowrap;font-size:13px}
+.ticker span{display:inline-block;padding:0 20px}
+.live-dot{width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
+header{background:#fff;border-bottom:1px solid #e5e7eb;padding:14px 22px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+header h1{font-size:20px;margin:0}
+.avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #111;background:#ddd}
+.header-right{display:flex;gap:12px;align-items:center}
+main{max-width:1150px;margin:0 auto;padding:20px}
+.welcome{background:linear-gradient(135deg,#111827,#1e40af);color:#fff;padding:24px;border-radius:16px;margin-bottom:16px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.welcome h2{margin:0 0 6px}.welcome p{margin:0;opacity:.85}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.card{background:#fff;border:1px solid #e5e7eb;padding:20px;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.card h3{margin-top:0}.big{font-size:28px;font-weight:800;display:block;margin-top:6px}
+.small{color:#6b7280;font-size:13px}
+label{display:block;margin:12px 0 4px;font-size:14px}
+input,select{width:100%;padding:11px;border:1px solid #d1d5db;border-radius:8px}
+button{padding:11px 14px;cursor:pointer;border-radius:8px;border:1px solid #111;background:#111;color:#fff}
+button.light{background:#fff;color:#111}.full-btn{width:100%;margin-top:14px}
+.row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #f3f4f6;font-size:14px}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.tabs button{background:#fff;color:#111;border:1px solid #ddd}.tabs button.active{background:#111;color:#fff}
+.section{display:none}.section.active{display:block}
+.progress{height:12px;background:#eee;border-radius:20px;overflow:hidden;margin:10px 0}.progress div{height:100%;background:#22c55e;width:0%}
+.pill{padding:4px 10px;border-radius:20px;font-size:12px;background:#dcfce7}
+#msg{text-align:center;font-weight:bold;margin:12px 0}
+.login-wrap{display:flex;justify-content:center;padding:40px 16px}.login-card{background:#fff;padding:24px;border-radius:14px;width:100%;max-width:380px}
+footer{text-align:center;padding:20px;color:#666;font-size:13px}
+@media(max-width:750px){.grid3,.grid2{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-<div class="card">
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-wrap">
+<div class="login-card">
 <h2 style="margin:0">Cedars Empire Login</h2>
 <p style="color:#666;font-size:14px">Welcome back. Login to access your account.</p>
-<input id="email" type="email" placeholder="Email" autocomplete="email">
-<input id="password" type="password" placeholder="Password" autocomplete="current-password">
-<div class="row">
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin:6px 0">
 <label><input type="checkbox" id="rememberMe" checked style="width:auto"> Remember Me</label>
-<button class="link" onclick="resetPassword()" type="button">Forgot Password?</button>
+<button onclick="resetPassword()" style="background:none;border:none;color:#1e40af;padding:6px;width:auto;font-size:13px">Forgot Password?</button>
 </div>
-<button onclick="login()">Login</button>
-<button onclick="signup()" style="background:#fff;color:#111;border:1px solid #111">Create Account</button>
-<p id="msg"></p>
+<button class="full-btn" onclick="doLogin()">Login</button>
+<button class="full-btn" onclick="doSignup()" style="background:#fff;color:#111">Create Account</button>
+<p id="loginMsg" style="text-align:center;font-weight:600;min-height:18px"></p>
 <p style="font-size:12px;color:#888;text-align:center">Earnings shown in £ GBP after login.<br>Withdrawals in Crypto Only.</p>
 </div>
+</div>
+
+<!-- DASHBOARD SCREEN -->
+<div id="dashboardScreen" style="display:none">
+<div class="ticker" id="ticker"><span><span class="live-dot"></span> LIVE MARKET LOADING...</span></div>
+<header><h1>Member Dashboard</h1><div class="header-right"><img id="avatarImg" class="avatar" src="https://via.placeholder.com/100"><div><div id="userEmail" style="font-weight:700;font-size:14px">Loading...</div><div style="font-size:12px;color:#666" id="headerPlan">Plan: - • KYC: Pending</div></div><button id="logoutBtn" class="light">Logout</button></div></header>
+<main>
+<div class="welcome"><div><h2 id="welcomeName">Welcome back 👋</h2><p>Your earnings are in <b>Pounds (£)</b>. Exchange to crypto when you want to withdraw.</p><p style="margin-top:10px"><span class="pill" id="liveGbpRate">GBP/USD: Loading...</span> <span class="pill" id="liveBtcPrice">BTC: Loading...</span></p></div><div style="text-align:right"><div class="small" style="color:#ddd">Total Earnings (GBP)</div><div style="font-size:32px;font-weight:900" id="earningsGbp">£0.00</div><button onclick="showTab('wallet',document.querySelectorAll('.tabs button')[3])">Exchange & Withdraw →</button></div></div>
+<div class="tabs"><button class="active" onclick="showTab('overview',this)">Overview</button><button onclick="showTab('plans',this)">Shareholder Plans</button><button onclick="showTab('profile',this)">Profile & KYC</button><button onclick="showTab('wallet',this)">Wallet & Exchange</button></div>
+<p id="msg"></p>
+<div id="overview" class="section active">
+<div class="grid3"><div class="card"><span class="small">Portfolio Value</span><span class="big" id="balance">£0.00</span><span class="small" id="balanceUsdt">0 USDT equivalent</span></div><div class="card"><span class="small">Shares Owned</span><span class="big" id="sharesOwned">0 Shares</span><span class="small" id="currentPlanText">Plan: -</span></div><div class="card"><span class="small">Referral Earnings</span><span class="big" id="referralEarnings">£0.00</span><span class="small" id="referralCountText">0 Referrals • Code: -</span></div></div>
+<div class="grid2"><div class="card"><h3>Portfolio Growth</h3><canvas id="growthChart" height="160"></canvas></div><div class="card"><h3>Account Completion</h3><div class="progress"><div id="completionBar"></div></div><p id="completionText">0% Complete</p><div id="checkEmail">○ Email Verified</div><div id="checkProfile">○ Profile Completed</div><div id="checkKyc">○ KYC Verified</div><div id="checkWallet">○ Wallet Added</div><button class="full-btn" onclick="showTab('profile',document.querySelectorAll('.tabs button')[2])">Complete Profile & KYC</button></div></div>
+<div class="card"><h3>Recent Activity</h3><div id="historyList"><p>No activity yet.</p></div></div>
+</div>
+<div id="plans" class="section"><h3>Shareholder Plans</h3><p class="small">Earn in Pounds. Plans paid in crypto, earnings credited in £.</p><div class="grid3"><div class="card"><h3>Starter</h3><span class="big">£100 - £999</span><p>• 1 Share per £100<br>• Monthly profit share<br>• Referral 5%</p><button class="full-btn" onclick="requestPlan('Starter')">Select Starter</button></div><div class="card" style="border:2px solid #111"><h3>Growth ⭐</h3><span class="big">£1,000 - £9,999</span><p>• Higher profit share<br>• Voting rights<br>• Referral 7%</p><button class="full-btn" onclick="requestPlan('Growth')">Select Growth</button></div><div class="card"><h3>Premium</h3><span class="big">£10,000+</span><p>• Highest profit share<br>• Dedicated manager<br>• Referral 10%</p><button class="full-btn" onclick="requestPlan('Premium')">Select Premium</button></div></div><div class="card"><h3>Your Current Plan</h3><div class="row"><span>Plan</span><span id="currentPlan">-</span></div><div class="row"><span>Status</span><span id="planStatus">-</span></div></div></div>
+<div id="profile" class="section"><div class="grid2"><div class="card"><h3>My Profile</h3><img id="avatarPreview" class="avatar" style="width:80px;height:80px" src="https://via.placeholder.com/100"><input type="file" id="avatarFile" accept="image/*" style="margin-top:8px"><button class="full-btn" onclick="uploadAvatar()">Upload Profile Picture</button><form id="profileForm"><label>Full Name</label><input type="text" id="fullName"><label>Phone / WhatsApp</label><input type="text" id="phone"><label>Country</label><input type="text" id="country"><label>Withdrawal Wallet - USDT TRC20</label><input type="text" id="walletAddress"><button class="full-btn" type="submit">Save Profile</button></form></div><div class="card"><h3>Authentication & KYC</h3><div class="row"><span>Email</span><span id="profileEmail">-</span></div><div class="row"><span>Email Verified</span><span id="emailVerified">No</span></div><div class="row"><span>KYC Status</span><strong id="kycStatusText">Pending</strong></div><form id="kycForm"><label>ID Type</label><select id="idType"><option>National ID</option><option>Passport</option><option>Driving License</option></select><label>ID Number</label><input type="text" id="idNumber"><label>ID Document</label><input type="file" id="idFile"><label>Selfie with ID</label><input type="file" id="selfieFile"><button class="full-btn" type="submit">Submit KYC</button></form></div></div></div>
+<div id="wallet" class="section"><div class="card" style="margin-bottom:14px"><h3>💱 Live Exchange - £ Pounds → Crypto</h3><p class="small">Real market rate. Earnings are in £. You exchange to crypto, then withdraw.</p><div class="grid2"><div><label>Amount in Pounds (£)</label><input type="number" id="calcGbp" value="100" oninput="calcExchange()"><label>Convert To</label><select id="calcTo" onchange="calcExchange()"><option value="USDT">USDT</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select></div><div style="background:#f9fafb;padding:16px;border-radius:10px"><div class="small">You will receive</div><div style="font-size:26px;font-weight:900" id="calcResult">Loading live rate...</div><div class="small" id="calcRate">Rate: Fetching...</div><button class="full-btn" onclick="createExchangeFromCalc()">Create Exchange Request</button></div></div></div><div class="grid2"><div class="card"><h3>Deposit Crypto</h3><form id="depositForm"><label>Currency</label><select id="depositCurrency"><option>USDT</option><option>BTC</option><option>ETH</option></select><label>Amount</label><input type="number" step="any" id="depositAmount" required><label>Tx Hash</label><input type="text" id="depositTx" required><button class="full-btn" type="submit">Submit Deposit Proof</button></form></div><div class="card"><h3>Withdraw - After Exchange</h3><form id="withdrawForm"><label>Currency</label><select id="withdrawCurrency"><option>USDT</option><option>BTC</option><option>ETH</option></select><label>Amount</label><input type="number" step="any" id="withdrawAmount" required><label>Wallet Address</label><input type="text" id="withdrawDest" required><button class="full-btn" type="submit">Request Withdrawal</button></form></div><div class="card"><h3>Send Crypto</h3><form id="sendForm"><label>Currency</label><select id="sendCurrency"><option>USDT</option><option>BTC</option><option>ETH</option></select><label>Amount</label><input type="number" step="any" id="sendAmount" required><label>Recipient</label><input type="text" id="sendTo" required><button class="full-btn" type="submit">Send</button></form></div><div class="card"><h3>Exchange £ → Crypto (Manual)</h3><form id="exchangeForm"><label>Amount in £</label><input type="number" step="any" id="exchangeAmount" required><label>To Crypto</label><select id="exchangeTo"><option>USDT</option><option>BTC</option><option>ETH</option></select><button class="full-btn" type="submit">Create Exchange Request</button></form></div></div></div>
+</main>
+<footer><p>© 2026 Member Dashboard • Earnings in £ GBP • Withdrawals in Crypto Only • Live Market Data via CoinGecko</p></footer>
+</div>
+
 <script>
-const SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co";
-const SUPABASE_KEY = "sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// Auto-fill email if Remember Me was used
-const savedEmail = localStorage.getItem('cedars_email');
-if(savedEmail){ document.getElementById('email').value = savedEmail; }
-
-// If already logged in, go straight to dashboard
-supabaseClient.auth.getSession().then(({data})=>{
-  if(data.session) window.location.href="index.html";
-});
-
-async function login(){
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const remember = document.getElementById('rememberMe').checked;
-  if(!email || !password){ document.getElementById('msg').innerText="Enter email and password"; return; }
-  document.getElementById('msg').innerText="Logging in...";
-  document.getElementById('msg').style.color="#111";
-  const {error} = await supabaseClient.auth.signInWithPassword({email, password});
-  if(error){ document.getElementById('msg').style.color="#b91c1c"; document.getElementById('msg').innerText=error.message; return; }
-  // Remember Me: save email only. Supabase keeps session automatically.
-  if(remember) localStorage.setItem('cedars_email', email);
-  else localStorage.removeItem('cedars_email');
-  window.location.href="index.html";
-}
-async function signup(){
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  if(!email || !password){ document.getElementById('msg').innerText="Enter email and password to create account"; return; }
-  const {error} = await supabaseClient.auth.signUp({email, password});
-  document.getElementById('msg').style.color = error ? "#b91c1c" : "#15803d";
-  document.getElementById('msg').innerText = error ? error.message : "Account created! Check your email to confirm, then Login.";
-}
-async function resetPassword(){
-  const email = document.getElementById('email').value.trim();
-  if(!email){ document.getElementById('msg').innerText="Type your email first, then tap Forgot Password"; return; }
-  const {error} = await supabaseClient.auth.resetPasswordForEmail(email, {redirectTo: window.location.origin + "/login.html"});
-  document.getElementById('msg').style.color = error ? "#b91c1c" : "#15803d";
-  document.getElementById('msg').innerText = error ? error.message : "Reset link sent to " + email + ". Check inbox / spam.";
-}
+let currentUser=null; let livePrices={BTC:0,ETH:0,USDT:1}; let gbpUsd=1.27;
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function setMsg(t){document.getElementById('msg').innerText=t;}
+function showLogin(){document.getElementById('loginScreen').style.display='flex';document.getElementById('dashboardScreen').style.display='none';}
+function showDashboard(){document.getElementById('loginScreen').style.display='none';document.getElementById('dashboardScreen').style.display='block';loadLiveMarket();loadUser();}
+const savedEmail=localStorage.getItem('cedars_email'); if(savedEmail) document.getElementById('email').value=savedEmail;
+supabaseClient.auth.getSession().then(({data})=>{ if(data.session) showDashboard(); else showLogin(); });
+async function doLogin(){const email=document.getElementById('email').value.trim();const password=document.getElementById('password').value;const remember=document.getElementById('rememberMe').checked;const m=document.getElementById('loginMsg');if(!email||!password){m.innerText="Enter email and password";return;}m.innerText="Logging in...";const {error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){m.innerText=error.message;return;}if(remember) localStorage.setItem('cedars_email',email); else localStorage.removeItem('cedars_email');showDashboard();}
+async function doSignup(){const email=document.getElementById('email').value.trim();const password=document.getElementById('password').value;const m=document.getElementById('loginMsg');const {error}=await supabaseClient.auth.signUp({email,password});m.innerText=error?error.message:"Account created! Check email to confirm, then Login.";}
+async function resetPassword(){const email=document.getElementById('email').value.trim();const m=document.getElementById('loginMsg');if(!email){m.innerText="Type your email first, then tap Forgot Password";return;}const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+"/"});m.innerText=error?error.message:"Reset link sent to "+email;}
+async function loadLiveMarket(){try{const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp,usd');const d=await r.json();livePrices.BTC=d.bitcoin.gbp;livePrices.ETH=d.ethereum.gbp;livePrices.USDT=d.tether.gbp;const fx=await fetch('https://api.exchangerate.host/latest?base=USD&symbols=GBP');const fxD=await fx.json();gbpUsd=1/fxD.rates.GBP;document.getElementById('ticker').innerHTML=`<span><span class="live-dot"></span> LIVE</span><span>BTC £${livePrices.BTC.toLocaleString()}</span><span>ETH £${livePrices.ETH.toLocaleString()}</span><span>USDT £${livePrices.USDT.toFixed(4)}</span><span>GBP/USD ${gbpUsd.toFixed(4)}</span>`;document.getElementById('liveGbpRate').innerText=`GBP/USD: ${gbpUsd.toFixed(4)} Live`;document.getElementById('liveBtcPrice').innerText=`BTC: £${livePrices.BTC.toLocaleString()}`;calcExchange();}catch(e){document.getElementById('ticker').innerHTML=`<span>Live market temporarily unavailable</span>`;}}
+setInterval(()=>{if(document.getElementById('dashboardScreen').style.display!=='none') loadLiveMarket();},60000);
+function calcExchange(){const gbp=parseFloat(document.getElementById('calcGbp').value||0);const to=document.getElementById('calcTo').value;if(!livePrices.BTC) return;const rate=livePrices[to];const out=gbp/rate;document.getElementById('calcResult').innerText=out.toFixed(to==='BTC'?6:2)+' '+to;document.getElementById('calcRate').innerText=`Rate: 1 ${to} = £${rate.toLocaleString()} • Live`;}
+function createExchangeFromCalc(){document.getElementById('exchangeAmount').value=document.getElementById('calcGbp').value;document.getElementById('exchangeTo').value=document.getElementById('calcTo').value;document.getElementById('exchangeForm').dispatchEvent(new Event('submit'));}
+async function loadUser(){const {data:{user}}=await supabaseClient.auth.getUser();if(!user){showLogin();return;}currentUser=user;document.getElementById('userEmail').innerText=user.email;document.getElementById('profileEmail').innerText=user.email;document.getElementById('emailVerified').innerText=user.email_confirmed_at?"Yes":"No";const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id',user.id).single();if(profile){const balGbp=profile.balance_gbp||profile.balance||0;const earnGbp=profile.total_earnings_gbp||profile.total_earnings||0;document.getElementById('balance').innerText="£"+Number(balGbp).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});document.getElementById('earningsGbp').innerText="£"+Number(earnGbp).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});document.getElementById('balanceUsdt').innerText=(balGbp/(livePrices.USDT||0.79)).toFixed(2)+" USDT equivalent";document.getElementById('sharesOwned').innerText=(profile.shares||0)+" Shares";document.getElementById('currentPlanText').innerText="Plan: "+(profile.plan||"-");document.getElementById('currentPlan').innerText=profile.plan||"-";document.getElementById('planStatus').innerText=profile.plan_status||"-";document.getElementById('headerPlan').innerText="Plan: "+(profile.plan||"-")+" • KYC: "+(profile.kyc_status||"Pending");document.getElementById('referralEarnings').innerText="£"+Number(profile.referral_earnings_gbp||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});document.getElementById('referralCountText').innerText=(profile.referral_count||0)+" Referrals • Code: "+(profile.referral_code||"-");document.getElementById('welcomeName').innerText="Welcome back, "+(profile.full_name||user.email.split('@')[0])+" 👋";document.getElementById('fullName').value=profile.full_name||"";document.getElementById('phone').value=profile.phone||"";document.getElementById('country').value=profile.country||"";document.getElementById('walletAddress').value=profile.wallet_address||"";document.getElementById('kycStatusText').innerText=profile.kyc_status||"Pending";if(profile.avatar_url){document.getElementById('avatarImg').src=profile.avatar_url;document.getElementById('avatarPreview').src=profile.avatar_url;}let score=0;if(user.email_confirmed_at){score+=25;document.getElementById('checkEmail').innerText="✓ Email Verified";}if(profile.full_name&&profile.phone){score+=25;document.getElementById('checkProfile').innerText="✓ Profile Completed";}if(profile.kyc_status==="Verified"||profile.kyc_status==="Approved"){score+=25;document.getElementById('checkKyc').innerText="✓ KYC Verified";}if(profile.wallet_address){score+=25;document.getElementById('checkWallet').innerText="✓ Wallet Added";}document.getElementById('completionBar').style.width=score+"%";document.getElementById('completionText').innerText=score+"% Complete";const ctx=document.getElementById('growthChart');if(ctx) new Chart(ctx,{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Balance £',data:[0,balGbp*0.2,balGbp*0.4,balGbp*0.6,balGbp*0.8,balGbp],borderColor:'#111827',fill:true,backgroundColor:'rgba(17,24,39,0.08)'}]},options:{responsive:true,plugins:{legend:{display:false}}}});}loadHistory();}
+async function loadHistory(){if(!currentUser) return;const {data}=await supabaseClient.from('deposits').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(5);if(data&&data.length) document.getElementById('historyList').innerHTML=data.map(d=>`<div class="row"><span>${d.currency||''} Deposit - ${d.amount} - ${d.status}</span><span>${new Date(d.created_at).toLocaleDateString()}</span></div>`).join('');}
+async function uploadAvatar(){const file=document.getElementById('avatarFile').files[0];if(!file) return alert('Choose a picture first');const path=currentUser.id+'/'+Date.now()+'_'+file.name;const {error}=await supabaseClient.storage.from('avatars').upload(path,file);if(error) return setMsg(error.message);const {data}=supabaseClient.storage.from('avatars').getPublicUrl(path);await supabaseClient.from('profiles').update({avatar_url:data.publicUrl}).eq('id',currentUser.id);document.getElementById('avatarImg').src=data.publicUrl;document.getElementById('avatarPreview').src=data.publicUrl;setMsg('Profile picture updated!');}
+document.getElementById('logoutBtn').onclick=async()=>{await supabaseClient.auth.signOut();showLogin();};
+async function requestPlan(p){const {error}=await supabaseClient.from('plan_requests').insert([{user_id:currentUser.id,plan_name:p,status:'pending'}]);setMsg(error?error.message:"Plan request for "+p+" submitted");}
+document.getElementById('profileForm').onsubmit=async(e)=>{e.preventDefault();const {error}=await supabaseClient.from('profiles').update({full_name:document.getElementById('fullName').value,phone:document.getElementById('phone').value,country:document.getElementById('country').value,wallet_address:document.getElementById('walletAddress').value}).eq('id',currentUser.id);setMsg(error?error.message:"Profile saved");loadUser();};
+document.getElementById('kycForm').onsubmit=async(e)=>{e.preventDefault();const {error}=await supabaseClient.from('profiles').update({kyc_status:'Under Review',id_type:document.getElementById('idType').value,id_number:document.getElementById('idNumber').value}).eq('id',currentUser.id);setMsg(error?error.message:"KYC submitted for review");loadUser();};
+document.getElementById('depositForm').onsubmit=async(e)=>{e.preventDefault();const {error}=await supabaseClient.from('deposits').insert([{user_id:currentUser.id,currency:document.getElementById('depositCurrency').value,amount:parseFloat(document.getElementById('depositAmount').value),tx_hash:document.getElementById('depositTx').value,status:'pending'}]);setMsg(error?error.message:"Deposit proof submitted");loadHistory();};
+document.getElementById('withdrawForm').onsubmit=async(e)=>{e.preventDefault();const {error}=await supabaseClient.from('withdrawals').insert([{user_id:currentUser.id,currency:document.getElementById('withdrawCurrency').value,amount:parseFloat(document.getElementById('withdrawAmount').value),destination:document.getElementById('withdrawDest').value,status:'pending'}]);setMsg(error?error.message:"Withdrawal request created");};
+document.getElementById('sendForm').onsubmit=async(e)=>{e.preventDefault();const {error}=await supabaseClient.from('transfers').insert([{user_id:currentUser.id,currency:document.getElementById('sendCurrency').value,amount:parseFloat(document.getElementById('sendAmount').value),recipient_address:document.getElementById('sendTo').value,status:'pending'}]);setMsg(error?error.message:"Send request created");};
+document.getElementById('exchangeForm').onsubmit=async(e)=>{e.preventDefault();const {error}=await supabaseClient.from('exchanges').insert([{user_id:currentUser.id,amount:parseFloat(document.getElementById('exchangeAmount').value),from_currency:'GBP',to_currency:document.getElementById('exchangeTo').value,status:'pending',rate_at_time:livePrices[document.getElementById('exchangeTo').value]}]);setMsg(error?error.message:"Exchange £ → "+document.getElementById('exchangeTo').value+" created at live rate £"+livePrices[document.getElementById('exchangeTo').value]);};
 </script>
 </body>
 </html>
