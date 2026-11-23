@@ -1,130 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cedars Empire - ADMIN</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cedars Empire - ADMIN FULL</title>
 <style>
-  *{box-sizing:border-box} body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;padding:20px}
-  .box{max-width:900px;margin:0 auto;background:#1e293b;padding:20px;border-radius:12px}
-  h1,h2{margin:0 0 12px} input,select,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:0}
-  input,select{background:#0f172a;color:#fff;border:1px solid #334155}
-  button{background:#22c55e;color:#000;font-weight:700;cursor:pointer}
-  button.red{background:#ef4444;color:#fff} button.blue{background:#3b82f6;color:#fff}
-  .row{display:flex;gap:10px} .row>*{flex:1}
-  .card{background:#0f172a;padding:14px;border-radius:10px;margin:10px 0}
-  .flex{display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .badge{padding:4px 10px;border-radius:20px;font-size:12px;background:#334155}
-  .badge.green{background:#22c55e;color:#000} .badge.yellow{background:#eab308;color:#000}
-  .hidden{display:none} small{color:#94a3b8}
-  table{width:100%;border-collapse:collapse} td,th{padding:8px;text-align:left;border-bottom:1px solid #334155;font-size:14px}
-</style>
-</head>
-<body>
-<div class="box">
-  <h1>🌲 Cedars Empire - ADMIN</h1>
-  <small id="status">Not logged in</small>
+body{font-family:Arial;background:#0f172a;color:#fff;margin:0;padding:14px}
+.box{max-width:1000px;margin:auto;background:#1e293b;padding:16px;border-radius:12px}
+input,select,button,textarea{width:100%;padding:11px;margin:5px 0;border-radius:8px;border:0}
+input,select,textarea{background:#0f172a;color:#fff;border:1px solid #334155}
+button{background:#22c55e;color:#000;font-weight:700;cursor:pointer}
+.red{background:#ef4444;color:#fff}.blue{background:#3b82f6;color:#fff}.yellow{background:#eab308}
+.card{background:#0f172a;padding:12px;border-radius:10px;margin:10px 0}
+.flex{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.hidden{display:none}.badge{padding:4px 10px;border-radius:20px;background:#eab308;color:#000;font-size:12px}.green{background:#22c55e}
+.small{font-size:12px;color:#94a3b8}.btns{display:flex;gap:6px}.btns button{width:auto;padding:8px 12px;font-size:13px}
+.tabs{display:flex;gap:6px}.tabs button{background:#334155;color:#fff}.tabs button.active{background:#22c55e;color:#000}
+</style></head>
+<body><div class="box">
+<h1>🌲 Cedars Empire - ADMIN</h1><small id="status">Not logged in</small>
 
-  <!-- LOGIN -->
-  <div id="loginBox" class="card">
-    <h2>Admin Login</h2>
-    <input id="email" placeholder="Email" value="admin@cedars.com">
-    <input id="pass" type="password" placeholder="Password">
-    <input id="code" placeholder="Secret Code">
-    <button onclick="doLogin()">Login</button>
-    <p id="loginMsg" style="color:#f87171"></p>
-    <small>First time? Use Admin123 / CEDARS2026</small>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div id="dashBox" class="hidden">
-    <div class="row">
-      <div class="card"><h3 id="totalMembers">0</h3><small>Total Members</small></div>
-      <div class="card"><h3 id="pendingCount">0</h3><small>Pending Approval</small></div>
-      <div class="card"><h3 id="approvedCount">0</h3><small>Approved</small></div>
-    </div>
-
-    <div class="card">
-      <h2>Add Member</h2>
-      <input id="mName" placeholder="Full Name">
-      <input id="mPhone" placeholder="Phone / WhatsApp">
-      <input id="mAmount" type="number" placeholder="Amount UGX">
-      <button onclick="addMember()">Add Member</button>
-    </div>
-
-    <div class="card">
-      <h2>Members & Approvals</h2>
-      <div id="memberList"></div>
-    </div>
-
-    <div class="card">
-      <h2>Tasks</h2>
-      <input id="taskTitle" placeholder="New Task Title">
-      <button class="blue" onclick="addTask()">Add Task</button>
-      <div id="taskList"></div>
-    </div>
-
-    <button class="red" onclick="doLogout()">Logout</button>
-    <button onclick="exportData()">Export Backup (Download)</button>
-    <small>Backup saves your approvals to a file. Keep it safe.</small>
-  </div>
+<div id="loginBox" class="card">
+<h2>Admin Login</h2>
+<input id="email" value="admin@cedars.com"><input id="pass" type="password" placeholder="Password"><input id="code" placeholder="Secret Code">
+<button onclick="doLogin()">Login</button><p id="loginMsg" style="color:#f87171"></p>
+<small>Default: Admin123 / CEDARS2026 - Change in Settings after login</small>
 </div>
 
+<div id="dashBox" class="hidden">
+<div class="tabs">
+<button class="active" onclick="showTab('overview',this)">Overview</button>
+<button onclick="showTab('members',this)">Members</button>
+<button onclick="showTab('tasks',this)">Tasks</button>
+<button onclick="showTab('engines',this)">Engines</button>
+<button onclick="showTab('backup',this)">Backup / Settings</button>
+</div>
+
+<div id="tab-overview">
+<div class="flex">
+<div class="card" style="flex:1"><h2 id="t1">0</h2>Total Members</div>
+<div class="card" style="flex:1"><h2 id="t2">0</h2>Pending</div>
+<div class="card" style="flex:1"><h2 id="t3">0</h2>Approved</div>
+<div class="card" style="flex:1"><h2 id="t4">0</h2>Total Balance UGX</div>
+</div>
+<div class="card"><h3>📢 Announcement (Members see this)</h3>
+<textarea id="annText" placeholder="Write announcement..."></textarea>
+<button class="blue" onclick="saveAnn()">Save Announcement</button></div>
+<div class="card"><h3>📜 Activity Log</h3><div id="logList"></div></div>
+</div>
+
+<div id="tab-members" class="hidden">
+<div class="card">
+<div class="flex"><input id="search" placeholder="Search name / phone" oninput="render()"><select id="filter" onchange="render()" style="max-width:180px"><option value="all">All</option><option value="pending">Pending</option><option value="approved">Approved</option></select></div>
+<button class="blue" onclick="approveAll()">Approve All Pending</button>
+<div id="memberList"></div></div>
+</div>
+
+<div id="tab-tasks" class="hidden">
+<div class="card"><h3>Add Task</h3><input id="taskTitle" placeholder="Task title"><input id="taskReward" type="number" placeholder="Reward UGX"><button class="blue" onclick="addTask()">Add Task</button>
+<div id="taskList"></div></div>
+</div>
+
+<div id="tab-engines" class="hidden">
+<div class="card"><h3>⚙️ Engines - Real Control</h3><div id="engineList"></div>
+<small>ON = Members see RUNNING. OFF = Members see STOPPED. No fake numbers.</small></div>
+</div>
+
+<div id="tab-backup" class="hidden">
+<div class="card"><h3>Backup</h3>
+<button onclick="exportData()">Export Backup JSON</button>
+<input type="file" id="importFile" accept=".json"><button class="blue" onclick="importData()">Import Backup</button>
+<button class="red" onclick="clearAll()">Clear All Data (Danger)</button></div>
+<div class="card"><h3>Change Admin Login</h3>
+<input id="newPass" placeholder="New Password"><input id="newCode" placeholder="New Secret Code">
+<button class="yellow" onclick="changeAdmin()">Save New Login</button></div>
+<button class="red" onclick="logout()">Logout</button>
+</div>
+</div></div>
+
 <script>
-const ADMIN = { email:"admin@cedars.com", pass:"Admin123", code:"CEDARS2026" };
-let data = JSON.parse(localStorage.getItem("cedars_data") || '{"members":[],"tasks":[]}');
-function save(){ localStorage.setItem("cedars_data", JSON.stringify(data)); render(); }
-function doLogin(){
-  const e=document.getElementById("email").value.trim();
-  const p=document.getElementById("pass").value.trim();
-  const c=document.getElementById("code").value.trim();
-  if(e===ADMIN.email && p===ADMIN.pass && c===ADMIN.code){
-    localStorage.setItem("cedars_admin","1");
-    showDash();
-  } else {
-    document.getElementById("loginMsg").innerText="Wrong email / password / code. Try again.";
-  }
-}
-function showDash(){
-  document.getElementById("loginBox").classList.add("hidden");
-  document.getElementById("dashBox").classList.remove("hidden");
-  document.getElementById("status").innerText="Logged in as Admin";
-  render();
-}
-function doLogout(){ localStorage.removeItem("cedars_admin"); location.reload(); }
-function addMember(){
-  const name=document.getElementById("mName").value.trim();
-  const phone=document.getElementById("mPhone").value.trim();
-  const amt=document.getElementById("mAmount").value.trim();
-  if(!name) return alert("Enter name");
-  data.members.push({id:Date.now(), name, phone, amount:amt||0, status:"pending"});
-  document.getElementById("mName").value=""; document.getElementById("mPhone").value=""; document.getElementById("mAmount").value="";
-  save();
-}
-function approve(id){ const m=data.members.find(x=>x.id===id); if(m) m.status="approved"; save(); }
-function reject(id){ data.members=data.members.filter(x=>x.id!==id); save(); }
-function addTask(){
-  const t=document.getElementById("taskTitle").value.trim();
-  if(!t) return;
-  data.tasks.push({id:Date.now(), title:t, done:false});
-  document.getElementById("taskTitle").value=""; save();
-}
-function toggleTask(id){ const t=data.tasks.find(x=>x.id===id); if(t) t.done=!t.done; save(); }
-function exportData(){
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="cedars-backup.json"; a.click();
-}
+const DEFAULT_ADMIN={email:"admin@cedars.com",pass:"Admin123",code:"CEDARS2026"};
+function getAdmin(){return JSON.parse(localStorage.getItem("cedars_admin_cfg")||JSON.stringify(DEFAULT_ADMIN))}
+function getData(){let d=JSON.parse(localStorage.getItem("cedars_data")||'{}'); if(!d.members) d.members=[]; if(!d.tasks) d.tasks=[]; if(!d.engines) d.engines=[{id:1,name:"Verification Engine",on:true,desc:"Approves members"},{id:2,name:"Task Engine",on:true,desc:"Shows tasks"},{id:3,name:"Growth Engine",on:false,desc:"Growth / referrals"}]; if(!d.ann) d.ann=""; if(!d.logs) d.logs=[]; return d}
+function save(d){localStorage.setItem("cedars_data",JSON.stringify(d)); render()}
+function log(msg){let d=getData(); d.logs.unshift(new Date().toLocaleString()+" - "+msg); d.logs=d.logs.slice(0,30); localStorage.setItem("cedars_data",JSON.stringify(d)); render()}
+function showTab(id,btn){["overview","members","tasks","engines","backup"].forEach(t=>document.getElementById("tab-"+t).classList.add("hidden")); document.getElementById("tab-"+id).classList.remove("hidden"); document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active")); btn.classList.add("active")}
+function doLogin(){let a=getAdmin(); let e=document.getElementById("email").value.trim(),p=document.getElementById("pass").value.trim(),c=document.getElementById("code").value.trim(); if(e===a.email&&p===a.pass&&c===a.code){localStorage.setItem("cedars_admin","1"); showDash()} else document.getElementById("loginMsg").innerText="Wrong email / password / code"}
+function showDash(){document.getElementById("loginBox").classList.add("hidden"); document.getElementById("dashBox").classList.remove("hidden"); document.getElementById("status").innerText="Logged in as Admin"; document.getElementById("annText").value=getData().ann; render()}
+function logout(){localStorage.removeItem("cedars_admin"); location.reload()}
+function approve(id){let d=getData(); let m=d.members.find(x=>x.id===id); if(m){m.status="approved"; save(d); log("Approved "+m.name)}}
+function approveAll(){let d=getData(); d.members.forEach(m=>m.status="approved"); save(d); log("Approved all pending")}
+function reject(id){let d=getData(); let m=d.members.find(x=>x.id===id); d.members=d.members.filter(x=>x.id!==id); save(d); if(m) log("Deleted "+m.name)}
+function addBal(id,sign){let amt=prompt((sign>0?"Add":"Subtract")+" balance UGX?"); if(!amt) return; let d=getData(); let m=d.members.find(x=>x.id===id); m.balance=(m.balance||0)+sign*Number(amt); save(d); log((sign>0?"Added ":"Subtracted ")+amt+" to "+m.name)}
+function payout(id){let d=getData(); let m=d.members.find(x=>x.id===id); if(!m.balance||m.balance<=0) return alert("No balance"); if(!confirm("Mark UGX "+m.balance+" as PAID to "+m.name+"?")) return; log("Paid UGX "+m.balance+" to "+m.name); m.balance=0; save(d)}
+function toggleEngine(id){let d=getData(); let e=d.engines.find(x=>x.id===id); e.on=!e.on; save(d); log(e.name+" turned "+(e.on?"ON":"OFF"))}
+function addTask(){let t=document.getElementById("taskTitle").value.trim(),r=Number(document.getElementById("taskReward").value||0); if(!t) return alert("Enter task"); let d=getData(); d.tasks.push({id:Date.now(),title:t,reward:r}); document.getElementById("taskTitle").value=""; save(d); log("Added task: "+t)}
+function delTask(id){let d=getData(); d.tasks=d.tasks.filter(x=>x.id!==id); save(d)}
+function saveAnn(){let d=getData(); d.ann=document.getElementById("annText").value; save(d); log("Updated announcement")}
+function exportData(){let blob=new Blob([JSON.stringify(getData(),null,2)],{type:"application/json"}); let a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="cedars-backup.json"; a.click()}
+function importData(){let f=document.getElementById("importFile").files[0]; if(!f) return alert("Choose file"); let r=new FileReader(); r.onload=e=>{localStorage.setItem("cedars_data",e.target.result); render(); alert("Imported")}; r.readAsText(f)}
+function clearAll(){if(!confirm("Delete ALL members/tasks?")) return; localStorage.removeItem("cedars_data"); render()}
+function changeAdmin(){let p=document.getElementById("newPass").value.trim(),c=document.getElementById("newCode").value.trim(); if(!p||!c) return alert("Fill both"); let a=getAdmin(); a.pass=p; a.code=c; localStorage.setItem("cedars_admin_cfg",JSON.stringify(a)); alert("Saved. Next login use new Password/Code")}
 function render(){
-  document.getElementById("totalMembers").innerText=data.members.length;
-  document.getElementById("pendingCount").innerText=data.members.filter(m=>m.status==="pending").length;
-  document.getElementById("approvedCount").innerText=data.members.filter(m=>m.status==="approved").length;
-  document.getElementById("memberList").innerHTML = data.members.length===0 ? "<p>No members yet.</p>" : data.members.map(m=>`
-    <div class="flex card"><div><b>${m.name}</b><br><small>${m.phone} - UGX ${m.amount}</small></div>
-    <span class="badge ${m.status==="approved"?"green":"yellow"}">${m.status}</span>
-    <div style="display:flex;gap:6px"><button onclick="approve(${m.id})">Approve</button><button class="red" onclick="reject(${m.id})">Delete</button></div></div>`).join("");
-  document.getElementById("taskList").innerHTML = data.tasks.map(t=>`<div class="flex card"><span>${t.done?"✅":"⬜"} ${t.title}</span><button class="blue" onclick="toggleTask(${t.id})">Done</button></div>`).join("") || "<p>No tasks</p>";
+let d=getData();
+document.getElementById("t1").innerText=d.members.length;
+document.getElementById("t2").innerText=d.members.filter(m=>m.status==="pending").length;
+document.getElementById("t3").innerText=d.members.filter(m=>m.status==="approved").length;
+document.getElementById("t4").innerText=d.members.reduce((s,m)=>s+(m.balance||0),0);
+document.getElementById("logList").innerHTML=d.logs.map(l=>`<div class="small">• ${l}</div>`).join("")||"No activity yet";
+let q=(document.getElementById("search")?.value||"").toLowerCase(), f=document.getElementById("filter")?.value||"all";
+let list=d.members.filter(m=>(f==="all"||m.status===f)&&((m.name+" "+m.phone).toLowerCase().includes(q)));
+document.getElementById("memberList").innerHTML=list.length===0?"<p>No members</p>":list.map(m=>`<div class="flex card"><div><b>${m.name}</b><br><span class="small">${m.phone} | Bal: ${m.balance||0}</span></div><span class="badge ${m.status==="approved"?"green":""}">${m.status}</span><div class="btns"><button onclick="approve(${m.id})">Approve</button><button class="blue" onclick="addBal(${m.id},1)">+ Bal</button><button class="yellow" onclick="addBal(${m.id},-1)">- Bal</button><button class="blue" onclick="payout(${m.id})">Pay</button><button class="red" onclick="reject(${m.id})">Delete</button></div></div>`).join("");
+document.getElementById("taskList").innerHTML=d.tasks.map(t=>`<div class="flex card"><span>${t.title} - UGX ${t.reward}</span><button class="red" style="width:80px" onclick="delTask(${t.id})">Delete</button></div>`).join("")||"<p>No tasks</p>";
+document.getElementById("engineList").innerHTML=d.engines.map(e=>`<div class="flex card"><div><b>${e.on?"🟢":"🔴"} ${e.name}</b><br><span class="small">${e.desc}</span></div><button class="${e.on?"red":""}" style="width:110px" onclick="toggleEngine(${e.id})">${e.on?"STOP":"START"}</button></div>`).join("");
 }
-if(localStorage.getItem("cedars_admin")==="1"){ showDash(); }
-</script>
-</body>
-</html>
+if(localStorage.getItem("cedars_admin")==="1") showDash();
+</script></body></html>
