@@ -1,164 +1,129 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Member Dashboard</title>
-  <style>
-    /* Your existing styling */
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f9fa; }
-    .container { max-width: 1200px; margin: auto; padding: 20px; }
-    .card { background: #fff; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-    h1, h2 { margin-top: 0; }
-    button { padding: 10px 20px; border: none; border-radius: 8px; background: #000; color: #fff; cursor: pointer; }
-    button:hover { opacity: 0.8; }
-    input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
-    table { width: 100%; border-collapse: collapse; }
-    th { text-align: left; background: #f0f0f0; padding: 10px; font-size: 13px; }
-    td { padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
-    small { color: #666; display: block; margin-top: 10px; }
+<!-- Inside Wallet & Exchange tab -->
+<div id="exchange-engine">
+  <h2>Exchange</h2>
+  <form id="exchange-form">
+    <label>From:</label>
+    <select id="from-currency">
+      <option value="GBP">GBP</option>
+    </select>
+    <label>To:</label>
+    <select id="to-currency">
+      <option value="USDT">USDT</option>
+      <option value="BTC">BTC</option>
+      <option value="ETH">ETH</option>
+    </select>
+    <label>Amount:</label>
+    <input type="number" id="amount" placeholder="Enter amount" />
+    <button id="exchange-btn">Exchange</button>
+  </form>
+  <p id="exchange-rate"></p>
+  <p id="exchange-result"></p>
+  <h3>Transaction History</h3>
+  <ul id="transaction-history"></ul>
+</div>
 
-    /* New block styling */
-    #transactions, #redemption, #leadership {
-      background: #fff; padding: 20px; border-radius: 12px;
-      margin: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+<script>
+  // Supabase URL and anon key
+  const supabaseUrl = 'https://your-supabase-url.supabase.co';
+  const supabaseAnonKey = 'your-supabase-anon-key';
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+  // CoinGecko API URL
+  const apiUrl = 'https://api.coingecko.com/api/v3/simple/price';
+
+  // Fetch live rates
+  async function getExchangeRate(fromCurrency, toCurrency) {
+    try {
+      const response = await fetch(`${apiUrl}?ids=${toCurrency.toLowerCase()}&vs_currencies=${fromCurrency.toLowerCase()}`);
+      const data = await response.json();
+      return data[toCurrency.toLowerCase()][fromCurrency.toLowerCase()];
+    } catch (error) {
+      console.error('Error fetching exchange rate:', error);
     }
-    #transactions button {
-      padding: 6px 12px; margin: 3px; border-radius: 20px;
-      border: 1px solid #ddd; background: #f5f5f5; cursor: pointer;
+  }
+
+  // Fetch user's current wallet balance
+  async function getWalletBalance(userId) {
+    try {
+      const { data, error } = await supabase
+        .from('wallets')
+        .select('balance')
+        .eq('user_id', userId);
+      if (error) throw error;
+      return data[0].balance;
+    } catch (error) {
+      console.error('Error fetching wallet balance:', error);
     }
-    #transactions button:hover { background: #000; color: #fff; }
-  </style>
-</head>
-<body>
+  }
 
-  <div class="container">
-    <!-- TOP SECTION -->
-    <div class="card">
-      <h1>Member Dashboard</h1>
-      <p>ogwal.bemmanuel@gmail.com</p>
-      <p>Plan: -</p>
-      <p>KYC: Pending</p>
-      <button>Logout</button>
-      <p>Welcome back 👋</p>
-      <p>Your earnings are in Pounds (£). Exchange to crypto when you want to withdraw.</p>
-      <p>GBP/USD: Loading... BTC: Loading...</p>
-    </div>
+  // Update wallet balance after exchange
+  async function updateWalletBalance(userId, newBalance) {
+    try {
+      const { data, error } = await supabase
+        .from('wallets')
+        .update({ balance: newBalance })
+        .eq('user_id', userId);
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error updating wallet balance:', error);
+    }
+  }
 
-    <!-- OVERVIEW -->
-    <div class="card">
-      <h2>Overview</h2>
-      <p>Total Earnings (GBP): £0.00</p>
-      <button>Exchange & Withdraw →</button>
-    </div>
+  // Add transaction to history
+  async function addTransaction(userId, transaction) {
+    try {
+      const { data, error } = await supabase
+        .from('transactions')
+        .insert([transaction]);
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error adding transaction:', error);
+    }
+  }
 
-    <!-- SHAREHOLDER PLANS -->
-    <div class="card">
-      <h2>Shareholders Plans</h2>
-      <p>£300 - £50,000. Term: 1095 days.</p>
-      <p>Target Profit Share: Up to 1% daily. Variable, not guaranteed. Capital at risk.</p>
-    </div>
+  // Handle exchange form submission
+  document.getElementById('exchange-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const userId = 'CURRENT_USER_ID'; // Replace with current user's ID
+    const fromCurrency = document.getElementById('from-currency').value;
+    const toCurrency = document.getElementById('to-currency').value;
+    const amount = parseFloat(document.getElementById('amount').value);
+    const rate = await getExchangeRate(fromCurrency, toCurrency);
+    const exchangedAmount = amount / rate;
+    const fee = exchangedAmount * 0.005; // 0.5% fee
+    const finalAmount = exchangedAmount - fee;
+    const currentBalance = await getWalletBalance(userId);
+    if (currentBalance >= amount) {
+      const newBalance = currentBalance - amount + finalAmount;
+      await updateWalletBalance(userId, newBalance);
+      const transaction = {
+        user_id: userId,
+        from_currency: fromCurrency,
+        to_currency: toCurrency,
+        amount: amount,
+        exchanged_amount: finalAmount,
+        fee: fee,
+        timestamp: new Date().toISOString(),
+      };
+      await addTransaction(userId, transaction);
+      document.getElementById('exchange-result').innerText = `Exchange successful! New balance: ${newBalance}`;
+      // Update transaction history
+      const transactionHistory = document.getElementById('transaction-history');
+      const transactionListItem = document.createElement('li');
+      transactionListItem.textContent = `Exchanged ${amount} ${fromCurrency} for ${finalAmount} ${toCurrency}`;
+      transactionHistory.appendChild(transactionListItem);
+    } else {
+      document.getElementById('exchange-result').innerText = 'Insufficient balance';
+    }
+  });
 
-    <!-- PROFILE & KYC -->
-    <div class="card">
-      <h2>Profile & KYC</h2>
-      <button>Complete Profile & KYC</button>
-      <p>Profile Completed: 0%</p>
-      <p>KYC Status: Pending</p>
-    </div>
-
-    <!-- WALLET & EXCHANGE -->
-    <div class="card">
-      <h2>Wallet & Exchange</h2>
-      <p>Portfolio Value: £0.00</p>
-      <p>Shares Owned: 0 Shares</p>
-      <p>Referral Earnings: £0.00</p>
-    </div>
-
-    <!-- PORTFOLIO GROWTH -->
-    <div class="card">
-      <h2>Portfolio Growth</h2>
-      <p>Account Completion: 0% Complete</p>
-    </div>
-
-    <!-- RECENT ACTIVITY -->
-    <div class="card">
-      <h2>Recent Activity</h2>
-      <p>No activity yet.</p>
-    </div>
-
-    <!-- NEW C BLOCK: TRANSACTIONS + REDEMPTION + LEADERSHIP -->
-    <div id="transactions" class="card">
-      <h2>Transactions History</h2>
-      <p>All money movements in your account.</p>
-      <div>
-        <button>All</button>
-        <button>Deposits</button>
-        <button>Profit Share</button>
-        <button>Referrals</button>
-        <button>Withdrawals</button>
-        <button>Redemptions</button>
-      </div>
-      <input placeholder="Search Reference ID..." />
-      <table>
-        <thead>
-          <tr><th>Date</th><th>Reference</th><th>Type</th><th>Plan</th><th>Amount (£)</th><th>Balance After (£)</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-        </tbody>
-      </table>
-      <small>Profit share is variable, based on actual profits. Not guaranteed.</small>
-    </div>
-
-    <div id="redemption" class="card">
-      <h2>Redemption Table</h2>
-      <p>End-of-contract payouts only. Contract term: 1095 days.</p>
-      <table>
-        <thead>
-          <tr><th>Date Requested</th><th>Plan</th><th>Shares</th><th>Amount (£)</th><th>Profit Earned (£)</th><th>Status</th><th>Method</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-        </tbody>
-      </table>
-      <small>Redemption is capital + actual profit earned, if any. Not guaranteed profit.</small>
-    </div>
-
-    <div id="leadership" class="card">
-      <h2>Leadership Corner</h2>
-      <p>View your network. View only — no earnings from recruitment alone.</p>
-      <div>
-        <div>Direct Team: 0</div>
-        <div>Total Team: 0</div>
-        <div>Active Members: 0</div>
-        <div>Team Volume: £0.00</div>
-      </div>
-      <h3>Team Tree</h3>
-      <div>
-        <div>You (Top)</div>
-        <div>Level 1: Your Direct Referrals</div>
-        <div>Level 2: Their Referrals</div>
-        <div>Level 3: Next Level</div>
-      </div>
-      <h3>All Team Members</h3>
-      <input placeholder="Search Name / Email..." />
-      <table>
-        <thead>
-          <tr><th>Name</th><th>Level</th><th>Join Date</th><th>Plan</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-        </tbody>
-      </table>
-      <small>No earnings are guaranteed from team size or recruitment. Any benefit is variable, based on actual performance.</small>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="card">
-      <p>© 2026 Member Dashboard • Earnings in £ GBP • Withdrawals in Crypto Only • Live Market Data via CoinGecko</p>
-    </div>
-  </div>
-
-</body>
-</html>
+  // Display live exchange rates
+  setInterval(async () => {
+    const fromCurrency = document.getElementById('from-currency').value;
+    const toCurrency = document.getElementById('to-currency').value;
+    const rate = await getExchangeRate(fromCurrency, toCurrency);
+    document.getElementById('exchange-rate').innerText = `1 ${toCurrency} = ${rate} ${fromCurrency}`;
+  }, 10000); // Update every 10 seconds
+</script>
