@@ -6,109 +6,150 @@
 <title>Cedars Empire - Member Dashboard</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#0f172a}
-.topbar{background:#0f172a;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.topbar b{font-size:20px}.topbar small{opacity:.8}
-.wrap{max-width:1000px;margin:0 auto;padding:16px}
+.topbar{background:#0f172a;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.topbar b{font-size:20px}.topbar small{opacity:.85}
+.wrap{max-width:1020px;margin:0 auto;padding:14px}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-.tabs button{padding:10px 16px;border:1px solid #cbd5e1;background:#fff;border-radius:999px;cursor:pointer;font-weight:700}
+.tabs button{padding:10px 14px;border:1px solid #cbd5e1;background:#fff;border-radius:999px;cursor:pointer;font-weight:700;font-size:13px}
 .tabs button.active{background:#0f172a;color:#fff}
 .card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);margin-bottom:14px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:600px){.grid{grid-template-columns:1fr}}
-.big{font-size:26px;font-weight:900;margin:6px 0}.muted{color:#64748b;font-size:13px}
-.bar{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;width:0%;background:#2563eb}
-.btn{width:100%;padding:13px;border:none;border-radius:10px;font-weight:800;cursor:pointer;color:#fff}
-.btn-green{background:#16a34a}.btn-blue{background:#2563eb}.btn-dark{background:#0f172a}
-input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;margin:6px 0 12px 0}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.big{font-size:26px;font-weight:900;margin:6px 0}.muted{color:#64748b;font-size:13px;line-height:1.5}
+.bar{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:#2563eb}
+.btn{width:100%;padding:13px;border:none;border-radius:10px;font-weight:800;cursor:pointer;color:#fff;margin-top:8px}
+.btn-green{background:#16a34a}.btn-blue{background:#2563eb}.btn-dark{background:#0f172a}.btn-orange{background:#ea580c}
+input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;margin:6px 0 10px 0;background:#fff}
 label{font-weight:700;font-size:14px}
 .dark{background:#0f172a;color:#fff}
-.plan{border:2px solid #e2e8f0;border-radius:14px;padding:16px;margin-bottom:12px}
+.plan{border:2px solid #e2e8f0;border-radius:14px;padding:16px;margin-bottom:12px;background:#fff}
+.row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:800;background:#fef3c7;color:#92400e}
+.warn{background:#fffbeb;border:1px solid #fde68a;padding:12px;border-radius:10px;font-size:13px;line-height:1.5;color:#92400e}
+.fee-box{background:#f8fafc;border:1px dashed #94a3b8;padding:10px;border-radius:10px;font-size:13px;line-height:1.6;margin:8px 0}
+.offer{border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin-bottom:10px}
 </style>
 </head>
 <body>
-<div class="topbar"><div><b>🌲 Cedars Empire</b><br><small>Member Dashboard</small></div><div style="text-align:right"><small>ogwal.bemmanuel@gmail.com</small><br><small>Plan: - &nbsp;|&nbsp; KYC: Pending</small></div></div>
+<div class="topbar"><div><b>🌲 Cedars Empire</b><br><small>Member Dashboard</small></div><div style="text-align:right"><small>ogwal.bemmanuel@gmail.com</small><br><small>Plan: <span id="top-plan">-</span> &nbsp;|&nbsp; KYC: Pending</small></div></div>
 <div class="wrap">
 <div class="tabs">
 <button id="btn-overview" class="active" onclick="showTab('overview')">Overview</button>
 <button id="btn-plans" onclick="showTab('plans')">Shareholder Plans</button>
 <button id="btn-profile" onclick="showTab('profile')">Profile & KYC</button>
 <button id="btn-wallet" onclick="showTab('wallet')">Wallet & Exchange</button>
+<button id="btn-p2p" onclick="showTab('p2p')">P2P</button>
+<button id="btn-referral" onclick="showTab('referral')">Referrals</button>
 </div>
+
+<div class="card" style="background:#0f172a;color:#fff"><b>Fees — Always Shown Before You Confirm</b><div class="muted" style="color:#cbd5e1">Exchange 2% • Withdraw 20% • P2P 5% • Referral Commission 10%</div></div>
 
 <!-- OVERVIEW -->
 <div id="tab-overview">
-<div class="card"><h2 style="margin:0">Welcome back 👋</h2><p class="muted">Your earnings are in Pounds (£). Exchange to crypto when you withdraw.</p>
-<div id="live-market" style="background:#fef3c7;color:#92400e;padding:10px 14px;border-radius:8px;font-size:14px;">Loading live market...</div>
+<div class="card"><h2 style="margin:0">Welcome back 👋</h2><p class="muted">Your earnings are in Pounds (£). Exchange to crypto when you want to withdraw.</p><div id="live-market" style="background:#fef3c7;color:#92400e;padding:10px 14px;border-radius:8px;font-size:14px;">Loading live market...</div><div class="warn" style="margin-top:12px"><b>Important:</b> Profit shares are <b>Variable, Not Guaranteed.</b> Capital is at risk. Fees apply: Exchange 2%, Withdraw 20%, P2P 5%.</div></div>
+<div class="card"><b>Total Earnings (GBP)</b><div class="big" id="total-earnings">£0.00</div><button class="btn btn-green" onclick="goToWallet()">Exchange & Withdraw →</button></div>
+<div class="grid">
+<div class="card"><div class="muted">Portfolio Value</div><div class="big" id="portfolio-value">£0.00</div><div class="muted" id="portfolio-usdt">0 USDT equivalent</div></div>
+<div class="card"><div class="muted">Shares Owned</div><div class="big" id="shares-owned">0 Shares</div><div class="muted">Plan: <span id="plan-label">-</span></div></div>
+<div class="card"><div class="muted">Referral Earnings (10%)</div><div class="big" id="ref-earnings">£0.00</div><div class="muted"><span id="ref-count">0</span> Referrals • Code: <b>CEDARS-EMMA-2026</b></div></div>
+<div class="card"><div class="muted">Portfolio Growth</div><div class="big" id="growth">0%</div><div class="muted">This month</div></div>
 </div>
 <div class="grid">
-<div class="card"><div class="muted">Portfolio Value</div><div class="big">£0.00</div><div class="muted">Total value of your shares</div></div>
-<div class="card"><div class="muted">Shares Owned</div><div class="big">0 Shares</div><div class="muted">Across all plans</div></div>
-<div class="card"><div class="muted">Referral Earnings</div><div class="big">£0.00</div><div class="muted">Earned from referrals</div></div>
-<div class="card"><div class="muted">Portfolio Growth</div><div class="big">0%</div><div class="muted">This month</div></div>
+<div class="card"><b>Wallet Balance</b><div class="row" style="margin-top:10px"><span class="muted">Available Balance</span><b id="avail-bal">£0.00</b></div><div class="row"><span class="muted">Locked / In Contract</span><b id="locked-bal">£0.00</b></div><div class="row"><span class="muted">Total Balance</span><b id="total-bal">£0.00</b></div><button class="btn btn-blue" onclick="showTab('wallet')">Open Wallet</button></div>
+<div class="card"><b>Profit Share Tracker</b><p class="muted">Variable, Not Guaranteed</p><div class="row"><span>Today's Target (up to)</span><b>1.00%</b></div><div class="row"><span>Today's Actual</span><b id="today-actual">0.00%</b></div><div class="row"><span>Total Earned So Far</span><b id="total-profit">£0.00</b></div></div>
 </div>
-<div class="card"><b>Account Completion</b><div style="display:flex;justify-content:space-between"><span class="muted">Complete your profile to unlock</span><b>0%</b></div><div class="bar" style="margin-top:8px"><i id="prog"></i></div><br><button class="btn btn-dark" onclick="showTab('profile')">Complete Profile</button></div>
-<div class="card"><b>Quick Actions</b><br><br><button class="btn btn-blue" onclick="goToWallet()">Exchange & Withdraw →</button><br><br><button class="btn btn-green" onclick="showTab('plans')">View Shareholder Plans</button></div>
+<div class="card"><b>Contract Countdown</b><div class="row"><span id="contract-text">No active contract yet</span><b id="contract-days">Day 0 of 1095</b></div><div class="bar" style="margin-top:10px"><i id="contract-bar" style="width:0%"></i></div><div class="muted" style="margin-top:8px">End Date: <span id="contract-end">-</span> • Start: <span id="contract-start">-</span></div><button class="btn btn-dark" onclick="showTab('plans')">Buy Shares / Deposit</button></div>
+<div class="card"><b>Transaction History</b><div id="history-overview"></div></div>
 </div>
 
 <!-- PLANS -->
 <div id="tab-plans" style="display:none">
-<div class="card"><h3 style="margin:0">Shareholder Plans</h3><p class="muted">Choose a plan to start earning.</p></div>
-<div class="plan"><h3>Starter - £100</h3><p class="muted">10 Shares • Beginner plan</p><button class="btn btn-blue" onclick="alert('Starter plan selected. Contact admin to activate.')">Select Starter</button></div>
-<div class="plan"><h3>Growth - £500</h3><p class="muted">55 Shares • Most popular</p><button class="btn btn-blue" onclick="alert('Growth plan selected. Contact admin to activate.')">Select Growth</button></div>
-<div class="plan"><h3>Empire - £1000</h3><p class="muted">120 Shares • Premium</p><button class="btn btn-blue" onclick="alert('Empire plan selected. Contact admin to activate.')">Select Empire</button></div>
+<div class="card"><h3 style="margin:0">Shareholder Plans</h3><p class="muted">£300 - £50,000 • 1095 days contract • Profit variable, not guaranteed.</p></div>
+<div class="plan"><h3>Starter - £300 to £5,000</h3><label>Amount (£)</label><input id="amt-starter" type="number" placeholder="e.g. 1000"><button class="btn btn-blue" onclick="openDeposit('Starter','amt-starter')">Invest in Starter →</button></div>
+<div class="plan"><h3>Growth - £5,001 to £20,000</h3><label>Amount (£)</label><input id="amt-growth" type="number" placeholder="e.g. 8000"><button class="btn btn-blue" onclick="openDeposit('Growth','amt-growth')">Invest in Growth →</button></div>
+<div class="plan"><h3>Empire - £20,001 to £50,000</h3><label>Amount (£)</label><input id="amt-empire" type="number" placeholder="e.g. 25000"><button class="btn btn-blue" onclick="openDeposit('Empire','amt-empire')">Invest in Empire →</button></div>
+<div class="card" id="deposit-box" style="display:none"><h3 style="margin:0">Confirm Deposit</h3><p id="deposit-summary"></p><div class="warn"><b>Contract:</b> 1095 days. Capital locked / in contract. Profit share variable, not guaranteed, may be 0% some days.</div><label><input type="checkbox" id="agree" style="width:auto"> I understand the 1095-day contract and profit is not guaranteed.</label><button class="btn btn-green" onclick="confirmDeposit()">Confirm Deposit</button></div>
 </div>
 
 <!-- PROFILE -->
-<div id="tab-profile" style="display:none">
-<div class="card"><h3 style="margin:0">Profile & KYC</h3><p class="muted">KYC Status: <b>Pending</b></p><label>Full Name</label><input value="Ogwal Emmanuel"><label>Email</label><input value="ogwal.bemmanuel@gmail.com"><label>Phone</label><input placeholder="+256 ..."><button class="btn btn-blue" onclick="alert('Profile saved!')">Save Profile</button></div>
-</div>
+<div id="tab-profile" style="display:none"><div class="card"><h3 style="margin:0">Profile & KYC</h3><p class="muted">KYC: <span class="pill">Pending</span></p><label>Full Name</label><input value="Ogwal Emmanuel"><label>Email</label><input value="ogwal.bemmanuel@gmail.com" readonly><label>Phone</label><input placeholder="+256 ..."><button class="btn btn-blue" onclick="alert('Profile saved')">Save Profile</button></div></div>
 
 <!-- WALLET -->
 <div id="tab-wallet" style="display:none">
-<div class="card"><h3 style="margin:0">Wallet & Exchange</h3><p class="muted">Balance: <b>£0.00</b> • Exchange to crypto when you withdraw.</p></div>
-<div class="card dark"><h3 style="margin:0 0 12px 0">Quick Exchange — Live Rate</h3><label style="color:#fff">Amount in GBP</label><input id="ex-amount" type="number" value="100"><label style="color:#fff">Convert To</label><select id="ex-to"><option value="tether">USDT</option><option value="bitcoin">BTC</option><option value="ethereum">ETH</option></select><button class="btn btn-green" onclick="getRate()">Get Live Rate</button><div id="ex-result" style="margin:12px 0">Enter amount and get live rate.</div><button class="btn btn-blue" onclick="confirmExchange()">Confirm Exchange</button><div id="exchange-history" style="margin-top:12px"></div></div>
-<div class="card"><h3 style="margin:0">Withdraw</h3><p class="muted">Withdraw your GBP balance to crypto.</p><button class="btn btn-dark" onclick="alert('Withdrawal request sent. Admin will process.')">Request Withdrawal</button></div>
+<div class="card"><h3 style="margin:0">Wallet & Exchange</h3><p class="muted">Available: <b id="avail-bal2">£0.00</b> • Locked: <b id="locked-bal2">£0.00</b></p><div class="fee-box"><b>Fees:</b> Exchange 2% • Withdraw 20%</div></div>
+<div class="card dark"><h3 style="margin:0 0 12px 0">Quick Exchange — Live Rate + 2% Fee</h3><label style="color:#fff">Amount in GBP</label><input id="ex-amount" type="number" value="100"><label style="color:#fff">Convert To</label><select id="ex-to"><option value="tether">USDT</option><option value="bitcoin">BTC</option><option value="ethereum">ETH</option></select><button class="btn btn-green" onclick="getRate()">Get Live Rate</button><div id="ex-result" style="margin:12px 0">Enter amount and get live rate.</div><div id="ex-fee" class="fee-box" style="background:#1e293b;color:#fff;border-color:#334155;display:none"></div><button class="btn btn-blue" onclick="confirmExchange()">Confirm Exchange</button><div id="exchange-history" style="margin-top:12px"></div></div>
+<div class="card"><h3 style="margin:0">Withdraw — 20% Fee</h3><p class="muted">You receive 80% after 20% fee. Status: Pending → Approved → Paid.</p><label>Amount (£)</label><input id="wd-amount" type="number" placeholder="e.g. 100" oninput="calcWithdraw()"><div id="wd-fee" class="fee-box" style="display:none"></div><label>Withdraw To</label><select id="wd-to"><option>Crypto Wallet (USDT)</option><option>Bank Transfer</option><option>Mobile Money</option></select><label>Wallet / Account Details</label><input id="wd-details" placeholder="Paste wallet address or account number"><button class="btn btn-dark" onclick="requestWithdraw()">Request Withdrawal</button><div id="withdraw-list" style="margin-top:12px"></div></div>
+<div class="card"><b>All Transactions</b><div id="history-wallet"></div></div>
+</div>
+
+<!-- P2P -->
+<div id="tab-p2p" style="display:none">
+<div class="card"><h3 style="margin:0">P2P Marketplace</h3><p class="muted">Buy / Sell crypto directly with other members. <b>P2P Fee: 5%</b> paid by seller. Cedars Empire holds funds in escrow until buyer confirms payment.</p><div class="fee-box"><b>How P2P works:</b> 1. Seller creates offer → 2. Buyer clicks Buy → 3. Buyer pays in GBP → 4. Seller releases crypto → 5. 5% fee deducted from seller.</div></div>
+<div class="card"><h3 style="margin:0">Create P2P Offer (Sell Crypto)</h3><label>I Want To Sell</label><select id="p2p-coin"><option>USDT</option><option>BTC</option><option>ETH</option></select><label>Amount of Crypto</label><input id="p2p-amount" type="number" placeholder="e.g. 100"><label>Price per Coin in GBP (£)</label><input id="p2p-price" type="number" placeholder="e.g. 0.76 for USDT"><label>Payment Method</label><select id="p2p-pay"><option>Bank Transfer</option><option>Mobile Money</option><option>Cash</option></select><div id="p2p-fee-preview" class="fee-box" style="display:none"></div><button class="btn btn-orange" onclick="calcP2P()">Calculate 5% Fee</button><button class="btn btn-green" onclick="createP2P()">Create Offer</button></div>
+<div class="card"><b>Live P2P Offers</b><div id="p2p-list"><p class="muted">No offers yet. Create the first offer above.</p></div></div>
+<div class="card"><b>My P2P Trades</b><div id="p2p-my"></div></div>
+</div>
+
+<!-- REFERRAL -->
+<div id="tab-referral" style="display:none">
+<div class="card"><h3 style="margin:0">Referrals — Earn 10%</h3><p class="muted">You earn <b>10% commission</b> on your referral's deposit / profit share. Example: Referral deposits £1000 → You earn £100.</p><label>Your Referral Link</label><input id="ref-link" readonly value="https://cedarsempire.com/join?ref=CEDARS-EMMA-2026"><button class="btn btn-blue" onclick="copyRef()">Copy Referral Link</button><div class="fee-box"><b>Your Referral Earnings (10%):</b> <span id="ref-earnings2">£0.00</span> • Total Referrals: <span id="ref-count2">0</span></div></div>
+<div class="card"><b>Your Referrals</b><div id="ref-list"><p class="muted">No referrals yet.</p></div><label>Add Referral (demo)</label><input id="new-ref-name" placeholder="Name"><label>Their Deposit (£) — you get 10%</label><input id="new-ref-deposit" type="number" placeholder="e.g. 1000"><button class="btn btn-green" onclick="addReferral()">Add Referral + Calculate 10%</button></div>
 </div>
 
 </div>
 <script>
-function showTab(id){
-['overview','plans','profile','wallet'].forEach(t=>{
-document.getElementById('tab-'+t).style.display = t===id ? 'block':'none';
-document.getElementById('btn-'+t).classList.toggle('active', t===id);
-});
-window.scrollTo(0,0);
-}
+let state = JSON.parse(localStorage.getItem('cedars_v3')||'null') || {deposits:[],withdrawals:[],exchanges:[],refs:[],p2p:[],profit:0,available:0,locked:0,plan:'-',startDate:null};
+let pendingDeposit=null, lastResult="", lastEx={amt:0,got:0,label:'',fee:0,net:0};
+function save(){ localStorage.setItem('cedars_v3', JSON.stringify(state)); render(); }
+function showTab(id){ ['overview','plans','profile','wallet','p2p','referral'].forEach(t=>{ document.getElementById('tab-'+t).style.display=t===id?'block':'none'; document.getElementById('btn-'+t).classList.toggle('active',t===id); }); window.scrollTo(0,0); }
 function goToWallet(){ showTab('wallet'); }
-async function loadMarket(){
-try{
-const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp');
-const d=await r.json();
-document.getElementById('live-market').innerHTML='Live Market: BTC £'+d.bitcoin.gbp+' | ETH £'+d.ethereum.gbp+' | USDT £'+d.tether.gbp;
-}catch(e){document.getElementById('live-market').innerText='Live market temporarily unavailable';}
+function openDeposit(plan,inputId){ let amt=parseFloat(document.getElementById(inputId).value); if(!amt||amt<300||amt>50000){ alert('Enter £300 - £50,000'); return; } pendingDeposit={plan,amt}; let end=new Date(); end.setDate(end.getDate()+1095); document.getElementById('deposit-summary').innerHTML='Plan: <b>'+plan+'</b><br>Amount: <b>£'+amt.toFixed(2)+'</b><br>Contract: <b>1095 days</b> • End: '+end.toLocaleDateString(); document.getElementById('deposit-box').style.display='block'; }
+function confirmDeposit(){ if(!document.getElementById('agree').checked){ alert('Tick that you understand the contract'); return; } if(!pendingDeposit) return; state.deposits.push({plan:pendingDeposit.plan,amount:pendingDeposit.amt,date:new Date().toLocaleString(),status:'Pending'}); state.locked+=pendingDeposit.amt; state.plan=pendingDeposit.plan; if(!state.startDate) state.startDate=new Date().toISOString(); save(); document.getElementById('deposit-box').style.display='none'; alert('Deposit: £'+pendingDeposit.amt+' Pending'); showTab('overview'); }
+function calcWithdraw(){ let amt=parseFloat(document.getElementById('wd-amount').value); let el=document.getElementById('wd-fee'); if(!amt||amt<=0){ el.style.display='none'; return; } let fee=amt*0.20; let net=amt-fee; el.style.display='block'; el.innerHTML='Amount: £'+amt.toFixed(2)+'<br>Withdraw Fee (20%): -£'+fee.toFixed(2)+'<br><b>You will receive: £'+net.toFixed(2)+'</b>'; }
+function requestWithdraw(){ let amt=parseFloat(document.getElementById('wd-amount').value); let to=document.getElementById('wd-to').value; let details=document.getElementById('wd-details').value; if(!amt||amt<=0){ alert('Enter amount'); return; } if(amt>state.available){ alert('Insufficient available. Available £'+state.available.toFixed(2)); return; } if(!details){ alert('Enter wallet details'); return; } let fee=amt*0.20; let net=amt-fee; state.withdrawals.push({amount:amt,fee,net,to,details,date:new Date().toLocaleString(),status:'Pending'}); state.available-=amt; save(); alert('Withdrawal requested: £'+amt+' | Fee 20% £'+fee.toFixed(2)+' | You receive £'+net.toFixed(2)+' | Status: Pending'); }
+function copyRef(){ let el=document.getElementById('ref-link'); el.select(); document.execCommand('copy'); alert('Referral link copied!'); }
+function addReferral(){ let n=document.getElementById('new-ref-name').value; let dep=parseFloat(document.getElementById('new-ref-deposit').value)||0; if(!n){ alert('Enter name'); return; } let earn=dep*0.10; state.refs.push({name:n,deposit:dep,earning:earn}); save(); alert('Referral added: '+n+' | Deposit £'+dep+' | You earn 10% = £'+earn.toFixed(2)); }
+function calcP2P(){ let amt=parseFloat(document.getElementById('p2p-amount').value); let price=parseFloat(document.getElementById('p2p-price').value); let el=document.getElementById('p2p-fee-preview'); if(!amt||!price){ alert('Enter amount and price'); return; } let total=amt*price; let fee=total*0.05; let net=total-fee; el.style.display='block'; el.innerHTML='Total: £'+total.toFixed(2)+'<br>P2P Fee (5%): -£'+fee.toFixed(2)+'<br><b>Seller receives: £'+net.toFixed(2)+'</b>'; }
+function createP2P(){ let coin=document.getElementById('p2p-coin').value; let amt=parseFloat(document.getElementById('p2p-amount').value); let price=parseFloat(document.getElementById('p2p-price').value); let pay=document.getElementById('p2p-pay').value; if(!amt||!price){ alert('Enter amount and price'); return; } let total=amt*price; let fee=total*0.05; let net=total-fee; state.p2p.push({coin,amt,price,total,fee,net,pay,date:new Date().toLocaleString(),status:'Open'}); save(); alert('P2P Offer created: '+amt+' '+coin+' @ £'+price+' | Fee 5% £'+fee.toFixed(2)+' | You receive £'+net.toFixed(2)); }
+function buyP2P(i){ let o=state.p2p[i]; if(!o||o.status!=='Open') return; if(confirm('Buy '+o.amt+' '+o.coin+' for £'+o.total.toFixed(2)+' via '+o.pay+'? Seller pays 5% fee. Continue?')){ o.status='Sold - In Escrow'; save(); alert('P2P trade started. Pay seller via '+o.pay+' and seller will release crypto.'); } }
+function render(){
+let totalDep=state.deposits.reduce((s,d)=>s+d.amount,0);
+let refTotal=state.refs.reduce((s,r)=>s+(r.earning||0),0);
+let totalEarn=state.profit+refTotal;
+document.getElementById('total-earnings').innerText='£'+totalEarn.toFixed(2);
+document.getElementById('portfolio-value').innerText='£'+(state.locked+state.available).toFixed(2);
+document.getElementById('shares-owned').innerText=Math.floor(totalDep/10)+' Shares';
+document.getElementById('top-plan').innerText=state.plan; document.getElementById('plan-label').innerText=state.plan;
+document.getElementById('ref-earnings').innerText='£'+refTotal.toFixed(2); document.getElementById('ref-earnings2').innerText='£'+refTotal.toFixed(2);
+document.getElementById('ref-count').innerText=state.refs.length; document.getElementById('ref-count2').innerText=state.refs.length;
+document.getElementById('avail-bal').innerText='£'+state.available.toFixed(2); document.getElementById('avail-bal2').innerText='£'+state.available.toFixed(2);
+document.getElementById('locked-bal').innerText='£'+state.locked.toFixed(2); document.getElementById('locked-bal2').innerText='£'+state.locked.toFixed(2);
+document.getElementById('total-bal').innerText='£'+(state.available+state.locked).toFixed(2);
+document.getElementById('total-profit').innerText='£'+state.profit.toFixed(2);
+document.getElementById('growth').innerText=totalDep>0?((state.profit/totalDep)*100).toFixed(2)+'%':'0%';
+if(state.startDate){ let start=new Date(state.startDate); let now=new Date(); let days=Math.floor((now-start)/86400000)+1; if(days>1095)days=1095; let end=new Date(start); end.setDate(end.getDate()+1095); document.getElementById('contract-text').innerText='Active - '+state.plan+' Plan'; document.getElementById('contract-days').innerText='Day '+days+' of 1095'; document.getElementById('contract-bar').style.width=(days/1095*100)+'%'; document.getElementById('contract-start').innerText=start.toLocaleDateString(); document.getElementById('contract-end').innerText=end.toLocaleDateString(); }
+let hist=''; state.deposits.forEach(d=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Deposit - '+d.plan+' - £'+d.amount.toFixed(2)+' - '+d.date+' - <span class="pill">'+d.status+'</span></div>');
+state.withdrawals.forEach(w=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Withdrawal - £'+w.amount.toFixed(2)+' (Fee 20% £'+w.fee.toFixed(2)+' | Net £'+w.net.toFixed(2)+') - '+w.date+' - <span class="pill">'+w.status+'</span></div>');
+state.exchanges.forEach(e=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Exchange - '+e.text+'</div>');
+state.p2p.forEach(p=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">P2P - '+p.amt+' '+p.coin+' @ £'+p.price+' (Fee 5% £'+p.fee.toFixed(2)+') - '+p.status+'</div>');
+if(!hist) hist='<p class="muted">No transactions yet.</p>';
+document.getElementById('history-overview').innerHTML=hist; document.getElementById('history-wallet').innerHTML=hist;
+let wlist=''; state.withdrawals.forEach(w=>wlist+='<div style="padding:8px 0;border-bottom:1px solid #eee">£'+w.amount.toFixed(2)+' → Net £'+w.net.toFixed(2)+' (Fee £'+w.fee.toFixed(2)+') - '+w.date+' - <span class="pill">'+w.status+'</span></div>');
+document.getElementById('withdraw-list').innerHTML=wlist?'<b>Withdrawal Requests:</b>'+wlist:'';
+let rlist=''; state.refs.forEach(r=>rlist+='<div style="padding:8px 0;border-bottom:1px solid #eee">'+r.name+' - Deposit £'+(r.deposit||0).toFixed(2)+' - You earn 10% = £'+(r.earning||0).toFixed(2)+'</div>');
+if(rlist) document.getElementById('ref-list').innerHTML=rlist;
+let plist=''; state.p2p.forEach((p,i)=>{ plist+='<div class="offer"><b>'+p.amt+' '+p.coin+' @ £'+p.price+' = £'+p.total.toFixed(2)+'</b><br><span class="muted">'+p.pay+' • Fee 5% £'+p.fee.toFixed(2)+' • Seller receives £'+p.net.toFixed(2)+' • '+p.status+'</span><br>'+(p.status==='Open'?'<button class="btn btn-green" onclick="buyP2P('+i+')">Buy Now</button>':'<span class="pill">In Escrow</span>')+'</div>'; });
+if(plist) document.getElementById('p2p-list').innerHTML=plist;
+let my=''; state.p2p.forEach(p=>my+='<div style="padding:8px 0;border-bottom:1px solid #eee">'+p.amt+' '+p.coin+' - £'+p.total.toFixed(2)+' - '+p.status+'</div>');
+document.getElementById('p2p-my').innerHTML=my||'<p class="muted">No P2P trades yet.</p>';
+let elist=''; state.exchanges.forEach(e=>elist+='<div style="padding:6px 0;border-bottom:1px solid #334155">'+e.text+' - '+e.date+'</div>');
+if(elist) document.getElementById('exchange-history').innerHTML='<b>Exchange History (2% fee included):</b>'+elist;
 }
+async function loadMarket(){ try{ const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp'); const d=await r.json(); document.getElementById('live-market').innerHTML='Live Market: BTC £'+d.bitcoin.gbp+' | ETH £'+d.ethereum.gbp+' | USDT £'+d.tether.gbp; document.getElementById('portfolio-usdt').innerText=((state.locked+state.available)/d.tether.gbp).toFixed(2)+' USDT equivalent'; }catch(e){ document.getElementById('live-market').innerText='Live market temporarily unavailable'; } }
 loadMarket(); setInterval(loadMarket,60000);
-let lastResult=""; let exHistory=[];
-async function getRate(){
-const amt=parseFloat(document.getElementById('ex-amount').value);
-const to=document.getElementById('ex-to').value;
-const el=document.getElementById('ex-result');
-if(!amt||amt<=0){el.innerText='Enter a valid amount';return;}
-el.innerText='Fetching live rate...';
-try{
-const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+to+'&vs_currencies=gbp');
-const d=await r.json(); const rate=d[to].gbp; const got=amt/rate;
-const label=to==='tether'?'USDT':to.toUpperCase();
-lastResult=amt+' GBP = '+got.toFixed(6)+' '+label+' (1 '+label+' = £'+rate+')';
-el.innerText=lastResult;
-}catch(e){el.innerText='Failed to fetch rate. Try again.'; lastResult="";}
-}
-function confirmExchange(){
-if(!lastResult){alert('Get live rate first');return;}
-exHistory.unshift(lastResult+' - '+new Date().toLocaleString());
-document.getElementById('exchange-history').innerHTML='<b>Exchange History:</b><br>'+exHistory.map(h=>'<div style="padding:6px 0;border-bottom:1px solid #334155;">'+h+'</div>').join('');
-alert('Exchange confirmed!');
-}
+async function getRate(){ let amt=parseFloat(document.getElementById('ex-amount').value); let to=document.getElementById('ex-to').value; let el=document.getElementById('ex-result'); if(!amt||amt<=0){ el.innerText='Enter valid amount'; return; } el.innerText='Fetching live rate...'; try{ const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+to+'&vs_currencies=gbp'); const d=await r.json(); let rate=d[to].gbp; let gross=amt/rate; let feeCrypto=gross*0.02; let net=gross-feeCrypto; let label=to==='tether'?'USDT':to.toUpperCase(); lastResult=amt+' GBP = '+net.toFixed(6)+' '+label+' (Fee 2%)'; lastEx={amt,got:net,label,fee:feeCrypto,net}; el.innerText=lastResult; let fe=document.getElementById('ex-fee'); fe.style.display='block'; fe.innerHTML='Gross: '+gross.toFixed(6)+' '+label+'<br>Exchange Fee (2%): -'+feeCrypto.toFixed(6)+' '+label+'<br><b>You get: '+net.toFixed(6)+' '+label+'</b>'; }catch(e){ el.innerText='Failed to fetch rate. Try again.'; lastResult=""; } }
+function confirmExchange(){ if(!lastResult){ alert('Get live rate first'); return; } state.exchanges.unshift({text:lastResult,date:new Date().toLocaleString()}); save(); alert('Exchange confirmed! Fee 2% applied.'); }
+render();
 </script>
 </body>
 </html>
