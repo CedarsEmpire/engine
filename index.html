@@ -6,47 +6,38 @@
 <title>Member Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-    * { box-sizing: border-box; }
-  body { font-family: Arial, sans-serif; margin: 0; background: #f8f8f8; color: #111; }
-  
-  /* HEADER */
-  header { background: #fff; border-bottom: 1px solid #ddd; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; }
-  header h1 { font-size: 20px; margin: 0; }
-  header .right { display: flex; gap: 12px; align-items: center; }
-  header button { padding: 8px 16px; cursor: pointer; }
-
-  /* LAYOUT */
-  main { max-width: 1100px; margin: 0 auto; padding: 24px; }
-  h2 { margin-top: 0; }
-
-  /* OVERVIEW - Best practice: 3 in a row on desktop, stack on mobile */
-  .overview { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-  .stat { background: #fff; border: 1px solid #ddd; padding: 20px; }
-  .stat small { color: #666; }
-  .stat strong { display: block; font-size: 28px; margin-top: 8px; }
-
-  /* REFERRAL BAR */
-  .referral { background: #fff; border: 1px solid #ddd; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
-
-  /* ACTIONS - Best practice: 2x2 grid */
-  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .card { background: #fff; border: 1px solid #ddd; padding: 20px; }
-  .card h3 { margin-top: 0; }
-  .card label { display: block; margin: 12px 0 4px; font-size: 14px; }
-  .card input, .card select { width: 100%; padding: 10px; border: 1px solid #ccc; }
-  .card button { width: 100%; padding: 12px; margin-top: 16px; cursor: pointer; }
-
-  #msg { text-align: center; margin: 20px 0; font-weight: bold; }
-
-  /* FOOTER */
-  footer { text-align: center; padding: 20px; color: #666; font-size: 14px; border-top: 1px solid #ddd; background: #fff; margin-top: 24px; }
-
-  /* MOBILE */
-  @media (max-width: 700px) {
-    .overview { grid-template-columns: 1fr; }
-    .actions { grid-template-columns: 1fr; }
-    header { flex-direction: column; align-items: flex-start; gap: 10px; }
-  }
+  *{box-sizing:border-box}
+  body{font-family:Arial,sans-serif;margin:0;background:#f8f8f8;color:#111}
+  header{background:#fff;border-bottom:1px solid #ddd;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+  header h1{font-size:20px;margin:0}
+  header .right{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  header button{padding:8px 16px;cursor:pointer}
+  .badge{border:1px solid #111;padding:4px 10px;font-size:12px}
+  main{max-width:1150px;margin:0 auto;padding:24px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .card{background:#fff;border:1px solid #ddd;padding:20px}
+  .card h3{margin-top:0}
+  .card small{color:#666}
+  .big{font-size:28px;font-weight:bold;display:block;margin-top:8px}
+  .progress{height:10px;background:#eee;border:1px solid #ddd;margin:10px 0}
+  .progress div{height:100%;background:#111;width:0%}
+  label{display:block;margin:12px 0 4px;font-size:14px}
+  input,select,textarea{width:100%;padding:10px;border:1px solid #ccc}
+  button{padding:12px;cursor:pointer}
+  .full-btn{width:100%;margin-top:16px}
+  .row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #eee;font-size:14px}
+  .row:last-child{border-bottom:none}
+  .plan-active{border:2px solid #111}
+  .check{font-size:14px;margin:6px 0}
+  #msg{text-align:center;font-weight:bold;margin:16px 0}
+  footer{text-align:center;padding:20px;color:#666;font-size:14px;border-top:1px solid #ddd;background:#fff;margin-top:24px}
+  .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .tabs button{padding:10px 16px;background:#fff;border:1px solid #ddd}
+  .tabs button.active{background:#111;color:#fff}
+  .section{display:none}
+  .section.active{display:block}
+  @media(max-width:750px){.grid3,.grid2{grid-template-columns:1fr} header{flex-direction:column;align-items:flex-start;gap:10px}}
 </style>
 </head>
 <body>
@@ -56,168 +47,326 @@
   <h1>Member Dashboard</h1>
   <div class="right">
     <span id="userEmail">Loading...</span>
+    <span class="badge" id="kycBadgeHeader">KYC: Pending</span>
+    <span class="badge" id="planBadgeHeader">Plan: -</span>
     <button id="logoutBtn">Logout</button>
   </div>
 </header>
 
-<!-- DASHBOARD -->
 <main>
-  <!-- OVERVIEW -->
-  <div class="overview">
-    <div class="stat">
-      <small>Available Balance</small>
-      <strong id="balance">£0.00</strong>
-    </div>
-    <div class="stat">
-      <small>Total Deposited</small>
-      <strong id="totalDeposited">£0.00</strong>
-    </div>
-    <div class="stat">
-      <small>Total Withdrawn</small>
-      <strong id="totalWithdrawn">£0.00</strong>
-    </div>
-  </div>
-
-  <!-- REFERRAL -->
-  <div class="referral">
-    <div>
-      <strong>Your Referral Code</strong><br>
-      <span id="referralCode">-</span>
-    </div>
-    <small>Share this code. Referrals are tracked in Supabase.</small>
+  <!-- NAV TABS - Like a real member area -->
+  <div class="tabs">
+    <button class="active" onclick="showTab('overview',this)">Overview</button>
+    <button onclick="showTab('plans',this)">Shareholder Plans</button>
+    <button onclick="showTab('profile',this)">Profile & KYC</button>
+    <button onclick="showTab('wallet',this)">Wallet</button>
   </div>
 
   <p id="msg"></p>
 
-  <!-- ACTIONS -->
-  <div class="actions">
-    <!-- DEPOSIT -->
-    <div class="card">
-      <h3>Deposit</h3>
-      <form id="depositForm">
-        <label>Amount £</label>
-        <input type="number" id="depositAmount" placeholder="Amount £" required>
-        <label>Method</label>
-        <select id="depositMethod">
-          <option>Bank Transfer</option>
-          <option>Crypto</option>
-          <option>Cash</option>
-        </select>
-        <button type="submit">Request Deposit</button>
-      </form>
+  <!-- ============ OVERVIEW ============ -->
+  <div id="overview" class="section active">
+    <div class="grid3">
+      <div class="card"><small>Portfolio Value (USDT)</small><span class="big" id="balance">0 USDT</span><small>Crypto holdings only</small></div>
+      <div class="card"><small>Total Deposited (Crypto)</small><span class="big" id="totalDeposited">0 USDT</span><small>BTC / ETH / USDT</small></div>
+      <div class="card"><small>Total Withdrawn (Crypto)</small><span class="big" id="totalWithdrawn">0 USDT</span><small>To your wallet only</small></div>
     </div>
 
-    <!-- WITHDRAW -->
-    <div class="card">
-      <h3>Withdraw</h3>
-      <form id="withdrawForm">
-        <label>Amount £</label>
-        <input type="number" id="withdrawAmount" placeholder="Amount £" required>
-        <label>Destination - bank / wallet address</label>
-        <input type="text" id="withdrawDest" placeholder="Destination - bank / wallet address" required>
-        <button type="submit">Request Withdrawal</button>
-      </form>
+    <div class="grid2">
+      <div class="card">
+        <h3>Your Holdings</h3>
+        <div class="row"><span>BTC</span><span id="btcBal">0 BTC</span></div>
+        <div class="row"><span>ETH</span><span id="ethBal">0 ETH</span></div>
+        <div class="row"><span>USDT (TRC20 / ERC20)</span><span id="usdtBal">0 USDT</span></div>
+        <div class="row"><span>Shares Owned</span><span id="sharesOwned">0 Shares</span></div>
+        <div class="row"><span>Total Earnings</span><span id="totalEarnings">0 USDT</span></div>
+      </div>
+      <div class="card">
+        <h3>Account Completion</h3>
+        <p>Complete your profile to unlock withdrawals and plan upgrades.</p>
+        <div class="progress"><div id="completionBar"></div></div>
+        <p id="completionText">0% Complete</p>
+        <div class="check" id="checkEmail">○ Email Verified</div>
+        <div class="check" id="checkProfile">○ Profile Completed</div>
+        <div class="check" id="checkKyc">○ KYC Verified</div>
+        <div class="check" id="checkWallet">○ Withdrawal Wallet Added</div>
+        <button class="full-btn" onclick="showTab('profile',document.querySelectorAll('.tabs button')[2])">Complete Profile & KYC</button>
+      </div>
     </div>
 
-    <!-- SEND -->
     <div class="card">
-      <h3>Send Crypto</h3>
-      <form id="sendForm">
-        <label>Amount</label>
-        <input type="number" id="sendAmount" placeholder="Amount" required>
-        <label>Currency</label>
-        <select id="sendCurrency">
-          <option>BTC</option>
-          <option>ETH</option>
-          <option>USDT</option>
-        </select>
-        <label>Recipient wallet address</label>
-        <input type="text" id="sendTo" placeholder="Recipient wallet address" required>
-        <button type="submit">Send</button>
-      </form>
+      <h3>Referral</h3>
+      <div class="row"><span>Your Referral Code</span><strong id="referralCode">-</strong></div>
+      <div class="row"><span>Referrals</span><span id="referralCount">0</span></div>
+      <div class="row"><span>Referral Earnings</span><span id="referralEarnings">0 USDT</span></div>
+      <p><small>Share your code. Rewards are paid in USDT only.</small></p>
     </div>
 
-    <!-- EXCHANGE -->
+    <br>
     <div class="card">
-      <h3>Exchange</h3>
-      <form id="exchangeForm">
-        <label>Amount</label>
-        <input type="number" id="exchangeAmount" placeholder="Amount" required>
-        <label>From</label>
-        <select id="exchangeFrom">
-          <option>GBP</option>
-          <option>BTC</option>
-          <option>ETH</option>
-          <option>USDT</option>
-        </select>
-        <label>To</label>
-        <select id="exchangeTo">
-          <option>BTC</option>
-          <option>GBP</option>
-          <option>ETH</option>
-          <option>USDT</option>
-        </select>
-        <button type="submit">Create Exchange Request</button>
-      </form>
+      <h3>Recent Activity</h3>
+      <div id="historyList"><p>No activity yet.</p></div>
     </div>
   </div>
+
+  <!-- ============ SHAREHOLDER PLANS ============ -->
+  <div id="plans" class="section">
+    <h3>Shareholder Plans</h3>
+    <p>Choose a plan. Plans are paid in crypto only. Upgrades are reviewed by admin.</p>
+    <div class="grid3">
+      <div class="card" id="plan-starter">
+        <h3>Starter Shareholder</h3>
+        <span class="big">100 - 999 USDT</span>
+        <p>• 1 Share per 100 USDT<br>• Monthly profit share<br>• Community access<br>• Referral 5%</p>
+        <button class="full-btn" onclick="requestPlan('Starter Shareholder')">Select Starter</button>
+      </div>
+      <div class="card plan-active" id="plan-growth">
+        <h3>Growth Shareholder</h3>
+        <span class="big">1,000 - 9,999 USDT</span>
+        <p>• 1 Share per 100 USDT<br>• Higher profit share<br>• Priority support<br>• Referral 7%<br>• Voting rights</p>
+        <button class="full-btn" onclick="requestPlan('Growth Shareholder')">Select Growth</button>
+      </div>
+      <div class="card" id="plan-premium">
+        <h3>Premium Shareholder</h3>
+        <span class="big">10,000+ USDT</span>
+        <p>• 1 Share per 100 USDT<br>• Highest profit share<br>• Dedicated manager<br>• Referral 10%<br>• Voting + Board updates</p>
+        <button class="full-btn" onclick="requestPlan('Premium Shareholder')">Select Premium</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Your Current Plan</h3>
+      <div class="row"><span>Plan</span><span id="currentPlan">-</span></div>
+      <div class="row"><span>Status</span><span id="planStatus">-</span></div>
+      <div class="row"><span>Shares</span><span id="planShares">0</span></div>
+      <div class="row"><span>Next Payout</span><span id="nextPayout">-</span></div>
+    </div>
+  </div>
+
+  <!-- ============ PROFILE & KYC ============ -->
+  <div id="profile" class="section">
+    <div class="grid2">
+      <div class="card">
+        <h3>My Profile</h3>
+        <form id="profileForm">
+          <label>Full Name</label>
+          <input type="text" id="fullName" placeholder="Full Name">
+          <label>Phone / WhatsApp</label>
+          <input type="text" id="phone" placeholder="Phone / WhatsApp">
+          <label>Country</label>
+          <input type="text" id="country" placeholder="Country">
+          <label>Withdrawal Wallet - USDT (TRC20)</label>
+          <input type="text" id="walletAddress" placeholder="Your USDT TRC20 wallet address">
+          <button class="full-btn" type="submit">Save Profile</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Authentication & Security</h3>
+        <div class="row"><span>Email</span><span id="profileEmail">-</span></div>
+        <div class="row"><span>Email Verified</span><span id="emailVerified">No</span></div>
+        <div class="row"><span>Account Created</span><span id="createdAt">-</span></div>
+        <div class="row"><span>2FA</span><span id="twoFaStatus">Not Enabled</span></div>
+        <button class="full-btn" onclick="alert('2FA setup: Enable in Supabase Auth / Authenticator App. Contact support if needed.')">Enable 2FA</button>
+        <hr>
+        <h3>KYC Verification</h3>
+        <p><small>Required for withdrawals and plan upgrades. Upload ID + selfie. Reviewed by admin.</small></p>
+        <form id="kycForm">
+          <label>ID Type</label>
+          <select id="idType"><option>National ID</option><option>Passport</option><option>Driving License</option></select>
+          <label>ID Number</label>
+          <input type="text" id="idNumber" placeholder="ID Number">
+          <label>ID Document Link / File Name</label>
+          <input type="text" id="idDoc" placeholder="Upload in Supabase Storage, paste link here">
+          <label>Selfie Link / File Name</label>
+          <input type="text" id="selfieDoc" placeholder="Selfie with ID">
+          <button class="full-btn" type="submit">Submit KYC</button>
+        </form>
+        <p>KYC Status: <strong id="kycStatusText">Pending</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ WALLET - CRYPTO ONLY ============ -->
+  <div id="wallet" class="section">
+    <div class="card" style="margin-bottom:16px">
+      <h3>Deposit Addresses - Crypto Only</h3>
+      <p><small>Send ONLY the correct coin to the correct address. No fiat, no bank transfer.</small></p>
+      <div class="row"><span>BTC Deposit Address</span><span id="btcAddress">Contact Admin / Set in Supabase</span></div>
+      <div class="row"><span>ETH Deposit Address</span><span id="ethAddress">Contact Admin / Set in Supabase</span></div>
+      <div class="row"><span>USDT TRC20 Deposit Address</span><span id="usdtAddress">Contact Admin / Set in Supabase</span></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Deposit Crypto</h3>
+        <form id="depositForm">
+          <label>Currency</label>
+          <select id="depositCurrency"><option>BTC</option><option>ETH</option><option>USDT</option></select>
+          <label>Amount</label>
+          <input type="number" step="any" id="depositAmount" placeholder="Amount" required>
+          <label>Transaction Hash (TxID)</label>
+          <input type="text" id="depositTx" placeholder="Paste Tx Hash after sending" required>
+          <button class="full-btn" type="submit">Submit Deposit Proof</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Withdraw Crypto</h3>
+        <form id="withdrawForm">
+          <label>Currency</label>
+          <select id="withdrawCurrency"><option>USDT</option><option>BTC</option><option>ETH</option></select>
+          <label>Amount</label>
+          <input type="number" step="any" id="withdrawAmount" placeholder="Amount" required>
+          <label>Destination Wallet Address</label>
+          <input type="text" id="withdrawDest" placeholder="Your wallet address" required>
+          <button class="full-btn" type="submit">Request Withdrawal</button>
+        </form>
+        <p><small>KYC must be Verified to withdraw.</small></p>
+      </div>
+      <div class="card">
+        <h3>Send Crypto to Member</h3>
+        <form id="sendForm">
+          <label>Currency</label>
+          <select id="sendCurrency"><option>USDT</option><option>BTC</option><option>ETH</option></select>
+          <label>Amount</label>
+          <input type="number" step="any" id="sendAmount" placeholder="Amount" required>
+          <label>Recipient Wallet / Email</label>
+          <input type="text" id="sendTo" placeholder="Recipient wallet / email" required>
+          <button class="full-btn" type="submit">Send</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Exchange Crypto to Crypto</h3>
+        <form id="exchangeForm">
+          <label>Amount</label>
+          <input type="number" step="any" id="exchangeAmount" placeholder="Amount" required>
+          <label>From</label>
+          <select id="exchangeFrom"><option>USDT</option><option>BTC</option><option>ETH</option></select>
+          <label>To</label>
+          <select id="exchangeTo"><option>BTC</option><option>USDT</option><option>ETH</option></select>
+          <button class="full-btn" type="submit">Create Exchange Request</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
 </main>
 
-<!-- FOOTER -->
-<footer>
-  <p>&copy; 2026 Member Dashboard - All rights reserved</p>
-</footer>
+<footer><p>&copy; 2026 Member Dashboard - Crypto Only. No Fiat Transactions.</p></footer>
 
 <script>
 const SUPABASE_URL = "YOUR_SUPABASE_URL";
 const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+function showTab(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function setMsg(t){ document.getElementById('msg').innerText = t; }
+
+let currentUser = null;
 async function loadUser(){
   const { data: { user } } = await supabaseClient.auth.getUser();
   if(!user){ window.location.href = "login.html"; return; }
+  currentUser = user;
   document.getElementById('userEmail').innerText = user.email;
+  document.getElementById('profileEmail').innerText = user.email;
+  document.getElementById('emailVerified').innerText = user.email_confirmed_at ? "Yes" : "No";
+  document.getElementById('createdAt').innerText = new Date(user.created_at).toLocaleDateString();
+
   const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', user.id).single();
   if(profile){
-    document.getElementById('balance').innerText = "£" + (profile.balance || 0);
-    document.getElementById('totalDeposited').innerText = "£" + (profile.total_deposited || 0);
-    document.getElementById('totalWithdrawn').innerText = "£" + (profile.total_withdrawn || 0);
+    document.getElementById('balance').innerText = (profile.balance || 0) + " USDT";
+    document.getElementById('totalDeposited').innerText = (profile.total_deposited || 0) + " USDT";
+    document.getElementById('totalWithdrawn').innerText = (profile.total_withdrawn || 0) + " USDT";
     document.getElementById('referralCode').innerText = profile.referral_code || "-";
+    document.getElementById('btcBal').innerText = (profile.btc_balance || 0) + " BTC";
+    document.getElementById('ethBal').innerText = (profile.eth_balance || 0) + " ETH";
+    document.getElementById('usdtBal').innerText = (profile.usdt_balance || profile.balance || 0) + " USDT";
+    document.getElementById('sharesOwned').innerText = (profile.shares || 0) + " Shares";
+    document.getElementById('totalEarnings').innerText = (profile.total_earnings || 0) + " USDT";
+    document.getElementById('referralCount').innerText = profile.referral_count || 0;
+    document.getElementById('referralEarnings').innerText = (profile.referral_earnings || 0) + " USDT";
+    document.getElementById('currentPlan').innerText = profile.plan || "-";
+    document.getElementById('planStatus').innerText = profile.plan_status || "-";
+    document.getElementById('planShares').innerText = profile.shares || 0;
+    document.getElementById('planBadgeHeader').innerText = "Plan: " + (profile.plan || "-");
+    // Profile fields
+    document.getElementById('fullName').value = profile.full_name || "";
+    document.getElementById('phone').value = profile.phone || "";
+    document.getElementById('country').value = profile.country || "";
+    document.getElementById('walletAddress').value = profile.wallet_address || "";
+    // KYC
+    const kyc = profile.kyc_status || "Pending";
+    document.getElementById('kycStatusText').innerText = kyc;
+    document.getElementById('kycBadgeHeader').innerText = "KYC: " + kyc;
+    // Completion
+    let score = 0;
+    if(user.email_confirmed_at){ score+=25; document.getElementById('checkEmail').innerText="✓ Email Verified"; }
+    if(profile.full_name && profile.phone){ score+=25; document.getElementById('checkProfile').innerText="✓ Profile Completed"; }
+    if(kyc==="Verified" || kyc==="Approved"){ score+=25; document.getElementById('checkKyc').innerText="✓ KYC Verified"; }
+    if(profile.wallet_address){ score+=25; document.getElementById('checkWallet').innerText="✓ Withdrawal Wallet Added"; }
+    document.getElementById('completionBar').style.width = score+"%";
+    document.getElementById('completionText').innerText = score+"% Complete";
   }
+  loadHistory();
 }
 loadUser();
 
-document.getElementById('logoutBtn').onclick = async () => {
-  await supabaseClient.auth.signOut();
-  window.location.href = "login.html";
+async function loadHistory(){
+  if(!currentUser) return;
+  const { data } = await supabaseClient.from('deposits').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false}).limit(5);
+  if(data && data.length){
+    document.getElementById('historyList').innerHTML = data.map(d=>`<div class="row"><span>${d.currency||''} Deposit - ${d.amount} - ${d.status}</span><span>${new Date(d.created_at).toLocaleDateString()}</span></div>`).join('');
+  }
+}
+
+document.getElementById('logoutBtn').onclick = async () => { await supabaseClient.auth.signOut(); window.location.href="login.html"; };
+
+async function requestPlan(planName){
+  const { error } = await supabaseClient.from('plan_requests').insert([{user_id: currentUser.id, plan_name: planName, status:'pending'}]);
+  setMsg(error ? error.message : "Plan request for "+planName+" submitted. Admin will review.");
+}
+
+document.getElementById('profileForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const { error } = await supabaseClient.from('profiles').update({ full_name: document.getElementById('fullName').value, phone: document.getElementById('phone').value, country: document.getElementById('country').value, wallet_address: document.getElementById('walletAddress').value }).eq('id', currentUser.id);
+  setMsg(error ? error.message : "Profile saved");
+  loadUser();
+};
+
+document.getElementById('kycForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const { error } = await supabaseClient.from('profiles').update({ kyc_status:'Under Review', id_type: document.getElementById('idType').value, id_number: document.getElementById('idNumber').value, id_doc: document.getElementById('idDoc').value, selfie_doc: document.getElementById('selfieDoc').value }).eq('id', currentUser.id);
+  setMsg(error ? error.message : "KYC submitted for review");
+  loadUser();
 };
 
 document.getElementById('depositForm').onsubmit = async (e) => {
   e.preventDefault();
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  const { error } = await supabaseClient.from('deposits').insert([{ user_id: user.id, amount: parseFloat(document.getElementById('depositAmount').value), method: document.getElementById('depositMethod').value, status: 'pending' }]);
-  document.getElementById('msg').innerText = error ? error.message : "Deposit request created";
+  const { error } = await supabaseClient.from('deposits').insert([{ user_id: currentUser.id, currency: document.getElementById('depositCurrency').value, amount: parseFloat(document.getElementById('depositAmount').value), tx_hash: document.getElementById('depositTx').value, status:'pending' }]);
+  setMsg(error ? error.message : "Deposit proof submitted - awaiting confirmation");
+  loadHistory();
 };
 
 document.getElementById('withdrawForm').onsubmit = async (e) => {
   e.preventDefault();
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  const { error } = await supabaseClient.from('withdrawals').insert([{ user_id: user.id, amount: parseFloat(document.getElementById('withdrawAmount').value), destination: document.getElementById('withdrawDest').value, status: 'pending' }]);
-  document.getElementById('msg').innerText = error ? error.message : "Withdrawal request created";
+  const { error } = await supabaseClient.from('withdrawals').insert([{ user_id: currentUser.id, currency: document.getElementById('withdrawCurrency').value, amount: parseFloat(document.getElementById('withdrawAmount').value), destination: document.getElementById('withdrawDest').value, status:'pending' }]);
+  setMsg(error ? error.message : "Withdrawal request created - KYC required");
 };
 
 document.getElementById('sendForm').onsubmit = async (e) => {
   e.preventDefault();
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  const { error } = await supabaseClient.from('transfers').insert([{ user_id: user.id, amount: parseFloat(document.getElementById('sendAmount').value), currency: document.getElementById('sendCurrency').value, recipient_address: document.getElementById('sendTo').value, status: 'pending' }]);
-  document.getElementById('msg').innerText = error ? error.message : "Send request created";
+  const { error } = await supabaseClient.from('transfers').insert([{ user_id: currentUser.id, currency: document.getElementById('sendCurrency').value, amount: parseFloat(document.getElementById('sendAmount').value), recipient_address: document.getElementById('sendTo').value, status:'pending' }]);
+  setMsg(error ? error.message : "Send request created");
 };
 
 document.getElementById('exchangeForm').onsubmit = async (e) => {
   e.preventDefault();
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  const { error } = await supabaseClient.from('exchanges').insert([{ user_id: user.id, amount: parseFloat(document.getElementById('exchangeAmount').value), from_currency: document.getElementById('exchangeFrom').value, to_currency: document.getElementById('exchangeTo').value, status: 'pending' }]);
-  document.getElementById('msg').innerText = error ? error.message : "Exchange request created";
+  const { error } = await supabaseClient.from('exchanges').insert([{ user_id: currentUser.id, amount: parseFloat(document.getElementById('exchangeAmount').value), from_currency: document.getElementById('exchangeFrom').value, to_currency: document.getElementById('exchangeTo').value, status:'pending' }]);
+  setMsg(error ? error.message : "Exchange request created");
 };
 </script>
 </body>
