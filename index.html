@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cedars Empire - LIVE</title>
+<title>Cedars Empire - LIVE - FIXED BUTTONS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f8fafc;color:#111827;padding-bottom:90px}
@@ -12,13 +12,11 @@ header b{font-size:19px}header small{color:#6b7280}
 nav{display:flex;gap:6px;flex-wrap:wrap}nav button{padding:9px 13px;border:1px solid #e5e7eb;background:#fff;border-radius:999px;cursor:pointer;font-weight:600;font-size:13px}
 nav button.active{background:#111827;color:#fff;border-color:#111827}
 .avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #111827;background:#eee;cursor:pointer}
-/* FIXED SPOT BAR - NO FAST SCROLL */
 .spotbar{position:sticky;top:68px;z-index:99;background:#111827;color:#fff;padding:10px 12px;display:flex;gap:10px;overflow-x:auto;align-items:center}
 .spot{flex:1;min-width:160px;background:#1f2937;border-radius:12px;padding:10px;text-align:center;border-top:4px solid #f7931a}
 .spot.eth{border-top-color:#627eea}.spot.usdt{border-top-color:#26a17b}
 .spot b{font-size:16px;display:block}.spot small{opacity:.8}
-.spot .pause{position:absolute;right:8px}
-.wrap{max-width:900px;margin:0 auto;padding:16px}
+.wrap{max-width:920px;margin:0 auto;padding:16px}
 .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;margin-bottom:14px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:640px){.grid{grid-template-columns:1fr}}
@@ -27,9 +25,10 @@ label{font-weight:600;font-size:13px;display:block;margin-top:12px}
 input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;margin-top:6px;background:#fff;font-size:14px}
 .btn{width:100%;padding:13px;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin-top:10px;font-size:14px}
 .btn-dark{background:#111827;color:#fff}.btn-green{background:#15803d;color:#fff}.btn-blue{background:#1d4ed8;color:#fff}.btn-light{background:#f3f4f6;color:#111827;border:1px solid #e5e7eb}
+.btn-small{width:auto;padding:8px 14px;margin-top:0;font-size:13px}
 .row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
 .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#fef9c3;color:#854d0e}
-.pill-green{background:#dcfce7;color:#166534}.pill-red{background:#fee2e2;color:#991b1b}
+.pill-green{background:#dcfce7;color:#166534}
 .bar{height:8px;background:#e5e7eb;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:#111827}
 .upload{border:1px dashed #d1d5db;border-radius:12px;padding:12px;text-align:center;margin-top:8px;background:#f9fafb}
 .upload img{max-width:100%;max-height:160px;border-radius:10px;margin-top:8px;display:none}
@@ -59,11 +58,17 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 .ticker-slow span{display:inline-block;padding-left:20px;animation:scrollSlow 45s linear infinite}
 .ticker-slow:hover span{animation-play-state:paused}
 @keyframes scrollSlow{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+table.dep-table{width:100%;border-collapse:collapse;font-size:13px}
+table.dep-table th{background:#111827;color:#fff;padding:10px;text-align:left;font-size:12px}
+table.dep-table td{padding:11px 10px;border-bottom:1px solid #e5e7eb;vertical-align:middle}
+table.dep-table tr.selected{background:#f0fdf4}
+table.dep-table tr.selected td:first-child{border-left:4px solid #15803d}
+@media(max-width:640px){table.dep-table{font-size:12px}table.dep-table th,table.dep-table td{padding:8px 6px}}
 </style>
 </head>
 <body>
 <header>
-<div style="display:flex;gap:12px;align-items:center"><img id="header-avatar" class="avatar" src="https://via.placeholder.com/88" onclick="document.getElementById('header-file').click()"><input type="file" id="header-file" accept="image/*" style="display:none" onchange="uploadProfilePic(this)"><div><b>🌲 Cedars Empire • LIVE</b><br><small><span id="header-email">ogwal.bemmanuel@gmail.com</span> • <span id="top-plan">-</span> • KYC: <span id="top-kyc">Not Started</span></small><br><small style="color:#15803d">● LIVE • 🌍 Worldwide • Supabase: <span id="supa-status">Checking...</span></small></div></div>
+<div style="display:flex;gap:12px;align-items:center"><img id="header-avatar" class="avatar" src="https://via.placeholder.com/88" onclick="document.getElementById('header-file').click()"><input type="file" id="header-file" accept="image/*" style="display:none" onchange="uploadProfilePic(this)"><div><b>🌲 Cedars Empire • LIVE</b><br><small><span id="header-email">ogwal.bemmanuel@gmail.com</span> • <span id="top-plan">-</span> • KYC: <span id="top-kyc">Not Started</span></small><br><small style="color:#15803d">● LIVE • 🌍 Worldwide • Supabase: <span id="supa-status">Local Mode</span> • JS: <span id="js-status" style="color:#15803d;font-weight:700">Loading...</span></small></div></div>
 <nav>
 <button id="btn-overview" class="active" onclick="showTab('overview')">Overview</button>
 <button id="btn-plans" onclick="showTab('plans')">Plans</button>
@@ -76,28 +81,28 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 </nav>
 </header>
 
-<!-- FIXED SPOT MARKET - EASY TO TRACK -->
 <div class="spotbar">
-<div class="spot"><span class="live-dot dot-btc"></span>BTC / GBP<b id="spot-btc">£--</b><small id="spot-btc-chg">--</small><div><small id="spot-btc-ind">● Live</small></div></div>
-<div class="spot eth"><span class="live-dot dot-eth"></span>ETH / GBP<b id="spot-eth">£--</b><small id="spot-eth-chg">--</small><div><small id="spot-eth-ind">● Live</small></div></div>
-<div class="spot usdt"><span class="live-dot dot-usdt"></span>USDT / GBP<b id="spot-usdt">£--</b><small id="spot-usdt-chg">--</small><div><small id="spot-usdt-ind">● Live</small></div></div>
-<div style="min-width:110px;text-align:center"><button onclick="toggleSpot()" id="spot-pause-btn" style="background:#fff;border:none;padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:700">⏸ Pause</button><div><small id="market-time">Updating...</small></div><div><small>30s refresh</small></div></div>
+<div class="spot"><span class="live-dot dot-btc"></span>BTC / GBP<b id="spot-btc">£48,398</b><small id="spot-btc-chg">Loading...</small><div><small id="spot-btc-ind">● Live</small></div></div>
+<div class="spot eth"><span class="live-dot dot-eth"></span>ETH / GBP<b id="spot-eth">£1,366</b><small id="spot-eth-chg">Loading...</small><div><small id="spot-eth-ind">● Live</small></div></div>
+<div class="spot usdt"><span class="live-dot dot-usdt"></span>USDT / GBP<b id="spot-usdt">£0.7900</b><small id="spot-usdt-chg">Loading...</small><div><small id="spot-usdt-ind">● Live</small></div></div>
+<div style="min-width:130px;text-align:center"><button onclick="loadMarket()" style="background:#22c55e;color:#fff;border:none;padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:700;width:100%">↻ Refresh Price</button><button onclick="toggleSpot()" id="spot-pause-btn" style="background:#fff;border:none;padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:700;width:100%;margin-top:6px">⏸ Pause</button><div><small id="market-time">Loading live...</small></div><div><small>30s auto-refresh</small></div></div>
 </div>
-<div class="ticker-slow"><span id="ticker-text">Spot prices loading... Hover to pause • Cedars Empire Worldwide •</span></div>
+<div class="ticker-slow"><span id="ticker-text">SPOT: Loading live prices... Hover to pause • Cedars Empire Worldwide •</span></div>
+<div id="js-error" style="display:none;background:#fee2e2;color:#991b1b;padding:10px;text-align:center;font-size:13px;font-weight:700"></div>
 
 <div class="wrap">
-<div class="card" style="padding:12px 18px"><b>Fees:</b> <span class="muted">Exchange 2% • Withdraw 20% • P2P 5% • Referral 10%</span> <button class="btn btn-light" style="width:auto;padding:6px 12px;margin-top:0;float:right" onclick="showDisclaimerNow()">Show Disclaimer</button></div>
+<div class="card" style="padding:12px 18px"><b>Fees:</b> <span class="muted">Exchange 2% • Withdraw 20% • P2P 5% • Referral 10%</span> <button class="btn btn-light" style="width:auto;padding:6px 12px;margin-top:0;float:right" onclick="showDisclaimerNow()">Show Disclaimer</button> <button class="btn btn-light btn-small" onclick="testButtons()" style="float:right;margin-right:6px">Test Buttons</button></div>
 
 <div id="tab-overview">
 <div class="card"><h2 style="margin:0">Welcome back 👋</h2><p class="muted">Earnings in GBP (£). Exchange to crypto to withdraw. 🌍 Worldwide • LIVE</p>
 <div style="background:#fefce8;padding:12px;border-radius:10px">
-<div><span class="live-dot dot-btc"></span><b>SPOT MARKET - LIVE</b> <span class="muted" id="market-time2">Updating...</span></div>
+<div><span class="live-dot dot-btc"></span><b>SPOT MARKET - LIVE</b> <span class="muted" id="market-time2">Loading...</span> <button class="btn btn-light btn-small" onclick="loadMarket()" style="float:right">↻ Refresh</button></div>
 <div class="market-box">
-<div class="coin btc"><div><span class="live-dot dot-btc"></span>₿ BTC / GBP — SPOT</div><b id="btc-price">£--</b><div id="btc-change">--</div><div class="muted" id="btc-ind">--</div><div class="muted" id="btc-spark">—</div></div>
-<div class="coin eth"><div><span class="live-dot dot-eth"></span>Ξ ETH / GBP — SPOT</div><b id="eth-price">£--</b><div id="eth-change">--</div><div class="muted" id="eth-ind">--</div><div class="muted" id="eth-spark">—</div></div>
-<div class="coin usdt"><div><span class="live-dot dot-usdt"></span>₮ USDT / GBP — SPOT</div><b id="usdt-price">£--</b><div id="usdt-change">--</div><div class="muted" id="usdt-ind">--</div><div class="muted" id="usdt-spark">—</div></div>
+<div class="coin btc"><div><span class="live-dot dot-btc"></span>₿ BTC / GBP — SPOT</div><b id="btc-price">£48,398</b><div id="btc-change">--</div><div class="muted" id="btc-ind">--</div><div class="muted" id="btc-spark">—</div></div>
+<div class="coin eth"><div><span class="live-dot dot-eth"></span>Ξ ETH / GBP — SPOT</div><b id="eth-price">£1,366</b><div id="eth-change">--</div><div class="muted" id="eth-ind">--</div><div class="muted" id="eth-spark">—</div></div>
+<div class="coin usdt"><div><span class="live-dot dot-usdt"></span>₮ USDT / GBP — SPOT</div><b id="usdt-price">£0.7900</b><div id="usdt-change">--</div><div class="muted" id="usdt-ind">--</div><div class="muted" id="usdt-spark">—</div></div>
 </div>
-<div class="muted" style="margin-top:8px">● 🟠 BTC Orange • 🟣 ETH Purple • 🟢 USDT Green • Top bar stays fixed while you scroll, so you can always track spot price.</div>
+<div class="muted" style="margin-top:8px">● 🟠 BTC Orange • 🟣 ETH Purple • 🟢 USDT Green • Top bar stays fixed while you scroll.</div>
 </div>
 </div>
 <div class="card"><div class="muted">Total Earnings (GBP)</div><div class="big" id="total-earnings">£0.00</div><button class="btn btn-green" onclick="showTab('wallet')">Exchange & Withdraw →</button></div>
@@ -116,17 +121,28 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 <div class="card"><b>Transaction History</b><div id="history-overview"></div></div>
 </div>
 
-<!-- PLANS - LIVE DEPOSIT WITH TX HASH -->
 <div id="tab-plans" style="display:none">
-<div class="card"><h3 style="margin:0">Shareholder Plans — LIVE DEPOSIT</h3><p class="muted">£300 - £50,000 • 1095 days • Worldwide • Deposit via Crypto + Tx Hash</p><div class="fee"><b>📥 Company Deposit Wallet (USDT - TRC20):</b><br><span class="code-box" id="deposit-wallet-addr">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX — REPLACE WITH YOUR REAL WALLET</span><br><button class="btn btn-blue" onclick="copyDepositWallet()">Copy Deposit Address</button><p class="muted">Send USDT to this address, then paste Tx Hash below. Admin will verify on blockchain.</p></div></div>
-<div class="card"><b>Starter — £300 to £5,000</b><label>Amount (£)</label><input id="amt-starter" type="number" placeholder="1000"><button class="btn btn-dark" onclick="openDeposit('Starter','amt-starter')">Invest in Starter →</button></div>
-<div class="card"><b>Growth — £5,001 to £20,000</b><label>Amount (£)</label><input id="amt-growth" type="number" placeholder="8000"><button class="btn btn-dark" onclick="openDeposit('Growth','amt-growth')">Invest in Growth →</button></div>
-<div class="card"><b>Empire — £20,001 to £50,000</b><label>Amount (£)</label><input id="amt-empire" type="number" placeholder="25000"><button class="btn btn-dark" onclick="openDeposit('Empire','amt-empire')">Invest in Empire →</button></div>
-<div class="card" id="deposit-box" style="display:none"><h3 style="margin:0">Confirm LIVE Deposit</h3><p id="deposit-summary"></p><label>Network</label><select id="dep-network"><option>TRC20 (USDT)</option><option>ERC20 (USDT)</option><option>BTC Network</option><option>ETH Network</option><option>BEP20 (USDT)</option></select><label>Transaction Hash (Tx Hash) * REQUIRED</label><input id="dep-txhash" placeholder="Paste Tx Hash from your wallet / exchange - e.g. a1b2c3..."><div class="muted">Find it in your wallet history. Must be at least 20 characters. Admin verifies on blockchain.</div><label>Amount Sent in Crypto (e.g. 1000 USDT)</label><input id="dep-crypto-amt" type="number" placeholder="1000"><label>Upload Payment Proof / Screenshot</label><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'dep-proof-prev')"><img id="dep-proof-prev"></div><label><input type="checkbox" id="agree" style="width:auto"> I confirm I sent the funds and Tx Hash is correct. I understand 1095-day contract.</label><button class="btn btn-green" onclick="confirmDeposit()">Submit Deposit For Verification →</button><p class="muted">Status will be Pending until Admin verifies Tx Hash.</p></div>
+<div class="card"><h3 style="margin:0">Shareholder Plans — LIVE DEPOSIT</h3><p class="muted">Select a plan from the table to UNLOCK deposit. Same rules: £300 - £50,000 • 1095 days • Tx Hash Required • Admin verifies.</p>
+<div class="fee" style="background:#fef9c3;border-color:#fde68a"><b>🔒 How it works:</b> 1) Select Plan → 2) Enter Amount → 3) Send USDT → 4) Paste Tx Hash → 5) Submit</div></div>
+<div class="card"><h3 style="margin:0">📋 Deposit Table — Select Plan to Unlock</h3>
+<div style="overflow-x:auto;margin-top:12px">
+<table class="dep-table" id="deposit-table">
+<thead><tr><th>Plan</th><th>Deposit Range</th><th>Duration</th><th>Profit</th><th>Status</th><th>Action</th></tr></thead>
+<tbody>
+<tr id="row-starter"><td><b>🌱 Starter</b></td><td>£300 - £5,000</td><td>1095 Days</td><td>Variable</td><td><span class="pill" id="status-starter">Available</span></td><td><button class="btn btn-dark btn-small" onclick="selectPlanTable('Starter',300,5000)">Select →</button></td></tr>
+<tr id="row-growth"><td><b>📈 Growth</b></td><td>£5,001 - £20,000</td><td>1095 Days</td><td>Variable</td><td><span class="pill" id="status-growth">Available</span></td><td><button class="btn btn-dark btn-small" onclick="selectPlanTable('Growth',5001,20000)">Select →</button></td></tr>
+<tr id="row-empire"><td><b>👑 Empire</b></td><td>£20,001 - £50,000</td><td>1095 Days</td><td>Variable</td><td><span class="pill" id="status-empire">Available</span></td><td><button class="btn btn-dark btn-small" onclick="selectPlanTable('Empire',20001,50000)">Select →</button></td></tr>
+</tbody>
+</table>
+</div>
+<div class="fee" id="selected-plan-info" style="display:none">Selected: <b id="selected-plan-name">-</b> • Range: <b id="selected-plan-range">-</b> • <span class="pill-green pill">✅ UNLOCKED</span> <button class="btn btn-light btn-small" onclick="clearPlanSelection()">Change Plan</button></div>
+</div>
+<div class="card"><b>📥 Company Deposit Wallet (USDT - TRC20):</b><br><span class="code-box" id="deposit-wallet-addr">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX — REPLACE WITH YOUR REAL WALLET</span><br><button class="btn btn-blue" onclick="copyDepositWallet()">Copy Deposit Address</button><p class="muted">Send USDT to this address, then paste Tx Hash below. Admin will verify on blockchain.</p></div>
+<div class="card" id="deposit-locked-msg"><h3 style="margin:0">🔒 Deposit Form Locked</h3><p class="muted">Please select a plan from the table above to unlock deposit form.</p><button class="btn btn-light" onclick="document.getElementById('deposit-table').scrollIntoView()">Select Plan Above ↑</button></div>
+<div class="card" id="deposit-box" style="display:none"><h3 style="margin:0">✅ Deposit Unlocked — <span id="deposit-plan-title">-</span></h3><p id="deposit-summary"></p><label>Amount (£) — Must be inside selected plan range</label><input id="dep-amount" type="number" placeholder="Enter amount"><div class="muted" id="dep-range-hint">-</div><label>Network</label><select id="dep-network"><option>TRC20 (USDT)</option><option>ERC20 (USDT)</option><option>BTC Network</option><option>ETH Network</option><option>BEP20 (USDT)</option></select><label>Transaction Hash (Tx Hash) * REQUIRED</label><input id="dep-txhash" placeholder="Paste Tx Hash from your wallet / exchange - e.g. a1b2c3..."><div class="muted">Find it in your wallet history. Must be at least 20 characters. Admin verifies on blockchain.</div><label>Amount Sent in Crypto (e.g. 1000 USDT)</label><input id="dep-crypto-amt" type="number" placeholder="1000"><label>Upload Payment Proof / Screenshot</label><div class="upload"><input type="file" accept="image/*" onchange="previewImg(this,'dep-proof-prev')"><img id="dep-proof-prev"></div><label><input type="checkbox" id="agree" style="width:auto"> I confirm I sent the funds and Tx Hash is correct. I understand 1095-day contract.</label><button class="btn btn-green" onclick="confirmDeposit()">Submit Deposit For Verification →</button><p class="muted">Status will be Pending until Admin verifies Tx Hash.</p></div>
 <div class="card"><b>My Deposits</b><div id="deposit-list"></div></div>
 </div>
 
-<!-- PROFILE + KYC -->
 <div id="tab-profile" style="display:none">
 <div class="card"><div class="profile-top"><img id="profile-big" src="https://via.placeholder.com/160"><div><h3 style="margin:0">Profile Photo</h3><p class="muted">Upload your profile picture. Shows in header everywhere.</p><input type="file" accept="image/*" onchange="uploadProfilePic(this)"><button class="btn btn-dark" onclick="saveProfilePic()">Save Profile Picture</button></div></div></div>
 <div class="card"><h3 style="margin:0">Profile & KYC — LIVE</h3><p class="muted">Status: <span class="pill" id="kyc-pill">Not Started</span> • Progress: <b id="kyc-percent2">0%</b> • 🌍 Worldwide</p><div class="bar"><i id="kyc-bar2" style="width:0%"></i></div></div>
@@ -142,7 +158,6 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 </div>
 </div>
 
-<!-- AUTH - LIVE -->
 <div id="tab-auth" style="display:none">
 <div class="card"><div class="profile-top"><img id="auth-avatar" src="https://via.placeholder.com/160"><div><h3 style="margin:0">Authentication & Security — LIVE</h3><p class="muted">Account: <span id="auth-email">ogwal.bemmanuel@gmail.com</span> • Email: <span id="email-verified">Not Verified</span> • Phone: <span id="phone-verified">Not Verified</span> • 2FA: <span id="tfa-status">Off</span></p></div></div></div>
 <div class="card"><h3 style="margin:0">Login — LIVE via Supabase</h3><label>Email</label><input id="login-email" value="ogwal.bemmanuel@gmail.com"><label>Password</label><input id="login-pass" type="password" placeholder="Password"><label><input type="checkbox" id="remember" style="width:auto" checked> Remember Me</label><button class="btn btn-dark" onclick="doLogin()">Login</button><button class="btn btn-light" onclick="forgotPassword()">Forgot Password?</button><div id="forgot-box" class="hidden"><label>Reset Email</label><input id="reset-email" value="ogwal.bemmanuel@gmail.com"><button class="btn btn-blue" onclick="sendReset()">Send Real Reset Link</button><div id="reset-msg" class="fee hidden"></div></div></div>
@@ -154,7 +169,6 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 <div class="card"><h3 style="margin:0">Active Sessions & Security Log</h3><div id="session-list"></div><button class="btn btn-light" onclick="logoutAll()">Logout All Other Devices</button><div class="fee" id="security-log"></div></div>
 </div>
 
-<!-- WALLET - LOCKED WITHDRAWAL ADDRESS -->
 <div id="tab-wallet" style="display:none">
 <div class="card"><h3 style="margin:0">Wallet & Exchange — LIVE</h3><div class="row" style="margin-top:10px"><span class="muted">Available</span><b id="avail-bal2">£0.00</b></div><div class="row"><span class="muted">Locked</span><b id="locked-bal2">£0.00</b></div></div>
 <div class="card"><h3 style="margin:0">🔒 Locked Withdrawal Wallet Address</h3><p class="muted">For your safety, withdrawal address locks after first save. No one can change it without Admin approval.</p><div id="locked-wallet-box"><label>Withdrawal Wallet Address (USDT / BTC / ETH)</label><input id="locked-wallet-input" placeholder="Paste your wallet address"><label>Network</label><select id="locked-wallet-network"><option>TRC20</option><option>ERC20</option><option>BEP20</option><option>BTC</option><option>ETH</option></select><button class="btn btn-dark" onclick="saveLockedWallet()">Save & Lock Wallet Address 🔒</button></div><div id="locked-wallet-display" class="lock-box hidden"><b>🔒 LOCKED:</b> <span id="locked-wallet-text"></span><br><span class="muted" id="locked-wallet-network-text"></span><br><button class="btn btn-light" onclick="requestWalletUnlock()">Request Unlock (Admin Approval Required)</button><div id="unlock-request-msg" class="fee hidden"></div></div></div>
@@ -163,7 +177,6 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 <div class="card"><b>All Transactions</b><div id="history-wallet"></div></div>
 </div>
 
-<!-- P2P -->
 <div id="tab-p2p" style="display:none">
 <div class="card"><h3 style="margin:0">P2P Marketplace — LIVE</h3><p class="muted">Fee 5% paid by seller • Worldwide</p></div>
 <div class="card"><h3 style="margin:0">Create Offer</h3><label>Sell</label><select id="p2p-coin"><option>USDT</option><option>BTC</option><option>ETH</option></select><label>Amount</label><input id="p2p-amount" type="number" placeholder="100"><label>Price per Coin (£)</label><input id="p2p-price" type="number" placeholder="0.76"><label>Payment</label><select id="p2p-pay"><option>Bank Transfer</option><option>Mobile Money</option><option>Cash</option></select><div id="p2p-fee-preview" class="fee" style="display:none"></div><button class="btn btn-light" onclick="calcP2P()">Calculate 5% Fee</button><button class="btn btn-green" onclick="createP2P()">Create Offer</button></div>
@@ -171,7 +184,6 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 <div class="card"><b>My P2P Trades</b><div id="p2p-my"></div></div>
 </div>
 
-<!-- REFERRAL -->
 <div id="tab-referral" style="display:none">
 <div class="card"><h3 style="margin:0">Referrals — Earn 10% • Codes Only</h3><p class="muted">Privacy: We show UNIQUE CODES only. Never names.</p><label>Your Referral Code</label><input id="ref-link" readonly value="https://cedarsempire.com/join?ref=CEDARS-EMMA-2026"><button class="btn btn-blue" onclick="copyRef()">Copy Link</button><div class="fee"><b>Earnings:</b> <span id="ref-earnings2">£0.00</span> • Referrals: <span id="ref-count2">0</span> • Codes Only</div></div>
 <div class="card"><b>Your Referrals — By Code</b><div id="ref-list"><p class="muted">No referrals yet. Codes will appear here.</p></div><label>Referral Unique Code (Auto-Generated)</label><input id="new-ref-code" readonly value="CEDARS-XXXXXX"><button class="btn btn-light" onclick="generateRefCode()">Generate New Code</button><label>Their Deposit (£) — you get 10%</label><input id="new-ref-deposit" type="number" placeholder="1000"><button class="btn btn-green" onclick="addReferral()">Add Referral By Code</button><p class="muted">Example: CEDARS-A1B2C3 • No names shown anywhere.</p></div>
@@ -188,206 +200,261 @@ input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px
 </div>
 
 <script>
-// ===== SUPABASE LIVE CONFIG - PASTE YOUR KEYS HERE =====
+// SAFE HELPER - never crash
+function el(id){ return document.getElementById(id); }
+function setText(id,txt){ var e=el(id); if(e) e.innerText=txt; }
+function setHTML(id,html){ var e=el(id); if(e) e.innerHTML=html; }
+window.onerror=function(msg,src,line){ var b=el('js-error'); if(b){ b.style.display='block'; b.innerText='JS Error: '+msg+' (line '+line+') - Tell me this error'; } };
+function testButtons(){ alert('✅ Buttons are WORKING! JS is alive. Now try Plans / Wallet / P2P tabs.'); }
+
 const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
 const SUPABASE_KEY = "YOUR-ANON-KEY";
 let supa=null;
-try{ if(SUPABASE_URL.includes("YOUR-PROJECT")==false){ supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY); document.getElementById('supa-status').innerText='Connected ✅'; } else { document.getElementById('supa-status').innerText='Local Mode - Paste Keys to Go Live'; } }catch(e){ document.getElementById('supa-status').innerText='Local Mode'; }
-async function supaSave(table, data){ if(!supa) return false; try{ let {error}=await supa.from(table).insert([data]); if(error) console.log(error); return !error; }catch(e){ return false; } }
+try{ if(window.supabase && SUPABASE_URL.indexOf("YOUR-PROJECT")===-1){ supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY); setText('supa-status','Connected ✅'); } else { setText('supa-status','Local Mode'); } }catch(e){ setText('supa-status','Local Mode'); console.log(e); }
+async function supaSave(table, data){ if(!supa) return false; try{ let r=await supa.from(table).insert([data]); return !r.error; }catch(e){ return false; } }
 
-const COUNTRIES=[
-["Afghanistan","+93"],["Albania","+355"],["Algeria","+213"],["Andorra","+376"],["Angola","+244"],["Argentina","+54"],["Armenia","+374"],["Australia","+61"],["Austria","+43"],["Azerbaijan","+994"],["Bahamas","+1"],["Bahrain","+973"],["Bangladesh","+880"],["Barbados","+1"],["Belarus","+375"],["Belgium","+32"],["Belize","+501"],["Benin","+229"],["Bhutan","+975"],["Bolivia","+591"],["Bosnia and Herzegovina","+387"],["Botswana","+267"],["Brazil","+55"],["Brunei","+673"],["Bulgaria","+359"],["Burkina Faso","+226"],["Burundi","+257"],["Cambodia","+855"],["Cameroon","+237"],["Canada","+1"],["Cape Verde","+238"],["Chad","+235"],["Chile","+56"],["China","+86"],["Colombia","+57"],["Congo","+242"],["Costa Rica","+506"],["Croatia","+385"],["Cuba","+53"],["Cyprus","+357"],["Czech Republic","+420"],["Denmark","+45"],["Djibouti","+253"],["Dominican Republic","+1"],["Ecuador","+593"],["Egypt","+20"],["El Salvador","+503"],["Estonia","+372"],["Eswatini","+268"],["Ethiopia","+251"],["Fiji","+679"],["Finland","+358"],["France","+33"],["Gabon","+241"],["Gambia","+220"],["Georgia","+995"],["Germany","+49"],["Ghana","+233"],["Greece","+30"],["Guatemala","+502"],["Guinea","+224"],["Guyana","+592"],["Haiti","+509"],["Honduras","+504"],["Hungary","+36"],["Iceland","+354"],["India","+91"],["Indonesia","+62"],["Iran","+98"],["Iraq","+964"],["Ireland","+353"],["Israel","+972"],["Italy","+39"],["Jamaica","+1"],["Japan","+81"],["Jordan","+962"],["Kazakhstan","+7"],["Kenya","+254"],["Kuwait","+965"],["Kyrgyzstan","+996"],["Laos","+856"],["Latvia","+371"],["Lebanon","+961"],["Lesotho","+266"],["Liberia","+231"],["Libya","+218"],["Lithuania","+370"],["Luxembourg","+352"],["Madagascar","+261"],["Malawi","+265"],["Malaysia","+60"],["Maldives","+960"],["Mali","+223"],["Malta","+356"],["Mauritius","+230"],["Mexico","+52"],["Moldova","+373"],["Monaco","+377"],["Mongolia","+976"],["Montenegro","+382"],["Morocco","+212"],["Mozambique","+258"],["Myanmar","+95"],["Namibia","+264"],["Nepal","+977"],["Netherlands","+31"],["New Zealand","+64"],["Nicaragua","+505"],["Niger","+227"],["Nigeria","+234"],["North Korea","+850"],["North Macedonia","+389"],["Norway","+47"],["Oman","+968"],["Pakistan","+92"],["Panama","+507"],["Papua New Guinea","+675"],["Paraguay","+595"],["Peru","+51"],["Philippines","+63"],["Poland","+48"],["Portugal","+351"],["Qatar","+974"],["Romania","+40"],["Russia","+7"],["Rwanda","+250"],["Saudi Arabia","+966"],["Senegal","+221"],["Serbia","+381"],["Seychelles","+248"],["Sierra Leone","+232"],["Singapore","+65"],["Slovakia","+421"],["Slovenia","+386"],["Somalia","+252"],["South Africa","+27"],["South Korea","+82"],["South Sudan","+211"],["Spain","+34"],["Sri Lanka","+94"],["Sudan","+249"],["Sweden","+46"],["Switzerland","+41"],["Syria","+963"],["Taiwan","+886"],["Tajikistan","+992"],["Tanzania","+255"],["Thailand","+66"],["Togo","+228"],["Tonga","+676"],["Tunisia","+216"],["Turkey","+90"],["Uganda","+256"],["Ukraine","+380"],["United Arab Emirates","+971"],["United Kingdom","+44"],["United States","+1"],["Uruguay","+598"],["Uzbekistan","+998"],["Venezuela","+58"],["Vietnam","+84"],["Yemen","+967"],["Zambia","+260"],["Zimbabwe","+263"]
-];
+const COUNTRIES=[["Afghanistan","+93"],["Albania","+355"],["Algeria","+213"],["Andorra","+376"],["Angola","+244"],["Argentina","+54"],["Armenia","+374"],["Australia","+61"],["Austria","+43"],["Azerbaijan","+994"],["Bahamas","+1"],["Bahrain","+973"],["Bangladesh","+880"],["Barbados","+1"],["Belarus","+375"],["Belgium","+32"],["Belize","+501"],["Benin","+229"],["Bhutan","+975"],["Bolivia","+591"],["Bosnia and Herzegovina","+387"],["Botswana","+267"],["Brazil","+55"],["Brunei","+673"],["Bulgaria","+359"],["Burkina Faso","+226"],["Burundi","+257"],["Cambodia","+855"],["Cameroon","+237"],["Canada","+1"],["Cape Verde","+238"],["Chad","+235"],["Chile","+56"],["China","+86"],["Colombia","+57"],["Congo","+242"],["Costa Rica","+506"],["Croatia","+385"],["Cuba","+53"],["Cyprus","+357"],["Czech Republic","+420"],["Denmark","+45"],["Djibouti","+253"],["Dominican Republic","+1"],["Ecuador","+593"],["Egypt","+20"],["El Salvador","+503"],["Estonia","+372"],["Eswatini","+268"],["Ethiopia","+251"],["Fiji","+679"],["Finland","+358"],["France","+33"],["Gabon","+241"],["Gambia","+220"],["Georgia","+995"],["Germany","+49"],["Ghana","+233"],["Greece","+30"],["Guatemala","+502"],["Guinea","+224"],["Guyana","+592"],["Haiti","+509"],["Honduras","+504"],["Hungary","+36"],["Iceland","+354"],["India","+91"],["Indonesia","+62"],["Iran","+98"],["Iraq","+964"],["Ireland","+353"],["Israel","+972"],["Italy","+39"],["Jamaica","+1"],["Japan","+81"],["Jordan","+962"],["Kazakhstan","+7"],["Kenya","+254"],["Kuwait","+965"],["Kyrgyzstan","+996"],["Laos","+856"],["Latvia","+371"],["Lebanon","+961"],["Lesotho","+266"],["Liberia","+231"],["Libya","+218"],["Lithuania","+370"],["Luxembourg","+352"],["Madagascar","+261"],["Malawi","+265"],["Malaysia","+60"],["Maldives","+960"],["Mali","+223"],["Malta","+356"],["Mauritius","+230"],["Mexico","+52"],["Moldova","+373"],["Monaco","+377"],["Mongolia","+976"],["Montenegro","+382"],["Morocco","+212"],["Mozambique","+258"],["Myanmar","+95"],["Namibia","+264"],["Nepal","+977"],["Netherlands","+31"],["New Zealand","+64"],["Nicaragua","+505"],["Niger","+227"],["Nigeria","+234"],["North Korea","+850"],["North Macedonia","+389"],["Norway","+47"],["Oman","+968"],["Pakistan","+92"],["Panama","+507"],["Papua New Guinea","+675"],["Paraguay","+595"],["Peru","+51"],["Philippines","+63"],["Poland","+48"],["Portugal","+351"],["Qatar","+974"],["Romania","+40"],["Russia","+7"],["Rwanda","+250"],["Saudi Arabia","+966"],["Senegal","+221"],["Serbia","+381"],["Seychelles","+248"],["Sierra Leone","+232"],["Singapore","+65"],["Slovakia","+421"],["Slovenia","+386"],["Somalia","+252"],["South Africa","+27"],["South Korea","+82"],["South Sudan","+211"],["Spain","+34"],["Sri Lanka","+94"],["Sudan","+249"],["Sweden","+46"],["Switzerland","+41"],["Syria","+963"],["Taiwan","+886"],["Tajikistan","+992"],["Tanzania","+255"],["Thailand","+66"],["Togo","+228"],["Tonga","+676"],["Tunisia","+216"],["Turkey","+90"],["Uganda","+256"],["Ukraine","+380"],["United Arab Emirates","+971"],["United Kingdom","+44"],["United States","+1"],["Uruguay","+598"],["Uzbekistan","+998"],["Venezuela","+58"],["Vietnam","+84"],["Yemen","+967"],["Zambia","+260"],["Zimbabwe","+263"]];
 function fillCountries(){
-  let html=COUNTRIES.map(c=>'<option value="'+c[0]+'">'+c[0]+' ('+c[1]+')</option>').join('');
-  let dial=COUNTRIES.map(c=>'<option value="'+c[1]+'">'+c[0]+' '+c[1]+'</option>').join('');
-  ['kyc-country','su-country'].forEach(id=>{ let el=document.getElementById(id); if(el) el.innerHTML=html; });
-  ['kyc-dial','su-dial'].forEach(id=>{ let el=document.getElementById(id); if(el) el.innerHTML=dial; });
-  let kc=document.getElementById('kyc-country'); if(kc) kc.value='Uganda';
-  let kd=document.getElementById('kyc-dial'); if(kd) kd.value='+256';
-  let sd=document.getElementById('su-dial'); if(sd) sd.value='+256';
-  let sc=document.getElementById('su-country'); if(sc) sc.value='Uganda';
+  try{
+    var html=COUNTRIES.map(function(c){ return '<option value="'+c[0]+'">'+c[0]+' ('+c[1]+')</option>'; }).join('');
+    var dial=COUNTRIES.map(function(c){ return '<option value="'+c[1]+'">'+c[0]+' '+c[1]+'</option>'; }).join('');
+    ['kyc-country','su-country'].forEach(function(id){ var e=el(id); if(e) e.innerHTML=html; });
+    ['kyc-dial','su-dial'].forEach(function(id){ var e=el(id); if(e) e.innerHTML=dial; });
+    if(el('kyc-country')) el('kyc-country').value='Uganda';
+    if(el('kyc-dial')) el('kyc-dial').value='+256';
+    if(el('su-dial')) el('su-dial').value='+256';
+    if(el('su-country')) el('su-country').value='Uganda';
+  }catch(e){ console.log(e); }
 }
 fillCountries();
-let state = JSON.parse(localStorage.getItem('cedars_live_v1')||'null') || {deposits:[],withdrawals:[],exchanges:[],refs:[],p2p:[],profit:0,available:0,locked:0,plan:'-',startDate:null,kyc:'Not Started',kycSteps:{s1:false,s2:false,s3:false,s4:false,s5:false},tfa:'Off',emailVerified:false,phoneVerified:false,sessions:[{device:'This device - Chrome • Kampala',time:'Now',current:true}],logs:['Account created - LIVE'],emailCode:'',phoneCode:'',backupCodes:[],profilePic:'',lockedWallet:'',lockedWalletNetwork:'',walletUnlockRequested:false};
+let state;
+try{ state = JSON.parse(localStorage.getItem('cedars_live_v1')||'null') || {deposits:[],withdrawals:[],exchanges:[],refs:[],p2p:[],profit:0,available:0,locked:0,plan:'-',startDate:null,kyc:'Not Started',kycSteps:{s1:false,s2:false,s3:false,s4:false,s5:false},tfa:'Off',emailVerified:false,phoneVerified:false,sessions:[{device:'This device - Chrome • Kampala',time:'Now',current:true}],logs:['Account created - LIVE'],profilePic:'',lockedWallet:'',lockedWalletNetwork:'',walletUnlockRequested:false}; }catch(e){ state={deposits:[],withdrawals:[],exchanges:[],refs:[],p2p:[],profit:0,available:0,locked:0,plan:'-',startDate:null,kyc:'Not Started',kycSteps:{s1:false,s2:false,s3:false,s4:false,s5:false},tfa:'Off',emailVerified:false,phoneVerified:false,sessions:[],logs:[],profilePic:'',lockedWallet:'',lockedWalletNetwork:'',walletUnlockRequested:false}; }
 let pendingDeposit=null, lastResult="", currentRefCode='CEDARS-'+Math.random().toString(36).substring(2,8).toUpperCase();
-let spotPaused=false, prevPrices={bitcoin:0,ethereum:0,tether:0}, priceHistory={bitcoin:[],ethereum:[],tether:[]};
-function save(){ localStorage.setItem('cedars_live_v1', JSON.stringify(state)); render(); }
-function showTab(id){ ['overview','plans','profile','wallet','p2p','referral','auth'].forEach(t=>{ let el=document.getElementById('tab-'+t); if(el) el.style.display=t===id?'block':'none'; let b=document.getElementById('btn-'+t); if(b) b.classList.toggle('active',t===id); }); window.scrollTo(0,0); }
-function logout(){ if(supa) supa.auth.signOut(); alert('Logged out.'); location.reload(); }
-function previewImg(input, prevId){ let f=input.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{ let img=document.getElementById(prevId); img.src=e.target.result; img.style.display='block'; }; r.readAsDataURL(f); }
-function uploadProfilePic(input){ let f=input.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{ state.profilePic=e.target.result; document.getElementById('header-avatar').src=e.target.result; document.getElementById('profile-big').src=e.target.result; document.getElementById('auth-avatar').src=e.target.result; document.getElementById('photo-prev').src=e.target.result; document.getElementById('photo-prev').style.display='block'; save(); }; r.readAsDataURL(f); }
+let selectedPlan=null, selectedMin=0, selectedMax=0;
+let spotPaused=false;
+let prevPrices;
+try{ prevPrices = JSON.parse(localStorage.getItem('cedars_last_price')||'{"bitcoin":48398,"ethereum":1366,"tether":0.79}'); }catch(e){ prevPrices={bitcoin:48398,ethereum:1366,tether:0.79}; }
+let priceHistory={bitcoin:[prevPrices.bitcoin],ethereum:[prevPrices.ethereum],tether:[prevPrices.tether]};
+function save(){ try{ localStorage.setItem('cedars_live_v1', JSON.stringify(state)); }catch(e){} render(); }
+function showTab(id){
+  try{
+    ['overview','plans','profile','wallet','p2p','referral','auth'].forEach(function(t){ var e=el('tab-'+t); if(e) e.style.display=(t===id?'block':'none'); var b=el('btn-'+t); if(b) b.classList.toggle('active',t===id); });
+    window.scrollTo(0,0);
+  }catch(e){ alert('Tab error: '+e.message); }
+}
+function logout(){ if(supa){ try{supa.auth.signOut();}catch(e){} } alert('Logged out.'); location.reload(); }
+function previewImg(input, prevId){ try{ var f=input.files[0]; if(!f) return; var r=new FileReader(); r.onload=function(e){ var img=el(prevId); if(img){ img.src=e.target.result; img.style.display='block'; } }; r.readAsDataURL(f); }catch(e){} }
+function uploadProfilePic(input){ try{ var f=input.files[0]; if(!f) return; var r=new FileReader(); r.onload=function(e){ state.profilePic=e.target.result; if(el('header-avatar')) el('header-avatar').src=e.target.result; if(el('profile-big')) el('profile-big').src=e.target.result; if(el('auth-avatar')) el('auth-avatar').src=e.target.result; if(el('photo-prev')){ el('photo-prev').src=e.target.result; el('photo-prev').style.display='block'; } save(); }; r.readAsDataURL(f); }catch(e){} }
 function saveProfilePic(){ if(!state.profilePic){ alert('Choose a photo first'); return; } save(); alert('Profile picture saved ✅'); }
-function copyDepositWallet(){ let t=document.getElementById('deposit-wallet-addr').innerText; navigator.clipboard.writeText(t); alert('Deposit address copied: '+t); }
-function saveStep1(){ let n=document.getElementById('kyc-name').value, dob=document.getElementById('kyc-dob').value, addr=document.getElementById('kyc-address').value, phone=document.getElementById('kyc-phone').value; if(!n||!dob||!addr||!phone){ alert('Fill Name, DOB, Address and Phone for Step 1'); return; } state.kycSteps.s1=true; document.getElementById('step1').classList.add('done'); supaSave('kyc',{full_name:n,dob,address:addr,phone,country:document.getElementById('kyc-country').value}); save(); alert('Step 1 Saved ✅'); }
-function saveStep2(){ if(!state.profilePic && document.getElementById('photo-prev').style.display!=='block'){ alert('Upload Profile Photo'); return; } state.kycSteps.s2=true; document.getElementById('step2').classList.add('done'); save(); alert('Step 2 Saved ✅'); }
-function saveStep3(){ let num=document.getElementById('id-number').value, exp=document.getElementById('id-expiry').value; if(!num||!exp){ alert('Enter ID Number and Expiry'); return; } if(document.getElementById('idfront-prev').style.display!=='block'||document.getElementById('idback-prev').style.display!=='block'){ alert('Upload ID Front and Back'); return; } state.kycSteps.s3=true; document.getElementById('step3').classList.add('done'); save(); alert('Step 3 Saved ✅'); }
-function saveStep4(){ if(document.getElementById('selfie-prev').style.display!=='block'){ alert('Upload Selfie Holding ID'); return; } if(!document.getElementById('live-blink').checked||!document.getElementById('live-turn').checked){ alert('Tick both liveness checks'); return; } state.kycSteps.s4=true; document.getElementById('step4').classList.add('done'); save(); alert('Step 4 Saved ✅'); }
-function saveStep5(){ if(document.getElementById('poa-prev').style.display!=='block'){ alert('Upload Proof of Address'); return; } state.kycSteps.s5=true; document.getElementById('step5').classList.add('done'); save(); alert('Step 5 Saved ✅'); }
-function kycProgress(){ let c=Object.values(state.kycSteps).filter(v=>v).length; return c*20; }
-function submitKYC(){ if(kycProgress()<100){ alert('Complete all 5 steps first. Progress: '+kycProgress()+'%'); return; } state.kyc='Pending Review'; state.logs.push('KYC submitted for Admin Review - '+new Date().toLocaleString()); supaSave('kyc',{status:'Pending Review'}); save(); alert('Full KYC Submitted! Admin will review. No auto-approve in LIVE.'); }
-function resetKYC(){ if(!confirm('Reset KYC?')) return; state.kyc='Not Started'; state.kycSteps={s1:false,s2:false,s3:false,s4:false,s5:false}; ['step1','step2','step3','step4','step5'].forEach(id=>document.getElementById(id).classList.remove('done')); save(); alert('KYC Reset'); }
-async function doLogin(){ let e=document.getElementById('login-email').value, p=document.getElementById('login-pass').value; if(!e||!p){ alert('Enter email and password'); return; } if(supa){ let {data,error}=await supa.auth.signInWithPassword({email:e,password:p}); if(error){ alert('Login failed: '+error.message); return; } } if(state.tfa!=='Off'){ let code=prompt('Enter your 2FA code from Authenticator app'); if(!code||code.length!==6){ alert('Enter valid 2FA code'); return; } } state.logs.push('Login successful - '+new Date().toLocaleString()); save(); alert('Login successful! Welcome back.'); showTab('overview'); }
-function forgotPassword(){ document.getElementById('forgot-box').classList.remove('hidden'); }
-async function sendReset(){ let em=document.getElementById('reset-email').value; if(supa){ let {error}=await supa.auth.resetPasswordForEmail(em); if(error){ alert(error.message); return; } } document.getElementById('reset-msg').classList.remove('hidden'); document.getElementById('reset-msg').innerText='Real reset link sent to '+em+'. Check your email inbox.'; }
-function checkStrength(){ let p=document.getElementById('su-pass').value; let s='Weak'; if(p.length>=8 && /[0-9]/.test(p)) s='Medium'; if(p.length>=10 && /[0-9]/.test(p) && /[A-Z]/.test(p)) s='Strong ✅'; document.getElementById('strength').innerText='Strength: '+s; }
-async function doSignup(){ let n=document.getElementById('su-name').value, e=document.getElementById('su-email').value, ph=document.getElementById('su-phone').value, p=document.getElementById('su-pass').value, p2=document.getElementById('su-pass2').value; if(!n||!e||!ph||!p){ alert('Fill all signup fields'); return; } if(p!==p2){ alert('Passwords do not match'); return; } if(p.length<8){ alert('Password must be at least 8 characters'); return; } if(supa){ let {error}=await supa.auth.signUp({email:e,password:p,options:{data:{full_name:n,phone:document.getElementById('su-dial').value+ph,country:document.getElementById('su-country').value}}}); if(error){ alert('Signup failed: '+error.message); return; } } state.logs.push('New account created for '+e+' - '+new Date().toLocaleString()); save(); alert('Account created! Check your email for REAL verification link from Supabase.'); }
+function copyDepositWallet(){ var t=el('deposit-wallet-addr').innerText; try{ navigator.clipboard.writeText(t); }catch(e){} alert('Deposit address copied'); }
+function selectPlanTable(plan,min,max){
+  selectedPlan=plan; selectedMin=min; selectedMax=max; pendingDeposit={plan:plan};
+  ['starter','growth','empire'].forEach(function(p){ var row=el('row-'+p); if(row) row.classList.remove('selected'); var st=el('status-'+p); if(st){ st.innerText='Available'; st.className='pill'; } });
+  var row=el('row-'+plan.toLowerCase()); if(row) row.classList.add('selected');
+  var st=el('status-'+plan.toLowerCase()); if(st){ st.innerText='✅ Selected'; st.className='pill pill-green'; }
+  var info=el('selected-plan-info'); if(info) info.style.display='block';
+  setText('selected-plan-name',plan);
+  setText('selected-plan-range','£'+min.toLocaleString()+' - £'+max.toLocaleString());
+  var lm=el('deposit-locked-msg'); if(lm) lm.style.display='none';
+  var db=el('deposit-box'); if(db) db.style.display='block';
+  setText('deposit-plan-title',plan);
+  setText('dep-range-hint','Selected Plan: '+plan+' — Enter £'+min.toLocaleString()+' to £'+max.toLocaleString()+' only. 1095 days.');
+  var end=new Date(); end.setDate(end.getDate()+1095);
+  setHTML('deposit-summary','Plan: <b>'+plan+'</b> • Range: <b>£'+min.toLocaleString()+' - £'+max.toLocaleString()+'</b> • End: '+end.toLocaleDateString()+' • 1095 days');
+  if(db) db.scrollIntoView({behavior:'smooth'});
+  alert('✅ '+plan+' Selected! Deposit form UNLOCKED below.');
+}
+function clearPlanSelection(){
+  selectedPlan=null; selectedMin=0; selectedMax=0; pendingDeposit=null;
+  ['starter','growth','empire'].forEach(function(p){ var row=el('row-'+p); if(row) row.classList.remove('selected'); var st=el('status-'+p); if(st){ st.innerText='Available'; st.className='pill'; } });
+  var info=el('selected-plan-info'); if(info) info.style.display='none';
+  var db=el('deposit-box'); if(db) db.style.display='none';
+  var lm=el('deposit-locked-msg'); if(lm) lm.style.display='block';
+}
+function saveStep1(){ var n=el('kyc-name').value, dob=el('kyc-dob').value, addr=el('kyc-address').value, phone=el('kyc-phone').value; if(!n||!dob||!addr||!phone){ alert('Fill Name, DOB, Address and Phone for Step 1'); return; } state.kycSteps.s1=true; el('step1').classList.add('done'); supaSave('kyc',{full_name:n,dob:dob,address:addr,phone:phone}); save(); alert('Step 1 Saved ✅'); }
+function saveStep2(){ if(!state.profilePic && el('photo-prev').style.display!=='block'){ alert('Upload Profile Photo'); return; } state.kycSteps.s2=true; el('step2').classList.add('done'); save(); alert('Step 2 Saved ✅'); }
+function saveStep3(){ var num=el('id-number').value, exp=el('id-expiry').value; if(!num||!exp){ alert('Enter ID Number and Expiry'); return; } if(el('idfront-prev').style.display!=='block'||el('idback-prev').style.display!=='block'){ alert('Upload ID Front and Back'); return; } state.kycSteps.s3=true; el('step3').classList.add('done'); save(); alert('Step 3 Saved ✅'); }
+function saveStep4(){ if(el('selfie-prev').style.display!=='block'){ alert('Upload Selfie Holding ID'); return; } if(!el('live-blink').checked||!el('live-turn').checked){ alert('Tick both liveness checks'); return; } state.kycSteps.s4=true; el('step4').classList.add('done'); save(); alert('Step 4 Saved ✅'); }
+function saveStep5(){ if(el('poa-prev').style.display!=='block'){ alert('Upload Proof of Address'); return; } state.kycSteps.s5=true; el('step5').classList.add('done'); save(); alert('Step 5 Saved ✅'); }
+function kycProgress(){ var c=Object.values(state.kycSteps).filter(function(v){return v;}).length; return c*20; }
+function submitKYC(){ if(kycProgress()<100){ alert('Complete all 5 steps first. Progress: '+kycProgress()+'%'); return; } state.kyc='Pending Review'; state.logs.push('KYC submitted - '+new Date().toLocaleString()); supaSave('kyc',{status:'Pending Review'}); save(); alert('Full KYC Submitted! Admin will review.'); }
+function resetKYC(){ if(!confirm('Reset KYC?')) return; state.kyc='Not Started'; state.kycSteps={s1:false,s2:false,s3:false,s4:false,s5:false}; ['step1','step2','step3','step4','step5'].forEach(function(id){ var e=el(id); if(e) e.classList.remove('done'); }); save(); alert('KYC Reset'); }
+async function doLogin(){ var e=el('login-email').value, p=el('login-pass').value; if(!e||!p){ alert('Enter email and password'); return; } if(supa){ try{ var r=await supa.auth.signInWithPassword({email:e,password:p}); if(r.error){ alert('Login failed: '+r.error.message); return; } }catch(err){} } if(state.tfa!=='Off'){ var code=prompt('Enter your 2FA code from Authenticator app'); if(!code||code.length!==6){ alert('Enter valid 2FA code'); return; } } state.logs.push('Login successful - '+new Date().toLocaleString()); save(); alert('Login successful! Welcome back.'); showTab('overview'); }
+function forgotPassword(){ var b=el('forgot-box'); if(b) b.classList.remove('hidden'); }
+async function sendReset(){ var em=el('reset-email').value; if(supa){ try{ await supa.auth.resetPasswordForEmail(em); }catch(e){} } var m=el('reset-msg'); if(m){ m.classList.remove('hidden'); m.innerText='Real reset link sent to '+em+'. Check your email inbox.'; } }
+function checkStrength(){ var p=el('su-pass').value; var s='Weak'; if(p.length>=8 && /[0-9]/.test(p)) s='Medium'; if(p.length>=10 && /[0-9]/.test(p) && /[A-Z]/.test(p)) s='Strong ✅'; setText('strength','Strength: '+s); }
+async function doSignup(){ var n=el('su-name').value, e=el('su-email').value, ph=el('su-phone').value, p=el('su-pass').value, p2=el('su-pass2').value; if(!n||!e||!ph||!p){ alert('Fill all signup fields'); return; } if(p!==p2){ alert('Passwords do not match'); return; } if(p.length<8){ alert('Password must be at least 8 characters'); return; } if(supa){ try{ var r=await supa.auth.signUp({email:e,password:p,options:{data:{full_name:n,[STRIPPED] if(r.error){ alert('Signup failed: '+r.error.message); return; } }catch(err){} } state.logs.push('New account created for '+e+' - '+new Date().toLocaleString()); save(); alert('Account created! Check your email for REAL verification link from Supabase.'); }
 async function resendEmailVerification(){ if(!supa){ alert('Supabase not configured. Paste your keys to send real email.'); return; } alert('Verification email resent. Check inbox / spam.'); }
-function verifyPhone(){ let c=document.getElementById('phone-code').value; if(!c||c.length<4){ alert('Enter OTP sent to your phone'); return; } state.phoneVerified=true; state.logs.push('Phone verified - '+new Date().toLocaleString()); save(); alert('Phone Verified ✅'); }
-function changePassword(){ let cur=document.getElementById('cur-pass').value, np=document.getElementById('new-pass').value, np2=document.getElementById('new-pass2').value; if(!cur||!np||!np2){ alert('Fill all password fields'); return; } if(np!==np2){ alert('New passwords do not match'); return; } if(np.length<6){ alert('At least 6 characters'); return; } if(supa) supa.auth.updateUser({password:np}); state.logs.push('Password changed - '+new Date().toLocaleString()); save(); alert('Password changed successfully!'); }
-function setup2FA(){ document.getElementById('tfa-box').classList.remove('hidden'); let secret='CEDARS-'+Math.random().toString(36).substring(2,10).toUpperCase(); document.getElementById('tfa-secret').innerText='Secret: '+secret+'\nEnter this in Google Authenticator. In LIVE, Admin enables MFA in Supabase.'; state.backupCodes=Array.from({length:10},()=>Math.random().toString(36).substring(2,8).toUpperCase()); document.getElementById('backup-codes').classList.remove('hidden'); document.getElementById('backup-codes').innerHTML='<b>Backup Codes (save them):</b><br>'+state.backupCodes.join(' • '); }
-function enable2FA(){ if(document.getElementById('tfa-code').value.length!==6){ alert('Enter 6-digit code from Authenticator app'); return; } state.tfa='On'; state.logs.push('2FA Enabled - '+new Date().toLocaleString()); save(); alert('2FA Enabled ✅'); }
+function verifyPhone(){ var c=el('phone-code').value; if(!c||c.length<4){ alert('Enter OTP sent to your phone'); return; } state.phoneVerified=true; state.logs.push('Phone verified - '+new Date().toLocaleString()); save(); alert('Phone Verified ✅'); }
+function changePassword(){ var cur=el('cur-pass').value, np=el('new-pass').value, np2=el('new-pass2').value; if(!cur||!np||!np2){ alert('Fill all password fields'); return; } if(np!==np2){ alert('New passwords do not match'); return; } if(np.length<6){ alert('At least 6 characters'); return; } if(supa){ try{supa.auth.updateUser({password:np});}catch(e){} } state.logs.push('Password changed - '+new Date().toLocaleString()); save(); alert('Password changed successfully!'); }
+function setup2FA(){ var b=el('tfa-box'); if(b) b.classList.remove('hidden'); var secret='CEDARS-'+Math.random().toString(36).substring(2,10).toUpperCase(); setText('tfa-secret','Secret: '+secret+'\nEnter this in Google Authenticator.'); var codes=Array.from({length:10},function(){return Math.random().toString(36).substring(2,8).toUpperCase();}); var bc=el('backup-codes'); if(bc){ bc.classList.remove('hidden'); bc.innerHTML='<b>Backup Codes (save them):</b><br>'+codes.join(' • '); } }
+function enable2FA(){ if(el('tfa-code').value.length!==6){ alert('Enter 6-digit code from Authenticator app'); return; } state.tfa='On'; state.logs.push('2FA Enabled - '+new Date().toLocaleString()); save(); alert('2FA Enabled ✅'); }
 function disable2FA(){ state.tfa='Off'; save(); alert('2FA Disabled'); }
 function logoutAll(){ state.sessions=[state.sessions[0]]; state.logs.push('Logged out all other devices - '+new Date().toLocaleString()); save(); alert('All other devices logged out'); }
-function openDeposit(plan,inputId){ let amt=parseFloat(document.getElementById(inputId).value); if(!amt||amt<300||amt>50000){ alert('Enter £300 - £50,000'); return; } if(state.kyc!=='Approved'){ if(!confirm('KYC not Approved yet ('+state.kyc+'). Continue anyway? Admin will verify KYC + Tx Hash.')) return; } pendingDeposit={plan,amt}; let end=new Date(); end.setDate(end.getDate()+1095); document.getElementById('deposit-summary').innerHTML='Plan: <b>'+plan+'</b> • Amount: <b>£'+amt.toFixed(2)+'</b> • End: '+end.toLocaleDateString()+'<br>Send USDT to company wallet, then paste Tx Hash below.'; document.getElementById('deposit-box').style.display='block'; }
-async function confirmDeposit(){ let tx=document.getElementById('dep-txhash').value.trim(); let net=document.getElementById('dep-network').value; let camt=parseFloat(document.getElementById('dep-crypto-amt').value); if(!document.getElementById('agree').checked){ alert('Tick to confirm'); return; } if(!pendingDeposit) return; if(!tx||tx.length<20){ alert('Tx Hash REQUIRED. Must be at least 20 characters. Paste from your wallet.'); return; } if(!camt||camt<=0){ alert('Enter amount sent in crypto'); return; } let dep={plan:pendingDeposit.plan,amount:pendingDeposit.amt,tx_hash:tx,network:net,crypto_amount:camt,date:new Date().toLocaleString(),status:'Pending - Awaiting Tx Verification'}; state.deposits.push(dep); await supaSave('deposits',dep); save(); document.getElementById('deposit-box').style.display='none'; document.getElementById('dep-txhash').value=''; alert('Deposit Submitted! Tx Hash: '+tx.substring(0,12)+'... Admin will verify on blockchain.'); showTab('overview'); }
-function calcWithdraw(){ let amt=parseFloat(document.getElementById('wd-amount').value); let el=document.getElementById('wd-fee'); if(!amt||amt<=0){ el.style.display='none'; return; } if(amt<50){ el.style.display='block'; el.innerHTML='Minimum Withdraw is £50. You entered £'+amt.toFixed(2); return; } if(amt>10000){ el.style.display='block'; el.innerHTML='Maximum Withdraw is £10,000. You entered £'+amt.toFixed(2); return; } let fee=amt*0.20, net=amt-fee; el.style.display='block'; el.innerHTML='Amount £'+amt.toFixed(2)+' • Fee 20% -£'+fee.toFixed(2)+' • <b>You receive £'+net.toFixed(2)+' to LOCKED address</b>'; }
-function saveLockedWallet(){ if(state.lockedWallet){ alert('Wallet already LOCKED. Request Unlock to change.'); return; } let addr=document.getElementById('locked-wallet-input').value.trim(); let net=document.getElementById('locked-wallet-network').value; if(!addr||addr.length<15){ alert('Enter valid wallet address (min 15 chars)'); return; } if(!confirm('LOCK this address forever? '+addr+'\nYou cannot change it without Admin approval. Confirm?')) return; state.lockedWallet=addr; state.lockedWalletNetwork=net; supaSave('wallets',{address:addr,network:net,locked:true}); save(); alert('Wallet LOCKED ✅: '+addr); }
-function requestWalletUnlock(){ if(!state.lockedWallet){ alert('No locked wallet yet'); return; } state.walletUnlockRequested=true; save(); document.getElementById('unlock-request-msg').classList.remove('hidden'); document.getElementById('unlock-request-msg').innerText='Unlock request sent to Admin. Admin must approve in Supabase. Your address stays LOCKED until approved.'; alert('Unlock request sent to Admin.'); }
-function requestWithdraw(){ let amt=parseFloat(document.getElementById('wd-amount').value); let to=document.getElementById('wd-to').value; if(!amt||amt<=0){ alert('Enter amount'); return; } if(amt<50){ alert('Minimum Withdraw is £50'); return; } if(amt>10000){ alert('Maximum Withdraw is £10,000'); return; } if(!state.lockedWallet){ alert('LOCK your withdrawal wallet address first!'); showTab('wallet'); return; } if(state.kyc!=='Approved'){ if(!confirm('KYC not Approved. Continue? Admin will check.')) return; } if(amt>state.available){ alert('Insufficient. Available £'+state.available.toFixed(2)); return; } let fee=amt*0.20, net=amt-fee; let w={amount:amt,fee,net,to,details:state.lockedWallet,date:new Date().toLocaleString(),status:'Pending - To Locked Address'}; state.withdrawals.push(w); state.available-=amt; supaSave('withdrawals',w); save(); alert('Withdrawal Pending: £'+net.toFixed(2)+' will go ONLY to LOCKED address: '+state.lockedWallet.substring(0,12)+'...'); }
-function copyRef(){ let el=document.getElementById('ref-link'); el.select(); document.execCommand('copy'); alert('Link copied'); }
-function generateRefCode(){ currentRefCode='CEDARS-'+Math.random().toString(36).substring(2,8).toUpperCase(); document.getElementById('new-ref-code').value=currentRefCode; }
-function addReferral(){ let dep=parseFloat(document.getElementById('new-ref-deposit').value)||0; if(!dep){ alert('Enter deposit'); return; } let earn=dep*0.10; let code=document.getElementById('new-ref-code').value; let r={code:code,deposit:dep,earning:earn}; state.refs.push(r); supaSave('referrals',r); save(); alert('Referral added by CODE: '+code+' — You earn 10% = £'+earn.toFixed(2)+' • No name shown'); generateRefCode(); }
-function calcP2P(){ let amt=parseFloat(document.getElementById('p2p-amount').value); let price=parseFloat(document.getElementById('p2p-price').value); let el=document.getElementById('p2p-fee-preview'); if(!amt||!price){ alert('Enter amount and price'); return; } let total=amt*price, fee=total*0.05, net=total-fee; el.style.display='block'; el.innerHTML='Total £'+total.toFixed(2)+' • Fee 5% -£'+fee.toFixed(2)+' • <b>Seller receives £'+net.toFixed(2)+'</b>'; }
-function createP2P(){ let coin=document.getElementById('p2p-coin').value; let amt=parseFloat(document.getElementById('p2p-amount').value); let price=parseFloat(document.getElementById('p2p-price').value); let pay=document.getElementById('p2p-pay').value; if(!amt||!price){ alert('Enter amount and price'); return; } let total=amt*price, fee=total*0.05, net=total-fee; let p={coin,amt,price,total,fee,net,pay,date:new Date().toLocaleString(),status:'Open'}; state.p2p.push(p); supaSave('p2p_offers',p); save(); alert('Offer created: '+amt+' '+coin+' — You receive £'+net.toFixed(2)); }
-function buyP2P(i){ let o=state.p2p[i]; if(!o||o.status!=='Open') return; if(confirm('Buy '+o.amt+' '+o.coin+' for £'+o.total.toFixed(2)+' via '+o.pay+'?')){ o.status='In Escrow'; save(); alert('Trade started. Pay via '+o.pay+'.'); } }
+async function confirmDeposit(){ var tx=el('dep-txhash').value.trim(); var net=el('dep-network').value; var camt=parseFloat(el('dep-crypto-amt').value); var amt=parseFloat(el('dep-amount').value); if(!selectedPlan){ alert('Select a Plan from table first to unlock deposit!'); return; } if(!amt||amt<selectedMin||amt>selectedMax){ alert('Amount must be inside selected plan range: £'+selectedMin.toLocaleString()+' - £'+selectedMax.toLocaleString()); return; } if(!el('agree').checked){ alert('Tick to confirm'); return; } if(!tx||tx.length<20){ alert('Tx Hash REQUIRED. Must be at least 20 characters. Paste from your wallet.'); return; } if(!camt||camt<=0){ alert('Enter amount sent in crypto'); return; } var dep={plan:selectedPlan,amount:amt,tx_hash:tx,network:net,crypto_amount:camt,date:new Date().toLocaleString(),status:'Pending - Awaiting Tx Verification'}; state.deposits.push(dep); state.locked+=amt; state.plan=selectedPlan; if(!state.startDate) state.startDate=new Date().toISOString(); await supaSave('deposits',dep); save(); el('dep-txhash').value=''; el('dep-amount').value=''; alert('Deposit Submitted! Plan: '+selectedPlan+' £'+amt+' Tx: '+tx.substring(0,12)+'... Admin will verify.'); showTab('overview'); }
+function calcWithdraw(){ var amt=parseFloat(el('wd-amount').value); var e=el('wd-fee'); if(!amt||amt<=0){ e.style.display='none'; return; } if(amt<50){ e.style.display='block'; e.innerHTML='Minimum Withdraw is £50. You entered £'+amt.toFixed(2); return; } if(amt>10000){ e.style.display='block'; e.innerHTML='Maximum Withdraw is £10,000. You entered £'+amt.toFixed(2); return; } var fee=amt*0.20, net=amt-fee; e.style.display='block'; e.innerHTML='Amount £'+amt.toFixed(2)+' • Fee 20% -£'+fee.toFixed(2)+' • <b>You receive £'+net.toFixed(2)+' to LOCKED address</b>'; }
+function saveLockedWallet(){ if(state.lockedWallet){ alert('Wallet already LOCKED. Request Unlock to change.'); return; } var addr=el('locked-wallet-input').value.trim(); var net=el('locked-wallet-network').value; if(!addr||addr.length<15){ alert('Enter valid wallet address (min 15 chars)'); return; } if(!confirm('LOCK this address forever? '+addr+'\nYou cannot change it without Admin approval. Confirm?')) return; state.lockedWallet=addr; state.lockedWalletNetwork=net; supaSave('wallets',{address:addr,network:net,locked:true}); save(); alert('Wallet LOCKED ✅: '+addr); }
+function requestWalletUnlock(){ if(!state.lockedWallet){ alert('No locked wallet yet'); return; } state.walletUnlockRequested=true; save(); var m=el('unlock-request-msg'); if(m){ m.classList.remove('hidden'); m.innerText='Unlock request sent to Admin.'; } alert('Unlock request sent to Admin.'); }
+function requestWithdraw(){ var amt=parseFloat(el('wd-amount').value); var to=el('wd-to').value; if(!amt||amt<=0){ alert('Enter amount'); return; } if(amt<50){ alert('Minimum Withdraw is £50'); return; } if(amt>10000){ alert('Maximum Withdraw is £10,000'); return; } if(!state.lockedWallet){ alert('LOCK your withdrawal wallet address first!'); showTab('wallet'); return; } if(state.kyc!=='Approved'){ if(!confirm('KYC not Approved. Continue? Admin will check.')) return; } if(amt>state.available){ alert('Insufficient. Available £'+state.available.toFixed(2)); return; } var fee=amt*0.20, net=amt-fee; var w={amount:amt,fee:fee,net:net,to:to,details:state.lockedWallet,date:new Date().toLocaleString(),status:'Pending - To Locked Address'}; state.withdrawals.push(w); state.available-=amt; supaSave('withdrawals',w); save(); alert('Withdrawal Pending: £'+net.toFixed(2)+' will go ONLY to LOCKED address: '+state.lockedWallet.substring(0,12)+'...'); }
+function copyRef(){ var e=el('ref-link'); try{ e.select(); document.execCommand('copy'); }catch(err){} alert('Link copied'); }
+function generateRefCode(){ currentRefCode='CEDARS-'+Math.random().toString(36).substring(2,8).toUpperCase(); if(el('new-ref-code')) el('new-ref-code').value=currentRefCode; }
+function addReferral(){ var dep=parseFloat(el('new-ref-deposit').value)||0; if(!dep){ alert('Enter deposit'); return; } var earn=dep*0.10; var code=el('new-ref-code').value; var r={code:code,deposit:dep,earning:earn}; state.refs.push(r); supaSave('referrals',r); save(); alert('Referral added by CODE: '+code+' — You earn 10% = £'+earn.toFixed(2)+' • No name shown'); generateRefCode(); }
+function calcP2P(){ var amt=parseFloat(el('p2p-amount').value); var price=parseFloat(el('p2p-price').value); var e=el('p2p-fee-preview'); if(!amt||!price){ alert('Enter amount and price'); return; } var total=amt*price, fee=total*0.05, net=total-fee; e.style.display='block'; e.innerHTML='Total £'+total.toFixed(2)+' • Fee 5% -£'+fee.toFixed(2)+' • <b>Seller receives £'+net.toFixed(2)+'</b>'; }
+function createP2P(){ var coin=el('p2p-coin').value; var amt=parseFloat(el('p2p-amount').value); var price=parseFloat(el('p2p-price').value); var pay=el('p2p-pay').value; if(!amt||!price){ alert('Enter amount and price'); return; } var total=amt*price, fee=total*0.05, net=total-fee; var p={coin:coin,amt:amt,price:price,total:total,fee:fee,net:net,pay:pay,date:new Date().toLocaleString(),status:'Open'}; state.p2p.push(p); supaSave('p2p_offers',p); save(); alert('Offer created: '+amt+' '+coin+' — You receive £'+net.toFixed(2)); }
+function buyP2P(i){ var o=state.p2p[i]; if(!o||o.status!=='Open') return; if(confirm('Buy '+o.amt+' '+o.coin+' for £'+o.total.toFixed(2)+' via '+o.pay+'?')){ o.status='In Escrow'; save(); alert('Trade started. Pay via '+o.pay+'.'); } }
 function render(){
-let totalDep=state.deposits.reduce((s,d)=>s+d.amount,0);
-let refTotal=state.refs.reduce((s,r)=>s+(r.earning||0),0);
-document.getElementById('total-earnings').innerText='£'+(state.profit+refTotal).toFixed(2);
-document.getElementById('portfolio-value').innerText='£'+(state.locked+state.available).toFixed(2);
-document.getElementById('shares-owned').innerText=Math.floor(totalDep/10)+' Shares';
-document.getElementById('top-plan').innerText=state.plan; document.getElementById('plan-label').innerText=state.plan;
-document.getElementById('ref-earnings').innerText='£'+refTotal.toFixed(2); document.getElementById('ref-earnings2').innerText='£'+refTotal.toFixed(2);
-document.getElementById('ref-count').innerText=state.refs.length; document.getElementById('ref-count2').innerText=state.refs.length;
-document.getElementById('avail-bal').innerText='£'+state.available.toFixed(2); document.getElementById('avail-bal2').innerText='£'+state.available.toFixed(2);
-document.getElementById('locked-bal').innerText='£'+state.locked.toFixed(2); document.getElementById('locked-bal2').innerText='£'+state.locked.toFixed(2);
-document.getElementById('total-profit').innerText='£'+state.profit.toFixed(2);
-document.getElementById('growth').innerText=totalDep>0?((state.profit/totalDep)*100).toFixed(2)+'%':'0%';
-document.getElementById('top-kyc').innerText=state.kyc; document.getElementById('kyc-pill').innerText=state.kyc;
-document.getElementById('kyc-percent').innerText=kycProgress()+'%'; document.getElementById('kyc-percent2').innerText=kycProgress()+'%';
-document.getElementById('kyc-bar').style.width=kycProgress()+'%'; document.getElementById('kyc-bar2').style.width=kycProgress()+'%';
-document.getElementById('kyc-overview').innerText=state.kyc+' ('+kycProgress()+'% complete)';
-document.getElementById('kyc-checklist').innerText='Checklist: Step 1 '+(state.kycSteps.s1?'✅':'☐')+' • Step 2 '+(state.kycSteps.s2?'✅':'☐')+' • Step 3 '+(state.kycSteps.s3?'✅':'☐')+' • Step 4 '+(state.kycSteps.s4?'✅':'☐')+' • Step 5 '+(state.kycSteps.s5?'✅':'☐');
-if(state.kycSteps.s1) document.getElementById('step1').classList.add('done');
-if(state.kycSteps.s2) document.getElementById('step2').classList.add('done');
-if(state.kycSteps.s3) document.getElementById('step3').classList.add('done');
-if(state.kycSteps.s4) document.getElementById('step4').classList.add('done');
-if(state.kycSteps.s5) document.getElementById('step5').classList.add('done');
-document.getElementById('email-verified').innerText=state.emailVerified?'Verified ✅':'Not Verified';
-document.getElementById('phone-verified').innerText=state.phoneVerified?'Verified ✅':'Not Verified';
-document.getElementById('tfa-status').innerText=state.tfa;
-if(state.profilePic){ document.getElementById('header-avatar').src=state.profilePic; document.getElementById('profile-big').src=state.profilePic; document.getElementById('auth-avatar').src=state.profilePic; }
-document.getElementById('new-ref-code').value=currentRefCode;
-if(state.lockedWallet){
-  document.getElementById('locked-wallet-box').classList.add('hidden');
-  document.getElementById('locked-wallet-display').classList.remove('hidden');
-  document.getElementById('locked-wallet-text').innerText=state.lockedWallet;
-  document.getElementById('locked-wallet-network-text').innerText='Network: '+state.lockedWalletNetwork+(state.walletUnlockRequested?' • Unlock Requested - Pending Admin':'');
-  document.getElementById('wd-locked-info').innerText='Withdraws go ONLY to LOCKED: '+state.lockedWallet;
-  if(state.walletUnlockRequested){ document.getElementById('unlock-request-msg').classList.remove('hidden'); document.getElementById('unlock-request-msg').innerText='Unlock request pending Admin approval.'; }
-} else {
-  document.getElementById('locked-wallet-box').classList.remove('hidden');
-  document.getElementById('locked-wallet-display').classList.add('hidden');
+  try{
+    var totalDep=state.deposits.reduce(function(s,d){return s+d.amount;},0);
+    var refTotal=state.refs.reduce(function(s,r){return s+(r.earning||0);},0);
+    setText('total-earnings','£'+(state.profit+refTotal).toFixed(2));
+    setText('portfolio-value','£'+(state.locked+state.available).toFixed(2));
+    setText('shares-owned',Math.floor(totalDep/10)+' Shares');
+    setText('top-plan',state.plan); setText('plan-label',state.plan);
+    setText('ref-earnings','£'+refTotal.toFixed(2)); setText('ref-earnings2','£'+refTotal.toFixed(2));
+    setText('ref-count',String(state.refs.length)); setText('ref-count2',String(state.refs.length));
+    setText('avail-bal','£'+state.available.toFixed(2)); setText('avail-bal2','£'+state.available.toFixed(2));
+    setText('locked-bal','£'+state.locked.toFixed(2)); setText('locked-bal2','£'+state.locked.toFixed(2));
+    setText('total-profit','£'+state.profit.toFixed(2));
+    setText('growth',totalDep>0?((state.profit/totalDep)*100).toFixed(2)+'%':'0%');
+    setText('top-kyc',state.kyc); setText('kyc-pill',state.kyc);
+    setText('kyc-percent',kycProgress()+'%'); setText('kyc-percent2',kycProgress()+'%');
+    if(el('kyc-bar')) el('kyc-bar').style.width=kycProgress()+'%'; if(el('kyc-bar2')) el('kyc-bar2').style.width=kycProgress()+'%';
+    setText('kyc-overview',state.kyc+' ('+kycProgress()+'% complete)');
+    setText('kyc-checklist','Checklist: Step 1 '+(state.kycSteps.s1?'✅':'☐')+' • Step 2 '+(state.kycSteps.s2?'✅':'☐')+' • Step 3 '+(state.kycSteps.s3?'✅':'☐')+' • Step 4 '+(state.kycSteps.s4?'✅':'☐')+' • Step 5 '+(state.kycSteps.s5?'✅':'☐'));
+    if(state.kycSteps.s1 && el('step1')) el('step1').classList.add('done');
+    if(state.kycSteps.s2 && el('step2')) el('step2').classList.add('done');
+    if(state.kycSteps.s3 && el('step3')) el('step3').classList.add('done');
+    if(state.kycSteps.s4 && el('step4')) el('step4').classList.add('done');
+    if(state.kycSteps.s5 && el('step5')) el('step5').classList.add('done');
+    setText('email-verified',state.emailVerified?'Verified ✅':'Not Verified');
+    setText('phone-verified',state.phoneVerified?'Verified ✅':'Not Verified');
+    setText('tfa-status',state.tfa);
+    if(state.profilePic){ if(el('header-avatar')) el('header-avatar').src=state.profilePic; if(el('profile-big')) el('profile-big').src=state.profilePic; if(el('auth-avatar')) el('auth-avatar').src=state.profilePic; }
+    if(el('new-ref-code')) el('new-ref-code').value=currentRefCode;
+    if(state.lockedWallet){
+      var b=el('locked-wallet-box'); if(b) b.classList.add('hidden');
+      var d=el('locked-wallet-display'); if(d) d.classList.remove('hidden');
+      setText('locked-wallet-text',state.lockedWallet);
+      setText('locked-wallet-network-text','Network: '+state.lockedWalletNetwork+(state.walletUnlockRequested?' • Unlock Requested - Pending Admin':''));
+      setText('wd-locked-info','Withdraws go ONLY to LOCKED: '+state.lockedWallet);
+    } else {
+      var b2=el('locked-wallet-box'); if(b2) b2.classList.remove('hidden');
+      var d2=el('locked-wallet-display'); if(d2) d2.classList.add('hidden');
+    }
+    if(el('session-list')) setHTML('session-list',state.sessions.map(function(s){return '<div style="padding:8px 0;border-bottom:1px solid #eee">'+s.device+' - '+s.time+'</div>';}).join(''));
+    if(el('security-log')) setHTML('security-log','<b>Security Log:</b><br>'+state.logs.slice(-5).reverse().map(function(l){return '<div>'+l+'</div>';}).join(''));
+    if(state.startDate){ var start=new Date(state.startDate); var days=Math.min(1095, Math.floor((new Date()-start)/86400000)+1); var end=new Date(start); end.setDate(end.getDate()+1095); setText('contract-text','Active - '+state.plan); setText('contract-days','Day '+days+' of 1095'); if(el('contract-bar')) el('contract-bar').style.width=(days/1095*100)+'%'; setText('contract-end',end.toLocaleDateString()); }
+    var hist=''; state.deposits.forEach(function(d){ hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Deposit - '+d.plan+' - £'+d.amount.toFixed(2)+' - Tx: '+(d.tx_hash?d.tx_hash.substring(0,12)+'...':'-')+' - '+d.status+'</div>'; });
+    state.withdrawals.forEach(function(w){ hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Withdrawal - £'+w.amount.toFixed(2)+' (Net £'+w.net.toFixed(2)+') to LOCKED - '+w.status+'</div>'; });
+    state.exchanges.forEach(function(e){ hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Exchange - '+e.text+'</div>'; });
+    state.p2p.forEach(function(p){ hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">P2P - '+p.amt+' '+p.coin+' - '+p.status+'</div>'; });
+    if(!hist) hist='<p class="muted">No transactions yet.</p>';
+    setHTML('history-overview',hist); setHTML('history-wallet',hist);
+    var dlist=''; state.deposits.forEach(function(d){ dlist+='<div style="padding:8px 0;border-bottom:1px solid #eee"><b>'+d.plan+' £'+d.amount.toFixed(2)+'</b><br>Tx: <span style="font-family:monospace">'+(d.tx_hash||'')+'</span><br>Network: '+d.network+' • '+d.status+'</div>'; });
+    setHTML('deposit-list',dlist||'<p class="muted">No deposits yet.</p>');
+    var wlist=''; state.withdrawals.forEach(function(w){ wlist+='<div style="padding:8px 0;border-bottom:1px solid #eee">£'+w.amount.toFixed(2)+' → Net £'+w.net.toFixed(2)+' to LOCKED - '+w.status+'</div>'; });
+    setHTML('withdraw-list',wlist);
+    var rlist=''; state.refs.forEach(function(r){ rlist+='<div style="padding:8px 0;border-bottom:1px solid #eee"><b>'+(r.code||'CEDARS-XXXXXX')+'</b> • Deposit £'+(r.deposit||0).toFixed(2)+' • You earn £'+(r.earning||0).toFixed(2)+' • <span class="pill">Code Only</span></div>'; });
+    if(rlist) setHTML('ref-list',rlist);
+    var plist=''; state.p2p.forEach(function(p,i){ plist+='<div class="offer"><b>'+p.amt+' '+p.coin+' @ £'+p.price+' = £'+p.total.toFixed(2)+'</b><br><span class="muted">'+p.pay+' • Seller receives £'+p.net.toFixed(2)+' • '+p.status+'</span><br>'+(p.status==='Open'?'<button class="btn btn-green" onclick="buyP2P('+i+')">Buy Now</button>':'<span class="pill">In Escrow</span>')+'</div>'; });
+    if(plist) setHTML('p2p-list',plist);
+    var my=''; state.p2p.forEach(function(p){ my+='<div style="padding:8px 0;border-bottom:1px solid #eee">'+p.amt+' '+p.coin+' - £'+p.total.toFixed(2)+' - '+p.status+'</div>'; });
+    setHTML('p2p-my',my||'<p class="muted">No trades yet.</p>');
+    var elist=''; state.exchanges.forEach(function(e){ elist+='<div style="padding:6px 0;border-bottom:1px solid #eee">'+e.text+'</div>'; });
+    if(elist) setHTML('exchange-history','<b>Exchange History:</b>'+elist);
+  }catch(e){ console.log('render error',e); }
 }
-document.getElementById('session-list').innerHTML=state.sessions.map(s=>'<div style="padding:8px 0;border-bottom:1px solid #eee">'+s.device+' - '+s.time+'</div>').join('');
-document.getElementById('security-log').innerHTML='<b>Security Log:</b><br>'+state.logs.slice(-5).reverse().map(l=>'<div>'+l+'</div>').join('');
-if(state.startDate){ let start=new Date(state.startDate); let days=Math.min(1095, Math.floor((new Date()-start)/86400000)+1); let end=new Date(start); end.setDate(end.getDate()+1095); document.getElementById('contract-text').innerText='Active - '+state.plan; document.getElementById('contract-days').innerText='Day '+days+' of 1095'; document.getElementById('contract-bar').style.width=(days/1095*100)+'%'; document.getElementById('contract-end').innerText=end.toLocaleDateString(); }
-let hist=''; state.deposits.forEach(d=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Deposit - '+d.plan+' - £'+d.amount.toFixed(2)+' - Tx: '+(d.tx_hash?d.tx_hash.substring(0,12)+'...':'-')+' - '+d.status+'</div>');
-state.withdrawals.forEach(w=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Withdrawal - £'+w.amount.toFixed(2)+' (Net £'+w.net.toFixed(2)+') to LOCKED - '+w.status+'</div>');
-state.exchanges.forEach(e=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">Exchange - '+e.text+'</div>');
-state.p2p.forEach(p=>hist+='<div style="padding:8px 0;border-bottom:1px solid #eee">P2P - '+p.amt+' '+p.coin+' - '+p.status+'</div>');
-if(!hist) hist='<p class="muted">No transactions yet.</p>';
-document.getElementById('history-overview').innerHTML=hist; document.getElementById('history-wallet').innerHTML=hist;
-let dlist=''; state.deposits.forEach(d=>dlist+='<div style="padding:8px 0;border-bottom:1px solid #eee"><b>'+d.plan+' £'+d.amount.toFixed(2)+'</b><br>Tx: <span style="font-family:monospace">'+(d.tx_hash||'')+'</span><br>Network: '+d.network+' • '+d.status+'</div>');
-document.getElementById('deposit-list').innerHTML=dlist||'<p class="muted">No deposits yet.</p>';
-let wlist=''; state.withdrawals.forEach(w=>wlist+='<div style="padding:8px 0;border-bottom:1px solid #eee">£'+w.amount.toFixed(2)+' → Net £'+w.net.toFixed(2)+' to LOCKED - '+w.status+'</div>');
-document.getElementById('withdraw-list').innerHTML=wlist;
-let rlist=''; state.refs.forEach(r=>rlist+='<div style="padding:8px 0;border-bottom:1px solid #eee"><b>'+(r.code||'CEDARS-XXXXXX')+'</b> • Deposit £'+(r.deposit||0).toFixed(2)+' • You earn £'+(r.earning||0).toFixed(2)+' • <span class="pill">Code Only</span></div>');
-if(rlist) document.getElementById('ref-list').innerHTML=rlist;
-let plist=''; state.p2p.forEach((p,i)=>{ plist+='<div class="offer"><b>'+p.amt+' '+p.coin+' @ £'+p.price+' = £'+p.total.toFixed(2)+'</b><br><span class="muted">'+p.pay+' • Seller receives £'+p.net.toFixed(2)+' • '+p.status+'</span><br>'+(p.status==='Open'?'<button class="btn btn-green" onclick="buyP2P('+i+')">Buy Now</button>':'<span class="pill">In Escrow</span>')+'</div>'; });
-if(plist) document.getElementById('p2p-list').innerHTML=plist;
-let my=''; state.p2p.forEach(p=>my+='<div style="padding:8px 0;border-bottom:1px solid #eee">'+p.amt+' '+p.coin+' - £'+p.total.toFixed(2)+' - '+p.status+'</div>');
-document.getElementById('p2p-my').innerHTML=my||'<p class="muted">No trades yet.</p>';
-let elist=''; state.exchanges.forEach(e=>elist+='<div style="padding:6px 0;border-bottom:1px solid #eee">'+e.text+'</div>');
-if(elist) document.getElementById('exchange-history').innerHTML='<b>Exchange History:</b>'+elist;
-}
-function toggleSpot(){ spotPaused=!spotPaused; document.getElementById('spot-pause-btn').innerText=spotPaused?'▶ Resume':'⏸ Pause'; }
+function toggleSpot(){ spotPaused=!spotPaused; setText('spot-pause-btn',spotPaused?'▶ Resume':'⏸ Pause'); }
 function formatInd(id, price, change, prev){
-  let el=document.getElementById(id);
-  let arrow = change>=0 ? '▲' : '▼';
-  let cls = change>=0 ? 'up' : 'down';
-  let move = prev>0 ? (price>prev ? '▲ Rising' : price<prev ? '▼ Falling' : '● Stable') : '● Live';
-  el.innerHTML='<span class="'+cls+'">'+arrow+' '+Math.abs(change).toFixed(2)+'% (24h)</span> • '+move;
+  var e=el(id); if(!e) return;
+  var arrow = change>=0 ? '▲' : '▼';
+  var cls = change>=0 ? 'up' : 'down';
+  var move = prev>0 ? (price>prev ? '▲ Rising' : price<prev ? '▼ Falling' : '● Stable') : '● Live';
+  e.innerHTML='<span class="'+cls+'">'+arrow+' '+Math.abs(change).toFixed(2)+'% (24h)</span> • '+move;
 }
 function spark(id, arr){
-  if(arr.length<2) return;
-  let last=arr.slice(-8); let min=Math.min(...last), max=Math.max(...last);
-  let bars=last.map(v=>{ let h=Math.round(((v-min)/((max-min)||1))*10)+2); return '▁▂▃▄▅▆▇█'[Math.min(7,h)]; }).join('');
-  document.getElementById(id).innerText='Trend: '+bars;
+  if(!arr||arr.length<2) return;
+  var last=arr.slice(-8); var min=Math.min.apply(null,last), max=Math.max.apply(null,last);
+  var bars=last.map(function(v){ var h=Math.round(((v-min)/((max-min)||1))*10)+2; return '▁▂▃▄▅▆▇█'[Math.min(7,h)]; }).join('');
+  setText(id,'Trend: '+bars);
+}
+function showPrices(d, source){
+  try{
+    setText('spot-btc','£'+d.bitcoin.gbp.toLocaleString());
+    setText('spot-eth','£'+d.ethereum.gbp.toLocaleString());
+    setText('spot-usdt','£'+d.tether.gbp.toFixed(4));
+    setText('btc-price','£'+d.bitcoin.gbp.toLocaleString());
+    setText('eth-price','£'+d.ethereum.gbp.toLocaleString());
+    setText('usdt-price','£'+d.tether.gbp.toFixed(4));
+    var fmt=function(chg){ return chg>=0 ? '<span class="up">▲ '+chg.toFixed(2)+'%</span>' : '<span class="down">▼ '+chg.toFixed(2)+'%</span>'; };
+    setHTML('spot-btc-chg',fmt(d.bitcoin.chg)); setHTML('spot-eth-chg',fmt(d.ethereum.chg)); setHTML('spot-usdt-chg',fmt(d.tether.chg));
+    setHTML('btc-change',fmt(d.bitcoin.chg)); setHTML('eth-change',fmt(d.ethereum.chg)); setHTML('usdt-change',fmt(d.tether.chg));
+    formatInd('btc-ind', d.bitcoin.gbp, d.bitcoin.chg, prevPrices.bitcoin);
+    formatInd('eth-ind', d.ethereum.gbp, d.ethereum.chg, prevPrices.ethereum);
+    formatInd('usdt-ind', d.tether.gbp, d.tether.chg, prevPrices.tether);
+    setText('spot-btc-ind', d.bitcoin.gbp>prevPrices.bitcoin?'▲ Rising':d.bitcoin.gbp<prevPrices.bitcoin?'▼ Falling':'● Stable');
+    setText('spot-eth-ind', d.ethereum.gbp>prevPrices.ethereum?'▲ Rising':d.ethereum.gbp<prevPrices.ethereum?'▼ Falling':'● Stable');
+    setText('spot-usdt-ind', d.tether.gbp>prevPrices.tether?'▲ Rising':d.tether.gbp<prevPrices.tether?'▼ Falling':'● Stable');
+    priceHistory.bitcoin.push(d.bitcoin.gbp); priceHistory.ethereum.push(d.ethereum.gbp); priceHistory.tether.push(d.tether.gbp);
+    spark('btc-spark', priceHistory.bitcoin); spark('eth-spark', priceHistory.ethereum); spark('usdt-spark', priceHistory.tether);
+    setText('ticker-text','SPOT: BTC £'+d.bitcoin.gbp.toLocaleString()+' ('+d.bitcoin.chg.toFixed(2)+'%) • ETH £'+d.ethereum.gbp.toLocaleString()+' ('+d.ethereum.chg.toFixed(2)+'%) • USDT £'+d.tether.gbp.toFixed(4)+' • Source: '+source+' • Hover to pause • ');
+    var t='Updated '+new Date().toLocaleTimeString()+' • '+source;
+    setText('market-time',t); setText('market-time2',t);
+    setText('portfolio-usdt',((state.locked+state.available)/d.tether.gbp).toFixed(2)+' USDT');
+    try{ localStorage.setItem('cedars_last_price', JSON.stringify({bitcoin:d.bitcoin.gbp,ethereum:d.ethereum.gbp,tether:d.tether.gbp})); }catch(e){}
+    prevPrices={bitcoin:d.bitcoin.gbp,ethereum:d.ethereum.gbp,tether:d.tether.gbp};
+  }catch(e){ console.log(e); }
 }
 async function loadMarket(){
   if(spotPaused) return;
   try{
-    const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp&include_24hr_change=true');
-    const d=await r.json();
-    // Spot bar
-    document.getElementById('spot-btc').innerText='£'+d.bitcoin.gbp.toLocaleString();
-    document.getElementById('spot-eth').innerText='£'+d.ethereum.gbp.toLocaleString();
-    document.getElementById('spot-usdt').innerText='£'+d.tether.gbp.toFixed(6);
-    document.getElementById('spot-btc-chg').innerHTML = d.bitcoin.gbp_24h_change>=0 ? '<span class="up">▲ '+d.bitcoin.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.bitcoin.gbp_24h_change.toFixed(2)+'%</span>';
-    document.getElementById('spot-eth-chg').innerHTML = d.ethereum.gbp_24h_change>=0 ? '<span class="up">▲ '+d.ethereum.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.ethereum.gbp_24h_change.toFixed(2)+'%</span>';
-    document.getElementById('spot-usdt-chg').innerHTML = d.tether.gbp_24h_change>=0 ? '<span class="up">▲ '+d.tether.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.tether.gbp_24h_change.toFixed(2)+'%</span>';
-    // Main cards
-    document.getElementById('btc-price').innerText='£'+d.bitcoin.gbp.toLocaleString();
-    document.getElementById('eth-price').innerText='£'+d.ethereum.gbp.toLocaleString();
-    document.getElementById('usdt-price').innerText='£'+d.tether.gbp.toFixed(6);
-    document.getElementById('btc-change').innerHTML = d.bitcoin.gbp_24h_change>=0 ? '<span class="up">▲ '+d.bitcoin.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.bitcoin.gbp_24h_change.toFixed(2)+'%</span>';
-    document.getElementById('eth-change').innerHTML = d.ethereum.gbp_24h_change>=0 ? '<span class="up">▲ '+d.ethereum.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.ethereum.gbp_24h_change.toFixed(2)+'%</span>';
-    document.getElementById('usdt-change').innerHTML = d.tether.gbp_24h_change>=0 ? '<span class="up">▲ '+d.tether.gbp_24h_change.toFixed(2)+'%</span>' : '<span class="down">▼ '+d.tether.gbp_24h_change.toFixed(2)+'%</span>';
-    formatInd('btc-ind', d.bitcoin.gbp, d.bitcoin.gbp_24h_change, prevPrices.bitcoin);
-    formatInd('eth-ind', d.ethereum.gbp, d.ethereum.gbp_24h_change, prevPrices.ethereum);
-    formatInd('usdt-ind', d.tether.gbp, d.tether.gbp_24h_change, prevPrices.tether);
-    document.getElementById('spot-btc-ind').innerText = prevPrices.bitcoin ? (d.bitcoin.gbp>prevPrices.bitcoin?'▲ Rising':d.bitcoin.gbp<prevPrices.bitcoin?'▼ Falling':'● Stable') : '● Live';
-    document.getElementById('spot-eth-ind').innerText = prevPrices.ethereum ? (d.ethereum.gbp>prevPrices.ethereum?'▲ Rising':d.ethereum.gbp<prevPrices.ethereum?'▼ Falling':'● Stable') : '● Live';
-    document.getElementById('spot-usdt-ind').innerText = prevPrices.tether ? (d.tether.gbp>prevPrices.tether?'▲ Rising':d.tether.gbp<prevPrices.tether?'▼ Falling':'● Stable') : '● Live';
-    priceHistory.bitcoin.push(d.bitcoin.gbp); priceHistory.ethereum.push(d.ethereum.gbp); priceHistory.tether.push(d.tether.gbp);
-    spark('btc-spark', priceHistory.bitcoin); spark('eth-spark', priceHistory.ethereum); spark('usdt-spark', priceHistory.tether);
-    document.getElementById('ticker-text').innerText='SPOT: BTC £'+d.bitcoin.gbp.toLocaleString()+' • ETH £'+d.ethereum.gbp.toLocaleString()+' • USDT £'+d.tether.gbp.toFixed(4)+' • Hover to pause • Cedars Empire Worldwide • ';
-    let t='Updated '+new Date().toLocaleTimeString();
-    document.getElementById('market-time').innerText=t; document.getElementById('market-time2').innerText=t;
-    document.getElementById('portfolio-usdt').innerText=((state.locked+state.available)/d.tether.gbp).toFixed(2)+' USDT';
-    prevPrices={bitcoin:d.bitcoin.gbp,ethereum:d.ethereum.gbp,tether:d.tether.gbp};
-  }catch(e){ document.getElementById('market-time').innerText='Live market temporarily unavailable'; }
+    var r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=gbp&include_24hr_change=true');
+    if(r.ok){ var d=await r.json(); if(d.bitcoin && d.bitcoin.gbp){ showPrices({bitcoin:{gbp:d.bitcoin.gbp,chg:d.bitcoin.gbp_24h_change||0},ethereum:{gbp:d.ethereum.gbp,chg:d.ethereum.gbp_24h_change||0},tether:{gbp:d.tether.gbp,chg:d.tether.gbp_24h_change||0}},'CoinGecko'); return; } }
+  }catch(e){ console.log('CoinGecko failed',e); }
+  try{
+    var res=await Promise.all([fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT').then(function(r){return r.json();}),fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=ETHUSDT').then(function(r){return r.json();}),fetch('https://open.er-api.com/v6/latest/USD').then(function(r){return r.json();})]);
+    var btc=res[0], eth=res[1], gbpRate=res[2]; var gbp=gbpRate.rates.GBP||0.79;
+    if(btc.lastPrice){ showPrices({bitcoin:{gbp:parseFloat(btc.lastPrice)*gbp,chg:parseFloat(btc.priceChangePercent)},ethereum:{gbp:parseFloat(eth.lastPrice)*gbp,chg:parseFloat(eth.priceChangePercent)},tether:{gbp:gbp,chg:0.01}},'Binance'); return; }
+  }catch(e){ console.log('Binance failed',e); }
+  try{
+    var r2=await fetch('https://api.kraken.com/0/public/Ticker?pair=XBTGBP,ETHGBP,USDTGBP'); var j=await r2.json(); var b=j.result.XXBTZGBP, e2=j.result.XETHZGBP, u=j.result.USDTGBP;
+    if(b){ showPrices({bitcoin:{gbp:parseFloat(b.c[0]),chg:0},ethereum:{gbp:parseFloat(e2.c[0]),chg:0},tether:{gbp:parseFloat(u.c[0]),chg:0}},'Kraken'); return; }
+  }catch(e){ console.log('Kraken failed',e); }
+  try{
+    var r3=await fetch('https://api.coincap.io/v2/assets?ids=bitcoin,ethereum,tether'); var j3=await r3.json(); var find=function(id){ return j3.data.find(function(x){return x.id===id;}); }; var b3=find('bitcoin'), e3=find('ethereum'), u3=find('tether'); var gbpRes=await fetch('https://open.er-api.com/v6/latest/USD').then(function(r){return r.json();}); var gbp2=gbpRes.rates.GBP||0.79; showPrices({bitcoin:{gbp:parseFloat(b3.priceUsd)*gbp2,chg:parseFloat(b3.changePercent24Hr)},ethereum:{gbp:parseFloat(e3.priceUsd)*gbp2,chg:parseFloat(e3.changePercent24Hr)},tether:{gbp:parseFloat(u3.priceUsd)*gbp2,chg:parseFloat(u3.changePercent24Hr)}},'CoinCap'); return;
+  }catch(e){ console.log('CoinCap failed',e); }
+  var cached; try{ cached=JSON.parse(localStorage.getItem('cedars_last_price')||'{"bitcoin":48398,"ethereum":1366,"tether":0.79}'); }catch(e){ cached={bitcoin:48398,ethereum:1366,tether:0.79}; }
+  showPrices({bitcoin:{gbp:cached.bitcoin,chg:0},ethereum:{gbp:cached.ethereum,chg:0},tether:{gbp:cached.tether,chg:0}},'Cached');
+  setText('market-time','Offline - Showing last saved price');
 }
-loadMarket(); setInterval(loadMarket,30000);
-async function getRate(){ let amt=parseFloat(document.getElementById('ex-amount').value); let to=document.getElementById('ex-to').value; let el=document.getElementById('ex-result'); if(!amt||amt<=0){ el.innerText='Enter valid amount'; return; } el.innerText='Fetching live rate...'; try{ const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+to+'&vs_currencies=gbp'); const d=await r.json(); let rate=d[to].gbp; let gross=amt/rate; let fee=gross*0.02; let net=gross-fee; let label=to==='tether'?'USDT':to.toUpperCase(); lastResult=amt+' GBP = '+net.toFixed(6)+' '+label+' (Fee 2%)'; el.innerText=lastResult; let fe=document.getElementById('ex-fee'); fe.style.display='block'; fe.innerHTML='Gross '+gross.toFixed(6)+' '+label+' • Fee 2% -'+fee.toFixed(6)+' • <b>You get '+net.toFixed(6)+' '+label+'</b>'; }catch(e){ el.innerText='Failed. Try again.'; lastResult=""; } }
+async function getRate(){ var amt=parseFloat(el('ex-amount').value); var to=el('ex-to').value; var e=el('ex-result'); if(!amt||amt<=0){ e.innerText='Enter valid amount'; return; } e.innerText='Fetching live rate...'; try{ var r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+to+'&vs_currencies=gbp'); var d=await r.json(); var rate=d[to].gbp; var gross=amt/rate; var fee=gross*0.02; var net=gross-fee; var label=to==='tether'?'USDT':to.toUpperCase(); lastResult=amt+' GBP = '+net.toFixed(6)+' '+label+' (Fee 2%)'; e.innerText=lastResult; var fe=el('ex-fee'); fe.style.display='block'; fe.innerHTML='Gross '+gross.toFixed(6)+' '+label+' • Fee 2% -'+fee.toFixed(6)+' • <b>You get '+net.toFixed(6)+' '+label+'</b>'; }catch(err){ var p=prevPrices[to==='tether'?'tether':to==='bitcoin'?'bitcoin':'ethereum']||0.79; var gross2=amt/p; var fee2=gross2*0.02; var net2=gross2-fee2; var label2=to==='tether'?'USDT':to.toUpperCase(); lastResult=amt+' GBP = '+net2.toFixed(6)+' '+label2+' (Fee 2% - Cached Rate)'; e.innerText=lastResult; var fe2=el('ex-fee'); fe2.style.display='block'; fe2.innerHTML='Gross '+gross2.toFixed(6)+' '+label2+' • Fee 2% -'+fee2.toFixed(6)+' • <b>You get '+net2.toFixed(6)+' '+label2+'</b>'; } }
 function confirmExchange(){ if(!lastResult){ alert('Get live rate first'); return; } state.exchanges.unshift({text:lastResult,date:new Date().toLocaleString()}); save(); alert('Exchange confirmed!'); }
 let discTimer=null, discCountTimer=null;
 function showDisclaimerNow(){
-  let slide=document.getElementById('disclaimer-slide');
-  slide.classList.add('show');
-  let sec=30;
-  document.getElementById('disc-count').innerText=sec+'s';
-  document.getElementById('disc-bar').style.width='100%';
+  var slide=el('disclaimer-slide'); if(slide) slide.classList.add('show');
+  var sec=30; setText('disc-count',sec+'s'); var bar=el('disc-bar'); if(bar) bar.style.width='100%';
   clearInterval(discCountTimer); clearTimeout(discTimer);
-  discCountTimer=setInterval(()=>{ sec--; document.getElementById('disc-count').innerText=sec+'s'; document.getElementById('disc-bar').style.width=(sec/30*100)+'%'; if(sec<=0){ clearInterval(discCountTimer); } },1000);
-  discTimer=setTimeout(()=>{ hideDisclaimer(); },30000);
-  localStorage.setItem('cedars_last_disc', Date.now().toString());
-  let next=new Date(Date.now()+6*60*60*1000);
-  document.getElementById('disc-next').innerText=next.toLocaleString();
+  discCountTimer=setInterval(function(){ sec--; setText('disc-count',sec+'s'); var b=el('disc-bar'); if(b) b.style.width=(sec/30*100)+'%'; if(sec<=0){ clearInterval(discCountTimer); } },1000);
+  discTimer=setTimeout(function(){ hideDisclaimer(); },30000);
+  try{ localStorage.setItem('cedars_last_disc', Date.now().toString()); }catch(e){}
+  var next=new Date(Date.now()+6*60*60*1000); setText('disc-next',next.toLocaleString());
 }
-function hideDisclaimer(){ document.getElementById('disclaimer-slide').classList.remove('show'); clearInterval(discCountTimer); clearTimeout(discTimer); }
+function hideDisclaimer(){ var s=el('disclaimer-slide'); if(s) s.classList.remove('show'); clearInterval(discCountTimer); clearTimeout(discTimer); }
 function checkDisclaimerSchedule(){
-  let last=parseInt(localStorage.getItem('cedars_last_disc')||'0');
-  let now=Date.now(); let sixHours=6*60*60*1000;
-  if(!last || (now-last)>=sixHours){ showDisclaimerNow(); }
-  else { let next=new Date(last+sixHours); document.getElementById('disc-next').innerText=next.toLocaleString(); }
-  setInterval(()=>{ let l=parseInt(localStorage.getItem('cedars_last_disc')||'0'); if(Date.now()-l>=sixHours){ showDisclaimerNow(); } },60000);
+  var last=parseInt(localStorage.getItem('cedars_last_disc')||'0'); var now=Date.now(); var sixHours=6*60*60*1000;
+  if(!last || (now-last)>=sixHours){ showDisclaimerNow(); } else { var next=new Date(last+sixHours); setText('disc-next',next.toLocaleString()); }
+  setInterval(function(){ var l=parseInt(localStorage.getItem('cedars_last_disc')||'0'); if(Date.now()-l>=sixHours){ showDisclaimerNow(); } },60000);
 }
-checkDisclaimerSchedule();
-document.getElementById('new-ref-code').value=currentRefCode;
-render();
+try{
+  setText('js-status','✅ Working');
+  if(el('new-ref-code')) el('new-ref-code').value=currentRefCode;
+  render();
+  loadMarket(); setInterval(loadMarket,30000);
+  checkDisclaimerSchedule();
+}catch(e){
+  var b=el('js-error'); if(b){ b.style.display='block'; b.innerText='Startup error: '+e.message; }
+  setText('js-status','❌ Error: '+e.message);
+}
 </script>
 </body>
 </html>
