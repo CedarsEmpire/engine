@@ -1,17 +1,135 @@
-<button onclick="confirmExchange()" style="width:100%; padding:12px; background:#2563eb; color:white; border:none; border-radius:8px; font-weight:bold; margin-top:8px;">Confirm Exchange</button>
-<div id="exchange-history" style="margin-top:16px; color:white;"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora Exchange Dashboard</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,sans-serif;background:#0f172a;color:white}
+  .topbar{background:#1e293b;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+  .topbar b{font-size:18px}
+  .tabs{display:flex;gap:8px;padding:12px 20px;flex-wrap:wrap;background:#0f172a}
+  .tabs button{padding:10px 14px;border:none;border-radius:20px;background:#1e293b;color:white;cursor:pointer}
+  .tabs button.active{background:#2563eb}
+  .container{padding:20px;max-width:900px;margin:0 auto}
+  .card{background:#1e293b;border-radius:14px;padding:20px;margin-bottom:16px}
+  .card h3{margin:0 0 10px 0}
+  input,select{width:100%;padding:12px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:white;margin:6px 0 12px 0}
+  label{font-size:13px;color:#cbd5e1}
+  .btn{width:100%;padding:13px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:6px}
+  .btn-green{background:#16a34a;color:white}
+  .btn-blue{background:#2563eb;color:white}
+  .result{margin-top:12px;background:#0f172a;padding:12px;border-radius:8px;font-size:14px;min-height:20px}
+  .history-item{padding:8px 0;border-bottom:1px solid #334155;font-size:14px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="topbar"><b>⚡ Aurora Exchange</b><span>Wallet: £0.00</span></div>
+
+<div class="tabs">
+  <button class="active" onclick="showTab('overview',this)">Overview</button>
+  <button onclick="showTab('plans',this)">Shareholder Plans</button>
+  <button onclick="showTab('profile',this)">Profile & KYC</button>
+  <button onclick="showTab('wallet',this)">Wallet & Exchange</button>
+</div>
+
+<div class="container">
+
+  <!-- OVERVIEW -->
+  <div id="tab-overview">
+    <div class="card"><h3>Overview</h3><p>Welcome back! Your dashboard is working.</p><p>Total Balance: <b>£0.00</b></p></div>
+    <div class="card"><h3>Quick Stats</h3><p>Exchanges Today: <span id="stat-count">0</span></p></div>
+  </div>
+
+  <!-- PLANS -->
+  <div id="tab-plans" class="hidden">
+    <div class="card"><h3>Shareholder Plans</h3><p>Starter Plan - £100</p><p>Growth Plan - £500</p><p>Premium Plan - £1000</p></div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="tab-profile" class="hidden">
+    <div class="card"><h3>Profile & KYC</h3><p>Name: Demo User</p><p>KYC Status: Pending</p></div>
+  </div>
+
+  <!-- WALLET -->
+  <div id="tab-wallet" class="hidden">
+    <div class="card">
+      <h3>Wallet & Exchange</h3>
+      <p>GBP Balance: <b>£10,000.00</b></p>
+      <p>USDT Balance: <b>0 USDT</b></p>
+      <p>BTC Balance: <b>0 BTC</b></p>
+      <p>ETH Balance: <b>0 ETH</b></p>
+    </div>
+
+    <div class="card">
+      <h3>Quick Exchange</h3>
+      <label>Amount in GBP</label>
+      <input id="ex-amount" type="number" value="100" placeholder="Enter amount">
+      <label>Convert To</label>
+      <select id="ex-to">
+        <option value="tether">USDT</option>
+        <option value="bitcoin">BTC</option>
+        <option value="ethereum">ETH</option>
+      </select>
+      <button class="btn btn-green" onclick="getRate()">Get Live Rate</button>
+      <div class="result" id="ex-result">Enter amount and get live rate.</div>
+      <button class="btn btn-blue" onclick="confirmExchange()">Confirm Exchange</button>
+      <div id="exchange-history" style="margin-top:16px;"></div>
+    </div>
+  </div>
+
+</div>
 
 <script>
+function showTab(id, btn){
+  document.getElementById('tab-overview').classList.add('hidden');
+  document.getElementById('tab-plans').classList.add('hidden');
+  document.getElementById('tab-profile').classList.add('hidden');
+  document.getElementById('tab-wallet').classList.add('hidden');
+  document.getElementById('tab-'+id).classList.remove('hidden');
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+let lastResult = "";
 let history = [];
-function confirmExchange(){
-  const amt = document.getElementById('ex-amount').value;
+
+async function getRate(){
+  const amt = parseFloat(document.getElementById('ex-amount').value);
   const to = document.getElementById('ex-to').value;
-  const resEl = document.getElementById('ex-result').innerText;
-  if(resEl.includes('Failed') || !resEl){
+  const resEl = document.getElementById('ex-result');
+  if(!amt || amt <= 0){ resEl.innerText = "Enter a valid amount"; return; }
+  resEl.innerText = "Fetching live rate...";
+  try{
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+to+'&vs_currencies=gbp');
+    const d = await r.json();
+    const rate = d[to].gbp;
+    const got = amt / rate;
+    const label = to === 'tether' ? 'USDT' : to.toUpperCase();
+    lastResult = amt + " GBP = " + got.toFixed(6) + " " + label + "  (1 " + label + " = £" + rate + ")";
+    resEl.innerText = lastResult;
+  }catch(e){
+    resEl.innerText = "Failed to fetch rate. Try again.";
+    lastResult = "";
+  }
+}
+
+function confirmExchange(){
+  if(!lastResult || lastResult.includes('Failed')){
     alert('Get live rate first');
     return;
   }
-  history.push(`${amt} GBP → ${to.toUpperCase() === 'TETHER' ? 'USDT' : to.toUpperCase()} - ${new Date().toLocaleTimeString()}`);
-  document.getElementById('exchange-history').innerHTML = '<h4 style="margin:0 0 8px 0;">Exchange History:</h4>' + history.map(h => `<p style="margin:4px 0;">${h}</p>`).join('');
+  const time = new Date().toLocaleString();
+  history.unshift(lastResult + " - " + time);
+  document.getElementById('stat-count').innerText = history.length;
+  const hEl = document.getElementById('exchange-history');
+  hEl.innerHTML = '<h4 style="margin:0 0 8px 0;">Exchange History:</h4>' + history.map(h=>'<div class="history-item">'+h+'</div>').join('');
+  alert('Exchange confirmed!');
 }
 </script>
+
+</body>
+</html>
