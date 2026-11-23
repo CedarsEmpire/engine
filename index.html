@@ -1,63 +1,119 @@
-<!-- ===== C: TRANSACTIONS + REDEMPTION + LEADERSHIP CORNER ===== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Dashboard</title>
+  <style>
+    /* Main Dashboard Styling */
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f9fa; }
+    .container { max-width: 1200px; margin: auto; padding: 20px; }
+    .card { background: #fff; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    h1, h2 { margin-top: 0; }
+    button { padding: 10px 20px; border: none; border-radius: 8px; background: #000; color: #fff; cursor: pointer; }
+    button:hover { opacity: 0.8; }
+    input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; background: #f0f0f0; padding: 10px; font-size: 13px; }
+    td { padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
+    small { color: #666; display: block; margin-top: 10px; }
 
-<!-- TRANSACTIONS HISTORY -->
-<section id="transactions">
-  <h2>Transactions History</h2>
-  <p>All money movements in your account.</p>
-  <div>
-    <button>All</button>
-    <button>Deposits</button>
-    <button>Profit Share</button>
-    <button>Referrals</button>
-    <button>Withdrawals</button>
-    <button>Redemptions</button>
+    /* C Block Styling */
+    #transactions, #redemption, #leadership {
+      background: #fff; padding: 20px; border-radius: 12px;
+      margin: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    #transactions button {
+      padding: 6px 12px; margin: 3px; border-radius: 20px;
+      border: 1px solid #ddd; background: #f5f5f5; cursor: pointer;
+    }
+    #transactions button:hover { background: #000; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- YOUR EXISTING DASHBOARD -->
+    <div class="card">
+      <h1>Member Dashboard</h1>
+      <p>Welcome. Your plans: £300 - £50,000. Term: 1095 days.</p>
+      <button>Deposit / Buy Shares</button>
+      <button>Withdraw</button>
+      <p><small>Target Profit Share: Up to 1% daily. Variable, not guaranteed. Capital at risk.</small></p>
+    </div>
+
+    <!-- C BLOCK: TRANSACTIONS + REDEMPTION + LEADERSHIP -->
+    <div id="transactions" class="card">
+      <h2>Transactions History</h2>
+      <p>All money movements in your account.</p>
+      <div>
+        <button>All</button>
+        <button>Deposits</button>
+        <button>Profit Share</button>
+        <button>Referrals</button>
+        <button>Withdrawals</button>
+        <button>Redemptions</button>
+      </div>
+      <input placeholder="Search Reference ID..." />
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Reference</th><th>Type</th><th>Plan</th><th>Amount (£)</th><th>Balance After (£)</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+        </tbody>
+      </table>
+      <small>Profit share is variable, based on actual profits. Not guaranteed.</small>
+    </div>
+
+    <div id="redemption" class="card">
+      <h2>Redemption Table</h2>
+      <p>End-of-contract payouts only. Contract term: 1095 days.</p>
+      <table>
+        <thead>
+          <tr><th>Date Requested</th><th>Plan</th><th>Shares</th><th>Amount (£)</th><th>Profit Earned (£)</th><th>Status</th><th>Method</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+        </tbody>
+      </table>
+      <small>Redemption is capital + actual profit earned, if any. Not guaranteed profit.</small>
+    </div>
+
+    <div id="leadership" class="card">
+      <h2>Leadership Corner</h2>
+      <p>View your network. View only — no earnings from recruitment alone.</p>
+      <div>
+        <div>Direct Team: 0</div>
+        <div>Total Team: 0</div>
+        <div>Active Members: 0</div>
+        <div>Team Volume: £0.00</div>
+      </div>
+      <h3>Team Tree</h3>
+      <div>
+        <div>You (Top)</div>
+        <div>Level 1: Your Direct Referrals</div>
+        <div>Level 2: Their Referrals</div>
+        <div>Level 3: Next Level</div>
+      </div>
+      <h3>All Team Members</h3>
+      <input placeholder="Search Name / Email..." />
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Level</th><th>Join Date</th><th>Plan</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+        </tbody>
+      </table>
+      <small>No earnings are guaranteed from team size or recruitment. Any benefit is variable, based on actual performance.</small>
+    </div>
+
+    <!-- DISCLAIMER UNDER PLANS -->
+    <div class="card">
+      <p><b>Target Profit Share: Up to 1% daily.</b> Variable, based on actual company performance. Not guaranteed. Capital at risk. Profit share is paid only from actual profits. If no profit that day, no payout that day. Contract term: 1095 days. Plans: £300 - £50,000.</p>
+    </div>
   </div>
-  <input placeholder="Search Reference ID..." />
-  <table>
-    <tr><th>Date</th><th>Reference</th><th>Type</th><th>Plan</th><th>Amount (£)</th><th>Balance After (£)</th><th>Status</th></tr>
-    <tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-  </table>
-  <small>Profit share is variable, based on actual profits. Not guaranteed.</small>
-</section>
 
-<!-- REDEMPTION TABLE -->
-<section id="redemption">
-  <h2>Redemption Table</h2>
-  <p>End-of-contract payouts only. Contract term: 1095 days.</p>
-  <table>
-    <tr><th>Date Requested</th><th>Plan</th><th>Shares</th><th>Amount (£)</th><th>Profit Earned (£)</th><th>Status</th><th>Method</th></tr>
-    <tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-  </table>
-  <small>Redemption is capital + actual profit earned, if any. Not guaranteed profit.</small>
-</section>
-
-<!-- LEADERSHIP CORNER -->
-<section id="leadership">
-  <h2>Leadership Corner</h2>
-  <p>View your network. View only — no earnings from recruitment alone.</p>
-  <div>
-    <div>Direct Team: 0</div>
-    <div>Total Team: 0</div>
-    <div>Active Members: 0</div>
-    <div>Team Volume: £0.00</div>
-  </div>
-
-  <h3>Team Tree</h3>
-  <div>
-    <div>You (Top)</div>
-    <div>Level 1: Your Direct Referrals</div>
-    <div>Level 2: Their Referrals</div>
-    <div>Level 3: Next Level</div>
-  </div>
-
-  <h3>All Team Members</h3>
-  <input placeholder="Search Name / Email..." />
-  <table>
-    <tr><th>Name</th><th>Level</th><th>Join Date</th><th>Plan</th><th>Status</th></tr>
-    <tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-  </table>
-  <small>No earnings are guaranteed from team size or recruitment. Any benefit is variable, based on actual performance.</small>
-</section>
-
-<!-- PLANS DISCLAIMER - Paste under Plans -->
-<p><b>Target Profit Share: Up to 1% daily.</b> Variable, based on actual company performance. Not guaranteed. Capital at risk. Profit share is paid only from actual profits. If no profit that day, no payout that day. Contract term: 1095 days. Plans: £300 - £50,000.</p>
+</body>
+</html>
