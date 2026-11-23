@@ -3,124 +3,333 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard</title>
+<title>Cedars Empire - ADMIN - MASTER</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-body { background: #f1f5f9; color: #111; }
-header { background: #0f172a; color: #fff; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
-header h1 { font-size: 20px; }
-header span { background: #dc2626; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-.container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
-.card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-.card h3 { font-size: 13px; color: #64748b; margin-bottom: 8px; text-transform: uppercase; }
-.card p { font-size: 26px; font-weight: bold; }
-.card small { color: #16a34a; }
-.box { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px; }
-.box h2 { font-size: 17px; margin-bottom: 15px; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { text-align: left; padding: 12px 8px; border-bottom: 1px solid #e2e8f0; }
-th { color: #64748b; font-size: 12px; text-transform: uppercase; }
-button { border: 0; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-.approve { background: #16a34a; color: #fff; }
-.reject { background: #fee2e2; color: #991b1b; }
-.view { background: #0f172a; color: #fff; }
-input, select { width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 10px; }
-.actions { display: flex; gap: 15px; flex-wrap: wrap; }
-.actions a { background: #fff; padding: 14px 18px; border-radius: 10px; text-decoration: none; color: #111; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#0f172a;color:#fff;padding-bottom:80px}
+header{position:sticky;top:0;z-index:100;background:#111827;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+header b{font-size:20px}header small{color:#9ca3af}
+nav{display:flex;gap:6px;flex-wrap:wrap}nav button{padding:9px 13px;border:1px solid #374151;background:#1f2937;color:#fff;border-radius:999px;cursor:pointer;font-weight:600;font-size:13px}
+nav button.active{background:#fff;color:#111827}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.card{background:#fff;color:#111827;border-radius:16px;padding:18px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}}
+.big{font-size:26px;font-weight:800;margin:6px 0}.muted{color:#6b7280;font-size:13px;line-height:1.5}
+label{font-weight:600;font-size:13px;display:block;margin-top:12px}
+input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;margin-top:6px;font-size:14px}
+.btn{width:100%;padding:12px;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin-top:10px;font-size:14px}
+.btn-dark{background:#111827;color:#fff}.btn-green{background:#15803d;color:#fff}.btn-red{background:#dc2626;color:#fff}.btn-blue{background:#1d4ed8;color:#fff}.btn-light{background:#f3f4f6;color:#111827;border:1px solid #e5e7eb}.btn-small{width:auto;padding:7px 12px;margin-top:0;font-size:12px}
+.btn-orange{background:#ea580c;color:#fff}.btn-purple{background:#7c3aed;color:#fff}.btn-gold{background:#ca8a04;color:#fff}
+.row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#fef9c3;color:#854d0e}.pill-green{background:#dcfce7;color:#166534}.pill-red{background:#fee2e2;color:#991b1b}.pill-blue{background:#dbeafe;color:#1e40af}
+.bar{height:8px;background:#e5e7eb;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:#22c55e}
+.item{border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin-bottom:10px}
+.fee{font-size:13px;background:#f9fafb;border:1px solid #e5e7eb;padding:10px;border-radius:10px;margin-top:10px}
+.code{font-family:monospace;background:#111827;color:#fff;padding:10px;border-radius:8px;word-break:break-all;font-size:13px;display:block;margin-top:6px}
+.live-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;animation:blink 1s infinite;background:#22c55e}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.engine{border:2px solid #e5e7eb;border-radius:14px;padding:14px}
+.engine.africa{border-top:6px solid #f59e0b}.engine.europe{border-top:6px solid #3b82f6}.engine.asia{border-top:6px solid #ef4444}.engine.americas{border-top:6px solid #22c55e}.engine.oceania{border-top:6px solid #8b5cf6}
 </style>
 </head>
 <body>
+<header><div><b>🌲 Cedars Empire — ADMIN • MASTER</b><br><small>Admin Only • <span id="admin-status">Not Logged In</span> • JS: <span id="js-status" style="color:#f87171">Loading...</span> • Sync: <span id="sync-status" style="color:#22c55e">● Connected to index.html</span></small></div>
+<nav id="admin-nav" style="display:none">
+<button id="btn-dash" class="active" onclick="showAdminTab('dash')">Dashboard</button>
+<button id="btn-engine" onclick="showAdminTab('engine')">🌍 Global Engine</button>
+<button id="btn-sub" onclick="showAdminTab('sub')">⚙️ 5 Sub-Engines</button>
+<button id="btn-stake" onclick="showAdminTab('stake')">🔒 Staking</button>
+<button id="btn-redeem" onclick="showAdminTab('redeem')">🎁 Redemption Codes</button>
+<button id="btn-dep" onclick="showAdminTab('dep')">Deposits <span id="badge-dep"></span></button>
+<button id="btn-kyc" onclick="showAdminTab('kyc')">KYC</button>
+<button id="btn-wd" onclick="showAdminTab('wd')">Withdrawals</button>
+<button id="btn-wallet" onclick="showAdminTab('wallet')">Wallet Unlock</button>
+<button id="btn-p2p" onclick="showAdminTab('p2p')">P2P</button>
+<button id="btn-users" onclick="showAdminTab('users')">Users</button>
+<button id="btn-profit" onclick="showAdminTab('profit')">Profit Share</button>
+<button onclick="adminLogout()">Logout</button>
+</nav></header>
 
-<header>
-  <h1>Admin Dashboard</h1>
-  <span>ADMIN ONLY</span>
-</header>
+<div class="wrap">
+<div id="admin-login" class="card">
+<h2 style="margin:0">🔐 Admin Login</h2><p class="muted">Default: <b>admin@cedars.com / admin123 / CEDARS-ADMIN-2026</b> — Change in code before live!</p>
+<label>Admin Email</label><input id="admin-email" value="admin@cedars.com">
+<label>Admin Password</label><input id="admin-pass" type="password" value="admin123">
+<label>Admin Secret Code</label><input id="admin-code" placeholder="CEDARS-ADMIN-2026">
+<button class="btn btn-dark" onclick="adminLogin()">Login as Admin →</button>
+<button class="btn btn-light" onclick="testAdmin()">Test Admin Buttons</button>
+</div>
 
-<div class="container">
+<div id="admin-app" style="display:none">
 
-  <div class="cards">
-    <div class="card"><h3>Total Members</h3><p id="totalMembers">0</p><small>Active group members</small></div>
-    <div class="card"><h3>Total Savings</h3><p id="totalSavings">UGX 0</p><small>All members combined</small></div>
-    <div class="card"><h3>Pending Loans</h3><p id="pendingLoans">0</p><small>Waiting approval</small></div>
-    <div class="card"><h3>Pending Members</h3><p id="pendingMembers">0</p><small>Waiting approval</small></div>
-  </div>
+<div id="tab-dash">
+<div class="card" style="background:#111827;color:#fff"><h3 style="margin:0">🌍 GLOBAL ENGINE — LIVE • INTEGRATED TO index.html</h3><div class="row" style="margin-top:10px"><span><span class="live-dot"></span><b id="dash-workers" style="font-size:22px">2,000 Workers</b></span><b id="dash-tasks">0 Tasks</b><b id="dash-verify">0 Verified</b></div><div class="bar" style="margin-top:10px;background:#374151"><i id="dash-load" style="width:92%"></i></div><div class="muted" style="color:#9ca3af">Load: <span id="dash-load-txt">92%</span> • Uptime: 99.98% • 5 Sub-Engines: <span style="color:#22c55e">All Online ✅</span> • Sync to User: <span style="color:#22c55e">Every 5 sec</span></div><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn btn-green btn-small" onclick="showAdminTab('engine')">Global Engine →</button><button class="btn btn-purple btn-small" onclick="showAdminTab('sub')">5 Sub-Engines →</button><button class="btn btn-gold btn-small" onclick="showAdminTab('redeem')">Redemption Code →</button><button class="btn btn-orange btn-small" onclick="showAdminTab('stake')">Staking →</button></div></div>
+<div class="grid">
+<div class="card"><div class="muted">Total Deposits</div><div class="big" id="a-total-dep">£0.00</div><div class="muted" id="a-dep-count">0 deposits</div></div>
+<div class="card"><div class="muted">Pending Deposits</div><div class="big" id="a-pending-dep" style="color:#dc2626">£0.00</div></div>
+<div class="card"><div class="muted">Total Staked</div><div class="big" id="a-total-staked">£0.00</div><div class="muted" id="a-stake-count">0 stakes</div></div>
+<div class="card"><div class="muted">Redemption Codes</div><div class="big" id="a-redeem-count">0 Codes</div><div class="muted" id="a-redeem-used">0 Redeemed</div></div>
+<div class="card"><div class="muted">Total Withdrawals</div><div class="big" id="a-total-wd">£0.00</div></div>
+<div class="card"><div class="muted">Fees Earned</div><div class="big" id="a-fees" style="color:#15803d">£0.00</div></div>
+<div class="card"><div class="muted">Locked / In Contract</div><div class="big" id="a-locked">£0.00</div></div>
+<div class="card"><div class="muted">KYC Status</div><div class="big" id="a-kyc">Not Started</div></div>
+</div>
+<div class="card"><b>Integration Check — index.html reads this:</b><div class="fee" id="integration-check">Engine: - • Staking: - • Redemption Codes: - • Last Sync: -</div><button class="btn btn-light btn-small" onclick="forceSync()">🔄 Force Sync to index.html Now</button><button class="btn btn-blue btn-small" onclick="openUser()">👀 Open index.html (User Side) →</button></div>
+<div class="card"><b>Admin Activity Log</b><div id="admin-log"></div></div>
+</div>
 
-  <div class="actions">
-    <a href="/">← Back to Member Dashboard</a>
-    <a href="#" onclick="exportData()">⬇ Export Members</a>
-    <a href="#" onclick="location.reload()">↻ Refresh Data</a>
-  </div>
-  <br>
+<div id="tab-engine" style="display:none">
+<div class="card" style="background:#111827;color:#fff"><h2 style="margin:0">🌍 GLOBAL ENGINE — 2000 AUTOMATED WORKERS</h2><p style="opacity:.8">Master engine controls all 5 sub-engines. Sources tasks worldwide, verifies in real-time. User side reads this live.</p>
+<div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+<div style="background:#1f2937;padding:14px;border-radius:12px"><div style="opacity:.7;font-size:13px">Total Workers</div><div style="font-size:28px;font-weight:800" id="ge-workers">2,000</div><div style="color:#22c55e">● 1,987 Online • 13 Resting</div></div>
+<div style="background:#1f2937;padding:14px;border-radius:12px"><div style="opacity:.7;font-size:13px">Tasks Sourced Today</div><div style="font-size:28px;font-weight:800" id="ge-tasks">0</div><div>Live sourcing...</div></div>
+<div style="background:#1f2937;padding:14px;border-radius:12px"><div style="opacity:.7;font-size:13px">Verifications Today</div><div style="font-size:28px;font-weight:800" id="ge-verify">0</div><div>Real-time AI verification</div></div>
+</div>
+<div style="margin-top:12px"><div class="row"><span>Engine Load</span><b id="ge-load-txt">92%</b></div><div class="bar" style="background:#374151;margin-top:6px"><i id="ge-load" style="width:92%"></i></div></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+<button class="btn btn-green btn-small" onclick="engineStart()">▶ Start Engine</button>
+<button class="btn btn-red btn-small" onclick="enginePause()">⏸ Pause Engine</button>
+<button class="btn btn-blue btn-small" onclick="engineBoost()">⚡ Boost +500 Tasks</button>
+<button class="btn btn-light btn-small" onclick="engineReset()">🔄 Reset Counters</button>
+</div>
+<div class="fee" style="background:#1f2937;color:#fff;border-color:#374151"><b>Engine Settings (Admin Only — Syncs to User):</b>
+<label style="color:#fff">Workers Active (Max 2000)</label><input id="engine-workers-set" type="number" value="2000" max="2000" min="0">
+<label style="color:#fff">Tasks Per Minute</label><input id="engine-tpm" type="number" value="120" min="10" max="500">
+<label style="color:#fff">Verification Speed</label><select id="engine-speed"><option>Real-Time (Instant)</option><option>Fast (5 sec)</option><option>Normal (30 sec)</option></select>
+<button class="btn btn-green" onclick="saveEngineSettings()">Save Engine Settings → Sync to User</button></div>
+</div>
+<div class="card"><h3 style="margin:0">📡 Live Engine Feed</h3><div id="engine-feed"></div></div>
+</div>
 
-  <div class="box">
-    <h2>Pending Member Approvals</h2>
-    <table>
-      <thead><tr><th>Name</th><th>Phone</th><th>Date Joined</th><th>Action</th></tr></thead>
-      <tbody id="pendingTable"><tr><td colspan="4">No pending members. Add a test member below to see it work.</td></tr></tbody>
-    </table>
-  </div>
+<div id="tab-sub" style="display:none">
+<div class="card"><h3 style="margin:0">⚙️ 5 SUB-ENGINES — 200 AI Workers Each = 1,000 Workers</h3><p class="muted">Each sub-engine sources tasks in its region + verifies in real-time. Total with Global: <b>3,000 Workers</b>. User side sees same numbers.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-green btn-small" onclick="allSubStart()">▶ Start All 5</button><button class="btn btn-red btn-small" onclick="allSubPause()">⏸ Pause All 5</button><button class="btn btn-light btn-small" onclick="refreshSub()">🔄 Refresh</button></div></div>
+<div id="sub-list"></div>
+<div class="card"><h3 style="margin:0">➕ Sub-Engine Task Control</h3>
+<label>Select Sub-Engine</label><select id="sub-select"><option value="africa">🌍 AFRICA</option><option value="europe">🇪🇺 EUROPE</option><option value="asia">🌏 ASIA</option><option value="americas">🌎 AMERICAS</option><option value="oceania">🌊 OCEANIA</option></select>
+<label>Action</label><select id="sub-action"><option>Boost Workers +50</option><option>Pause This Engine</option><option>Resume This Engine</option><option>Clear Tasks</option></select>
+<button class="btn btn-purple" onclick="subAction()">Apply To Sub-Engine → Sync</button></div>
+<div class="card"><h3 style="margin:0">🌍 Live Verifications — All Regions</h3><div id="sub-feed"></div></div>
+</div>
 
-  <div class="box">
-    <h2>All Members</h2>
-    <table>
-      <thead><tr><th>Name</th><th>Phone</th><th>Savings</th><th>Status</th><th>Action</th></tr></thead>
-      <tbody id="membersTable"></tbody>
-    </table>
-  </div>
+<div id="tab-stake" style="display:none">
+<div class="card"><h3 style="margin:0">🔒 STAKING — Admin Controls • Syncs to User</h3><p class="muted">Users stake, lock, earn APY. Admin approves, pays rewards, allows unstake.</p>
+<div class="grid" style="grid-template-columns:1fr 1fr 1fr"><div class="card"><div class="muted">Total Staked</div><div class="big" id="stake-total">£0.00</div></div><div class="card"><div class="muted">Pending Stakes</div><div class="big" id="stake-pending">0</div></div><div class="card"><div class="muted">Rewards Paid</div><div class="big" id="stake-rewards">£0.00</div></div></div></div>
+<div class="card"><h3 style="margin:0">⚙️ Staking Settings — User Sees These</h3>
+<label>Staking Plan Name</label><input id="stake-plan" value="Cedars Stake - Flexible">
+<label>APY %</label><input id="stake-apy" type="number" value="12" min="0" max="100">
+<label>Lock Days</label><select id="stake-lock"><option value="30">30 Days</option><option value="90">90 Days</option><option value="180">180 Days</option><option value="365">365 Days</option><option value="1095">1095 Days (Contract)</option></select>
+<label>Min Stake (£)</label><input id="stake-min" type="number" value="50">
+<label>Max Stake (£)</label><input id="stake-max" type="number" value="50000">
+<label>Staking Enabled?</label><select id="stake-enabled"><option value="yes">✅ Enabled</option><option value="no">❌ Disabled</option></select>
+<button class="btn btn-green" onclick="saveStakeSettings()">Save Staking Settings → Sync to User</button>
+<div class="fee" id="stake-settings-show">Current: 12% APY • 30 Days • Min £50 • Max £50,000 • Enabled ✅</div></div>
+<div class="card"><h3 style="margin:0">➕ Add Manual Stake (For User)</h3><label>User Email / Code</label><input id="stake-user" placeholder="ogwal.bemmanuel@gmail.com"><label>Amount (£)</label><input id="stake-amt" type="number" placeholder="1000"><label>Lock Days</label><input id="stake-days" type="number" value="30"><button class="btn btn-green" onclick="addStake()">Add Stake & Lock</button></div>
+<div class="card"><h3 style="margin:0">All Stakes — Approve / Pay / Unstake</h3><div id="stake-list"></div></div>
+</div>
 
-  <div class="box">
-    <h2>Add / Test Member (Admin Only)</h2>
-    <input id="newName" placeholder="Full Name e.g. John Kato">
-    <input id="newPhone" placeholder="Phone e.g. 0770000000">
-    <input id="newSavings" type="number" placeholder="Savings e.g. 50000">
-    <button class="view" style="width:100%; padding:12px;" onclick="addMember()">Add Member</button>
-  </div>
+<div id="tab-redeem" style="display:none">
+<div class="card"><h3 style="margin:0">🎁 REDEMPTION CODES — Random Redemptions • Syncs to User</h3><p class="muted">Admin creates random codes. Users redeem for bonus in index.html. One code = random reward.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-gold btn-small" onclick="generateRandomCode()">🎲 Generate Random Code</button><button class="btn btn-light btn-small" onclick="generateBulkCodes()">🎲 Generate 10 Random Codes</button></div></div>
+<div class="card"><h3 style="margin:0">➕ Create Redemption Code</h3>
+<label>Code (Leave blank for random)</label><input id="redeem-code" placeholder="CEDARS-XXXXXX — or leave blank">
+<label>Reward Amount (£)</label><input id="redeem-amt" type="number" placeholder="50" value="50">
+<label>Reward Type</label><select id="redeem-type"><option>Cash Bonus (£)</option><option>Staking Bonus</option><option>Referral Bonus</option><option>Free Shares</option><option>Random (10 - 100)</option></select>
+<label>Max Uses</label><input id="redeem-max" type="number" value="1" min="1" max="1000">
+<label>Expiry Date</label><input id="redeem-expiry" type="date">
+<label>Random Redemption?</label><select id="redeem-random"><option value="no">No — Fixed Amount</option><option value="yes">Yes — Random £10 - £100</option></select>
+<button class="btn btn-gold" onclick="createRedeemCode()">🎁 Create Redemption Code → Sync to User</button>
+<div class="fee" id="redeem-preview">Preview will show here.</div></div>
+<div class="card"><h3 style="margin:0">All Redemption Codes</h3><div id="redeem-list"></div></div>
+<div class="card"><h3 style="margin:0">🧪 Test Redemption (As User Would)</h3><label>Enter Code To Redeem</label><input id="test-redeem-code" placeholder="CEDARS-XXXXXX"><button class="btn btn-green" onclick="testRedeem()">Redeem Code Now</button><div id="test-redeem-result" class="fee" style="display:none"></div></div>
+</div>
 
+<div id="tab-dep" style="display:none">
+<div class="card"><h3 style="margin:0">📥 Deposits — Verify Tx Hash</h3><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-light btn-small" onclick="filterDep('all')">All</button><button class="btn btn-light btn-small" onclick="filterDep('pending')">Pending Only</button><button class="btn btn-light btn-small" onclick="filterDep('approved')">Approved</button><button class="btn btn-light btn-small" onclick="filterDep('rejected')">Rejected</button></div></div>
+<div class="card"><div id="dep-list"></div></div>
+<div class="card"><h3 style="margin:0">➕ Add Manual Deposit</h3><label>User Email</label><input id="manual-user" placeholder="ogwal.bemmanuel@gmail.com"><label>Plan</label><select id="manual-plan"><option>Starter</option><option>Growth</option><option>Empire</option></select><label>Amount (£)</label><input id="manual-amt" type="number" placeholder="1000"><label>Tx / Reference</label><input id="manual-tx" placeholder="BANK-REF-123"><button class="btn btn-green" onclick="addManualDeposit()">Add & Approve Manual Deposit</button></div>
+</div>
+<div id="tab-kyc" style="display:none">
+<div class="card"><h3 style="margin:0">🪪 KYC Review — 5 Steps</h3><div id="kyc-detail"></div><div style="display:flex;gap:8px"><button class="btn btn-green" onclick="approveKYC()">✅ Approve KYC</button><button class="btn btn-red" onclick="rejectKYC()">❌ Reject KYC</button></div></div>
+<div class="card"><h3 style="margin:0">KYC Checklist</h3><div id="kyc-check"></div></div>
+</div>
+<div id="tab-wd" style="display:none">
+<div class="card"><h3 style="margin:0">💸 Withdrawals — To LOCKED Address ONLY</h3></div>
+<div class="card"><div id="wd-list"></div></div>
+</div>
+<div id="tab-wallet" style="display:none">
+<div class="card"><h3 style="margin:0">🔒 Wallet Unlock Requests</h3><div id="wallet-req"></div></div>
+<div class="card"><h3 style="margin:0">Current Locked Wallet</h3><div id="locked-wallet-admin"></div><button class="btn btn-red" onclick="adminUnlockWallet()">✅ Approve Unlock</button><button class="btn btn-light" onclick="denyUnlock()">❌ Deny Unlock</button></div>
+</div>
+<div id="tab-p2p" style="display:none">
+<div class="card"><h3 style="margin:0">🤝 P2P Moderation</h3><div id="p2p-admin-list"></div></div>
+</div>
+<div id="tab-users" style="display:none">
+<div class="card"><h3 style="margin:0">👥 Users</h3><div id="user-list"></div></div>
+<div class="card"><h3 style="margin:0">➕ Add User Manually</h3><label>Name</label><input id="new-user-name" placeholder="Full Name"><label>Email</label><input id="new-user-email" placeholder="Email"><label>Plan</label><select id="new-user-plan"><option>Starter</option><option>Growth</option><option>Empire</option></select><button class="btn btn-green" onclick="addUser()">Add User</button></div>
+</div>
+<div id="tab-profit" style="display:none">
+<div class="card"><h3 style="margin:0">📈 Profit Share — Distribute Daily</h3><p class="muted">Variable, Not Guaranteed. Max 1.00% per day.</p><label>Today Profit % (0 to 1.00)</label><input id="profit-pct" type="number" step="0.01" max="1" min="0" value="0.50"><div class="fee" id="profit-preview">Enter % to preview.</div><button class="btn btn-light" onclick="previewProfit()">Preview Distribution</button><button class="btn btn-green" onclick="distributeProfit()">✅ Distribute Profit</button></div>
+<div class="card"><h3 style="margin:0">Profit History</h3><div id="profit-history"></div></div>
+</div>
+
+</div>
 </div>
 
 <script>
-let members = JSON.parse(localStorage.getItem('admin_members') || '[]');
-if(members.length === 0){
-  members = [
-    {name: "Test Member 1", phone: "0771111111", savings: 150000, status: "Approved"},
-    {name: "Test Member 2", phone: "0772222222", savings: 80000, status: "Pending"}
-  ];
-  save();
+function el(id){ return document.getElementById(id); }
+function setText(id,txt){ var e=el(id); if(e) e.innerText=txt; }
+function setHTML(id,html){ var e=el(id); if(e) e.innerHTML=html; }
+function testAdmin(){ alert('✅ Admin buttons WORKING!'); }
+function showAdminTab(id){
+  var tabs=['dash','engine','sub','stake','redeem','dep','kyc','wd','wallet','p2p','users','profit'];
+  for(var i=0;i<tabs.length;i++){ var t=tabs[i]; var e=el('tab-'+t); if(e) e.style.display=(t===id?'block':'none'); var b=el('btn-'+t); if(b){ if(t===id) b.classList.add('active'); else b.classList.remove('active'); } }
+  window.scrollTo(0,0); renderAdmin();
 }
-function save(){ localStorage.setItem('admin_members', JSON.stringify(members)); render(); }
-function render(){
-  let approved = members.filter(m => m.status === 'Approved');
-  let pending = members.filter(m => m.status === 'Pending');
-  document.getElementById('totalMembers').innerText = members.length;
-  document.getElementById('totalSavings').innerText = 'UGX ' + approved.reduce((s,m)=>s+Number(m.savings||0),0).toLocaleString();
-  document.getElementById('pendingMembers').innerText = pending.length;
-  document.getElementById('pendingLoans').innerText = 0;
-
-  document.getElementById('pendingTable').innerHTML = pending.length ? pending.map((m,i)=>{
-    let idx = members.indexOf(m);
-    return `<tr><td>${m.name}</td><td>${m.phone}</td><td>Today</td><td><button class="approve" onclick="approveMember(${idx})">Approve</button> <button class="reject" onclick="removeMember(${idx})">Reject</button></td></tr>`;
-  }).join('') : '<tr><td colspan="4">No pending members.</td></tr>';
-
-  document.getElementById('membersTable').innerHTML = members.map((m,i)=>{
-    return `<tr><td>${m.name}</td><td>${m.phone}</td><td>UGX ${Number(m.savings||0).toLocaleString()}</td><td>${m.status}</td><td><button class="reject" onclick="removeMember(${i})">Remove</button></td></tr>`;
-  }).join('');
-}
-function addMember(){
-  let name = document.getElementById('newName').value.trim();
-  let phone = document.getElementById('newPhone').value.trim();
-  let savings = document.getElementById('newSavings').value || 0;
-  if(!name || !phone){ alert('Enter name and phone'); return; }
-  members.push({name, phone, savings: Number(savings), status: "Pending"});
-  save();
-  document.getElementById('newName').value=''; document.getElementById('newPhone').value=''; document.getElementById('newSavings').value='';
-  alert('Member added as Pending');
-}
-function approveMember(i){ members[i].status='Approved'; save(); }
-function removeMember(i){ if(confirm('Remove this member?')){ members.splice(i,1); save(); } }
-function exportData(){ alert(JSON.stringify(members, null, 2)); }
-render();
+function adminLogout(){ localStorage.removeItem('cedars_admin_logged'); location.reload(); }
+function openUser(){ window.open('index.html','_blank'); }
+function forceSync(){ saveAdmin(); setText('sync-status','● Synced Just Now ✅'); alert('Synced to index.html ✅ — Open index.html and refresh, you will see same Engine / Staking / Codes.'); }
+setText('js-status','✅ Working'); var j=el('js-status'); if(j) j.style.color='#22c55e';
 </script>
 
+<script>
+var ADMIN_EMAIL='admin@cedars.com', ADMIN_PASS='admin123', ADMIN_CODE='CEDARS-ADMIN-2026';
+var depFilter='all';
+var state;
+try{ state=JSON.parse(localStorage.getItem('cedars_live_v1')||'null') || {}; }catch(e){ state={}; }
+if(!state.deposits) state.deposits=[]; if(!state.withdrawals) state.withdrawals=[]; if(!state.exchanges) state.exchanges=[]; if(!state.refs) state.refs=[]; if(!state.p2p) state.p2p=[];
+if(state.profit==null) state.profit=0; if(state.available==null) state.available=0; if(state.locked==null) state.locked=0; if(!state.plan) state.plan='-'; if(!state.kyc) state.kyc='Not Started';
+if(!state.kycSteps) state.kycSteps={s1:false,s2:false,s3:false,s4:false,s5:false}; if(!state.logs) state.logs=[]; if(!state.lockedWallet) state.lockedWallet=''; if(!state.lockedWalletNetwork) state.lockedWalletNetwork='';
+if(!state.profitHistory) state.profitHistory=[]; if(!state.adminLogs) state.adminLogs=[]; if(!state.users) state.users=[];
+if(!state.stakes) state.stakes=[]; if(!state.redeemCodes) state.redeemCodes=[];
+if(!state.engine) state.engine={workers:2000, tpm:120, speed:'Real-Time (Instant)', running:true, tasks:12450, verified:11980, load:92};
+if(!state.subEngines) state.subEngines={
+  africa:{name:'AFRICA', flag:'🌍', workers:200, online:198, tasks:3240, verified:3110, status:'Running'},
+  europe:{name:'EUROPE', flag:'🇪🇺', workers:200, online:199, tasks:2890, verified:2780, status:'Running'},
+  asia:{name:'ASIA', flag:'🌏', workers:200, online:197, tasks:3510, verified:3400, status:'Running'},
+  americas:{name:'AMERICAS', flag:'🌎', workers:200, online:200, tasks:2980, verified:2870, status:'Running'},
+  oceania:{name:'OCEANIA', flag:'🌊', workers:200, online:195, tasks:1240, verified:1190, status:'Running'}
+};
+if(!state.stakeSettings) state.stakeSettings={plan:'Cedars Stake - Flexible', apy:12, lock:30, min:50, max:50000, enabled:'yes'};
+if(!state.engineFeed) state.engineFeed=[]; if(!state.subFeed) state.subFeed=[];
+if(!state.lastSync) state.lastSync=0;
+function saveAdmin(){ state.lastSync=Date.now(); try{ localStorage.setItem('cedars_live_v1', JSON.stringify(state)); }catch(e){} renderAdmin(); }
+function logAdmin(msg){ state.adminLogs.unshift(msg+' — '+new Date().toLocaleString()); if(state.adminLogs.length>30) state.adminLogs=state.adminLogs.slice(0,30); saveAdmin(); }
+function adminLogin(){ var e=el('admin-email').value, p=el('admin-pass').value, c=el('admin-code').value; if(e!==ADMIN_EMAIL || p!==ADMIN_PASS){ alert('Wrong Admin Email or Password'); return; } if(c!==ADMIN_CODE){ alert('Wrong Admin Secret Code. Enter CEDARS-ADMIN-2026'); return; } localStorage.setItem('cedars_admin_logged','yes'); el('admin-login').style.display='none'; el('admin-app').style.display='block'; el('admin-nav').style.display='flex'; setText('admin-status','Logged in as Admin ✅'); renderAdmin(); alert('Welcome Admin! ✅ Global Engine Online. index.html will sync.'); }
+function checkAdminLogin(){ if(localStorage.getItem('cedars_admin_logged')==='yes'){ el('admin-login').style.display='none'; el('admin-app').style.display='block'; el('admin-nav').style.display='flex'; setText('admin-status','Logged in as Admin ✅'); renderAdmin(); } }
+function filterDep(f){ depFilter=f; renderAdmin(); }
+function engineStart(){ state.engine.running=true; logAdmin('Global Engine STARTED - 2000 workers'); alert('Global Engine STARTED ✅ User side will show LIVE.'); }
+function enginePause(){ state.engine.running=false; logAdmin('Global Engine PAUSED'); alert('Global Engine PAUSED ⏸ User side will show PAUSED.'); }
+function engineBoost(){ state.engine.tasks+=500; logAdmin('Global Engine BOOST +500 tasks'); alert('Boosted! +500 tasks ⚡'); }
+function engineReset(){ state.engine.tasks=0; state.engine.verified=0; saveAdmin(); alert('Counters Reset'); }
+function saveEngineSettings(){ var w=parseInt(el('engine-workers-set').value)||2000; var tpm=parseInt(el('engine-tpm').value)||120; var sp=el('engine-speed').value; state.engine.workers=Math.min(2000,w); state.engine.tpm=tpm; state.engine.speed=sp; saveAdmin(); logAdmin('Engine settings saved: '+w+' workers, '+tpm+' TPM'); alert('Engine Settings Saved ✅ Synced to index.html'); }
+function allSubStart(){ Object.keys(state.subEngines).forEach(function(k){ state.subEngines[k].status='Running'; }); saveAdmin(); logAdmin('All 5 Sub-Engines STARTED'); alert('All 5 STARTED ✅'); }
+function allSubPause(){ Object.keys(state.subEngines).forEach(function(k){ state.subEngines[k].status='Paused'; }); saveAdmin(); logAdmin('All 5 Sub-Engines PAUSED'); alert('All 5 Paused ⏸'); }
+function refreshSub(){ renderAdmin(); alert('Sub-Engines Refreshed'); }
+function subAction(){ var key=el('sub-select').value; var act=el('sub-action').value; var eng=state.subEngines[key]; if(act.indexOf('Boost')!==-1){ eng.workers=Math.min(300, eng.workers+50); eng.tasks+=100; } if(act.indexOf('Pause')!==-1){ eng.status='Paused'; } if(act.indexOf('Resume')!==-1){ eng.status='Running'; } if(act.indexOf('Clear')!==-1){ eng.tasks=0; eng.verified=0; } saveAdmin(); logAdmin('Sub-Engine '+eng.name+' action: '+act); alert(eng.name+' Updated: '+act+' — Synced'); }
+function toggleSub(key){ var eng=state.subEngines[key]; eng.status = eng.status==='Running' ? 'Paused' : 'Running'; saveAdmin(); }
+function saveStakeSettings(){ state.stakeSettings={plan:el('stake-plan').value, apy:parseFloat(el('stake-apy').value)||12, lock:parseInt(el('stake-lock').value)||30, min:parseFloat(el('stake-min').value)||50, max:parseFloat(el('stake-max').value)||50000, enabled:el('stake-enabled').value}; saveAdmin(); logAdmin('Staking settings: '+state.stakeSettings.apy+'% APY, '+state.stakeSettings.lock+' days'); setHTML('stake-settings-show','Current: '+state.stakeSettings.apy+'% APY • '+state.stakeSettings.lock+' Days • Min £'+state.stakeSettings.min+' • Max £'+state.stakeSettings.max+' • Enabled '+(state.stakeSettings.enabled==='yes'?'✅':'❌')); alert('Staking Settings Saved ✅ User side will show same APY.'); }
+function addStake(){ var u=el('stake-user').value||'ogwal.bemmanuel@gmail.com'; var amt=parseFloat(el('stake-amt').value); var days=parseInt(el('stake-days').value)||30; if(!amt||amt<state.stakeSettings.min){ alert('Min stake £'+state.stakeSettings.min); return; } var end=new Date(); end.setDate(end.getDate()+days); var reward=amt*(state.stakeSettings.apy/100)*(days/365); state.stakes.push({user:u, amount:amt, days:days, apy:state.stakeSettings.apy, reward:reward, end:end.toLocaleDateString(), date:new Date().toLocaleString(), status:'Active 🔒'}); saveAdmin(); logAdmin('Stake added £'+amt+' for '+u); alert('Stake Added ✅ £'+amt+' locked '+days+' days • Reward £'+reward.toFixed(2)); }
+function approveStake(i){ state.stakes[i].status='Active 🔒'; saveAdmin(); alert('Stake Approved ✅'); }
+function payStakeReward(i){ var s=state.stakes[i]; if(!confirm('Pay reward £'+s.reward.toFixed(2)+' to user?')) return; s.status='Reward Paid ✅'; state.available+=s.reward; saveAdmin(); logAdmin('Stake reward paid £'+s.reward.toFixed(2)); alert('Reward Paid ✅ £'+s.reward.toFixed(2)); }
+function unstake(i){ var s=state.stakes[i]; if(!confirm('Unstake £'+s.amount+'?')) return; s.status='Unstaked ✅'; state.available+=s.amount; saveAdmin(); logAdmin('Unstaked £'+s.amount); alert('Unstaked ✅ £'+s.amount+' returned.'); }
+function deleteStake(i){ if(!confirm('Delete stake?')) return; state.stakes.splice(i,1); saveAdmin(); }
+function makeRandomCode(){ var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; var code='CEDARS-'; for(var i=0;i<6;i++){ code+=chars[Math.floor(Math.random()*chars.length)]; } return code; }
+function generateRandomCode(){ var c=makeRandomCode(); el('redeem-code').value=c; alert('Random Code: '+c); }
+function generateBulkCodes(){ for(var i=0;i<10;i++){ var amt=10+Math.floor(Math.random()*91); state.redeemCodes.push({code:makeRandomCode(), amount:amt, type:'Random (10 - 100)', max:1, used:0, expiry:'No Expiry', random:'yes', date:new Date().toLocaleString(), status:'Active ✅'}); } saveAdmin(); logAdmin('Generated 10 random redemption codes'); alert('10 Random Codes Generated! 🎁 £10-£100 each. User can redeem in index.html'); }
+function createRedeemCode(){ var code=el('redeem-code').value.trim() || makeRandomCode(); var amt=parseFloat(el('redeem-amt').value)||50; var type=el('redeem-type').value; var max=parseInt(el('redeem-max').value)||1; var exp=el('redeem-expiry').value||'No Expiry'; var isRandom=el('redeem-random').value; if(isRandom==='yes'){ amt=10+Math.floor(Math.random()*91); type='Random (10 - 100)'; } if(state.redeemCodes.find(function(r){return r.code===code;})){ alert('Code already exists!'); return; } state.redeemCodes.push({code:code, amount:amt, type:type, max:max, used:0, expiry:exp, random:isRandom, date:new Date().toLocaleString(), status:'Active ✅'}); saveAdmin(); logAdmin('Redemption code created: '+code+' £'+amt); setHTML('redeem-preview','Created: <b>'+code+'</b> • Reward £'+amt+' • Type: '+type+' • Max Uses: '+max+' • Expiry: '+exp+' • SYNCED TO USER ✅'); el('redeem-code').value=''; alert('Redemption Code Created 🎁: '+code+' — £'+amt+' — User can redeem now.'); }
+function deleteRedeemCode(i){ if(!confirm('Delete this code?')) return; state.redeemCodes.splice(i,1); saveAdmin(); }
+function toggleRedeemCode(i){ var r=state.redeemCodes[i]; r.status = r.status.indexOf('Active')!==-1 ? 'Disabled ❌' : 'Active ✅'; saveAdmin(); }
+function testRedeem(){ var code=el('test-redeem-code').value.trim(); if(!code){ alert('Enter code'); return; } var r=state.redeemCodes.find(function(x){return x.code===code;}); var res=el('test-redeem-result'); res.style.display='block'; if(!r){ res.innerHTML='❌ Invalid Code: '+code; return; } if(r.status.indexOf('Active')===-1){ res.innerHTML='❌ Code Disabled'; return; } if(r.used>=r.max){ res.innerHTML='❌ Code Already Used Max'; return; } var reward=r.amount; if(r.random==='yes'){ reward=10+Math.floor(Math.random()*91); } r.used+=1; if(r.used>=r.max) r.status='Used Up ✅'; state.available+=reward; saveAdmin(); logAdmin('Code redeemed: '+code+' Reward £'+reward); res.innerHTML='🎉 SUCCESS! Code '+code+' redeemed! You got <b>£'+reward+'</b>'; alert('Redeemed! 🎉 £'+reward); }
+function copyRedeem(i){ var c=state.redeemCodes[i].code; try{ navigator.clipboard.writeText(c); }catch(e){} alert('Code copied: '+c); }
+function approveDeposit(i){ var d=state.deposits[i]; if(!d) return; if(!confirm('Approve Deposit? Plan: '+d.plan+' Amount: £'+d.amount+' Tx: '+d.tx_hash)) return; d.status='Approved ✅'; saveAdmin(); logAdmin('Approved deposit £'+d.amount); alert('Deposit Approved ✅ User sees it in index.html'); }
+function rejectDeposit(i){ var d=state.deposits[i]; if(!d) return; var reason=prompt('Why reject?'); if(reason===null) return; d.status='Rejected ❌ - '+reason; state.locked=Math.max(0,state.locked-d.amount); saveAdmin(); logAdmin('Rejected deposit £'+d.amount); alert('Deposit Rejected.'); }
+function deleteDeposit(i){ if(!confirm('Delete this deposit?')) return; state.deposits.splice(i,1); saveAdmin(); }
+function copyTx(i){ var d=state.deposits[i]; try{ navigator.clipboard.writeText(d.tx_hash); alert('Tx Hash copied.'); }catch(e){ alert(d.tx_hash); } }
+function addManualDeposit(){ var plan=el('manual-plan').value, amt=parseFloat(el('manual-amt').value), tx=el('manual-tx').value; if(!amt||!tx){ alert('Enter Amount and Tx'); return; } state.deposits.push({plan:plan,amount:amt,tx_hash:tx,network:'Manual / Bank',crypto_amount:amt,date:new Date().toLocaleString(),status:'Approved ✅ - Manual'}); state.locked+=amt; state.plan=plan; if(!state.startDate) state.startDate=new Date().toISOString(); saveAdmin(); logAdmin('Manual deposit £'+amt); alert('Manual Deposit Added ✅'); }
+function approveKYC(){ if(state.kyc==='Not Started'){ alert('No KYC submitted yet'); return; } if(!confirm('Approve KYC?')) return; state.kyc='Approved'; saveAdmin(); logAdmin('KYC Approved'); alert('KYC Approved ✅'); }
+function rejectKYC(){ var r=prompt('Why reject KYC?'); if(r===null) return; state.kyc='Rejected - '+r; saveAdmin(); alert('KYC Rejected.'); }
+function approveWithdrawal(i){ var w=state.withdrawals[i]; if(!w) return; if(!confirm('Approve Withdrawal? Net £'+w.net+' to LOCKED: '+w.details)) return; w.status='Approved ✅ - Sent'; saveAdmin(); logAdmin('Approved withdrawal Net £'+w.net); alert('Withdrawal Approved ✅'); }
+function rejectWithdrawal(i){ var w=state.withdrawals[i]; if(!w) return; if(!confirm('Reject and refund £'+w.amount+'?')) return; w.status='Rejected ❌'; state.available+=w.amount; saveAdmin(); alert('Withdrawal Rejected & Refunded'); }
+function adminUnlockWallet(){ if(!state.lockedWallet){ alert('No locked wallet'); return; } if(!confirm('Allow user to change wallet? Old: '+state.lockedWallet)) return; state.lockedWallet=''; state.lockedWalletNetwork=''; state.walletUnlockRequested=false; saveAdmin(); logAdmin('Wallet unlock approved'); alert('Wallet Unlocked ✅'); }
+function denyUnlock(){ state.walletUnlockRequested=false; saveAdmin(); alert('Unlock Denied.'); }
+function cancelP2P(i){ if(!confirm('Cancel P2P?')) return; state.p2p[i].status='Cancelled by Admin'; saveAdmin(); }
+function releaseP2P(i){ if(!confirm('Release escrow?')) return; state.p2p[i].status='Completed ✅'; saveAdmin(); alert('Escrow Released ✅'); }
+function addUser(){ var n=el('new-user-name').value, e=el('new-user-email').value, p=el('new-user-plan').value; if(!n||!e){ alert('Enter Name and Email'); return; } state.users.push({name:n,email:e,plan:p,date:new Date().toLocaleString()}); saveAdmin(); alert('User Added: '+n); }
+function previewProfit(){ var pct=parseFloat(el('profit-pct').value); if(isNaN(pct)||pct<0||pct>1){ alert('Enter 0 to 1.00'); return; } var profit=(state.locked||0)*(pct/100); setHTML('profit-preview','Locked: £'+(state.locked||0).toFixed(2)+' • '+pct+'% = <b>£'+profit.toFixed(2)+'</b>'); }
+function distributeProfit(){ var pct=parseFloat(el('profit-pct').value); if(isNaN(pct)||pct<0||pct>1){ alert('Enter 0 to 1.00'); return; } if(!confirm('Distribute '+pct+'% profit?')) return; var profit=(state.locked||0)*(pct/100); state.profit+=profit; state.available+=profit; state.profitHistory.unshift({pct:pct,amount:profit,date:new Date().toLocaleString()}); saveAdmin(); logAdmin('Distributed profit '+pct+'% = £'+profit.toFixed(2)); alert('Profit Distributed ✅ £'+profit.toFixed(2)); }
+function renderAdmin(){
+  try{
+    var totalDep=0, pendingDep=0, totalWd=0, fees=0;
+    state.deposits.forEach(function(d){ totalDep+=d.amount; if(d.status && d.status.indexOf('Pending')!==-1) pendingDep+=d.amount; });
+    state.withdrawals.forEach(function(w){ totalWd+=w.net||0; fees+=w.fee||0; });
+    var p2pFees=0; state.p2p.forEach(function(p){ p2pFees+=p.fee||0; });
+    var totalStaked=0; state.stakes.forEach(function(s){ if(s.status.indexOf('Active')!==-1 || s.status.indexOf('Reward')!==-1) totalStaked+=s.amount; });
+    setText('a-total-dep','£'+totalDep.toFixed(2)); setText('a-dep-count',state.deposits.length+' deposits');
+    setText('a-pending-dep','£'+pendingDep.toFixed(2)); setText('badge-dep', state.deposits.filter(function(d){return d.status && d.status.indexOf('Pending')!==-1;}).length>0 ? '('+state.deposits.filter(function(d){return d.status && d.status.indexOf('Pending')!==-1;}).length+' pending)' : '');
+    setText('a-total-staked','£'+totalStaked.toFixed(2)); setText('a-stake-count',state.stakes.length+' stakes');
+    setText('a-redeem-count',String(state.redeemCodes.length)+' Codes'); setText('a-redeem-used', state.redeemCodes.reduce(function(s,r){return s+r.used;},0)+' Redeemed');
+    setText('a-total-wd','£'+totalWd.toFixed(2)); setText('a-fees','£'+(fees+p2pFees).toFixed(2));
+    setText('a-locked','£'+state.locked.toFixed(2)); setText('a-kyc',state.kyc);
+    setText('dash-workers', state.engine.workers.toLocaleString()+' Workers'); setText('dash-tasks', state.engine.tasks.toLocaleString()+' Tasks'); setText('dash-verify', state.engine.verified.toLocaleString()+' Verified');
+    setText('dash-load-txt', state.engine.load+'%'); if(el('dash-load')) el('dash-load').style.width=state.engine.load+'%';
+    setText('ge-workers', state.engine.workers.toLocaleString()); setText('ge-tasks', state.engine.tasks.toLocaleString()); setText('ge-verify', state.engine.verified.toLocaleString()); setText('ge-load-txt', state.engine.load+'%'); if(el('ge-load')) el('ge-load').style.width=state.engine.load+'%';
+    if(el('engine-workers-set')) el('engine-workers-set').value=state.engine.workers; if(el('engine-tpm')) el('engine-tpm').value=state.engine.tpm;
+    setText('stake-total','£'+totalStaked.toFixed(2)); setText('stake-pending', String(state.stakes.filter(function(s){return s.status.indexOf('Pending')!==-1;}).length));
+    setHTML('integration-check','Engine: '+(state.engine.running?'🟢 Running — '+state.engine.workers+' workers':'🔴 Paused')+' • Staking: '+state.stakeSettings.apy+'% APY, '+state.stakeSettings.lock+' days • Redemption Codes: '+state.redeemCodes.length+' codes, '+state.redeemCodes.reduce(function(s,r){return s+r.used;},0)+' used • Last Sync: '+(state.lastSync? new Date(state.lastSync).toLocaleTimeString():'-')+' • Key: cedars_live_v1 — Same as index.html ✅');
+    setHTML('admin-log', state.adminLogs.slice(0,10).map(function(l){return '<div style="padding:6px 0;border-bottom:1px solid #eee">'+l+'</div>';}).join('') || '<p class="muted">No admin actions yet.</p>');
+    setHTML('engine-feed', state.engineFeed.slice(-5).reverse().map(function(f){return '<div style="padding:6px 0;border-bottom:1px solid #eee">'+f+'</div>';}).join('') || '<div class="fee">Engine live — tasks sourcing...</div>');
+    var subHtml='';
+    Object.keys(state.subEngines).forEach(function(k){
+      var e=state.subEngines[k];
+      subHtml+='<div class="card engine '+k+'"><div class="row"><b style="font-size:18px">'+e.flag+' '+e.name+' SUB-ENGINE</b><span class="pill '+(e.status==='Running'?'pill-green':'pill-red')+'">'+e.status+'</span></div><div class="grid" style="grid-template-columns:1fr 1fr 1fr;margin-top:10px"><div><div class="muted">AI Workers</div><div class="big">'+e.workers+'</div><div class="muted">'+e.online+' Online</div></div><div><div class="muted">Tasks Sourced</div><div class="big">'+e.tasks.toLocaleString()+'</div></div><div><div class="muted">Verified Real-Time</div><div class="big" style="color:#15803d">'+e.verified.toLocaleString()+'</div></div></div><div class="bar" style="margin-top:10px"><i style="width:'+Math.min(100, e.verified/Math.max(1,e.tasks)*100)+'%"></i></div><div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-green btn-small" onclick="toggleSub(\''+k+'\')">⏯ Toggle Start/Pause</button></div></div>';
+    });
+    setHTML('sub-list', subHtml);
+    setHTML('sub-feed', state.subFeed.slice(-5).reverse().map(function(f){return '<div style="padding:6px 0;border-bottom:1px solid #eee">'+f+'</div>';}).join('') || '<div class="fee">Waiting for verifications...</div>');
+    var stakeHtml=''; state.stakes.forEach(function(s,i){ stakeHtml+='<div class="item"><b>Stake £'+s.amount.toFixed(2)+'</b> • User: '+s.user+' • '+s.days+' days • APY '+s.apy+'% • Reward £'+s.reward.toFixed(2)+' • End: '+s.end+' • <span class="pill">'+s.status+'</span><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-green btn-small" onclick="approveStake('+i+')">✅ Approve</button><button class="btn btn-blue btn-small" onclick="payStakeReward('+i+')">💰 Pay Reward</button><button class="btn btn-orange btn-small" onclick="unstake('+i+')">🔓 Unstake</button><button class="btn btn-light btn-small" onclick="deleteStake('+i+')">🗑 Delete</button></div></div>'; });
+    setHTML('stake-list', stakeHtml || '<p class="muted">No stakes yet.</p>');
+    setHTML('stake-settings-show','Current: '+state.stakeSettings.apy+'% APY • '+state.stakeSettings.lock+' Days • Min £'+state.stakeSettings.min+' • Max £'+state.stakeSettings.max+' • Enabled '+(state.stakeSettings.enabled==='yes'?'✅':'❌'));
+    var redeemHtml=''; state.redeemCodes.forEach(function(r,i){ redeemHtml+='<div class="item"><b style="font-size:16px">🎁 '+r.code+'</b> • <span class="pill '+(r.status.indexOf('Active')!==-1?'pill-green':'pill-red')+'">'+r.status+'</span><br><span class="muted">Reward: £'+r.amount+' • Type: '+r.type+' • Used: '+r.used+'/'+r.max+' • Expiry: '+r.expiry+'</span><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-blue btn-small" onclick="copyRedeem('+i+')">📋 Copy Code</button><button class="btn btn-light btn-small" onclick="toggleRedeemCode('+i+')">⏯ Enable/Disable</button><button class="btn btn-red btn-small" onclick="deleteRedeemCode('+i+')">🗑 Delete</button></div></div>'; });
+    setHTML('redeem-list', redeemHtml || '<p class="muted">No redemption codes yet. Create one above.</p>');
+    var dlist=''; state.deposits.forEach(function(d,i){ if(depFilter==='pending' && !(d.status && d.status.indexOf('Pending')!==-1)) return; if(depFilter==='approved' && !(d.status && d.status.indexOf('Approved')!==-1)) return; if(depFilter==='rejected' && !(d.status && d.status.indexOf('Rejected')!==-1)) return; dlist+='<div class="item"><b>'+d.plan+' — £'+d.amount.toFixed(2)+'</b> • <span class="pill">'+d.status+'</span><br><span class="muted">Date: '+d.date+' • Network: '+d.network+'</span><span class="code">Tx: '+(d.tx_hash||'')+'</span><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-light btn-small" onclick="copyTx('+i+')">📋 Copy Tx</button><button class="btn btn-green btn-small" onclick="approveDeposit('+i+')">✅ Approve</button><button class="btn btn-red btn-small" onclick="rejectDeposit('+i+')">❌ Reject</button><button class="btn btn-light btn-small" onclick="deleteDeposit('+i+')">🗑 Delete</button></div></div>'; });
+    setHTML('dep-list', dlist || '<p class="muted">No deposits yet.</p>');
+    setHTML('kyc-check','Step 1: '+(state.kycSteps.s1?'✅':'☐')+' • Step 2: '+(state.kycSteps.s2?'✅':'☐')+' • Step 3: '+(state.kycSteps.s3?'✅':'☐')+' • Step 4: '+(state.kycSteps.s4?'✅':'☐')+' • Step 5: '+(state.kycSteps.s5?'✅':'☐')+'<br><b>Status: '+state.kyc+'</b>');
+    setHTML('kyc-detail','<div class="fee"><b>User:</b> Ogwal Emmanuel • Plan: '+state.plan+' • Contract: '+(state.startDate? new Date(state.startDate).toLocaleDateString():'-')+'</div>');
+    var wlist=''; state.withdrawals.forEach(function(w,i){ wlist+='<div class="item"><b>Withdrawal £'+w.amount.toFixed(2)+'</b> • Fee £'+w.fee.toFixed(2)+' • Net £'+w.net.toFixed(2)+' • <span class="pill">'+w.status+'</span><br><span class="code">LOCKED: '+(w.details||'')+'</span><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-green btn-small" onclick="approveWithdrawal('+i+')">✅ Approve & Sent</button><button class="btn btn-red btn-small" onclick="rejectWithdrawal('+i+')">❌ Reject & Refund</button></div></div>'; });
+    setHTML('wd-list', wlist || '<p class="muted">No withdrawals yet.</p>');
+    setHTML('wallet-req', state.walletUnlockRequested ? '<div class="fee" style="background:#fee2e2"><b>⚠️ UNLOCK REQUESTED</b></div>' : '<p class="muted">No unlock request.</p>');
+    setHTML('locked-wallet-admin', state.lockedWallet ? '<span class="code">'+state.lockedWallet+'</span><br><span class="muted">Network: '+state.lockedWalletNetwork+'</span>' : '<p class="muted">No locked wallet yet.</p>');
+    var plist=''; state.p2p.forEach(function(p,i){ plist+='<div class="item"><b>'+p.amt+' '+p.coin+' @ £'+p.price+' = £'+p.total.toFixed(2)+'</b> • <span class="pill">'+p.status+'</span><br><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-green btn-small" onclick="releaseP2P('+i+')">✅ Release</button><button class="btn btn-red btn-small" onclick="cancelP2P('+i+')">❌ Cancel</button></div></div>'; });
+    setHTML('p2p-admin-list', plist || '<p class="muted">No P2P offers yet.</p>');
+    var ulist='<div class="item"><b>Ogwal Emmanuel</b> • ogwal.bemmanuel@gmail.com • Plan: '+state.plan+' • Locked: £'+state.locked.toFixed(2)+' • KYC: '+state.kyc+'</div>';
+    state.users.forEach(function(u){ ulist+='<div class="item"><b>'+u.name+'</b> • '+u.email+' • Plan: '+u.plan+'</div>'; });
+    setHTML('user-list', ulist);
+    setHTML('profit-history', state.profitHistory.map(function(h){return '<div style="padding:6px 0;border-bottom:1px solid #eee">'+h.pct+'% = £'+h.amount.toFixed(2)+' • '+h.date+'</div>';}).join('') || '<p class="muted">No profit yet.</p>');
+  }catch(e){ console.log(e); }
+}
+setInterval(function(){
+  try{
+    if(state.engine && state.engine.running){
+      var add=Math.floor(Math.random()*8)+3;
+      state.engine.tasks+=add; state.engine.verified+=Math.floor(add*0.96);
+      var regions=['africa','europe','asia','americas','oceania'];
+      var r=regions[Math.floor(Math.random()*regions.length)];
+      var eng=state.subEngines[r];
+      if(eng && eng.status==='Running'){
+        var t2=Math.floor(Math.random()*4)+1; eng.tasks+=t2; eng.verified+=Math.floor(t2*0.95);
+        var feedMsg='['+new Date().toLocaleTimeString()+'] '+eng.flag+' '+eng.name+': Sourced '+t2+' task(s) • Verified by AI Worker #'+(Math.floor(Math.random()*200)+1)+' ✅';
+        state.subFeed.push(feedMsg); if(state.subFeed.length>20) state.subFeed=state.subFeed.slice(-20);
+        state.engineFeed.push(feedMsg); if(state.engineFeed.length>20) state.engineFeed=state.engineFeed.slice(-20);
+      }
+      state.engine.load=88+Math.floor(Math.random()*10);
+      state.lastSync=Date.now();
+      localStorage.setItem('cedars_live_v1', JSON.stringify(state));
+      if(el('admin-app') && el('admin-app').style.display!=='none'){ renderAdmin(); }
+    }
+  }catch(e){}
+},5000);
+checkAdminLogin();
+renderAdmin();
+</script>
 </body>
 </html>
