@@ -1,37 +1,17 @@
-<!-- SAFE EXCHANGE - SMALL ADD ONLY -->
-<div style="background:#111827; padding:16px; border-radius:12px; margin-top:12px;">
-  <h3 style="color:white; margin:0;">Quick Exchange</h3>
-  <p style="color:#9ca3af; font-size:13px;">GBP to USDT / BTC / ETH - Live Rate</p>
-  
-  <label style="color:white; font-size:13px;">Amount in GBP</label>
-  <input id="ex-amount" type="number" placeholder="100" style="width:100%; padding:10px; margin:6px 0; border-radius:8px; border:1px solid #374151; background:#1f2937; color:white;" />
-  
-  <label style="color:white; font-size:13px;">Convert To</label>
-  <select id="ex-to" style="width:100%; padding:10px; margin:6px 0; border-radius:8px; background:#1f2937; color:white;">
-    <option value="tether">USDT</option>
-    <option value="bitcoin">BTC</option>
-    <option value="ethereum">ETH</option>
-  </select>
-  
-  <button onclick="doExchange()" style="width:100%; padding:12px; background:#10b981; color:white; border:none; border-radius:8px; font-weight:bold;">Get Live Rate</button>
-  <p id="ex-result" style="color:white; margin-top:10px;">Result will show here...</p>
-</div>
+<button onclick="confirmExchange()" style="width:100%; padding:12px; background:#2563eb; color:white; border:none; border-radius:8px; font-weight:bold; margin-top:8px;">Confirm Exchange</button>
+<div id="exchange-history" style="margin-top:16px; color:white;"></div>
 
 <script>
-async function doExchange(){
-  const amt = document.getElementById('ex-amount').value || 0;
+let history = [];
+function confirmExchange(){
+  const amt = document.getElementById('ex-amount').value;
   const to = document.getElementById('ex-to').value;
-  const resEl = document.getElementById('ex-result');
-  resEl.innerText = "Fetching live rate...";
-  try{
-    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+to+'&vs_currencies=gbp');
-    const d = await r.json();
-    const rate = d[to].gbp;
-    const got = amt / rate;
-    resEl.innerText = amt + " GBP = " + got.toFixed(6) + " " + to.toUpperCase() + "  (1 " + to.toUpperCase() + " = £" + rate + ")";
-  }catch(e){
-    resEl.innerText = "Rate failed, try again. Check internet.";
+  const resEl = document.getElementById('ex-result').innerText;
+  if(resEl.includes('Failed') || !resEl){
+    alert('Get live rate first');
+    return;
   }
+  history.push(`${amt} GBP → ${to.toUpperCase() === 'TETHER' ? 'USDT' : to.toUpperCase()} - ${new Date().toLocaleTimeString()}`);
+  document.getElementById('exchange-history').innerHTML = '<h4 style="margin:0 0 8px 0;">Exchange History:</h4>' + history.map(h => `<p style="margin:4px 0;">${h}</p>`).join('');
 }
 </script>
-<!-- END SAFE EXCHANGE -->
