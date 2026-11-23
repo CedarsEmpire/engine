@@ -15,22 +15,28 @@
 <div id="withdraw" class="page hide"><div class="card"><b>WITHDRAW</b><label>Network</label><select id="wdNet"><option value="polygon">Polygon</option><option value="tron">Tron</option></select><label>To Wallet</label><input id="wallet" placeholder="0x... / T..."><label>Amount $</label><input id="wd" type="number" placeholder="1" oninput="doCalc()"><div class="row"><span>Fee 20%</span><b id="fee">$0.00</b></div><div class="row"><span>You Get</span><b id="net">$0.00</b></div><button class="btn" onclick="doWd()">WITHDRAW</button></div></div>
 </div></div><div class="toast" id="toast"></div>
 <script>
-const SUPABASE_URL = "PASTE_YOUR_COPIED_URL_HERE";
-const SUPABASE_KEY = "PASTE_YOUR_COPIED_ANON_KEY_HERE";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+var SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co/rest/v1/";
+var SUPABASE_KEY = "sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
+var supabase = null;
+try{
+  if(window.supabase && SUPABASE_URL.indexOf("http")==0){
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+  }
+}catch(e){ supabase = null; }
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none';},2500);}
 async function testConn(){
   var m = document.getElementById('connMsg');
+  if(!supabase){ m.textContent = "FAILED: URL/KEY not pasted yet - replace PASTE_YOUR_... lines"; toast("Paste real URL + Key first"); return; }
   m.textContent = "Testing...";
   try{
-    const { data, error } = await supabase.from('members').select('*').limit(1);
-    if(error){ m.textContent = "FAILED: " + error.message; toast("FAILED: " + error.message); }
-    else{ m.textContent = "Connected! Members found: " + (data ? data.length : 0); toast("Connected!"); }
+    const r = await supabase.from('members').select('*').limit(1);
+    if(r.error){ m.textContent = "FAILED: " + r.error.message; toast("FAILED: " + r.error.message); }
+    else{ m.textContent = "Connected! Members found: " + (r.data ? r.data.length : 0); toast("Connected!"); }
   }catch(e){ m.textContent = "FAILED: " + e.message; toast("FAILED: " + e.message); }
 }
 var TREASURY="0x0d4c2B95e8FB7Be3DB9953bAcEf3A4Be643bA77B";var TRON="TE26B7zQjMbahYAWcxEsSPC6aZEr2Hcz1u";var BAL=4,PROF=0,TASKS=0,RUN=true,STAKED=0,COMP=true;var MEM_PW="";
 try{var q=localStorage.getItem('c9');if(q){var p=JSON.parse(q);if(p&&typeof p.bal==='number'){BAL=p.bal;PROF=p.prof||0;TASKS=p.tasks||0;STAKED=p.staked||0;COMP=p.comp!==false;}}MEM_PW=localStorage.getItem('ch')||"";}catch(e){}
 function save(){try{localStorage.setItem('c9',JSON.stringify({bal:BAL,prof:PROF,tasks:TASKS,staked:STAKED,comp:COMP}));}catch(e){}}
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none';},2500);}
 function log(m){var t=document.getElementById('term');if(t){t.innerHTML+='['+new Date().toLocaleTimeString()+'] '+m+'<br>';t.scrollTop=9999;}}
 function el(id){return document.getElementById(id);}
 function render(){el('bal').textContent='$'+BAL.toFixed(3);el('prof').textContent='+$'+PROF.toFixed(3);el('tasks').textContent=TASKS;el('eng').textContent=RUN?'ON':'OFF';el('compTxt').textContent=COMP?'ON':'OFF';el('compBtn').textContent=COMP?'ON':'OFF';el('stakedHome').textContent='$'+STAKED.toFixed(2);el('stakeBal').textContent='$'+BAL.toFixed(2);el('staked').textContent='$'+STAKED.toFixed(2);var w=['W1 Forex','W2 Forex','W3 Crypto','W4 Crypto','W5 Arbitrage','W6 Arbitrage','W7 News Guard','W8 Risk'];el('wlist').innerHTML=w.map(function(x){return '<div class="row"><span>'+x+'</span><b>'+(RUN?'Working':'Paused')+'</b></div>';}).join('');}
