@@ -6,14 +6,14 @@
 <title>Cedars Empire - Shareholder</title>
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;overflow-x:hidden;width:100%;max-width:100%}
+html,body{margin:0;padding:0;overflow-x:hidden;width:100%}
 body{background:#f8fafc;color:#0f172a;font-family:Inter,system-ui,-apple-system,sans-serif}
-.topbar{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:12px 14px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10;width:100%}
+.topbar{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:12px 14px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10}
 .logo{font-weight:800;font-size:17px;letter-spacing:-.5px;white-space:nowrap}.logo span{color:#16a34a}
 .badge{background:#dcfce7;color:#166534;padding:6px 10px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid #bbf7d0;white-space:nowrap}
-#user-name{font-size:12px;font-weight:600;word-break:break-all}
+#user-name{font-size:12px;font-weight:600}
 .wrap{padding:14px;width:100%;max-width:960px;margin:0 auto}
-.notice{background:#fffbeb;border:1px solid #fde68a;padding:14px;border-radius:12px;font-size:13px;line-height:1.5;margin-bottom:14px;word-wrap:break-word}
+.notice{background:#fffbeb;border:1px solid #fde68a;padding:14px;border-radius:12px;font-size:13px;line-height:1.5;margin-bottom:14px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:12px}
 .card{background:#fff;border:1px solid #e2e8f0;padding:16px;border-radius:14px;width:100%;overflow:hidden}
 .card small{color:#64748b;font-size:12px}.card b{font-size:22px;display:block;margin-top:6px;word-break:break-word}
@@ -35,7 +35,8 @@ input,select{width:100%;max-width:100%;padding:12px;border-radius:10px;border:1p
 .muted{color:#64748b;font-size:12px;line-height:1.5}
 .fee-box{background:#f8fafc;border:1px dashed #cbd5e1;padding:12px;border-radius:10px;font-size:13px;margin:10px 0;word-break:break-word}
 .copy-box{display:flex;gap:8px;flex-wrap:wrap}.copy-box input{flex:1;min-width:200px}.copy-box button{width:100px}
-@media(max-width:600px){.logo{font-size:15px}.topbar{flex-direction:column;align-items:flex-start}.wrap{padding:10px}.panel{padding:14px}.card b{font-size:20px}}
+.profile-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px}.profile-row span:first-child{color:#64748b}
+@media(max-width:600px){.logo{font-size:15px}.topbar{flex-direction:column;align-items:flex-start}.wrap{padding:10px}.panel{padding:14px}}
 </style>
 </head>
 <body>
@@ -47,7 +48,6 @@ input,select{width:100%;max-width:100%;padding:12px;border-radius:10px;border:1p
 <div class="wrap">
   <div class="notice"><b>Shareholder Portal — Natural White, Real Data Only.</b><br>You earn in <b>£</b>. To withdraw you must <b>Exchange £ → Crypto</b> then withdraw to your crypto wallet. <b>Withdraw fee 20% | P2P fee 5% | Referral is how we grow.</b> No dividends are guaranteed — paid only when Admin declares a real profit pool.</div>
 
-  <!-- STATS UP -->
   <div class="grid">
     <div class="card"><small>My Shares</small><b id="stat-shares">0</b><p id="stat-plan">No plan yet</p></div>
     <div class="card"><small>Total Invested</small><b id="stat-invested">£0.00</b><p>Approved SHAREHOLDER_BUY</p></div>
@@ -57,9 +57,11 @@ input,select{width:100%;max-width:100%;padding:12px;border-radius:10px;border:1p
     <div class="card"><small>Referral Earnings</small><b id="stat-referral">£0.00</b><p>10% of referred deposits</p></div>
   </div>
 
-  <!-- TABS UP -->
+  <!-- TABS UP - NOW WITH PROFILE + KYC -->
   <div class="tabs">
     <button class="tab active" onclick="showTab('holdings',this)">Holdings</button>
+    <button class="tab" onclick="showTab('profile',this)">Profile</button>
+    <button class="tab" onclick="showTab('kyc',this)">KYC</button>
     <button class="tab" onclick="showTab('plans',this)">Buy Shares</button>
     <button class="tab" onclick="showTab('exchanger',this)">Exchanger £ → Crypto</button>
     <button class="tab" onclick="showTab('withdraw',this)">Withdraw (20%)</button>
@@ -70,24 +72,51 @@ input,select{width:100%;max-width:100%;padding:12px;border-radius:10px;border:1p
     <button class="tab" onclick="showTab('register',this)">Register</button>
   </div>
 
-  <!-- HOLDINGS -->
   <div id="tab-holdings" class="panel active"><h3>My Holdings</h3><div id="holdings-list">Loading...</div><p class="muted">Shareholder money gets Dividends only, not Daily Crediting. No double-pay.</p></div>
 
-  <!-- PLANS -->
+  <!-- PROFILE - NEW -->
+  <div id="tab-profile" class="panel">
+    <h3>My Profile</h3>
+    <p class="muted" id="profile-not-logged">Please Register / Login first.</p>
+    <div id="profile-box">
+      <div class="profile-row"><span>Username</span><b id="pf-username">-</b></div>
+      <div class="profile-row"><span>Full Name</span><b id="pf-fullname">-</b></div>
+      <div class="profile-row"><span>Email</span><b id="pf-email">-</b></div>
+      <div class="profile-row"><span>KYC Status</span><b id="pf-kyc">-</b></div>
+      <div class="profile-row"><span>Referral Code</span><b id="pf-refcode">-</b></div>
+      <div class="profile-row"><span>Referred By</span><b id="pf-referredby">-</b></div>
+      <div class="profile-row"><span>Joined</span><b id="pf-joined">-</b></div>
+      <label>Wallet Address (for Withdraw)</label><input id="pf-wallet" placeholder="Your USDT TRC20 Address">
+      <button class="btn btn-dark" onclick="saveWallet()">Save Wallet Address</button>
+      <button class="btn btn-light" onclick="logoutUser()">Logout</button>
+    </div>
+  </div>
+
+  <!-- KYC - NEW AS TAB + ALSO AT BOTTOM -->
+  <div id="tab-kyc" class="panel">
+    <h3>KYC Verification</h3>
+    <p class="muted">Upload your ID + Selfie. Admin approves in admin.html. You need KYC Approved to buy shares, exchange, withdraw.</p>
+    <div id="kyc-tab-status" style="font-weight:800;font-size:18px;margin:8px 0">NOT_STARTED</div>
+    <label>ID Type</label><select id="id-type-2"><option value="NATIONAL_ID">National ID</option><option value="PASSPORT">Passport</option><option value="DRIVING">Driving Licence</option></select>
+    <label>ID Number</label><input id="id-number-2" placeholder="ID Number e.g. CF123456">
+    <label>ID Front — Upload Photo</label><input type="file" id="file-front-2" accept="image/*">
+    <label>ID Back — Upload Photo</label><input type="file" id="file-back-2" accept="image/*">
+    <label>Selfie — Upload Photo</label><input type="file" id="file-selfie-2" accept="image/*">
+    <div id="kyc-upload-status-2" class="muted" style="margin-top:8px"></div>
+    <button class="btn btn-green" id="kyc-submit-btn-2" onclick="submitKycTab()">Submit KYC</button>
+  </div>
+
   <div id="tab-plans" class="panel"><h3>Buy Shares</h3><div id="plans-list">Loading...</div></div>
 
-  <!-- EXCHANGER -->
   <div id="tab-exchanger" class="panel">
     <h3>Exchanger — £ → Crypto</h3>
-    <p class="muted">You earn in £. You must exchange to crypto before you can withdraw. Exchange fee is 2%. Example: £100 → £98 → 98 USDT.</p>
+    <p class="muted">Exchange fee 2%. Example: £100 → £98 → 98 USDT.</p>
     <label>Amount in £</label><input id="ex-amount" type="number" placeholder="e.g. 100">
     <label>Receive Crypto</label><select id="ex-crypto"><option value="USDT">USDT (TRC20)</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select>
     <div class="fee-box" id="ex-preview">Enter amount to see preview</div>
     <button class="btn btn-dark" onclick="doExchange()">Exchange £ → Crypto Now</button>
-    <div id="ex-history" style="margin-top:14px"></div>
   </div>
 
-  <!-- WITHDRAW -->
   <div id="tab-withdraw" class="panel">
     <h3>Withdraw Crypto To Your Wallet — Fee 20%</h3>
     <p class="muted">You can only withdraw <b>Crypto Balance</b>, not £ Balance. First Exchange £ → Crypto, then Withdraw.</p>
@@ -96,24 +125,20 @@ input,select{width:100%;max-width:100%;padding:12px;border-radius:10px;border:1p
     <label>Network</label><select id="wd-network"><option>USDT TRC20</option><option>USDT ERC20</option><option>BTC</option></select>
     <div class="fee-box" id="wd-preview">Enter amount to see fee + net</div>
     <button class="btn btn-green" onclick="requestWithdraw()">Request Withdraw (20% Fee)</button>
-    <div id="wd-history" style="margin-top:14px"></div>
   </div>
 
-  <!-- P2P -->
   <div id="tab-p2p" class="panel">
     <h3>P2P Transfer — Fee 5%</h3>
-    <p class="muted">Send £ to another member. You pay 5% fee. Receiver gets 95%. Example: Send £100 → Receiver gets £95.</p>
+    <p class="muted">Send £ to another member. You pay 5% fee. Receiver gets 95%.</p>
     <label>Receiver Username</label><input id="p2p-to" placeholder="Receiver Username">
     <label>Amount in £</label><input id="p2p-amount" type="number" placeholder="e.g. 50">
     <div class="fee-box" id="p2p-preview">Enter amount to see fee</div>
     <button class="btn btn-dark" onclick="sendP2P()">Send P2P (5% Fee)</button>
-    <div id="p2p-history" style="margin-top:14px"></div>
   </div>
 
-  <!-- REFERRAL -->
   <div id="tab-referral" class="panel">
     <h3>Referral — Boost Membership</h3>
-    <p class="muted">Share your link. When your friend completes KYC + first deposit is Approved, you earn <b>10% referral</b> in £.</p>
+    <p class="muted">Share your link. When friend completes KYC + first deposit Approved, you earn <b>10% referral</b> in £.</p>
     <label>Your Referral Link</label>
     <div class="copy-box"><input id="ref-link" readonly value="Loading..."><button class="btn btn-light" onclick="copyRef()">Copy</button></div>
     <div class="grid" style="margin-top:12px">
@@ -124,22 +149,18 @@ input,select{width:100%;max-width:100%;padding:12px;border-radius:10px;border:1p
     <h4>People You Referred</h4><div id="ref-list">Loading...</div>
   </div>
 
-  <!-- DIVIDENDS -->
   <div id="tab-dividends" class="panel"><h3>Dividend History</h3><div id="dividends-list">Loading...</div></div>
 
-  <!-- REDEEM -->
   <div id="tab-redeem" class="panel">
     <h3>Redemption — Better Than Billboard</h3>
     <label>Redemption Code</label><input id="redeem-code" placeholder="Enter Code e.g. CEDARS-10">
     <button class="btn btn-green" onclick="redeemCode()">Redeem Code</button>
     <p class="muted">One code per person. Needs KYC Approved.</p>
-    <div id="redeem-history" style="margin-top:12px"></div>
   </div>
 
-  <!-- REGISTER -->
   <div id="tab-register" class="panel">
     <h3>Register as a Shareholder</h3>
-    <p class="muted">Create your shareholder account. If someone invited you, their code is saved automatically from link ?ref=CODE</p>
+    <p class="muted">Create your account. If someone invited you, code is saved automatically from link ?ref=CODE</p>
     <label>Username</label><input id="reg-username" placeholder="e.g. johndoe">
     <label>Full Name</label><input id="reg-fullname" placeholder="e.g. John Doe">
     <label>Email</label><input id="reg-email" type="email" placeholder="e.g. johndoe@example.com">
@@ -152,38 +173,36 @@ input,select{width:100%;max-width:100%;padding:12px;border-radius:10px;border:1p
     <label>Username</label><input id="login-username" placeholder="Your username">
     <label>Password</label><input id="login-password" type="password" placeholder="Password">
     <button class="btn btn-dark" onclick="loginUser()">Login</button>
-    <div id="login-status" style="margin-top:10px"></div>
   </div>
 
-  <!-- KYC - DOWN AT BOTTOM WITH UPLOADS -->
+  <!-- KYC AT BOTTOM TOO - SAME UPLOAD, SO YOU NEVER MISS IT -->
   <div class="card" id="kyc-card" style="margin-top:16px">
     <small>KYC Status</small><b id="kyc-status">NOT_STARTED</b>
     <p id="kyc-msg">Complete KYC to buy shares, exchange, withdraw, or refer.</p>
     <div id="kyc-form">
-      <label>ID Type</label>
-      <select id="id-type"><option value="NATIONAL_ID">National ID</option><option value="PASSPORT">Passport</option><option value="DRIVING">Driving Licence</option></select>
+      <label>ID Type</label><select id="id-type"><option value="NATIONAL_ID">National ID</option><option value="PASSPORT">Passport</option><option value="DRIVING">Driving Licence</option></select>
       <label>ID Number</label><input id="id-number" placeholder="ID Number e.g. CF123456">
-      <label>ID Front — Upload Photo</label><input type="file" id="file-front" accept="image/*">
-      <img id="preview-front" style="width:100%;max-width:220px;border-radius:10px;display:none;margin-top:8px">
-      <label>ID Back — Upload Photo</label><input type="file" id="file-back" accept="image/*">
-      <img id="preview-back" style="width:100%;max-width:220px;border-radius:10px;display:none;margin-top:8px">
-      <label>Selfie — Upload Photo</label><input type="file" id="file-selfie" accept="image/*">
-      <img id="preview-selfie" style="width:100%;max-width:220px;border-radius:10px;display:none;margin-top:8px">
+      <label>ID Front — Upload Photo</label><input type="file" id="file-front" accept="image/*"><img id="preview-front" style="width:100%;max-width:220px;border-radius:10px;display:none;margin-top:8px">
+      <label>ID Back — Upload Photo</label><input type="file" id="file-back" accept="image/*"><img id="preview-back" style="width:100%;max-width:220px;border-radius:10px;display:none;margin-top:8px">
+      <label>Selfie — Upload Photo</label><input type="file" id="file-selfie" accept="image/*"><img id="preview-selfie" style="width:100%;max-width:220px;border-radius:10px;display:none;margin-top:8px">
       <div id="kyc-upload-status" class="muted" style="margin-top:8px"></div>
       <button class="btn btn-green" id="kyc-submit-btn" onclick="submitKyc()">Submit KYC</button>
-      <p class="muted">Your photos upload to Supabase Storage bucket <b>kyc</b>. Admin sees them in admin.html to Approve / Reject.</p>
+      <p class="muted">Photos upload to Supabase Storage bucket <b>kyc</b>. Admin sees them to Approve / Reject.</p>
     </div>
   </div>
-
 </div>
 
 <script>
+// === SUPABASE - SAVED & SYNCED ===
 const SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co/rest/v1/";
 const SUPABASE_KEY = "sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
+const SUPABASE_BASE = "https://ipyvewpjtpgfuqfwizlr.supabase.co";
+
 let CURRENT_USER_ID = localStorage.getItem('shareholder_user_id') || '';
 let CURRENT_USERNAME = localStorage.getItem('shareholder_username') || '';
 let CURRENT_REF_CODE = '';
 let BAL_GBP = 0, BAL_CRYPTO = 0;
+let CURRENT_PROFILE = null;
 
 function headers(){ return { "apikey": SUPABASE_KEY, "Authorization": "Bearer "+SUPABASE_KEY, "Content-Type":"application/json" }; }
 function money(n){ return '£'+Number(n||0).toFixed(2); }
@@ -208,7 +227,7 @@ function previewFile(inputId, imgId){
   if(!f) return;
   const url = URL.createObjectURL(f);
   const img = document.getElementById(imgId);
-  img.src = url; img.style.display = 'block';
+  if(img){ img.src = url; img.style.display = 'block'; }
 }
 document.getElementById('file-front')?.addEventListener('change', ()=>previewFile('file-front','preview-front'));
 document.getElementById('file-back')?.addEventListener('change', ()=>previewFile('file-back','preview-back'));
@@ -216,14 +235,9 @@ document.getElementById('file-selfie')?.addEventListener('change', ()=>previewFi
 
 async function uploadKycFile(file, filename){
   const path = `${CURRENT_USER_ID}/${Date.now()}-${filename}`;
-  const base = SUPABASE_URL.replace('/rest/v1/','');
-  const res = await fetch(base + `/storage/v1/object/kyc/${path}`, {
-    method: 'POST',
-    headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer "+SUPABASE_KEY, "Content-Type": file.type || 'image/jpeg' },
-    body: file
-  });
+  const res = await fetch(SUPABASE_BASE + `/storage/v1/object/kyc/${path}`, { method:'POST', headers:{ "apikey": SUPABASE_KEY, "Authorization": "Bearer "+SUPABASE_KEY, "Content-Type": file.type || 'image/jpeg' }, body: file });
   if(!res.ok) throw new Error('Upload failed for '+filename);
-  return base + `/storage/v1/object/public/kyc/${path}`;
+  return SUPABASE_BASE + `/storage/v1/object/public/kyc/${path}`;
 }
 
 async function loadAll(){
@@ -234,15 +248,28 @@ async function loadAll(){
     document.getElementById('user-name').innerText = 'Not logged in - Go to Register';
     document.getElementById('holdings-list').innerHTML = 'Please Register / Login first.';
     document.getElementById('plans-list').innerHTML = 'Please Register / Login first.';
+    document.getElementById('profile-not-logged').innerText = 'Please Register / Login first to see Profile.';
     return;
   }
   document.getElementById('user-name').innerText = CURRENT_USERNAME;
   const users = await sb('users', `select=*&id=eq.${CURRENT_USER_ID}`);
   const me = users[0]||{};
+  CURRENT_PROFILE = me;
   CURRENT_REF_CODE = me.referral_code || me.username || '';
+  // PROFILE SYNC
+  document.getElementById('pf-username').innerText = me.username || '-';
+  document.getElementById('pf-fullname').innerText = me.full_name || '-';
+  document.getElementById('pf-email').innerText = me.email || '-';
+  document.getElementById('pf-kyc').innerText = me.kyc_status || 'NOT_STARTED';
+  document.getElementById('pf-refcode').innerText = CURRENT_REF_CODE;
+  document.getElementById('pf-referredby').innerText = me.referred_by || 'None';
+  document.getElementById('pf-joined').innerText = me.created_at ? new Date(me.created_at).toLocaleDateString() : '-';
+  document.getElementById('profile-not-logged').innerText = '';
+  if(me.wallet_address){ document.getElementById('pf-wallet').value = me.wallet_address; document.getElementById('wd-address').value = me.wallet_address; }
+  // KYC SYNC - BOTH PLACES
   document.getElementById('kyc-status').innerText = me.kyc_status || 'NOT_STARTED';
-  if(me.kyc_status!=='APPROVED'){ document.getElementById('kyc-msg').innerText = me.kyc_reject_reason ? 'Rejected: '+me.kyc_reject_reason : 'Complete KYC to unlock Exchange, Withdraw, P2P, Referral.'; }
-  else { document.getElementById('kyc-msg').innerText = 'KYC Approved. You can buy shares, exchange, withdraw.'; }
+  document.getElementById('kyc-tab-status').innerText = me.kyc_status || 'NOT_STARTED';
+  document.getElementById('kyc-msg').innerText = me.kyc_status!=='APPROVED' ? (me.kyc_reject_reason ? 'Rejected: '+me.kyc_reject_reason : 'Complete KYC to unlock Exchange, Withdraw, P2P, Referral.') : 'KYC Approved. You can buy shares, exchange, withdraw.';
   document.getElementById('ref-link').value = window.location.origin + '/index.html?ref=' + CURRENT_REF_CODE;
   document.getElementById('ref-code').innerText = CURRENT_REF_CODE;
   const ledger = await sb('ledger', `select=*&user_id=eq.${CURRENT_USER_ID}&order=created_at.desc&limit=100`);
@@ -280,7 +307,14 @@ async function loadAll(){
 }
 
 function copyRef(){ navigator.clipboard.writeText(document.getElementById('ref-link').value); alert('Referral link copied'); }
-
+function logoutUser(){ localStorage.removeItem('shareholder_user_id'); localStorage.removeItem('shareholder_username'); location.reload(); }
+async function saveWallet(){
+  const w = document.getElementById('pf-wallet').value.trim();
+  if(!w) return alert('Enter wallet address');
+  await fetch(SUPABASE_URL+"users?id=eq."+CURRENT_USER_ID,{method:'PATCH',headers:headers(),body:JSON.stringify({wallet_address:w})});
+  document.getElementById('wd-address').value = w;
+  alert('Wallet saved and synced to Withdraw tab');
+}
 async function registerUser(){
   const username=document.getElementById('reg-username').value.trim();
   const fullname=document.getElementById('reg-fullname').value.trim();
@@ -295,8 +329,7 @@ async function registerUser(){
   localStorage.setItem('shareholder_user_id', newUser.id);
   localStorage.setItem('shareholder_username', newUser.username);
   CURRENT_USER_ID = newUser.id; CURRENT_USERNAME = newUser.username;
-  document.getElementById('reg-status').innerHTML = 'Registered! You are now logged in.';
-  alert('Registered!'); loadAll(); showTab('holdings', document.querySelector('.tab'));
+  alert('Registered!'); loadAll(); showTab('profile', document.querySelectorAll('.tab')[1]);
 }
 async function loginUser(){
   const username=document.getElementById('login-username').value.trim();
@@ -310,35 +343,35 @@ async function loginUser(){
   CURRENT_USER_ID = me.id; CURRENT_USERNAME = me.username;
   alert('Logged in as '+me.username); loadAll();
 }
-async function submitKyc(){
+async function doSubmitKyc(idTypeEl, idNumEl, frontEl, backEl, selfieEl, statusEl, btnEl){
   if(!CURRENT_USER_ID) return alert('Register / Login first');
-  const idNumber = document.getElementById('id-number').value.trim();
-  const fFront = document.getElementById('file-front').files[0];
-  const fBack = document.getElementById('file-back').files[0];
-  const fSelfie = document.getElementById('file-selfie').files[0];
+  const idNumber = document.getElementById(idNumEl).value.trim();
+  const fFront = document.getElementById(frontEl).files[0];
+  const fBack = document.getElementById(backEl).files[0];
+  const fSelfie = document.getElementById(selfieEl).files[0];
   if(!idNumber) return alert('Enter ID Number');
   if(!fFront || !fBack || !fSelfie) return alert('Please upload all 3 photos: Front, Back, Selfie');
-  const btn = document.getElementById('kyc-submit-btn');
-  const statusEl = document.getElementById('kyc-upload-status');
+  const btn = document.getElementById(btnEl);
+  const status = document.getElementById(statusEl);
   btn.disabled = true; btn.innerText = 'Uploading... Please wait';
-  statusEl.innerText = 'Uploading Front...';
+  status.innerText = 'Uploading Front...';
   try{
     const frontUrl = await uploadKycFile(fFront, 'front.jpg');
-    statusEl.innerText = 'Uploading Back...';
+    status.innerText = 'Uploading Back...';
     const backUrl = await uploadKycFile(fBack, 'back.jpg');
-    statusEl.innerText = 'Uploading Selfie...';
+    status.innerText = 'Uploading Selfie...';
     const selfieUrl = await uploadKycFile(fSelfie, 'selfie.jpg');
-    statusEl.innerText = 'Saving KYC...';
-    await fetch(SUPABASE_URL+"kyc_docs",{method:'POST',headers:headers(),body:JSON.stringify({user_id:CURRENT_USER_ID,id_type:document.getElementById('id-type').value,id_number:idNumber,id_front_url:frontUrl,id_back_url:backUrl,selfie_url:selfieUrl})});
+    status.innerText = 'Saving KYC...';
+    await fetch(SUPABASE_URL+"kyc_docs",{method:'POST',headers:headers(),body:JSON.stringify({user_id:CURRENT_USER_ID,id_type:document.getElementById(idTypeEl).value,id_number:idNumber,id_front_url:frontUrl,id_back_url:backUrl,selfie_url:selfieUrl})});
     await fetch(SUPABASE_URL+"users?id=eq."+CURRENT_USER_ID,{method:'PATCH',headers:headers(),body:JSON.stringify({kyc_status:'PENDING',kyc_progress:50})});
-    statusEl.innerText = 'KYC submitted. Wait for Admin approval.';
+    status.innerText = 'KYC submitted. Wait for Admin approval.';
     alert('KYC submitted with photos. Wait for Admin approval.');
     loadAll();
-  }catch(e){
-    alert('KYC upload failed: '+e.message+' — Check Supabase Storage bucket "kyc" is created and PUBLIC');
-  }
+  }catch(e){ alert('KYC upload failed: '+e.message+' — Check Supabase Storage bucket "kyc" is created and PUBLIC'); }
   btn.disabled = false; btn.innerText = 'Submit KYC';
 }
+function submitKyc(){ doSubmitKyc('id-type','id-number','file-front','file-back','file-selfie','kyc-upload-status','kyc-submit-btn'); }
+function submitKycTab(){ doSubmitKyc('id-type-2','id-number-2','file-front-2','file-back-2','file-selfie-2','kyc-upload-status-2','kyc-submit-btn-2'); }
 async function buyPlan(plan_id,price){
   const res = await fetch(SUPABASE_URL+"ledger",{method:'POST',headers:{...headers(),"Prefer":"return=representation"},body:JSON.stringify({user_id:CURRENT_USER_ID,type:'SHAREHOLDER_BUY',amount:price,fee:0,status:'PENDING',reference:'SH-'+Date.now(),meta:{plan_id}})});
   if(!res.ok) return alert('Need KYC Approved');
@@ -348,7 +381,7 @@ async function doExchange(){
   const amt = Number(document.getElementById('ex-amount').value);
   if(!amt||amt<=0) return alert('Enter amount');
   if(amt > BAL_GBP) return alert('Not enough £ balance. You have '+money(BAL_GBP));
-  alert(`Exchange via Edge Function: £${amt} -> Fee £${(amt*0.02).toFixed(2)} -> You get ${(amt*0.98).toFixed(2)} USDT. Connect this button to your Edge Function.`);
+  alert(`Exchange via Edge Function: £${amt} -> Fee £${(amt*0.02).toFixed(2)} -> You get ${(amt*0.98).toFixed(2)} USDT.`);
 }
 async function requestWithdraw(){
   const amt = Number(document.getElementById('wd-amount').value);
@@ -363,7 +396,7 @@ async function sendP2P(){
   const to = document.getElementById('p2p-to').value.trim(); const amt = Number(document.getElementById('p2p-amount').value);
   if(!to||!amt) return alert('Enter user + amount');
   if(amt > BAL_GBP) return alert('Not enough £ balance');
-  alert(`P2P via Edge Function: Send £${amt} to ${to} | Fee 5% = £${(amt*0.05).toFixed(2)} | They get £${(amt*0.95).toFixed(2)}. Must run in Edge Function as 2 ledger entries.`);
+  alert(`P2P via Edge Function: Send £${amt} to ${to} | Fee 5% = £${(amt*0.05).toFixed(2)} | They get £${(amt*0.95).toFixed(2)}.`);
 }
 async function redeemCode(){
   const code = document.getElementById('redeem-code').value.trim().toUpperCase();
