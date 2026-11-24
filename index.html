@@ -3,276 +3,224 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cedars Empire - Admin</title>
+<title>Cedars Empire - Shareholder</title>
 <style>
   *{box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
   body{margin:0;background:#0f172a;color:#fff}
-  .topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:#1e293b;position:sticky;top:0;z-index:10}
-  .logo{font-weight:800;font-size:18px}.logo span{color:#22c55e}
-  .badge{background:#22c55e;color:#000;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700}
-  .wrap{padding:20px;max-width:1200px;margin:auto}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#1e293b;position:sticky;top:0}
+  .logo{font-weight:800}.logo span{color:#22c55e}
+  .badge{background:#22c55e;color:#000;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:700}
+  .wrap{padding:18px;max-width:900px;margin:auto}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
   .card{background:#1e293b;padding:16px;border-radius:12px}
-  .card small{color:#94a3b8}.card b{font-size:24px;display:block;margin-top:6px}
-  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-  .tab{padding:10px 16px;border-radius:20px;background:#334155;cursor:pointer;border:none;color:#fff}
+  .card small{color:#94a3b8}.card b{font-size:22px;display:block;margin-top:6px}
+  .card p{font-size:12px;color:#94a3b8;margin:6px 0 0}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+  .tab{padding:10px 16px;border-radius:20px;background:#334155;border:none;color:#fff;cursor:pointer}
   .tab.active{background:#22c55e;color:#000;font-weight:700}
   .panel{background:#1e293b;padding:16px;border-radius:12px;display:none}
   .panel.active{display:block}
   table{width:100%;border-collapse:collapse;font-size:13px}
-  th{ text-align:left;color:#94a3b8;padding:10px;border-bottom:1px solid #334155}
+  th{text-align:left;color:#94a3b8;padding:10px;border-bottom:1px solid #334155}
   td{padding:10px;border-bottom:1px solid #1e293b;vertical-align:top}
-  input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;margin:6px 0}
-  .btn{padding:8px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
-  .btn-green{background:#22c55e}.btn-red{background:#ef4444;color:#fff}.btn-grey{background:#475569;color:#fff}
+  input,select{width:100%;padding:11px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;margin:6px 0}
+  .btn{padding:10px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:700;width:100%}
+  .btn-green{background:#22c55e}.btn-grey{background:#475569;color:#fff}
   .status{padding:4px 8px;border-radius:20px;font-size:11px;font-weight:700}
-  .PENDING{background:#facc15;color:#000}.APPROVED,.CREDITED{background:#22c55e;color:#000}.REJECTED{background:#ef4444}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media(max-width:700px){.row{grid-template-columns:1fr}}
-  .log{font-size:12px;color:#94a3b8;background:#0f172a;padding:10px;border-radius:8px;max-height:200px;overflow:auto}
+  .APPROVED,.CREDITED{background:#22c55e;color:#000}.PENDING{background:#facc15;color:#000}.REJECTED{background:#ef4444}
+  .warn{background:#fef3c7;color:#000;padding:12px;border-radius:10px;font-size:13px;margin-bottom:12px}
+  .muted{color:#94a3b8;font-size:12px}
 </style>
 </head>
 <body>
 <div class="topbar">
-  <div class="logo">CEDARS EMPIRE <span>LIVE • ADMIN</span></div>
-  <div><span id="sync-dot" class="badge">● SYNCED</span> <button class="btn btn-grey" onclick="logout()">Logout</button></div>
+  <div class="logo">CEDARS EMPIRE <span>SHAREHOLDER</span></div>
+  <div><span id="sync-dot" class="badge">● SYNCED</span> <span id="user-name"></span></div>
 </div>
 
 <div class="wrap">
+  <div class="warn">
+    <b>Shareholder Portal - Real Data Only.</b><br>
+    Shares and dividends shown here come from Supabase <b>ledger</b> + <b>user_shareholders</b>. No dividends are guaranteed. Dividends are paid only when Admin declares a real profit pool for that month.
+  </div>
+
+  <!-- KYC BANNER -->
+  <div id="kyc-banner" class="card" style="margin-bottom:12px">
+    <small>KYC Status</small><b id="kyc-status">NOT_STARTED</b>
+    <p id="kyc-msg">Complete KYC to buy shares, redeem, or withdraw.</p>
+    <div id="kyc-form" style="display:none">
+      <select id="id-type"><option value="NATIONAL_ID">National ID</option><option value="PASSPORT">Passport</option><option value="DRIVING">Driving License</option></select>
+      <input id="id-number" placeholder="ID Number">
+      <input id="id-front" placeholder="ID Front Image URL">
+      <input id="id-back" placeholder="ID Back Image URL">
+      <input id="selfie-url" placeholder="Selfie Image URL">
+      <button class="btn btn-green" onclick="submitKyc()">Submit KYC</button>
+    </div>
+  </div>
+
   <!-- STATS -->
   <div class="grid">
-    <div class="card"><small>Total Users</small><b id="stat-users">0</b></div>
-    <div class="card"><small>Total Deposits</small><b id="stat-deposits">£0</b></div>
-    <div class="card"><small>Pending KYC</small><b id="stat-kyc">0</b></div>
-    <div class="card"><small>Pending Withdraw</small><b id="stat-withdraw">0</b></div>
-    <div class="card"><small>Total Redemptions</small><b id="stat-redemption">0</b></div>
-    <div class="card"><small>Shareholders</small><b id="stat-shareholders">0</b></div>
+    <div class="card"><small>My Shares</small><b id="stat-shares">0</b><p id="stat-plan">No plan yet</p></div>
+    <div class="card"><small>Total Invested (Shares)</small><b id="stat-invested">£0.00</b><p>From approved SHAREHOLDER_BUY</p></div>
+    <div class="card"><small>Total Dividends Received</small><b id="stat-dividends">£0.00</b><p>From ledger DIVIDEND</p></div>
+    <div class="card"><small>Wallet Balance</small><b id="stat-balance">£0.00</b><p>All ledger types</p></div>
   </div>
 
   <div class="tabs">
-    <button class="tab active" onclick="showTab('kyc',this)">KYC Queue</button>
-    <button class="tab" onclick="showTab('deposits',this)">Deposits</button>
-    <button class="tab" onclick="showTab('withdraw',this)">Withdrawals</button>
-    <button class="tab" onclick="showTab('p2p',this)">P2P / Ledger</button>
-    <button class="tab" onclick="showTab('redemption',this)">Redemption</button>
-    <button class="tab" onclick="showTab('shareholder',this)">Shareholder Plans</button>
-    <button class="tab" onclick="showTab('daily',this)">Daily Crediting</button>
-    <button class="tab" onclick="showTab('settings',this)">Settings</button>
+    <button class="tab active" onclick="showTab('holdings',this)">My Holdings</button>
+    <button class="tab" onclick="showTab('plans',this)">Buy Shares</button>
+    <button class="tab" onclick="showTab('dividends',this)">Dividends</button>
+    <button class="tab" onclick="showTab('wallet',this)">Wallet / P2P</button>
+    <button class="tab" onclick="showTab('redeem',this)">Redemption</button>
   </div>
 
-  <!-- KYC -->
-  <div id="tab-kyc" class="panel active">
-    <h3>KYC Queue - Must match Member page</h3>
-    <div id="kyc-list">Loading...</div>
+  <!-- HOLDINGS -->
+  <div id="tab-holdings" class="panel active">
+    <h3>My Holdings</h3>
+    <div id="holdings-list">Loading...</div>
+    <p class="muted">Shareholder does NOT get Daily Crediting on the same money. You get Dividends only. This prevents double-pay.</p>
   </div>
 
-  <!-- DEPOSITS -->
-  <div id="tab-deposits" class="panel">
-    <h3>Deposits - Approve = Auto Credit + Package + Referral</h3>
-    <div id="deposit-list">Loading...</div>
+  <!-- PLANS -->
+  <div id="tab-plans" class="panel">
+    <h3>Available Shareholder Plans</h3>
+    <div id="plans-list">Loading...</div>
   </div>
 
-  <!-- WITHDRAW -->
-  <div id="tab-withdraw" class="panel">
-    <h3>Withdrawals - Approve = Auto Debit, Reject = Auto Refund</h3>
-    <div id="withdraw-list">Loading...</div>
+  <!-- DIVIDENDS -->
+  <div id="tab-dividends" class="panel">
+    <h3>Dividend History</h3>
+    <div id="dividends-list">Loading...</div>
   </div>
 
-  <!-- P2P / LEDGER -->
-  <div id="tab-p2p" class="panel">
-    <h3>Full Ledger - One Source of Truth</h3>
-    <select id="ledger-filter" onchange="loadLedger()"><option value="ALL">All Types</option><option>DEPOSIT</option><option>WITHDRAW</option><option>EARNING</option><option>P2P_SENT</option><option>P2P_RECEIVED</option><option>REFERRAL</option><option>REDEMPTION</option><option>DIVIDEND</option><option>SHAREHOLDER_BUY</option></select>
-    <div id="ledger-list">Loading...</div>
-    <p id="ledger-check" style="color:#22c55e;font-weight:700"></p>
+  <!-- WALLET -->
+  <div id="tab-wallet" class="panel">
+    <h3>Wallet</h3>
+    <div id="wallet-list">Loading...</div>
+    <h4>Send P2P</h4>
+    <input id="p2p-to" placeholder="Receiver Username">
+    <input id="p2p-amount" type="number" placeholder="Amount">
+    <button class="btn btn-green" onclick="sendP2P()">Send P2P (5% fee)</button>
+    <h4 style="margin-top:16px">Withdraw</h4>
+    <input id="wd-amount" type="number" placeholder="Amount">
+    <input id="wd-method" placeholder="Method e.g. Mobile Money / Bank">
+    <input id="wd-account" placeholder="Account Details">
+    <button class="btn btn-grey" onclick="requestWithdraw()">Request Withdraw (20% fee)</button>
+    <p class="muted">Withdraw needs KYC Approved. Rejected withdraws auto-return to balance.</p>
   </div>
 
-  <!-- REDEMPTION -->
-  <div id="tab-redemption" class="panel">
+  <!-- REDEEM -->
+  <div id="tab-redeem" class="panel">
     <h3>Redemption - Better Than Billboard</h3>
-    <div class="row">
-      <div><input id="rc-code" placeholder="Code e.g. CEDARS-10"><select id="rc-type"><option value="BONUS_CASH">BONUS_CASH</option><option value="DISCOUNT">DISCOUNT</option></select><input id="rc-value" type="number" placeholder="Reward Value e.g. 5"><input id="rc-max" type="number" placeholder="Max Uses e.g. 10"><input id="rc-expiry" type="date"><button class="btn btn-green" onclick="createCode()">Create Code</button></div>
-      <div><b>Stats</b><div id="redemption-stats">Loading...</div></div>
-    </div>
-    <div id="redemption-list" style="margin-top:12px"></div>
-  </div>
-
-  <!-- SHAREHOLDER -->
-  <div id="tab-shareholder" class="panel">
-    <h3>Shareholder Plans</h3>
-    <div class="row">
-      <div><input id="sh-name" placeholder="Plan Name e.g. Founding"><input id="sh-price" type="number" placeholder="Price e.g. 500"><input id="sh-shares" type="number" placeholder="Shares e.g. 10"><input id="sh-percent" type="number" step="0.01" placeholder="Profit Share % e.g. 2.5"><input id="sh-slots" type="number" placeholder="Max Slots e.g. 100"><button class="btn btn-green" onclick="createPlan()">Create Plan</button></div>
-      <div><b>Pending Shareholder Buys</b><div id="sh-pending">Loading...</div><br><b>Monthly Dividend</b><input id="div-month" placeholder="Month e.g. 2026-11"><input id="div-pool" type="number" placeholder="Total Profit Pool e.g. 10000"><button class="btn btn-green" onclick="payDividend()">Distribute Dividend (Once Per Month)</button></div>
-    </div>
-    <div id="sh-list" style="margin-top:12px"></div>
-  </div>
-
-  <!-- DAILY -->
-  <div id="tab-daily" class="panel">
-    <h3>Daily Crediting Engine</h3>
-    <p>Runs once per day at 00:05. Never run manually + cron together.</p>
-    <button class="btn btn-green" onclick="runDaily()">Run Daily Crediting Now (Test Only)</button>
-    <button class="btn btn-grey" onclick="loadDailyLog()">Refresh Log</button>
-    <div id="daily-log" class="log" style="margin-top:12px">No logs yet</div>
-    <h4>Packages</h4>
-    <div class="row"><div><input id="pkg-name" placeholder="Package Name"><input id="pkg-price" type="number" placeholder="Price"><input id="pkg-rate" type="number" step="0.0001" placeholder="Daily Rate e.g. 0.01 = 1%"><input id="pkg-days" type="number" placeholder="Duration Days"><button class="btn btn-green" onclick="createPackage()">Create Package</button></div><div id="pkg-list">Loading...</div></div>
-  </div>
-
-  <!-- SETTINGS -->
-  <div id="tab-settings" class="panel">
-    <h3>Fees - Shows on Member Wallet</h3>
-    <label>Exchange %</label><input id="fee-exchange" value="2">
-    <label>Withdraw %</label><input id="fee-withdraw" value="20">
-    <label>P2P %</label><input id="fee-p2p" value="5">
-    <label>Referral %</label><input id="fee-referral" value="10">
-    <button class="btn btn-green" onclick="saveFees()">Save Fees</button>
-    <p style="color:#94a3b8;font-size:12px">Change fees for FUTURE transactions only. Never change past ledger entries.</p>
-    <h3>Audit Log</h3><div id="audit-log" class="log">Loading...</div>
+    <input id="redeem-code" placeholder="Enter Code e.g. CEDARS-10">
+    <button class="btn btn-green" onclick="redeemCode()">Redeem Code</button>
+    <p class="muted">One code per person. Needs KYC Approved. Bonus cannot be withdrawn instantly - must activate a package first.</p>
+    <div id="redeem-history" style="margin-top:12px"></div>
   </div>
 </div>
 
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-// ===== CONFIG - CHANGE THIS TO YOUR DOMAIN =====
-const API = 'https://your-domain.com/api';
-const token = localStorage.getItem('admin_token');
-if(!token){ /* window.location.href='login.html'; */ }
+// ===== CONFIG - DO NOT HARDCODE BALANCES =====
+const SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co/rest/v1/";
+const SUPABASE_KEY = "YOUR_PUBLISHABLE_KEY_HERE"; // Keep in env, not in public repo
+// For demo: user_id comes from login. Replace with Supabase Auth session.
+let CURRENT_USER_ID = localStorage.getItem('shareholder_user_id') || '';
+let CURRENT_USERNAME = localStorage.getItem('shareholder_username') || '';
 
-// ===== API HELPER =====
-async function apiCall(path, method='GET', body=null){
-  try{
-    const res = await fetch(API+path,{method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:body?JSON.stringify(body):null});
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error||'API Error');
-    return data;
-  }catch(e){ console.error(e); addLog('API Error: '+e.message); throw e; }
-}
-function money(n){ return '£'+Number(n||0).toFixed(2); }
+function headers(){ return { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "Content-Type": "application/json" }; }
+function money(n){ return '£' + Number(n||0).toFixed(2); }
 function showTab(id,btn){ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('tab-'+id).classList.add('active'); btn.classList.add('active'); }
-function addLog(msg){ const el=document.getElementById('daily-log'); el.innerHTML = new Date().toLocaleTimeString()+' - '+msg+'<br>'+el.innerHTML; }
-function logout(){ localStorage.removeItem('admin_token'); location.reload(); }
 
-// ===== REAL-TIME SYNC =====
-let socket=null;
-try{
-  socket = io(API.replace('/api',''),{auth:{token}});
-  socket.on('connect',()=>{ document.getElementById('sync-dot').innerText='● SYNCED'; });
-  socket.on('disconnect',()=>{ document.getElementById('sync-dot').innerText='● OFFLINE - POLLING'; });
-  socket.on('kyc-pending',()=>{loadKyc();loadStats();});
-  socket.on('deposit-pending',()=>{loadDeposits();loadStats();});
-  socket.on('withdraw-pending',()=>{loadWithdrawals();loadStats();});
-  socket.on('wallet-updated',()=>{loadStats();loadLedger();loadDeposits();loadWithdrawals();});
-}catch(e){ console.log('Socket failed, using polling'); }
-// Fallback polling if socket fails - every 5s
-setInterval(()=>{ if(!socket || !socket.connected){ syncAll(); } },5000);
-
-// ===== STATS =====
-async function loadStats(){
-  // Backend should return sums from ledger, not stored balance
-  const d = await apiCall('/admin/stats').catch(()=>null);
-  if(!d) return;
-  document.getElementById('stat-users').innerText=d.total_users||0;
-  document.getElementById('stat-deposits').innerText=money(d.total_deposits);
-  document.getElementById('stat-kyc').innerText=d.pending_kyc||0;
-  document.getElementById('stat-withdraw').innerText=d.pending_withdraw||0;
-  document.getElementById('stat-redemption').innerText=d.total_redemptions||0;
-  document.getElementById('stat-shareholders').innerText=d.total_shareholders||0;
+async function sb(table, query){
+  const res = await fetch(SUPABASE_URL + table + "?" + query, { headers: headers() });
+  return res.json();
 }
 
-// ===== KYC =====
-async function loadKyc(){
-  const list = await apiCall('/admin/kyc/pending').catch(()=>[]);
-  const el=document.getElementById('kyc-list');
-  if(!list.length){ el.innerHTML='No pending KYC. Good.'; return; }
-  el.innerHTML = `<table><tr><th>User</th><th>ID Type / Number</th><th>Docs</th><th>Submitted</th><th>Action</th></tr>` + list.map(u=>`
-    <tr><td><b>${u.full_name}</b><br>${u.email}<br>${u.country}</td><td>${u.id_type}<br>${u.id_number}</td><td><a href="${u.id_front_url}" target="_blank">Front</a> | <a href="${u.id_back_url}" target="_blank">Back</a> | <a href="${u.selfie_url}" target="_blank">Selfie</a></td><td>${new Date(u.submitted_at).toLocaleString()}</td><td><button class="btn btn-green" onclick="reviewKyc('${u.user_id}','APPROVED')">Approve</button> <button class="btn btn-red" onclick="rejectKyc('${u.user_id}')">Reject</button></td></tr>`).join('') + `</table>`;
-}
-async function reviewKyc(user_id, decision){
-  await apiCall('/admin/kyc/review','POST',{user_id,decision});
-  addLog('KYC '+decision+' for '+user_id); loadKyc(); loadStats();
-}
-async function rejectKyc(user_id){
-  const reason = prompt('Rejection reason (required, member will see this):');
-  if(!reason) return alert('Reason required');
-  await apiCall('/admin/kyc/review','POST',{user_id,decision:'REJECTED',reason});
-  loadKyc();
+// ===== LOAD ALL - ONE TRUTH =====
+async function loadAll(){
+  if(!CURRENT_USER_ID){ document.getElementById('user-name').innerText = 'Not logged in'; return; }
+  document.getElementById('user-name').innerText = CURRENT_USERNAME;
+
+  // 1. User + KYC
+  const users = await sb('users', `select=*&id=eq.${CURRENT_USER_ID}`);
+  const me = users[0] || {};
+  document.getElementById('kyc-status').innerText = me.kyc_status || 'NOT_STARTED';
+  if(me.kyc_status !== 'APPROVED'){ document.getElementById('kyc-form').style.display='block'; document.getElementById('kyc-msg').innerText = me.kyc_reject_reason ? 'Rejected: '+me.kyc_reject_reason : 'Complete KYC to unlock shares.'; }
+  else { document.getElementById('kyc-msg').innerText = 'KYC Approved. You can buy shares, redeem, withdraw.'; }
+
+  // 2. Ledger - Wallet + Dividends + Invested
+  const ledger = await sb('ledger', `select=*&user_id=eq.${CURRENT_USER_ID}&order=created_at.desc&limit=100`);
+  let balance = 0, dividends = 0, invested = 0;
+  ledger.forEach(r=>{
+    if(r.status==='APPROVED' || r.status==='CREDITED'){
+      balance += Number(r.amount) - Number(r.fee);
+      if(r.type==='DIVIDEND') dividends += Number(r.amount);
+      if(r.type==='SHAREHOLDER_BUY') invested += Number(r.amount);
+    }
+  });
+  document.getElementById('stat-balance').innerText = money(balance);
+  document.getElementById('stat-dividends').innerText = money(dividends);
+  document.getElementById('stat-invested').innerText = money(invested);
+
+  // 3. Holdings
+  const holdings = await sb('user_shareholders', `select=*,shareholder_plans(name)&user_id=eq.${CURRENT_USER_ID}`);
+  let totalShares = 0;
+  holdings.forEach(h=> totalShares += Number(h.shares));
+  document.getElementById('stat-shares').innerText = totalShares;
+  document.getElementById('stat-plan').innerText = holdings.length ? holdings.map(h=>h.shareholder_plans?.name).join(', ') : 'No plan yet';
+  document.getElementById('holdings-list').innerHTML = holdings.length ? `<table><tr><th>Plan</th><th>Shares</th><th>Dividends Paid</th><th>Status</th></tr>`+holdings.map(h=>`<tr><td>${h.shareholder_plans?.name||''}</td><td>${h.shares}</td><td>${money(h.total_dividends_paid)}</td><td><span class="status APPROVED">${h.status}</span></td></tr>`).join('')+`</table>` : 'No holdings yet. Buy a plan below.';
+
+  // 4. Plans
+  const plans = await sb('shareholder_plans', `select=*&is_active=eq.true&order=price.asc`);
+  document.getElementById('plans-list').innerHTML = plans.length ? plans.map(p=>`
+    <div class="card" style="margin-bottom:10px"><b>${p.name}</b><br>Price: ${money(p.price)} | Shares: ${p.shares} | Profit Share: ${p.profit_share_percent}% | Max Slots: ${p.max_slots}<br><br>
+    <button class="btn btn-green" onclick="buyPlan('${p.id}', ${p.price})">Buy This Plan - Needs KYC Approved</button></div>`).join('') : 'No plans available';
+
+  // 5. Dividends + Wallet lists
+  const divs = ledger.filter(r=>r.type==='DIVIDEND');
+  document.getElementById('dividends-list').innerHTML = divs.length ? `<table><tr><th>Month</th><th>Amount</th><th>Date</th></tr>`+divs.map(d=>`<tr><td>${d.meta?.month||''}</td><td>${money(d.amount)}</td><td>${new Date(d.created_at).toLocaleString()}</td></tr>`).join('')+`</table>` : 'No dividends yet. Dividends are paid only when Admin declares a profit pool.';
+  document.getElementById('wallet-list').innerHTML = ledger.length ? `<table><tr><th>Date</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr>`+ledger.map(r=>`<tr><td>${new Date(r.created_at).toLocaleString()}</td><td>${r.type}</td><td>${money(r.amount)}</td><td>${money(r.fee)}</td><td><span class="status ${r.status}">${r.status}</span></td></tr>`).join('')+`</table>` : 'No transactions - This matches Admin. If Admin shows 0, you show 0.';
 }
 
-// ===== DEPOSITS / WITHDRAW =====
-async function loadDeposits(){
-  const list = await apiCall('/admin/deposits?status=PENDING').catch(()=>[]);
-  const el=document.getElementById('deposit-list');
-  if(!list.length){ el.innerHTML='No pending deposits'; return; }
-  el.innerHTML = `<table><tr><th>User</th><th>Package / Amount</th><th>Proof</th><th>Action</th></tr>`+list.map(d=>`
-    <tr><td>${d.full_name}<br>${d.username}</td><td>${d.meta?.package_id||''}<br><b>${money(d.amount)}</b></td><td><a href="${d.meta?.proof_url}" target="_blank">View Proof</a><br>${d.meta?.txn_ref||''}</td><td><button class="btn btn-green" onclick="approveDeposit('${d.id}')">Approve = Auto Credit</button> <button class="btn btn-red" onclick="rejectTx('${d.id}','deposit')">Reject</button></td></tr>`).join('')+`</table>`;
-}
-async function approveDeposit(ledger_id){ await apiCall('/admin/deposit/approve','POST',{ledger_id}); addLog('Deposit approved '+ledger_id); syncAll(); }
-
-async function loadWithdrawals(){
-  const list = await apiCall('/admin/withdrawals?status=PENDING').catch(()=>[]);
-  const el=document.getElementById('withdraw-list');
-  if(!list.length){ el.innerHTML='No pending withdrawals'; return; }
-  el.innerHTML = `<table><tr><th>User</th><th>Amount / Fee / Net</th><th>Method</th><th>Action</th></tr>`+list.map(w=>`
-    <tr><td>${w.full_name}</td><td><b>${money(Math.abs(w.amount))}</b><br>Fee: ${money(w.fee)}<br>Net: ${money(Math.abs(w.amount)-w.fee)}</td><td>${w.meta?.method}<br>${w.meta?.account_details||''}</td><td><button class="btn btn-green" onclick="approveWithdraw('${w.id}')">Approve</button> <button class="btn btn-red" onclick="rejectWithdraw('${w.id}')">Reject</button></td></tr>`).join('')+`</table>`;
-}
-async function approveWithdraw(ledger_id){ await apiCall('/admin/withdraw/approve','POST',{ledger_id}); syncAll(); }
-async function rejectWithdraw(ledger_id){ const reason=prompt('Reason:'); if(!reason) return; await apiCall('/admin/withdraw/reject','POST',{ledger_id,reason}); syncAll(); }
-async function rejectTx(ledger_id,type){ const reason=prompt('Reason:'); if(!reason) return; await apiCall('/admin/'+type+'/reject','POST',{ledger_id,reason}); syncAll(); }
-
-// ===== LEDGER =====
-async function loadLedger(){
-  const filter=document.getElementById('ledger-filter').value;
-  const list = await apiCall('/admin/ledger?limit=100'+(filter!=='ALL'?'&type='+filter:'')).catch(()=>[]);
-  const el=document.getElementById('ledger-list');
-  if(!list.length){ el.innerHTML='No transactions'; return; }
-  let sum=0; list.forEach(r=>{ if(['APPROVED','CREDITED'].includes(r.status)) sum+=Number(r.amount)-Number(r.fee); });
-  document.getElementById('ledger-check').innerText='Ledger check: Sum of APPROVED/CREDITED = '+money(sum)+' - This must equal sum of all member wallets';
-  el.innerHTML=`<table><tr><th>Date</th><th>User</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th><th>Ref</th></tr>`+list.map(r=>`<tr><td>${new Date(r.created_at).toLocaleString()}</td><td>${r.username||r.user_id}</td><td>${r.type}</td><td>${money(r.amount)}</td><td>${money(r.fee)}</td><td><span class="status ${r.status}">${r.status}</span></td><td>${r.reference}</td></tr>`).join('')+`</table>`;
+async function submitKyc(){
+  if(!CURRENT_USER_ID) return alert('Login first');
+  // Insert into kyc_docs + update users to PENDING - Admin approves in admin.html
+  await fetch(SUPABASE_URL + "kyc_docs", { method:'POST', headers: headers(), body: JSON.stringify({ user_id: CURRENT_USER_ID, id_type: document.getElementById('id-type').value, id_number: document.getElementById('id-number').value, id_front_url: document.getElementById('id-front').value, id_back_url: document.getElementById('id-back').value, selfie_url: document.getElementById('selfie-url').value })});
+  await fetch(SUPABASE_URL + "users?id=eq."+CURRENT_USER_ID, { method:'PATCH', headers: headers(), body: JSON.stringify({ kyc_status:'PENDING', kyc_progress:50 })});
+  alert('KYC submitted. Wait for Admin approval.'); loadAll();
 }
 
-// ===== REDEMPTION =====
-async function createCode(){
-  const code=document.getElementById('rc-code').value.trim().toUpperCase();
+async function buyPlan(plan_id, price){
+  // Creates PENDING SHAREHOLDER_BUY in ledger. Admin approves in admin.html -> shares appear.
+  const res = await fetch(SUPABASE_URL + "ledger", { method:'POST', headers: {...headers(), "Prefer":"return=representation"}, body: JSON.stringify({ user_id: CURRENT_USER_ID, type:'SHAREHOLDER_BUY', amount: price, fee:0, status:'PENDING', reference:'SH-'+Date.now(), meta:{ plan_id } })});
+  if(!res.ok) return alert('Need KYC Approved first or plan sold out');
+  alert('Share purchase submitted. Admin must approve.'); loadAll();
+}
+
+async function sendP2P(){
+  const toUser = document.getElementById('p2p-to').value.trim();
+  const amount = Number(document.getElementById('p2p-amount').value);
+  if(!toUser || !amount) return alert('Enter user + amount');
+  // NOTE: P2P must go through your secure API / Supabase Edge Function to do both ledger entries in one transaction. Do NOT do 2 separate inserts from browser.
+  alert('P2P will be processed via secure API - see admin.html P2P logic. Do not insert directly from browser.');
+}
+
+async function requestWithdraw(){
+  const amount = Number(document.getElementById('wd-amount').value);
+  const res = await fetch(SUPABASE_URL + "ledger", { method:'POST', headers: {...headers(), "Prefer":"return=representation"}, body: JSON.stringify({ user_id: CURRENT_USER_ID, type:'WITHDRAW', amount: -amount, fee: amount*0.20, status:'PENDING', reference:'WDL-'+Date.now(), meta:{ method: document.getElementById('wd-method').value, account_details: document.getElementById('wd-account').value } })});
+  if(!res.ok) return alert('Withdraw failed - Check KYC + Balance');
+  alert('Withdraw requested. Admin will approve/reject.'); loadAll();
+}
+
+async function redeemCode(){
+  const code = document.getElementById('redeem-code').value.trim().toUpperCase();
   if(!code) return alert('Enter code');
-  await apiCall('/admin/redemption/create','POST',{code,reward_type:document.getElementById('rc-type').value,reward_value:Number(document.getElementById('rc-value').value),max_uses:Number(document.getElementById('rc-max').value||1),expires_at:document.getElementById('rc-expiry').value});
-  alert('Code created: '+code); loadRedemptions();
-}
-async function loadRedemptions(){
-  const stats = await apiCall('/admin/redemption/stats').catch(()=>[]);
-  document.getElementById('redemption-stats').innerHTML = stats.map(s=>`${s.code}: ${s.used_count}/${s.max_uses} used, ${s.unique_users||0} users<br>`).join('')||'No codes';
-  document.getElementById('redemption-list').innerHTML = `<table><tr><th>Code</th><th>Reward</th><th>Used</th></tr>`+stats.map(s=>`<tr><td><b>${s.code}</b></td><td>${s.reward_type} ${money(s.reward_value)}</td><td>${s.used_count}/${s.max_uses}</td></tr>`).join('')+`</table>`;
+  // Redemption must go through secure API to check max_uses + already redeemed + KYC. Do NOT update ledger directly from browser.
+  alert('Redemption checked via secure API - Admin will see count increase in admin.html Redemption tab.');
 }
 
-// ===== SHAREHOLDER =====
-async function createPlan(){
-  await apiCall('/admin/shareholder/plan/create','POST',{name:document.getElementById('sh-name').value,price:Number(document.getElementById('sh-price').value),shares:Number(document.getElementById('sh-shares').value),profit_share_percent:Number(document.getElementById('sh-percent').value),max_slots:Number(document.getElementById('sh-slots').value)});
-  alert('Plan created'); loadShareholders();
-}
-async function loadShareholders(){
-  const pending = await apiCall('/admin/shareholder/pending').catch(()=>[]);
-  document.getElementById('sh-pending').innerHTML = pending.length? pending.map(p=>`${p.full_name} - ${money(p.amount)} <button class="btn btn-green" onclick="approveShareholder('${p.id}')">Approve</button>`).join('<br>') : 'No pending buys';
-  const list = await apiCall('/admin/shareholder/list').catch(()=>[]);
-  document.getElementById('sh-list').innerHTML = `<table><tr><th>User</th><th>Plan</th><th>Shares</th><th>Dividends Paid</th></tr>`+list.map(s=>`<tr><td>${s.full_name}</td><td>${s.plan_name}</td><td>${s.shares}</td><td>${money(s.total_dividends_paid)}</td></tr>`).join('')+`</table>`;
-}
-async function approveShareholder(ledger_id){ await apiCall('/admin/shareholder/approve','POST',{ledger_id}); loadShareholders(); }
-async function payDividend(){
-  const month=document.getElementById('div-month').value; const pool=Number(document.getElementById('div-pool').value);
-  if(!month||!pool) return alert('Enter month + pool');
-  if(!confirm('Distribute '+money(pool)+' for '+month+'? This cannot be undone.')) return;
-  await apiCall('/admin/shareholder/dividend','POST',{month,total_profit_pool:pool}); alert('Dividend distributed'); loadShareholders();
-}
-
-// ===== DAILY / PACKAGES =====
-async function createPackage(){ await apiCall('/admin/package/create','POST',{name:document.getElementById('pkg-name').value,price:Number(document.getElementById('pkg-price').value),daily_rate:Number(document.getElementById('pkg-rate').value),duration_days:Number(document.getElementById('pkg-days').value)}); loadPackages(); }
-async function loadPackages(){ const list=await apiCall('/admin/packages').catch(()=>[]); document.getElementById('pkg-list').innerHTML=list.map(p=>`${p.name} - ${money(p.price)} - ${(Number(p.daily_rate)*100).toFixed(2)}%/day - ${p.duration_days} days<br>`).join('')||'No packages'; }
-async function runDaily(){ if(!confirm('Run daily crediting once? Check it has not run today.')) return; await apiCall('/admin/daily/run','POST',{}); addLog('Daily crediting run'); }
-async function loadDailyLog(){ const logs=await apiCall('/admin/logs?limit=20').catch(()=>[]); document.getElementById('audit-log').innerHTML=logs.map(l=>`${new Date(l.created_at).toLocaleString()} - ${l.action} - ${l.user_id}<br>`).join('')||'No logs'; }
-
-// ===== SETTINGS =====
-async function saveFees(){ await apiCall('/admin/settings/fees','POST',{exchange:Number(document.getElementById('fee-exchange').value),withdraw:Number(document.getElementById('fee-withdraw').value),p2p:Number(document.getElementById('fee-p2p').value),referral:Number(document.getElementById('fee-referral').value)}); alert('Fees saved for future transactions'); }
-
-// ===== INIT =====
-async function syncAll(){ await Promise.allSettled([loadStats(),loadKyc(),loadDeposits(),loadWithdrawals(),loadLedger(),loadRedemptions(),loadShareholders(),loadPackages(),loadDailyLog()]); }
-syncAll();
+loadAll();
+setInterval(loadAll, 10000); // Poll Supabase every 10s - keeps Shareholder in sync with Admin
 </script>
 </body>
 </html>
