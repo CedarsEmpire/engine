@@ -4,8 +4,8 @@
 <div class="tabs" id="tabs"></div><div class="wrap"><div id="page"><p style="text-align:center;padding:40px">Loading Cedars Empire V6.8...</p></div></div>
 <script>
 // ===== CONFIG - PUT YOUR OWN SECRETS HERE - NEVER SHARE THEM =====
-var SUPABASE_URL="YOUR_SUPABASE_URL_HERE"; var SUPABASE_KEY="YOUR_SUPABASE_KEY_HERE"; var supa=null; try{supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){supa=null;}
-var MAIN_EMAIL="YOUR_ADMIN_EMAIL_HERE"; var MAIN_PASS_ENC=btoa("YOUR_NEW_PASSWORD_HERE"); var MAIN_PIN_ENC=btoa("YOUR_NEW_PIN_HERE");
+var SUPABASE_URL="https://ipyvewpjtpgfuqfwizlr.supabase.co"; var SUPABASE_KEY="sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj"; var supa=null; try{supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){supa=null;}
+var MAIN_EMAIL="ogwal.bemmanuel@gmai.com"; var MAIN_PASS_ENC=btoa("1990@Bonny"); var MAIN_PIN_ENC=btoa("7820");
 function checkPin(pin){ try{return btoa(pin)===MAIN_PIN_ENC;}catch(e){return false;} } function checkPass(p){ try{return btoa(p)===MAIN_PASS_ENC;}catch(e){return false;} }
 var isLogged=false, isMemberView=false, currentMember=null, adminWorkers=[], members=[], withdrawQueue=[], referrals=[], dailyReport={deposits:0,withdraws:0,credits:0,fees:0}, profitToday=0, isLocked=false;
 try{adminWorkers=JSON.parse(localStorage.getItem('cedars_admin_workers')||'[]'); members=JSON.parse(localStorage.getItem('cedars_members_v2')||'[]'); withdrawQueue=JSON.parse(localStorage.getItem('cedars_wq_v2')||'[]'); referrals=JSON.parse(localStorage.getItem('cedars_ref_v2')||'[]');}catch(e){}
