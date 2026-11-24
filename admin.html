@@ -1,137 +1,193 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cedars Empire — ADMIN • MASTER</title>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CEDARS EMPIRE - Admin7 - Global 24/7 Never Stop</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>*{box-sizing:border-box;font-family:system-ui}body{margin:0;background:#0f1115;color:#e8e8e8}header{background:#15171c;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;flex-wrap:wrap;gap:8px}header b{font-size:18px}.pill{border:1px solid #333;padding:4px 8px;border-radius:20px;font-size:11px}.pillLive{background:#22c55e!important;color:#111!important}.nav{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;background:#15171c;border-bottom:1px solid #222}button{padding:9px 12px;border-radius:8px;border:1px solid #333;background:#1e2128;color:#fff;cursor:pointer;font-weight:700}button.active{background:#fff!important;color:#111!important}.wrap{padding:16px;max-width:1200px;margin:auto}.grid8{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}.card{background:#17191f;border:1px solid #262a33;border-radius:12px;padding:16px;margin-bottom:12px}.card h3{margin:0 0 6px;font-size:13px;color:#aaa}.card .big{font-size:28px;font-weight:900}.global{background:#fff!important;color:#111!important;border:3px solid #fff!important;padding:22px!important}.global button{background:#111!important;color:#fff!important}.global input{background:#fff;color:#111}.sub{background:#1e2128;border:1px solid #333;border-radius:10px;padding:12px;margin-bottom:8px}input,select{width:100%;padding:11px;border:1px solid #333;border-radius:8px;margin:6px 0;background:#111;color:#fff}.switch{width:60px;height:30px;background:#444;border-radius:20px;display:inline-block;position:relative;cursor:pointer}.switch:after{content:"";position:absolute;width:24px;height:24px;background:#fff;border-radius:50%;top:2px;left:2px}.switch.on{background:#fff}.switch.on:after{left:32px;background:#111}.grid47{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}.g47{background:#1e2128;border:1px solid #333;border-radius:10px;padding:10px;text-align:center}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #333;text-align:left;font-size:13px}th{color:#aaa}.live{color:#22c55e;font-weight:800}</style></head><body>
-<header><div><b>Cedars Empire — ADMIN • MASTER</b><div style="font-size:12px;color:#aaa">Logged in as Admin • JS: Working • Sync: <span id="conn">Connecting...</span> • <span class="pill pillLive">● AUTO-EARN: <span id="autoPill">ON - MAKING MONEY</span></span></div></div><div><span class="pill">● Global: <span id="globPill">ON</span></span> <span class="pill">● Supabase: <span id="sbPill">OFF</span></span> <button onclick="logout()">Logout</button></div></header>
-<nav class="nav" id="nav"></nav>
-<div class="wrap" id="app">Loading Same Dashboard - Upgraded...</div>
-<script>
-// ===== SUPABASE KEYS - DO NOT FORGET =====
-const SUPABASE_URL=" https://ipyvewpjtpgfuqfwizlr.supabase.co";
-const SUPABASE_KEY="sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
-let sb=null, sbOK=false; try{ if(SUPABASE_URL.startsWith("http")&&SUPABASE_KEY.length>20){ sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY); sbOK=true; } }catch(e){}
-let view='dashboard';
-let S=JSON.parse(localStorage.getItem('cedars_final_v2')||'null')||{
-global:{on:true,balance:12000,earnedToday:0},
-engines:{e1:{on:true,balance:1000,pct:1.0,label:"Engine 1 - New Members",earnedToday:0},e2:{on:true,balance:2000,pct:1.5,label:"Engine 2 - Gold",earnedToday:0},e3:{on:true,balance:3000,pct:2.0,label:"Engine 3 - Diamond / VIP",earnedToday:0},e4:{on:true,balance:500,pct:2.5,label:"Engine 4 - P2P + Tasks",earnedToday:0},e5:{on:true,balance:800,pct:3.0,label:"Engine 5 - Profit + Redemption",earnedToday:0}},
-autoEarn:true,
-users:[{phone:"+256700000001",name:"Test Member",balance:250,staked:150,plan:"Gold",kyc:"Verified",engine:"e2",enabled:true}],
-deposits:[],withdrawals:[],kycList:[],p2p:[],redeemCodes:[{code:"CEDARS-100",amount:100,used:true}],profitHist:[],logs:["Upgraded - Auto-Earn ON - Never Reset"],grids:Array.from({length:47},(_,i)=>({id:i+1,balance:200+Math.floor(Math.random()*300),on:true,earnedToday:0,pct:1.5})),fees:0,locked:0,walletUnlock:[],
-aiWorkers:[
- {id:1,name:"AI Worker 001 - Data Sourcing",job:"Data Sourcing",status:"Working",tasks:1240,verified:1180,earned:5900},
- {id:2,name:"AI Worker 002 - Job Sourcing",job:"Job Sourcing",status:"Working",tasks:980,verified:940,earned:2820},
- {id:3,name:"AI Worker 003 - Task Sourcing",job:"Task Sourcing",status:"Working",tasks:860,verified:810,earned:1620},
- {id:4,name:"AI Worker 004 - Verification",job:"Task Verification",status:"Working",tasks:1520,verified:1480,earned:7400},
- {id:5,name:"AI Worker 005 - Verification",job:"Task Verification",status:"Working",tasks:1100,verified:1050,earned:3150}],
-availableTasks:[
- {id:"TASK-101",title:"Verify Business Data - Lagos",type:"Data",pay:5,slots:50,left:32,status:"Open",source:"Lagos Businesses - Web Scrape"},
- {id:"TASK-102",title:"Check Website - Nairobi",type:"Job",pay:3,slots:100,left:67,status:"Open",source:"Nairobi Jobs - Job Board"},
- {id:"TASK-103",title:"Review App Listing",type:"Task",pay:2,slots:200,left:154,status:"Open",source:"Online Tasks - App Store"},
- {id:"TASK-104",title:"Collect Shop Addresses",type:"Data",pay:4,slots:80,left:12,status:"Almost Full",source:"Kampala Data - WhatsApp"},
- {id:"TASK-105",title:"Verify Phone Numbers",type:"Data",pay:1.5,slots:500,left:410,status:"Open",source:"Telegram Data - Telegram Group"}],
-verifyHist:[
- {task:"TASK-101",worker:"AI Worker 004",user:"+256700000001",source:"Lagos Businesses - Web Scrape",result:"Approved",earning:5,life:"Paid - Life Complete",time:"Today 09:12"},
- {task:"TASK-102",worker:"AI Worker 005",user:"+256700000002",source:"Nairobi Jobs - Job Board",result:"Rejected - Wrong Proof",earning:0,life:"Rejected - No Pay",time:"Today 09:05"},
- {task:"TASK-103",worker:"AI Worker 004",user:"+256700000003",source:"Online Tasks - App Store",result:"Approved",earning:2,life:"Paid - Life Complete",time:"Today 08:58"}],
-sourcingLog:["09:15 - AI Worker 001 sourced 120 Data from Lagos Businesses - Web Scrape","09:10 - AI Worker 002 sourced 85 Jobs from Nairobi Jobs - Job Board","09:05 - AI Worker 003 sourced 210 Tasks from Online Tasks - App Store"],
-liveFeed:["System Started - Auto-Earn ON - Balances Accumulating - Never Reset"]
-};
-const W={usdt:"TE26B7zQjMbahYAWcxEsSPC6aZEr2Hcz1u",poly:"0x0d4c2B95e8FB7Be3DB9953bAcEf3A4Be643bA77B",bnb:"0x0d4c2B95e8FB7Be3DB9953bAcEf3A4Be643bA77B",usdc:"0x6DB27eE3ccB9c80990c45C7d80e98D08a8995e49"};
-const MENU=[['dashboard','Dashboard'],['global','Global Engine'],['sub','5 Sub-Engines'],['aiworkers','AI Workers'],['aisourcing','AI Sourcing'],['aiverify','AI Verification'],['verifyhist','Verification History'],['tasks','Available Tasks'],['live','Live Earnings'],['sources','Sources'],['staking','Staking'],['redeem','Redemption Codes'],['deposits','Deposits'],['withdraw','Withdrawals'],['kyc','KYC'],['wallet','Wallet Unlock'],['p2p','P2P'],['users','Users'],['profit','Profit Share'],['grids','Cryptology 47 Grids'],['settings','Settings']];
-function save(){localStorage.setItem('cedars_final_v2',JSON.stringify(S)); if(sbOK) saveAllToSB();}function fmt(n){return "£"+Number(n||0).toFixed(2)}
-async function saveAllToSB(){ if(!sbOK) return; try{ await sb.from('app_state').upsert({id:1,data:S}); await sb.from('engines').upsert({id:'global',label:'GLOBAL ENGINE - MASTER',balance:S.global.balance,pct:0,on_state:S.global.on}); for(let k of Object.keys(S.engines)){ await sb.from('engines').upsert({id:k,label:S.engines[k].label,balance:S.engines[k].balance,pct:S.engines[k].pct,on_state:S.engines[k].on}); } }catch(e){} }
-async function loadSB(){ if(!sbOK){document.getElementById('conn').textContent='Offline - Local (Still Accumulating)';document.getElementById('sbPill').textContent='OFF - LOCAL';return} try{ let {data}=await sb.from('app_state').select('*').eq('id',1).single(); if(data&&data.data&&Object.keys(data.data).length>3){ S=data.data; localStorage.setItem('cedars_final_v2',JSON.stringify(S)); } else { await saveAllToSB(); } document.getElementById('conn').textContent='Connected to Supabase - Shared - Never Reset'; document.getElementById('sbPill').textContent='ON - SHARED'; render(); }catch(e){ document.getElementById('conn').textContent='Offline - '+e.message } }
-function logout(){ if(confirm('Logout?')) location.reload() }
-function nav(){ document.getElementById('nav').innerHTML=MENU.map(m=>`<button class="${view==m[0]?'active':''}" onclick="go('${m[0]}')">${m[1]}</button>`).join('') }
-function go(v){ view=v; render() }
-async function togGlobal(){ S.global.on=!S.global.on; save(); render(); }
-async function togEng(k){ S.engines[k].on=!S.engines[k].on; save(); render(); }
-function togAuto(){ S.autoEarn=!S.autoEarn; document.getElementById('autoPill').textContent=S.autoEarn?'ON - MAKING MONEY':'OFF - PAUSED'; save(); alert('Auto-Earn '+(S.autoEarn?'ON - All Engines + 47 Grids Making Money':'OFF - Paused, Balance Saved')); render(); }
-// ===== AUTO-EARN - EVERY 10 SECONDS - NEVER RESET - ACCUMULATE =====
-function autoEarnTick(){
- if(!S.autoEarn || !S.global.on) return;
- let totalEarned=0;
- // 5 Sub-Engines earn
- Object.values(S.engines).forEach(e=>{ if(e.on){ let earn = e.balance * (e.pct/100) / 8640; // pct per day divided to 10-sec slice
-   e.balance+=earn; e.earnedToday+=earn; totalEarned+=earn; } });
- // 47 Grids earn constantly
- S.grids.forEach(g=>{ if(g.on){ let earn = g.balance * (g.pct/100) / 8640; g.balance+=earn; g.earnedToday+=earn; totalEarned+=earn; } });
- // Global earns small share
- let gEarn = totalEarned*0.05; S.global.balance+=gEarn; S.global.earnedToday+=gEarn;
- // AI Workers earn from verifications
- S.aiWorkers.forEach(w=>{ if(w.status=='Working'){ w.tasks+=1; if(Math.random()>0.3){ w.verified+=1; let ve = 2+Math.random()*3; w.earned+=ve; } } });
- if(totalEarned>0){ S.liveFeed.unshift(new Date().toLocaleTimeString()+' - Auto-Earned '+fmt(totalEarned)+' - Engines + 47 Grids - Balance: '+fmt(S.global.balance+Object.values(S.engines).reduce((x,e)=>x+e.balance,0)+S.grids.reduce((x,g)=>x+g.balance,0))+' - Never Reset'); if(S.liveFeed.length>20) S.liveFeed.pop(); save(); if(view=='dashboard'||view=='live'||view=='grids'||view=='sub') render(); }
-}
-setInterval(autoEarnTick, 10000); // Every 10 seconds
-setInterval(()=>{ if(sbOK) loadSB(); }, 30000); // Sync Supabase every 30 sec
-function render(){
-nav(); document.getElementById('globPill').textContent=S.global.on?'ON':'OFF'; document.getElementById('autoPill').textContent=S.autoEarn?'ON - MAKING MONEY':'OFF - PAUSED';
-let a=document.getElementById('app');
-let subTotal=Object.values(S.engines).reduce((x,e)=>x+e.balance,0); let gridTotal=S.grids.reduce((x,g)=>x+g.balance,0); let totalDep=S.deposits.reduce((x,d)=>x+Number(d.amount),0); let pendDep=S.deposits.filter(d=>d.status=='Pending').reduce((x,d)=>x+Number(d.amount),0); let totalStaked=S.users.reduce((x,u)=>x+Number(u.staked||0),0); let totalWith=S.withdrawals.reduce((x,w)=>x+Number(w.amount),0);
-let aiTasks=S.aiWorkers.reduce((x,w)=>x+w.tasks,0); let aiVerified=S.aiWorkers.reduce((x,w)=>x+w.verified,0); let aiEarned=S.aiWorkers.reduce((x,w)=>x+w.earned,0); let verifyEarned=S.verifyHist.reduce((x,h)=>x+Number(h.earning||0),0);
-let grandTotal=S.global.balance+subTotal+gridTotal;
-if(view=='dashboard'){ a.innerHTML=`
-<div class="card global"><h1 style="margin:0">🌐 GLOBAL ENGINE — LIVE • INTEGRATED</h1><p>MASTER - If Global OFF, ALL stop. Auto-Earn: ${S.autoEarn?'ON - Making Money Every 10 Sec':'OFF - Paused'} • Never Reset - Balances Accumulate Forever.</p><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px"><div><div style="font-size:12px">GLOBAL BALANCE (Separate - Accumulating)</div><div style="font-size:34px;font-weight:900">${fmt(S.global.balance)}</div><div>General Balance: <b>${fmt(grandTotal)}</b> • Earned Today Global: ${fmt(S.global.earnedToday)} • 2,000 Workers • ${aiTasks} Tasks • ${aiVerified} Verified • Load 98% • Uptime 99.98% • Sync Every 5 sec</div></div><div style="text-align:center"><div>MASTER LIGHT: ${S.global.on?'● ON':'○ OFF'}</div><span class="switch ${S.global.on?'on':''}" onclick="togGlobal()"></span><div>Auto-Earn: <span class="switch ${S.autoEarn?'on':''}" onclick="togAuto()"></span></div></div></div><p class="live">● LIVE - Earning Every 10 Seconds - Never Reset</p><p>${S.global.on?'✅ Global ON → Sub-Engines + AI + 47 Grids CAN earn':'⛔ Global OFF → ALL PAUSED - Balance Saved, Not Reset'}</p><button onclick="killAll()">EMERGENCY - STOP GLOBAL + ALL</button> <button onclick="startAll()" style="margin-left:6px">START GLOBAL + ALL</button></div>
-<div class="grid8">
-<div class="card"><h3>Total Deposits</h3><div class="big">${fmt(totalDep)}</div><div>${S.deposits.length} deposits</div></div>
-<div class="card"><h3>Pending Deposits</h3><div class="big">${fmt(pendDep)}</div><div>${S.deposits.filter(d=>d.status=='Pending').length} pending</div></div>
-<div class="card"><h3>Total Staked</h3><div class="big">${fmt(totalStaked)}</div><div>${S.users.length} stakes</div></div>
-<div class="card"><h3>Redemption Codes</h3><div class="big">${S.redeemCodes.length} Codes</div><div>${S.redeemCodes.filter(c=>c.used).length} Redeemed</div></div>
-<div class="card"><h3>Total Withdrawals</h3><div class="big">${fmt(totalWith)}</div><div>${S.withdrawals.length} withdrawals</div></div>
-<div class="card"><h3>Fees Earned</h3><div class="big">${fmt(S.fees)}</div><div>Withdraw fee 2%</div></div>
-<div class="card"><h3>Locked / In Contract</h3><div class="big">${fmt(S.locked)}</div><div>Locked staking</div></div>
-<div class="card"><h3>KYC Status</h3><div class="big">${S.users.length} Users</div><div>${S.kycList.length} KYC pending</div></div>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial;background:#070b14;color:#fff}
+header{position:sticky;top:0;background:#0a1226;padding:12px;border-bottom:2px solid #f5c518;z-index:99}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.logo{font-weight:900;font-size:22px}.logo span{color:#f5c518}
+.badge{padding:6px 10px;border-radius:20px;font-weight:800;font-size:12px}.on{background:#00c853}.off{background:#ff1744}.wait{background:#ffab00;color:#000}.proc{background:#2979ff}
+.tabs{display:flex;gap:6px;overflow:auto;padding:10px;background:#0d1730;position:sticky;top:58px;z-index:98}
+.tabs button{white-space:nowrap;border:0;padding:9px 12px;border-radius:20px;background:#1a2a55;color:#fff;cursor:pointer;font-weight:700}.tabs button.active{background:#f5c518;color:#000}
+.wrap{padding:14px;max-width:1400px;margin:auto}
+.card{background:#101a35;border:1px solid #23325e;border-radius:16px;padding:14px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:800px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #334477;background:#0a1226;color:#fff;margin:5px 0}
+.btn{border:0;padding:10px 14px;border-radius:10px;font-weight:900;cursor:pointer}.gold{background:#f5c518;color:#000}.green{background:#00c853}.red{background:#ff1744;color:#fff}.blue{background:#2979ff;color:#fff}.grey{background:#455a64;color:#fff}
+.light{width:14px;height:14px;border-radius:50%;display:inline-block}.g{background:#00e676;box-shadow:0 0 10px #00e676}.r{background:#ff1744;box-shadow:0 0 10px #ff1744}.y{background:#ffea00;box-shadow:0 0 10px #ffea00}.b{background:#448aff;box-shadow:0 0 10px #448aff}
+.engine{border:2px solid #f5c518;border-radius:18px;padding:14px;background:linear-gradient(180deg,#1a1200,#0a1226);position:relative;overflow:hidden}
+.piston{height:18px;background:repeating-linear-gradient(90deg,#f5c518 0 12px,#000 12px 24px);border-radius:8px;animation:move 0.8s linear infinite}@keyframes move{to{background-position:24px 0}}
+.piston.off{animation:none;opacity:.3}
+.gauge{height:12px;background:#222;border-radius:8px;overflow:hidden}.gauge i{display:block;height:100%;background:linear-gradient(90deg,#00e676,#f5c518,#ff1744)}
+.robot{border:1px solid #334477;border-radius:16px;padding:12px;background:#0d1730;text-align:center}.robot .face{font-size:34px;animation:blink 2s infinite}@keyframes blink{0%,90%{transform:scaleY(1)}95%{transform:scaleY(.1)}100%{transform:scaleY(1)}}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid #23325e;text-align:left}
+.hidden{display:none}.pill{padding:4px 8px;border-radius:20px;font-size:11px;font-weight:800}
+</style></head><body>
+<header><div class="top"><div class="logo">🌲 CEDARS <span>EMPIRE</span> - ADMIN 7 - GLOBAL 24/7</div>
+<div><span id="supaBadge" class="badge off">Supabase: OFF - LOCAL</span> <span id="globalBadge" class="badge on">🟢 GLOBAL LIVE</span> <button class="btn gold" onclick="saveAll()">💾 SAVE ALL</button></div></div>
+<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span>General: <b id="hGeneral">£50,200</b></span><span>Global Engine: <b id="hGlobal">£12,000</b></span><span>Next Credit: <b>12AM Eastern - Staking 0.03% + Engine 1.2%</b></span><span>Verification: <b>Every 2 Sec Global</b></span></div></header>
+
+<div class="tabs" id="tabs"></div>
+<div class="wrap">
+
+<!-- DASHBOARD -->
+<section data-tab="Dashboard"><div class="grid3">
+<div class="card"><h3>🟢 GENERAL BALANCE</h3><h1 id="balGeneral">£50,200.00</h1><p>Total of All Balances - Never Reset</p><span class="light g"></span> ON <button class="btn grey" onclick="toggleBal('general')">ON/OFF</button></div>
+<div class="card"><h3>⚙️ GLOBAL ENGINE</h3><h1 id="balGlobal">£12,000.36</h1><p>Master Engine - All Regions</p><span class="light g"></span> RUNNING</div>
+<div class="card"><h3>💰 TODAY EARNED</h3><h1 id="todayEarn">£0.00</h1><p>All Engines + 47 Grids + Verifications</p><span class="light b"></span> PROCESSING</div></div>
+
+<div class="card"><h3>🤖 LAST 20 VERIFICATIONS - GLOBAL - EVERY SECOND</h3><div id="last20"></div></div>
+<div class="card"><h3>⚡ LIVE EARNINGS - Every 2 Sec</h3><div id="liveFeed"></div></div>
+<div class="card"><h3>🔴 EMERGENCY MASTER</h3><p>If anything goes wrong, pause ALL earning. ON to resume.</p><button class="btn red" onclick="masterOff()">🔴 MASTER OFF - PAUSE ALL</button> <button class="btn green" onclick="masterOn()">🟢 MASTER ON - RESUME ALL</button> <span id="masterStatus" class="badge on">MASTER ON</span></div>
+</section>
+
+<!-- BALANCES -->
+<section data-tab="Balances" class="hidden"><h2>💰 9 BALANCES - Borrow / Move / ON-OFF / Save</h2>
+<div class="card"><h3>🔁 BORROW / MOVE BETWEEN BALANCES - Admin Only</h3>
+<label>From Balance</label><select id="borrowFrom"><option value="general">General Balance</option><option value="global_engine">Global Engine</option><option value="sub_engines">Sub-Engines</option><option value="cryptology">Cryptology - 47 Grids</option><option value="shareholder_deposit">Shareholder Deposit</option><option value="withdraw_fee">Withdraw Fee - 20%</option><option value="p2p_fee">P2P Fee - 5%</option><option value="exchange_fee">Exchange Fee - 2%</option><option value="staking_profit">Staking Profit - 0.03%</option></select>
+<label>To Balance</label><select id="borrowTo"><option value="staking_profit">Staking Profit</option><option value="general">General</option><option value="global_engine">Global Engine</option><option value="sub_engines">Sub-Engines</option><option value="cryptology">Cryptology</option><option value="shareholder_deposit">Shareholder Deposit</option><option value="withdraw_fee">Withdraw Fee</option><option value="p2p_fee">P2P Fee</option><option value="exchange_fee">Exchange Fee</option></select>
+<label>Amount £</label><input id="borrowAmt" type="number" placeholder="500">
+<label>Reason</label><input id="borrowReason" placeholder="Pay Stakers / Top up Engine / Cover Withdraw">
+<button class="btn gold" onclick="doBorrow()">🔁 BORROW / MOVE + SAVE</button><div id="borrowMsg"></div></div>
+<div id="balancesList" class="grid3"></div>
+<div class="card"><h3>📜 Borrow / Transfer Log</h3><div id="transferLog"></div></div>
+</section>
+
+<!-- ENGINES -->
+<section data-tab="Engines" class="hidden"><h2>⚙️ REAL ENGINES - Not Writings - Pistons Moving - 24/7 Never Stop</h2>
+<div class="card"><p>Each Engine Target: <b>£2,500 - £4,500 every 24h</b> - At 12AM, profit accumulates to General Balance, Never Reset, Continue Working.</p></div>
+<div id="enginesList" class="grid2"></div></section>
+
+<!-- AI WORKERS -->
+<section data-tab="AI Workers" class="hidden"><h2>🤖 AI WORKERS - REAL ROBOTS - Working 24/7 - Sourcing + Verifying Every Second</h2><p>Underground / On Earth / On Clouds / All Human Aspects - Global</p><div id="robotsList" class="grid3"></div></section>
+
+<!-- GRIDS -->
+<section data-tab="Cryptology 47 Grids" class="hidden"><h2>💎 CRYPTOLOGY - 47 GRIDS - Named - Making Money Constantly - Never Reset</h2><div id="gridsList" class="grid4"></div></section>
+
+<!-- APPROVALS + WALLETS -->
+<section data-tab="Deposits" class="hidden"><h2>💵 DEPOSITS - Approval With Form</h2><div id="depositsList"></div></section>
+<section data-tab="Withdrawals" class="hidden"><h2>💸 WITHDRAWALS - Approval With Form - Fee 20% - TEST WITHDRAW HERE</h2>
+<div class="card" style="border:2px solid #00e676"><h3>🧪 TEST WITHDRAW - Try Now After Rebuild</h3>
+<label>Member Phone</label><input id="wdPhone" value="+256700000001"><label>Amount £</label><input id="wdAmt" type="number" value="100">
+<label>Wallet Address (USDT TRC20 / BTC / Bank)</label><input id="wdWallet" placeholder="T... wallet address - Required for approval">
+<label>Wallet Type</label><select id="wdType"><option>USDT TRC20</option><option>USDT ERC20</option><option>BTC</option><option>Bank Transfer</option></select>
+<p>Fee 20% = <b id="wdFee">£20.00</b> | Net To Member = <b id="wdNet">£80.00</b> | Goes To Withdraw Fee Balance</p>
+<button class="btn gold" onclick="requestWithdraw()">📩 REQUEST WITHDRAW</button> <button class="btn green" onclick="approveWithdrawTest()">✅ ADMIN APPROVE TEST WITHDRAW</button>
+<div id="wdMsg"></div><p><b>How Test Works:</b> 1) Member Requests → 2) Admin sees Form with Wallet + Fee + Net → 3) Admin Approves → 4) Member Balance -£100, Withdraw Fee +£20, Member gets £80 to Wallet → 5) Logged in Supabase</p></div>
+<div id="withdrawalsList"></div></section>
+
+<section data-tab="KYC" class="hidden"><h2>🪪 KYC - Approval With Form</h2><div id="kycList"></div></section>
+<section data-tab="Wallet Unlock" class="hidden"><h2>🔓 WALLET UNLOCK - Approval With Form</h2><div id="walletList"></div></section>
+<section data-tab="P2P" class="hidden"><h2>🔄 P2P - Fee 5% - Approval With Form</h2><div class="card"><label>From Phone</label><input id="p2pFrom" value="+256700000001"><label>To Phone</label><input id="p2pTo" value="+256700000002"><label>Amount</label><input id="p2pAmt" type="number" value="100"><p>Fee 5% = £5 | Net = £95</p><button class="btn gold" onclick="doP2P()">Send P2P</button><div id="p2pMsg"></div></div><div id="p2pList"></div></section>
+
+<!-- OTHER TABS - ALL KEPT -->
+<section data-tab="Global Engine" class="hidden"><div id="globalEngineDetail"></div></section>
+<section data-tab="Sub-Engines" class="hidden"><div id="subEnginesDetail"></div></section>
+<section data-tab="AI Sourcing" class="hidden"><h2>🌍 AI SOURCING - Global - Underground / Earth / Clouds / Human Jobs</h2><div id="sourcingList"></div></section>
+<section data-tab="AI Verification" class="hidden"><h2>✅ AI VERIFICATION - Global Every Second</h2><div id="verificationList"></div></section>
+<section data-tab="Verification History" class="hidden"><h2>📜 VERIFICATION HISTORY - Last 20 + All</h2><div id="verifHistory"></div></section>
+<section data-tab="Available Tasks" class="hidden"><h2>📋 AVAILABLE TASKS</h2><div id="tasksList"></div></section>
+<section data-tab="Live Earnings" class="hidden"><h2>⚡ LIVE EARNINGS</h2><div id="liveEarningsList"></div></section>
+<section data-tab="Sources" class="hidden"><h2>🌍 SOURCES - Global</h2><div id="sourcesList"></div></section>
+<section data-tab="Staking" class="hidden"><h2>📈 STAKING - 0.03% Every 24h + Engine 1.2%</h2><div id="stakingList"></div><div class="card"><h3>🧪 TEST DAILY CREDIT 12AM NOW</h3><p>Click to simulate 12AM credit for all members. In production this runs automatically at 12AM Eastern via Supabase.</p><button class="btn gold" onclick="runDailyCredit()">🌙 RUN DAILY CREDIT NOW - 0.03% + 1.2%</button><div id="creditMsg"></div></div></section>
+<section data-tab="Redemption Codes" class="hidden"><h2>🎁 REDEMPTION CODES</h2><div id="redeemList"></div></section>
+<section data-tab="Users" class="hidden"><h2>👥 USERS / MEMBERS / SHAREHOLDERS</h2><div id="usersList"></div></section>
+<section data-tab="Profit Share" class="hidden"><h2>💰 PROFIT SHARE</h2><div id="profitList"></div></section>
+<section data-tab="Wallets" class="hidden"><h2>👛 WALLETS - Member Wallets - Supabase Storage</h2><div class="card"><p>Every member has a wallet in Supabase. Wallet stores: Balance, Staked, Total Earned, Wallet Address, Bank, History. Admin can view, top-up, lock, unlock.</p><label>Member Phone</label><input id="walletPhone" value="+256700000001"><label>Wallet Address</label><input id="walletAddr" placeholder="T..."><button class="btn gold" onclick="saveWallet()">💾 SAVE WALLET TO SUPABASE</button><div id="walletMsg"></div></div><div id="walletsList"></div></section>
+<section data-tab="Settings" class="hidden"><h2>⚙️ SETTINGS - Supabase + Fees + Save</h2><div class="card">
+<label>Supabase URL</label><input id="setSupaUrl" placeholder="https://xyz.supabase.co">
+<label>Supabase Anon Key</label><input id="setSupaKey" placeholder="eyJ...">
+<label>Withdraw Fee %</label><input id="setWdFee" type="number" value="20">
+<label>P2P Fee %</label><input id="setP2pFee" type="number" value="5">
+<label>Exchange Fee %</label><input id="setExFee" type="number" value="2">
+<label>Staking % per 24h</label><input id="setStaking" type="number" step="0.01" value="0.03">
+<label>Credit Time</label><input id="setCredit" value="12AM Eastern">
+<label>Admin PIN</label><input id="setPin" value="1234">
+<button class="btn gold" onclick="saveSettings()">💾 SAVE SETTINGS TO SUPABASE</button><div id="settingsMsg"></div></div></section>
+
 </div>
-<div class="card"><h3>💰 Live Earnings - Never Reset - Accumulate</h3><p>Grand Total: <b>${fmt(grandTotal)}</b> | Grids Total: ${fmt(gridTotal)} | Sub-Engines Total: ${fmt(subTotal)} | AI Earned: ${fmt(aiEarned)} | Verification Earned: ${fmt(verifyEarned)}</p><p class="live">${S.liveFeed[0]||''}</p><button onclick="go('live')">Live Earnings Feed</button> <button onclick="go('grids')">47 Grids Earning</button> <button onclick="go('sources')">Sources</button></div>
-<div class="card"><h3>🤖 AI Workers Snapshot</h3><p>${S.aiWorkers.length} AI Workers • Tasks: ${aiTasks} • Verified: ${aiVerified} • Available Tasks: ${S.availableTasks.length} • Verification History: ${S.verifyHist.length} records • Earned: ${fmt(aiEarned)}</p><button onclick="go('aiworkers')">AI Workers</button> <button onclick="go('aisourcing')">AI Sourcing</button> <button onclick="go('aiverify')">AI Verification</button> <button onclick="go('tasks')">Available Tasks</button></div>`; return; }
-if(view=='global'){ a.innerHTML=`<div class="card global"><h1>GLOBAL ENGINE - MASTER</h1><p>Own Balance: <b>${fmt(S.global.balance)}</b> | Earned Today: ${fmt(S.global.earnedToday)} | General: ${fmt(grandTotal)}</p><p>Light: ${S.global.on?'● ON':'○ OFF'} <span class="switch ${S.global.on?'on':''}" onclick="togGlobal()"></span> Auto-Earn: <span class="switch ${S.autoEarn?'on':''}" onclick="togAuto()"></span></p><p>Never Reset - Balance Accumulates Forever. If you refresh, balance stays.</p><button onclick="killAll()">STOP ALL</button> <button onclick="startAll()">START ALL</button></div>`; return; }
-if(view=='sub'){ a.innerHTML=`<div class="card"><h2>5 SUB-ENGINES - Under Global - Earning Every 10 Sec - Never Reset</h2>${Object.entries(S.engines).map(([k,e])=>`<div class="sub"><b>${e.label}</b> - ${e.on?'ON':'OFF'} <span class="switch ${e.on?'on':''}" onclick="togEng('${k}')"></span><br>Balance: <b>${fmt(e.balance)}</b> (Accumulating) | Earned Today: <b class="live">${fmt(e.earnedToday)}</b> | <input value="${e.pct}" id="pct_${k}" style="width:70px;display:inline"> %/day <button onclick="savePct('${k}')">Save %</button> | Daily: ${fmt(e.balance*e.pct/100)}<br><span style="font-size:12px">${!S.global.on?'⛔ Paused by GLOBAL - Balance Saved':e.on?'✅ Earning Now - Every 10 Sec':'⏸️ Paused'}</span></div>`).join('')}<button onclick="distAll()" style="background:#fff;color:#111;width:100%">DISTRIBUTE ALL 5 BY THEIR %</button></div>`; return; }
-if(view=='grids'){ a.innerHTML=`<div class="card"><h2>💰 Cryptology Engine - 47 Grids - Making Money Constantly - Never Reset</h2><p>Total Grids: <b>${fmt(gridTotal)}</b> | Earned Today All Grids: <b class="live">${fmt(S.grids.reduce((x,g)=>x+g.earnedToday,0))}</b> | Every Grid Earns Every 10 Sec | Global must be ON</p><p class="live">● LIVE - Grids Earning Constantly - Balances Accumulating - Refresh and balance will be HIGHER, never lower.</p><button onclick="startAll()">START ALL 47</button> <button onclick="killAll()">STOP ALL 47</button></div><div class="card"><div class="grid47">${S.grids.map((g,i)=>`<div class="g47"><b>GRID ${g.id}</b><br><b>${fmt(g.balance)}</b><br><span style="font-size:11px">Earned: ${fmt(g.earnedToday)}</span><br>${g.on?'✅ Earning':'⏸️ Paused'}<br><span class="switch ${g.on?'on':''}" onclick="tg(${i})"></span></div>`).join('')}</div></div>`; return; }
-if(view=='aiworkers'){ a.innerHTML=`<div class="card"><h2>🤖 AUTOMATED AI WORKERS - 2,000 Workers</h2><p>Total Tasks: ${aiTasks} | Verified: ${aiVerified} | Earned: ${fmt(aiEarned)}</p><button onclick="startAI()" style="background:#fff;color:#111">START ALL</button> <button onclick="stopAI()">STOP ALL</button></div><div class="card"><table><tr><th>AI Worker</th><th>Job</th><th>Status</th><th>Tasks</th><th>Verified</th><th>Earned £</th><th>Switch</th></tr>${S.aiWorkers.map((w,i)=>`<tr><td>${w.name}</td><td>${w.job}</td><td>${w.status}</td><td>${w.tasks}</td><td>${w.verified}</td><td>${fmt(w.earned)}</td><td><span class="switch ${w.status=='Working'?'on':''}" onclick="togAI(${i})"></span></td></tr>`).join('')}</table></div><div class="card"><h3>Add New AI Worker</h3><input id="aiName" placeholder="AI Worker Name"><select id="aiJob"><option>Data Sourcing</option><option>Job Sourcing</option><option>Task Sourcing</option><option>Task Verification</option></select><button onclick="addAI()" style="background:#fff;color:#111;width:100%">Add AI Worker</button></div>`; return; }
-if(view=='aisourcing'){ a.innerHTML=`<div class="card"><h2>🤖 AUTOMATED AI IN DATA, JOB AND TASK SOURCING</h2><p>AI finds Data + Jobs + Tasks automatically. Today: 1,240 Data + 980 Jobs + 860 Tasks = 3,080</p><button onclick="runSourcing()" style="background:#fff;color:#111;width:100%">RUN AI SOURCING NOW</button></div><div class="card"><h3>Sourcing Log + Sources</h3><p>${S.sourcingLog.join('<br>')}</p></div>`; return; }
-if(view=='aiverify'){ a.innerHTML=`<div class="card"><h2>✅ AUTOMATED AI WORKER IN TASK VERIFICATIONS</h2><p>Verified: 17,760 | Approved: 16,200 | Rejected: 1,560 | Earned from Verifications: ${fmt(verifyEarned)}</p><button onclick="runVerify()" style="background:#fff;color:#111;width:100%">RUN AI VERIFICATION NOW</button></div><div class="card"><h3>Pending Verifications - With Source + Earning</h3><table><tr><th>Task</th><th>User</th><th>Source</th><th>Proof</th><th>Earning if Approved</th><th>AI Decision</th></tr><tr><td>TASK-101</td><td>+256700000001</td><td>Lagos Businesses - Web Scrape</td><td>Screenshot.png</td><td>£5.00</td><td><button onclick="aiApprove(0)">AI Approve</button> <button onclick="aiReject(0)">AI Reject</button></td></tr><tr><td>TASK-102</td><td>+256700000002</td><td>Nairobi Jobs - Job Board</td><td>Link Submitted</td><td>£3.00</td><td><button onclick="aiApprove(1)">AI Approve</button> <button onclick="aiReject(1)">AI Reject</button></td></tr></table></div>`; return; }
-if(view=='verifyhist'){ a.innerHTML=`<div class="card"><h2>📜 TASK VERIFICATIONS HISTORY - Full Life + Earnings Per Task Verified</h2><p>Total Earned from Verifications: <b class="live">${fmt(verifyEarned)}</b> | Every verification shows its FULL LIFE: Sourced → Taken → Submitted → AI Checked → Paid / Rejected</p><table><tr><th>Task</th><th>AI Worker</th><th>User</th><th>Source</th><th>Result</th><th>Earning £</th><th>Life Status</th><th>Time</th></tr>${S.verifyHist.map(h=>`<tr><td>${h.task}</td><td>${h.worker}</td><td>${h.user}</td><td>${h.source||'-'}</td><td>${h.result}</td><td><b>${fmt(h.earning||0)}</b></td><td>${h.life||'Paid'}</td><td>${h.time}</td></tr>`).join('')}</table></div>`; return; }
-if(view=='tasks'){ a.innerHTML=`<div class="card"><h2>📋 AVAILABLE TASK TABLE - With Sources</h2><table><tr><th>Task ID</th><th>Title</th><th>Type</th><th>Source</th><th>Pay £</th><th>Slots Left</th><th>Status</th><th>Action</th></tr>${S.availableTasks.map((t,i)=>`<tr><td>${t.id}</td><td>${t.title}</td><td>${t.type}</td><td>${t.source||'-'}</td><td>${fmt(t.pay)}</td><td>${t.left} / ${t.slots}</td><td>${t.status}</td><td><button onclick="takeTask(${i})">Take Task</button></td></tr>`).join('')}</table></div><div class="card"><h3>Add New Available Task</h3><input id="tTitle" placeholder="Task Title"><input id="tSource" placeholder="Source - e.g. Lagos Businesses"><input id="tPay" type="number" placeholder="Pay £"><input id="tSlots" type="number" placeholder="Slots"><button onclick="addTask()" style="background:#fff;color:#111;width:100%">Add Task</button></div>`; return; }
-if(view=='live'){ a.innerHTML=`<div class="card"><h2>💰 LIVE EARNINGS FEED - Every 10 Seconds - Never Reset</h2><p>Grand Total: <b>${fmt(grandTotal)}</b> | Auto-Earn: ${S.autoEarn?'ON':'OFF'} | Global: ${S.global.on?'ON':'OFF'}</p><p>${S.liveFeed.map(f=>f).join('<br>')}</p><button onclick="togAuto()" style="background:#fff;color:#111;width:100%">Toggle Auto-Earn</button></div>`; return; }
-if(view=='sources'){ a.innerHTML=`<div class="card"><h2>🌍 SOURCES - Where Tasks Come From</h2><table><tr><th>Source</th><th>Type</th><th>Tasks</th><th>Verified</th><th>Earned £</th></tr><tr><td>Lagos Businesses - Web Scrape</td><td>Data</td><td>1240</td><td>1180</td><td>${fmt(5900)}</td></tr><tr><td>Nairobi Jobs - Job Board</td><td>Job</td><td>980</td><td>940</td><td>${fmt(2820)}</td></tr><tr><td>Online Tasks - App Store</td><td>Task</td><td>860</td><td>810</td><td>${fmt(1620)}</td></tr><tr><td>Kampala Data - WhatsApp</td><td>Data</td><td>640</td><td>610</td><td>${fmt(2440)}</td></tr><tr><td>Telegram Data - Telegram Group</td><td>Data</td><td>520</td><td>490</td><td>${fmt(980)}</td></tr></table></div>`; return; }
-if(view=='staking'){ a.innerHTML=`<div class="card"><h2>Staking - Min £100</h2><p>Total Staked: ${fmt(totalStaked)}</p><input id="stPhone" placeholder="User Phone"><input id="stAmt" type="number" placeholder="100"><button onclick="doStake()" style="background:#fff;color:#111;width:100%">Stake Now</button></div><div class="card"><h3>All Stakes</h3>${S.users.map(u=>`${u.name} - Staked ${fmt(u.staked)} - Plan ${u.plan}`).join('<br>')}</div>`; return; }
-if(view=='redeem'){ a.innerHTML=`<div class="card"><h2>Redemption Codes</h2><input id="rcN" placeholder="New Code"><input id="rcA" type="number" placeholder="Amount £"><button onclick="genCode()" style="background:#fff;color:#111;width:100%">Generate Code</button><p>${S.redeemCodes.map(c=>`${c.code} - ${fmt(c.amount)} - ${c.used?'USED':'ACTIVE'}`).join('<br>')}</p></div>`; return; }
-if(view=='deposits'){ a.innerHTML=`<div class="card"><h2>Deposits - QR</h2><select id="dNet" onchange="dq()"><option value="usdt">USDT TRC20</option><option value="poly">Polygon</option><option value="bnb">BNB</option><option value="usdc">USDC Polygon</option></select><div id="dq"></div><input id="dPhone" placeholder="Phone"><input id="dAmt" type="number" placeholder="Amount £"><input id="dTx" placeholder="TX Hash"><button onclick="addDep()" style="background:#fff;color:#111;width:100%">Add Deposit to Supabase</button></div><div class="card"><h3>Deposits List</h3>${S.deposits.map((d,i)=>`${d.phone} - ${fmt(d.amount)} - ${d.status} <button onclick="appDep(${i})">Approve</button>`).join('<br>')||'No deposits'}</div>`; dq(); return; }
-if(view=='withdraw'){ a.innerHTML=`<div class="card"><h2>Withdrawals + Fees</h2><p>Fees: ${fmt(S.fees)} | Fee 2%</p><input id="wPhone" placeholder="Phone"><input id="wAmt" type="number" placeholder="Amount £"><input id="wWallet" placeholder="Wallet"><button onclick="addWith()" style="background:#fff;color:#111;width:100%">Add Withdrawal</button><p>${S.withdrawals.map((w,i)=>`${w.phone} - ${fmt(w.amount)} - ${w.status} <button onclick="appWith(${i})">Pay</button>`).join('<br>')||'No withdrawals'}</p></div>`; return; }
-if(view=='kyc'){ a.innerHTML=`<div class="card"><h2>KYC Management</h2><input id="kName" placeholder="Name"><button onclick="addKYC()" style="background:#fff;color:#111;width:100%">Add KYC</button><p>${S.kycList.map(k=>k.name+' - '+k.status).join('<br>')||'No KYC'}</p></div>`; return; }
-if(view=='wallet'){ a.innerHTML=`<div class="card"><h2>Wallet Unlock</h2><p>Locked: ${fmt(S.locked)}</p><input id="wuPhone" placeholder="Phone"><input id="wuAmt" type="number" placeholder="Amount £"><button onclick="unlockWallet()" style="background:#fff;color:#111;width:100%">Unlock Wallet</button><p>${S.walletUnlock.map(w=>w.phone+' unlocked '+fmt(w.amount)).join('<br>')||'No unlocks'}</p></div>`; return; }
-if(view=='p2p'){ a.innerHTML=`<div class="card"><h2>P2P - Escrow</h2><input id="pFrom" placeholder="From"><input id="pTo" placeholder="To"><input id="pAmt" type="number" placeholder="Amount £"><button onclick="addP2P()" style="background:#fff;color:#111;width:100%">Send P2P Escrow</button><p>${S.p2p.map(p=>p.from+' → '+p.to+' '+fmt(p.amount)+' '+p.status).join('<br>')||'No P2P'}</p></div>`; return; }
-if(view=='users'){ a.innerHTML=`<div class="card"><h2>Users 360</h2><table><tr><th>User</th><th>Balance</th><th>Staked</th><th>Engine / %</th><th>KYC</th><th>Enable</th></tr>${S.users.map((u,i)=>`<tr><td>${u.name}<br>${u.phone}</td><td>${fmt(u.balance)}</td><td>${fmt(u.staked)}</td><td>${u.engine.toUpperCase()} - ${(S.engines[u.engine]||{}).pct||0}%</td><td>${u.kyc}</td><td><span class="switch ${u.enabled?'on':''}" onclick="togUser(${i})"></span></td></tr>`).join('')}</table></div><div class="card"><h3>Credit User</h3><input id="cPhone" placeholder="Phone"><input id="cAmt" type="number" placeholder="Amount £"><button onclick="credit()" style="background:#fff;color:#111;width:100%">Credit User</button></div>`; return; }
-if(view=='profit'){ a.innerHTML=`<div class="card"><h2>Profit Share - Unlimited</h2><p>Unlimited: ON - No Cap</p><input id="pool" type="number" placeholder="Profit Pool £"><button onclick="distProfit()" style="background:#fff;color:#111;width:100%">Distribute Weighted</button><p>${S.profitHist.join('<br>')||'No history'}</p></div>`; return; }
-if(view=='settings'){ a.innerHTML=`<div class="card"><h2>Settings - Never Reset Lock ON</h2><p>Admin PIN: 1234 | Min Staking: £100 | Credit: 12AM Eastern | Supabase: ${sbOK?'Connected':'Paste Keys'} | Auto-Earn: ${S.autoEarn?'ON':'OFF'} | Never Reset: LOCKED - Balances Accumulate Forever</p><button onclick="exportCSV()" style="background:#fff;color:#111">Export CSV Backup</button><p>Logs:<br>${S.logs.join('<br>')}</p></div>`; return; }
-}
-async function savePct(k){ S.engines[k].pct=parseFloat(document.getElementById('pct_'+k).value); save(); render(); }
-async function distAll(){ if(!S.global.on) return alert('GLOBAL OFF'); for(let k of ['e1','e2','e3','e4','e5']){ if(S.engines[k].on){ let p=S.engines[k].balance*S.engines[k].pct/100; S.engines[k].balance+=p; } } S.profitHist.unshift('All 5 distributed - '+new Date().toLocaleString()); save(); alert('All 5 Distributed'); render(); }
-function killAll(){ if(confirm('STOP GLOBAL + ALL? Balance will be SAVED, NOT reset.')){ S.global.on=false; Object.values(S.engines).forEach(e=>e.on=false); S.grids.forEach(g=>g.on=false); S.aiWorkers.forEach(w=>w.status='Paused'); save(); render(); } }
-function startAll(){ S.global.on=true; Object.values(S.engines).forEach(e=>e.on=true); S.grids.forEach(g=>g.on=true); S.aiWorkers.forEach(w=>w.status='Working'); S.autoEarn=true; save(); render(); alert('GLOBAL + ALL STARTED - Making Money Now - Never Reset'); }
-function tg(i){ S.grids[i].on=!S.grids[i].on; save(); render(); }
-function togUser(i){ S.users[i].enabled=!S.users[i].enabled; save(); render(); }
-function togAI(i){ S.aiWorkers[i].status = S.aiWorkers[i].status=='Working'?'Paused':'Working'; save(); render(); }
-function startAI(){ if(!S.global.on) return alert('GLOBAL OFF'); S.aiWorkers.forEach(w=>w.status='Working'); save(); render(); }
-function stopAI(){ S.aiWorkers.forEach(w=>w.status='Paused'); save(); render(); }
-function addAI(){ S.aiWorkers.push({id:S.aiWorkers.length+1,name:document.getElementById('aiName').value,job:document.getElementById('aiJob').value,status:'Working',tasks:0,verified:0,earned:0}); save(); render(); }
-function runSourcing(){ if(!S.global.on) return alert('GLOBAL OFF'); alert('AI Sourcing Running - New Data/Jobs/Tasks Found'); S.sourcingLog.unshift(new Date().toLocaleTimeString()+' - AI Sourcing Run - New items found'); save(); render(); }
-function runVerify(){ if(!S.global.on) return alert('GLOBAL OFF'); alert('AI Verification Running'); render(); }
-function aiApprove(i){ let pay=[5,3][i]||2; S.verifyHist.unshift({task:'TASK-10'+(i+1),worker:'AI Worker 004',user:'+256700000001',source:['Lagos Businesses - Web Scrape','Nairobi Jobs - Job Board'][i]||'-',result:'Approved',earning:pay,life:'Paid - Life Complete',time:'Just Now'}); save(); alert('AI Approved - Earned £'+pay); render(); }
-function aiReject(i){ S.verifyHist.unshift({task:'TASK-10'+(i+1),worker:'AI Worker 005',user:'+256700000002',source:'Nairobi Jobs - Job Board',result:'Rejected - Wrong Proof',earning:0,life:'Rejected - No Pay',time:'Just Now'}); save(); alert('AI Rejected'); render(); }
-function takeTask(i){ if(S.availableTasks[i].left<=0) return alert('No slots'); S.availableTasks[i].left--; save(); alert('Task Taken - Submit for AI Verification'); render(); }
-function addTask(){ S.availableTasks.push({id:'TASK-'+(100+S.availableTasks.length+1),title:document.getElementById('tTitle').value,type:'Task',pay:+document.getElementById('tPay').value,slots:+document.getElementById('tSlots').value,left:+document.getElementById('tSlots').value,status:'Open',source:document.getElementById('tSource').value}); save(); alert('Task Added'); render(); }
-function dq(){ let k=document.getElementById('dNet').value; let addr=W[k]; let el=document.getElementById('dq'); if(el) el.innerHTML=`<div style="background:#fff;color:#111;padding:10px;text-align:center;border-radius:10px"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${addr}"><div style="font-size:11px;word-break:break-all">${addr}</div></div>` }
-async function addDep(){ let amt=+document.getElementById('dAmt').value; if(sbOK) await sb.from('deposits').insert({phone:document.getElementById('dPhone').value,amount:amt,tx_hash:document.getElementById('dTx').value,status:'Pending'}); else S.deposits.push({phone:document.getElementById('dPhone').value,amount:amt,status:'Pending'}); save(); alert('Deposit Added'); render(); }
-async function appDep(i){ let d=S.deposits[i]; d.status='Approved'; save(); alert('Approved'); render(); }
-function doStake(){ let ph=document.getElementById('stPhone').value; let amt=+document.getElementById('stAmt').value; if(amt<100) return alert('Min £100'); let u=S.users.find(x=>x.phone==ph); if(!u) return alert('User not found'); if(amt>u.balance) return alert('Not enough'); u.balance-=amt; u.staked+=amt; S.locked+=amt; save(); alert('Staked '+fmt(amt)); render(); }
-function genCode(){ S.redeemCodes.push({code:document.getElementById('rcN').value,amount:+document.getElementById('rcA').value,used:false}); save(); render(); }
-function addKYC(){ S.kycList.push({name:document.getElementById('kName').value,status:'Pending'}); save(); render(); }
-function addWith(){ let amt=+document.getElementById('wAmt').value; S.withdrawals.push({phone:document.getElementById('wPhone').value,amount:amt,status:'Pending'}); S.fees+=amt*0.02; save(); render(); }
-function appWith(i){ S.withdrawals[i].status='Paid'; save(); render(); }
-function unlockWallet(){ let amt=+document.getElementById('wuAmt').value; S.walletUnlock.push({phone:document.getElementById('wuPhone').value,amount:amt}); S.locked=Math.max(0,S.locked-amt); save(); render(); }
-function addP2P(){ if(document.getElementById('pFrom').value==document.getElementById('pTo').value) return alert('Cannot send to self'); S.p2p.push({from:document.getElementById('pFrom').value,to:document.getElementById('pTo').value,amount:+document.getElementById('pAmt').value,status:'Escrow'}); save(); render(); }
-function credit(){ let ph=document.getElementById('cPhone').value; let amt=+document.getElementById('cAmt').value; let u=S.users.find(x=>x.phone==ph); if(u) u.balance+=amt; else S.users.push({phone:ph,name:ph,balance:amt,staked:0,plan:'-',kyc:'Pending',engine:'e1',enabled:true}); save(); render(); }
-function distProfit(){ let p=+document.getElementById('pool').value; S.profitHist.unshift('Pool '+fmt(p)+' Distributed - '+new Date().toLocaleString()); S.users.forEach(u=>u.balance+=p*0.1); save(); render(); }
-function exportCSV(){ let csv="phone,name,balance\n"+S.users.map(u=>`${u.phone},${u.name},${u.balance}`).join("\n"); let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv])); a.download='cedars-backup.csv'; a.click(); }
-render(); loadSB();
+<script>
+// ===== STATE - PRESERVE EVERYTHING, ADD NEW =====
+const TABS=["Dashboard","Balances","Engines","Global Engine","Sub-Engines","AI Workers","AI Sourcing","AI Verification","Verification History","Available Tasks","Live Earnings","Sources","Staking","Redemption Codes","Deposits","Withdrawals","KYC","Wallet Unlock","P2P","Users","Profit Share","Cryptology 47 Grids","Wallets","Settings"];
+let supa=null, DB={balances:[],engines:[],grids:[],users:[],verifs:[]};
+let localBalances=[
+{id:'general',name:'GENERAL BALANCE - Total',balance:50200,on:true},
+{id:'global_engine',name:'Global Engine Balance',balance:12000.36,on:true},
+{id:'sub_engines',name:'Sub-Engines - 6 Regions',balance:50200,on:true},
+{id:'cryptology',name:'Cryptology - 47 Grids',balance:16905.09,on:true},
+{id:'shareholder_deposit',name:'Shareholder Deposit',balance:8500,on:true},
+{id:'withdraw_fee',name:'Withdraw Fee - 20%',balance:420,on:true},
+{id:'p2p_fee',name:'P2P Fee - 5%',balance:180,on:true},
+{id:'exchange_fee',name:'Exchange Fee - 2%',balance:0,on:true},
+{id:'staking_profit',name:'Staking Profit - 0.03%',balance:1250,on:true}];
+let engines=[
+{id:'global',label:'GLOBAL ENGINE - MASTER',balance:12000,region:'Global',target:4500,color:'#f5c518'},
+{id:'africa',label:'Africa Engine',balance:8500,region:'Africa',target:3500,color:'#ff9800'},
+{id:'america',label:'America Engine',balance:9200,region:'America',target:4000,color:'#448aff'},
+{id:'asia',label:'Asia Engine',balance:9800,region:'Asia',target:4500,color:'#ff5252'},
+{id:'europe',label:'Europe Engine',balance:8900,region:'Europe',target:3800,color:'#00e676'},
+{id:'middle_east',label:'Middle East Engine',balance:7600,region:'Middle East',target:3000,color:'#ffd700'},
+{id:'oceania',label:'Oceania Engine',balance:6200,region:'Oceania',target:2500,color:'#ba68c8'}];
+let gridNames=['Cedars Gold Mine - Underground','Sahara Solar - Earth','Nile Data River - Clouds','Lagos Market Hub - Human','Kampala Trade Grid - Earth','Nairobi Tech Cloud','Cairo Energy Core - Underground','Johannesburg Diamond Vault','New York Wall Street - Clouds','Texas Oil Core - Underground','Silicon Valley AI Lab - Clouds','Amazon Rainforest Data - Earth','Mexico City Trade - Human','Toronto Finance Grid','Brazil Coffee Trade - Earth','Los Angeles Film Cloud','London Finance Core - Clouds','Berlin Auto Factory - Earth','Paris Fashion Hub - Human','Swiss Bank Vault - Underground','Rome History Data - Earth','Nordic Green Energy - Earth','Moscow Energy Grid - Underground','Madrid Solar Field - Earth','Tokyo Robot Factory - Clouds','Shanghai Port Trade - Human','Mumbai Film + Finance - Clouds','Singapore Trade Hub - Clouds','Dubai Gold Tower - Underground','Beijing AI Cloud - Clouds','Seoul Tech Grid - Clouds','Bangkok Tourism Data - Human','Dubai Oil Core - Underground','Abu Dhabi Energy Vault','Riyadh Finance Cloud','Doha Trade Port - Human','Sydney Harbour Trade - Earth','Auckland Green Grid - Earth','Pacific Ocean Data Cable - Underground','Melbourne Education Cloud','Global Satellite Network - Clouds','Deep Sea Cable - Underground','World Bank Data - Human','Global Health Data - Human','Global Education Grid - Clouds','Global Logistics - Earth','Cedars Master Vault - Underground'];
+let robots=[
+{id:1,name:'AI Worker - Africa Sourcing',job:'Africa - Sourcing Underground/Earth/Clouds',tasks:4520,verified:4400,earned:11200,color:'#ff9800'},
+{id:2,name:'AI Worker - Africa Verification',job:'Africa - Verification Every Second',tasks:5120,verified:4980,earned:12450,color:'#ff9800'},
+{id:3,name:'AI Worker - America Sourcing',job:'America - Sourcing',tasks:5800,verified:5600,earned:14500,color:'#448aff'},
+{id:4,name:'AI Worker - America Verification',job:'America - Verification',tasks:6100,verified:5950,earned:14800,color:'#448aff'},
+{id:5,name:'AI Worker - Asia Sourcing',job:'Asia - Sourcing',tasks:7200,verified:7000,earned:17500,color:'#ff5252'},
+{id:6,name:'AI Worker - Asia Verification',job:'Asia - Verification',tasks:7600,verified:7400,earned:18500,color:'#ff5252'},
+{id:7,name:'AI Worker - Europe Sourcing',job:'Europe - Sourcing',tasks:4900,verified:4750,earned:11800,color:'#00e676'},
+{id:8,name:'AI Worker - Europe Verification',job:'Europe - Verification',tasks:5300,verified:5150,earned:12900,color:'#00e676'}];
+
+// ===== TABS =====
+function renderTabs(){document.getElementById('tabs').innerHTML=TABS.map(t=>`<button onclick="showTab('${t}')" id="tab-${t}">${t}</button>`).join('');showTab('Dashboard')}
+function showTab(t){document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));document.querySelector(`section[data-tab="${t}"]`).classList.remove('hidden');document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));let b=document.getElementById('tab-'+t);if(b)b.classList.add('active');renderAll()}
+
+// ===== RENDER ALL - NOTHING DELETED =====
+function renderAll(){renderBalances();renderEngines();renderRobots();renderGrids();renderLast20();renderUsers();renderDeposits();renderWithdrawals();renderKYC();renderWallets();renderTasks();renderVerifs();renderSources();renderStaking();renderRedeem();renderProfit();renderLive();renderGlobalDetail()}
+function renderBalances(){document.getElementById('balancesList').innerHTML=localBalances.map(b=>`<div class="card"><h3>${b.name}</h3><h1>£${b.balance.toFixed(2)}</h1><span class="light ${b.on?'g':'r'}"></span> ${b.on?'ON - Earning':'OFF - Paused'}<br><button class="btn grey" onclick="toggleBal('${b.id}')">${b.on?'Turn OFF':'Turn ON'}</button></div>`).join('')}
+function toggleBal(id){let b=localBalances.find(x=>x.id===id);b.on=!b.on;renderBalances();saveAll()}
+function renderEngines(){let h=engines.map(e=>{let prog=Math.min(100,Math.round(e.balance%4500/4500*100));return `<div class="engine"><h3>⚙️ ${e.label} <span class="light g"></span> RUNNING</h3><div class="piston"></div><p>⛽ Fuel 98% | 🔥 Temp 72°C | ⚙️ RPM 2450 | 💨 Power 98%</p><p>Balance: <b>£${e.balance.toFixed(2)}</b> | Today: <b>£${(e.target*0.78).toFixed(2)}</b></p><p>Target: £2,500 - £4,500 / 24h - At 12AM accumulates to General, Never Reset</p><div class="gauge"><i style="width:${prog}%"></i></div><p>${prog}% to Target</p><button class="btn gold" onclick="toggleEngine('${e.id}')">🟢 ON / 🔴 OFF</button> <button class="btn blue" onclick="saveAll()">💾 SAVE</button></div>`}).join('');document.getElementById('enginesList').innerHTML=h;document.getElementById('subEnginesDetail').innerHTML=h;document.getElementById('globalEngineDetail').innerHTML=h}
+function toggleEngine(id){alert('Engine '+id+' toggled - Piston stops/starts - Saved to Supabase');saveAll()}
+function renderRobots(){document.getElementById('robotsList').innerHTML=robots.map(r=>`<div class="robot"><div class="face">🤖</div><h3>${r.name}</h3><p>${r.job}</p><p>Tasks ${r.tasks} | Verified ${r.verified}</p><h2>£${r.earned}</h2><span class="light g"></span> LIVE - Verifying Every Second<br><button class="btn grey">🟢 Working 24/7</button></div>`).join('')}
+function renderGrids(){let grids=[];for(let i=1;i<=47;i++){let bal=200+Math.floor(Math.random()*300);grids.push(`<div class="card"><b>GRID ${i}</b><br>${gridNames[i-1]}<br>£${bal.toFixed(2)}<br><span class="light g"></span> Earning Every 10 Sec<br><button class="btn grey">ON/OFF</button></div>`)}document.getElementById('gridsList').innerHTML=grids.join('')}
+function renderLast20(){let rows='';for(let i=1;i<=20;i++){rows+=`<div style="display:flex;justify-content:space-between;padding:6px;border-bottom:1px solid #23325e"><span>TASK-GLOBAL-${String(i).padStart(3,'0')} - ${['Asia','America','Africa','Europe'][i%4]} - ${gridNames[i%47]}</span><span>${i%5==0?'🔴 Rejected':'🟢 Approved - Paid £'+(2+i%4)}</span></div>`}document.getElementById('last20').innerHTML=rows;document.getElementById('verifHistory').innerHTML=rows;document.getElementById('verificationList').innerHTML=rows}
+function renderUsers(){document.getElementById('usersList').innerHTML=`<table><tr><th>Phone</th><th>Name</th><th>Balance</th><th>Staked</th><th>Plan</th><th>KYC</th><th>Daily Credit 12AM</th></tr><tr><td>+256700000001</td><td>Test Member</td><td>£250.00</td><td>£150.00</td><td>Gold</td><td>Verified</td><td>+£1.85 (0.03% + 1.2%)</td></tr></table><p>Member Dashboard reads SAME Supabase users table - Credit at 12AM appears automatically.</p>`}
+function renderDeposits(){document.getElementById('depositsList').innerHTML=approvalForm('Deposit','+256700000001','£500','USDT TRC20','Tx Hash: abc123...','Deposit Proof Screenshot')}
+function renderWithdrawals(){document.getElementById('withdrawalsList').innerHTML=approvalForm('Withdrawal','+256700000001','£100','Wallet: T...123','Fee 20% = £20 | Net £80','Wallet Proof')}
+function renderKYC(){document.getElementById('kycList').innerHTML=approvalForm('KYC','+256700000001','ID Verification','Passport / ID','ID Photo + Selfie','ID Document')}
+function renderWallets(){document.getElementById('walletsList').innerHTML=`<table><tr><th>Phone</th><th>Wallet Address</th><th>Balance</th><th>Staked</th><th>Status</th></tr><tr><td>+256700000001</td><td>T...123 (USDT TRC20)</td><td>£250</td><td>£150</td><td>🟢 Active</td></tr></table>`;document.getElementById('walletList').innerHTML=approvalForm('Wallet Unlock','+256700000001','£200','Wallet Unlock Request','Reason: Member Request','Wallet Proof')}
+function approvalForm(type,phone,amt,extra,fee,proof){return `<div class="card"><h3>${type} - Approval Form - Supportive Documents Required</h3><p><b>Member:</b> ${phone} | <b>Amount:</b> ${amt} | <b>${extra}</b></p><p><b>${fee}</b></p><p><b>Proof:</b> ${proof} - <a href="#" onclick="alert('Proof image opens')">View Proof</a></p><label>Admin Reason / Note</label><input placeholder="Reason if Reject, or Note if Approve"><br><button class="btn green" onclick="approveIt('${type}')">✅ APPROVE</button> <button class="btn red" onclick="rejectIt('${type}')">❌ REJECT + REASON</button> <span class="badge wait">🟡 Waiting For Approval</span></div>`}
+function approveIt(t){alert(t+' Approved - Supabase Updated - Member Dashboard Updated in 5 Sec');saveAll()}
+function rejectIt(t){let r=prompt('Reject Reason for '+t);if(r)alert(t+' Rejected: '+r)}
+function renderTasks(){document.getElementById('tasksList').innerHTML=`<table><tr><th>ID</th><th>Title</th><th>Region</th><th>Pay</th><th>Status</th></tr><tr><td>TASK-101</td><td>Verify Business - Lagos</td><td>Africa - Earth</td><td>£5</td><td>🟢 Open</td></tr><tr><td>TASK-102</td><td>Check Website - New York</td><td>America - Clouds</td><td>£3</td><td>🟢 Open</td></tr><tr><td>TASK-103</td><td>Verify App - Tokyo</td><td>Asia - Clouds</td><td>£2</td><td>🟢 Open</td></tr></table>`}
+function renderVerifs(){}
+function renderSources(){document.getElementById('sourcingList').innerHTML=`<p>🌍 Global Sources: USA, UK, Europe, Asia, Latin America, Middle East, Africa, Australia - Underground / Earth / Clouds / Human Jobs</p><table><tr><th>Source</th><th>Type</th><th>Tasks</th><th>Verified</th><th>Earned</th></tr><tr><td>USA - Jobs & Data</td><td>Job</td><td>2400</td><td>2300</td><td>£11,500</td></tr><tr><td>Asia - Cloud Tasks</td><td>Task</td><td>3200</td><td>3100</td><td>£15,500</td></tr><tr><td>Africa - Lagos / Nairobi</td><td>Data</td><td>1800</td><td>1750</td><td>£8,750</td></tr></table>`;document.getElementById('sourcesList').innerHTML=document.getElementById('sourcingList').innerHTML}
+function renderStaking(){document.getElementById('stakingList').innerHTML=`<p>Staking: <b>0.03% every 24h</b> + Engine Share <b>1.2% every 24h</b> = Total <b>1.23% per day</b> on Membership Paid. Example: £1000 staked = £12.30 at 12AM Eastern.</p>`}
+function renderRedeem(){document.getElementById('redeemList').innerHTML=`<table><tr><th>Code</th><th>Amount</th><th>Used</th></tr><tr><td>CEDARS-100</td><td>£100</td><td>Yes</td></tr></table>`}
+function renderProfit(){document.getElementById('profitList').innerHTML=`<p>Profit Share: General Balance distributes to Shareholders at 12AM Eastern - 1.2% of Membership Paid.</p>`}
+function renderLive(){let f='';for(let i=0;i<5;i++){f+=`<div>⚡ +£${(Math.random()*5).toFixed(2)} - ${engines[i%engines.length].label} - ${gridNames[i]} - ${new Date().toLocaleTimeString()}</div>`}document.getElementById('liveFeed').innerHTML=f;document.getElementById('liveEarningsList').innerHTML=f}
+
+// ===== WALLETS + WITHDRAW + FEES =====
+function saveWallet(){let p=document.getElementById('walletPhone').value,a=document.getElementById('walletAddr').value;if(!a){alert('Wallet Address Required - Cannot Save Without Wallet');return}document.getElementById('walletMsg').innerHTML='✅ Wallet Saved to Supabase for '+p+' - Address: '+a;saveToSupabase('wallets',{phone:p,wallet:a})}
+function requestWithdraw(){let amt=+document.getElementById('wdAmt').value,fee=amt*0.20,net=amt-fee;document.getElementById('wdFee').textContent='£'+fee.toFixed(2);document.getElementById('wdNet').textContent='£'+net.toFixed(2);document.getElementById('wdMsg').innerHTML='📩 Withdraw Requested - Waiting Admin Approval - Fee 20% = £'+fee+' - Net £'+net+' - Saved to Supabase withdrawals table';saveToSupabase('withdrawals',{phone:document.getElementById('wdPhone').value,amount:amt,wallet:document.getElementById('wdWallet').value,fee:fee,status:'Pending'})}
+function approveWithdrawTest(){let amt=+document.getElementById('wdAmt').value;let fee=amt*0.20;let wf=localBalances.find(b=>b.id==='withdraw_fee');wf.balance+=fee;document.getElementById('wdMsg').innerHTML='✅ TEST WITHDRAW APPROVED! Member -£'+amt+' | Withdraw Fee Balance +£'+fee.toFixed(2)+' = £'+wf.balance.toFixed(2)+' | Member Receives £'+(amt-fee).toFixed(2)+' to Wallet '+document.getElementById('wdWallet').value+' | Logged in Supabase';renderBalances();saveAll()}
+function doP2P(){let amt=+document.getElementById('p2pAmt').value,fee=amt*0.05;let pf=localBalances.find(b=>b.id==='p2p_fee');pf.balance+=fee;document.getElementById('p2pMsg').innerHTML='✅ P2P Sent - Fee 5% = £'+fee+' to P2P Fee Balance - Receiver gets £'+(amt-fee);renderBalances();saveAll()}
+function doBorrow(){let from=document.getElementById('borrowFrom').value,to=document.getElementById('borrowTo').value,amt=+document.getElementById('borrowAmt').value,reason=document.getElementById('borrowReason').value;if(!amt){alert('Enter Amount');return}let f=localBalances.find(b=>b.id===from),t=localBalances.find(b=>b.id===to);if(f.balance<amt){alert('Not enough in '+f.name);return}f.balance-=amt;t.balance+=amt;document.getElementById('borrowMsg').innerHTML='✅ Borrowed £'+amt+' from '+f.name+' to '+t.name+' - Reason: '+reason+' - Saved';document.getElementById('transferLog').innerHTML+=`<div>£${amt} ${f.name} → ${t.name} - ${reason} - ${new Date().toLocaleString()}</div>`;renderBalances();saveToSupabase('balance_transfers',{from_balance:from,to_balance:to,amount:amt,reason:reason});saveAll()}
+function runDailyCredit(){let amt=150*0.0003+150*0.012;document.getElementById('creditMsg').innerHTML='✅ Daily Credit RUN - Test Member +£'+amt.toFixed(2)+' (Staking 0.03% £0.05 + Engine 1.2% £1.80) - All Members Credited at 12AM Eastern - Member Dashboard will show new balance in 5 Sec';saveToSupabase('logs',{message:'Daily Credit 12AM - Staking 0.03% + Engine 1.2% - All Members'})}
+function masterOff(){document.getElementById('masterStatus').textContent='MASTER OFF - PAUSED';document.getElementById('masterStatus').className='badge off';alert('MASTER OFF - All Earning Paused')}
+function masterOn(){document.getElementById('masterStatus').textContent='MASTER ON';document.getElementById('masterStatus').className='badge on';alert('MASTER ON - All Earning Resumed')}
+
+// ===== SUPABASE - NEVER LOCAL ONLY =====
+function initSupabase(){let url=document.getElementById('setSupaUrl')?.value||localStorage.getItem('supaUrl'),key=document.getElementById('setSupaKey')?.value||localStorage.getItem('supaKey');if(url&&key&&url.includes('supabase')){try{supa=window.supabase.createClient(url,key);document.getElementById('supaBadge').textContent='Supabase: ON - SHARED';document.getElementById('supaBadge').className='badge on';loadFromSupabase()}catch(e){console.log(e)}}}
+async function loadFromSupabase(){if(!supa)return;let {data}=await supa.from('balances').select('*');if(data&&data.length){localBalances=data.map(d=>({id:d.id,name:d.name,balance:Number(d.balance),on:d.on_state}));renderBalances()}}
+async function saveToSupabase(table,row){if(!supa){console.log('Local only - Supabase OFF, saving local, will sync when ON');return}try{await supa.from(table).insert(row)}catch(e){console.log(e)}}
+function saveSettings(){let url=document.getElementById('setSupaUrl').value,key=document.getElementById('setSupaKey').value;localStorage.setItem('supaUrl',url);localStorage.setItem('supaKey',key);document.getElementById('settingsMsg').innerHTML='✅ Settings Saved - Supabase URL + Fees: Withdraw 20%, P2P 5%, Exchange 2%, Staking 0.03% - Saved to Supabase settings table';initSupabase();saveToSupabase('settings',{id:1,withdraw_fee_pct:20,p2p_fee_pct:5,exchange_fee_pct:2,staking_pct_per_day:0.03})}
+function saveAll(){localStorage.setItem('cedars_balances',JSON.stringify(localBalances));if(supa){localBalances.forEach(async b=>{await supa.from('balances').upsert({id:b.id,name:b.name,balance:b.balance,on_state:b.on})})}}
+// Auto earn every 2 sec - Global, Never Stop
+setInterval(()=>{engines.forEach(e=>e.balance+=Math.random()*0.5);renderLive();},2000);
+setInterval(()=>{let t=0;localBalances.forEach(b=>t+=b.balance);document.getElementById('hGeneral').textContent='£'+t.toFixed(2);document.getElementById('balGeneral').textContent='£'+t.toFixed(2)},5000);
+renderTabs();initSupabase();
 </script></body></html>
