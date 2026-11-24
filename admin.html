@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CEDARS EMPIRE - Global Admin 2056 - Fully Verified</title>
+<title>CEDARS EMPIRE - Robotic Revolutionary Company | Global Admin 2056</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box} body{margin:0;background:#0a0a0a;color:#fff;font-family:Arial,sans-serif}
+*{box-sizing:border-box} body{margin:0;background:#050505;color:#fff;font-family:Arial,sans-serif}
 .top{position:sticky;top:0;background:#111;padding:12px;border-bottom:2px solid #f5c518;display:flex;gap:8px;flex-wrap:wrap;z-index:99}
 .top b{color:#f5c518;font-size:18px;width:100%}
 .pill{background:#222;border:1px solid #333;padding:6px 10px;border-radius:20px;font-size:12px}
@@ -26,294 +26,174 @@ input,select,textarea{width:100%;padding:10px;background:#222;color:#fff;border:
 small{color:#aaa} .gold{color:#f5c518} .green{color:#2ecc71} .red{color:#ff5a5a}
 .feed{max-height:240px;overflow:auto;background:#0f0f0f;padding:10px;border-radius:10px;font-size:13px;line-height:1.7}
 table{width:100%;border-collapse:collapse;font-size:13px} th,td{border-bottom:1px solid #333;padding:8px;text-align:left}
-.layerU{border-left:4px solid #8b5cf6} .layerE{border-left:4px solid #2ecc71} .layerC{border-left:4px solid #3498db} .layerH{border-left:4px solid #f5c518}
+.layerU{border-left:4px solid #8b5cf6} .layerE{border-left:4px solid #2ecc71} .layerC{border-left:4px solid #3498db} .layerH{border-left:4px solid #f5c518} .layerR{border-left:4px solid #ff2d55}
 .badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;background:#222;border:1px solid #444}
+.lock{max-width:420px;margin:60px auto;text-align:center}
 </style>
 </head>
 <body>
-
-<div class="top">
-<b>👑 CEDARS EMPIRE - GLOBAL ADMIN | 2056 VISION | FULLY VERIFIED</b>
-<span class="pill">Mode: <b id="tMode">LOCAL</b></span>
-<span class="pill">Global Engine: £<b id="tGlobal">0</b></span>
-<span class="pill">General: £<b id="tGeneral">0</b></span>
-<span class="pill">Profit Today: £<b id="tProfit">0</b></span>
-<span class="pill">⏳ Approvals: <b id="tAppr">0</b></span>
-<span class="pill">🤖 AI Brain: <b id="tAI">ON</b></span>
-<span class="pill">🧠 AI Score: <b id="tScore">98%</b></span>
-<span class="pill">🌍 Grids: <b>47 / 47 LIVE</b></span>
+<div id="lockScreen" class="lock">
+<div class="card" style="border:2px solid #f5c518">
+<h1>🤖 CEDARS EMPIRE</h1>
+<h3>Robotic Revolutionary Company</h3>
+<p><small>Underground • Earth • Cloud • Human • Robot</small></p>
+<p>Global Admin - 2056 Vision</p>
+<p><b>Our Values:</b><br>🤖 Robots Serve Humans • 🧠 Truth Over Hype • 🌍 One Earth, One Engine • ⚖️ No One Left Behind • 🔒 Safety First • 💡 Build For 30 Years, Not 30 Days</p>
+<input id="pinInput" type="password" inputmode="numeric" placeholder="Enter Admin PIN">
+<button class="btn" onclick="unlock()">🔓 UNLOCK ADMIN</button>
+<p><small>Default PIN: <b>1234</b> - Change it in code at top</small></p>
+<div id="pinErr" class="red"></div>
+</div>
+<div class="card"><h3>🦾 What We Build</h3><p>Humanoid Workers • Robot Farmers • Robot Nurses • Drone Delivery • Robot Builders • Robot Teachers • AI Factories • Space Robots</p><p><small>Robots do dangerous, heavy, repetitive work. Humans do creative, caring, leading work. AI connects them.</small></p></div>
 </div>
 
+<div id="app" style="display:none">
+<div class="top">
+<b>👑 CEDARS EMPIRE - ROBOTIC REVOLUTIONARY COMPANY | GLOBAL ADMIN</b>
+<span class="pill">Mode: <b id="tMode">LOCAL + SAVED ✅</b></span>
+<span class="pill">Currency: <select id="curSel" onchange="changeCurrency()" style="width:auto;padding:2px;background:#222;color:#fff;border:0"><option value="£|1">£ GBP</option><option value="$|1">$ USD</option><option value="UGX|3800">UGX Uganda</option><option value="KES|130">KES Kenya</option><option value="NGN|1500">NGN Nigeria</option><option value="INR|83">INR India</option><option value="€|1.08">€ EUR</option></select></span>
+<span class="pill">Global: <b id="tGlobal">0</b></span>
+<span class="pill">General: <b id="tGeneral">0</b></span>
+<span class="pill">Profit: <b id="tProfit">0</b></span>
+<span class="pill">⏳ Approvals: <b id="tAppr">0</b></span>
+<span class="pill">🤖 AI: <b id="tAI">ON</b></span>
+<span class="pill">🦾 Robots Active: <b id="tRobots">0</b></span>
+<span class="pill">🌍 Grids: <b>47 / 47 LIVE</b></span>
+<button class="btnR" onclick="lockAdmin()">🔒 Lock</button>
+</div>
 <div class="nav" id="nav"></div>
 <div id="page"></div>
+<div id="errBox" style="color:#ff5a5a;padding:10px;display:none"></div>
+</div>
 
 <script>
-// ============================================================
-// ★★★ REPLACE SUPABASE HERE - ONLY THESE 2 LINES ★★★
-// Go to supabase.com > Your Project > Settings > API > Copy URL + anon key
-// ============================================================
-const SUPABASE_URL = "https://ipyvewpjtpgfuqfwizlr.supabase.co/rest/v1/";
+// ===== CONFIG - CHANGE THESE ONLY =====
+const ADMIN_PIN = "1234"; // <-- CHANGE YOUR PIN HERE
+const SUPABASE_URL = "Supabase API URL: https://ipyvewpjtpgfuqfwizlr.supabase.co/rest/v1/
+Supabase APY KEY: 
+sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
 const SUPABASE_KEY = "sb_publishable_0rAiG41KwNmToFlG91RbyQ_K8bJSBdj";
-// ============================================================
-// DO NOT TOUCH ANYTHING BELOW UNLESS YOU KNOW CODE
-// ============================================================
+// ========================================
+let supabase=null, DB_ON=false;
+try{ if(SUPABASE_URL.indexOf("PASTE_")===-1 && window.supabase){ supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY); DB_ON=true; } }catch(e){}
+window.onerror=function(m){ var b=document.getElementById('errBox'); if(b){ b.style.display='block'; b.innerHTML='⚠️ Caught (data SAFE): '+m; } };
 
-let supabase = null;
-let DB_ON = false;
-try{
-  if(SUPABASE_URL && SUPABASE_URL.indexOf("PASTE_") === -1 && SUPABASE_KEY && SUPABASE_KEY.indexOf("PASTE_") === -1 && window.supabase){
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    DB_ON = true;
-  }
-}catch(e){ DB_ON = false; supabase = null; }
-
-// ============ STATE ============
-var cur = 'Dashboard';
-var profitToday = 0, sourcedCount = 0, verifiedCount = 0, autoTaskNum = 1, autoAI_ON = true, aiHealth = 98, aiDecisions = 0;
-var balances = [
-  {name:'General',balance:12500},{name:'Global Engine',balance:8500},
-  {name:'America North Engine',balance:2200},{name:'America South Engine',balance:1400},
-  {name:'Africa Engine',balance:1800},{name:'Asia Engine',balance:2400},
-  {name:'Europe Engine',balance:1900},{name:'Oceania Engine',balance:900},
-  {name:'Middle East Engine',balance:1100},{name:'Grid Vault',balance:0},{name:'Support Fund',balance:500},
+// ===== VALUES OF THE COMPANY =====
+var COMPANY_VALUES = [
+ {k:'Robots Serve Humans', v:'Robots do dangerous + heavy work. Humans lead, create, care.'},
+ {k:'Safety First', v:'No robot moves without safety check. No payment without proof.'},
+ {k:'Truth Over Hype', v:'Every task needs proof code. No fake earnings.'},
+ {k:'One Earth, One Engine', v:'Global Engine balances all continents.'},
+ {k:'No One Left Behind', v:'Every continent, every grid, every member matters.'},
+ {k:'Build For 30 Years', v:'We build systems that outlive us.'},
+ {k:'Human + Robot Together', v:'2056 = Human creativity + Robot strength + AI intelligence.'}
 ];
-var members = [{id:'M-001',name:'Demo Member',kyc:'Pending',bal:50,region:'Africa'}];
-var withdrawQueue = [{id:'W-001',member:'M-001',amount:100,status:'Pending'}];
-var vers = [{id:'TASK-001',r:'Africa',t:'Earth Solar Install [Earth]',c:'Earth',a:8,s:'Pending',proof:''}];
-var deposits = [{id:'D-001',member:'M-001',amount:200,status:'Approved'}];
-var credits = [{id:'C-001',member:'M-001',amount:50,status:'Approved'}];
-var proofs = [];
-var feedArr = ['System started - All 47 Grids LIVE','Global Engine connected to 8 Sub-Engines'], sourceFeed = [];
-var autoSources = ['Underground Mining Data','Geothermal Energy','Deep Tunnel Cable','Earth Solar Install','Smart Farm Data','Ocean Port Logistics','Cloud AI Training','Satellite Mapping','Quantum Compute','Human Translation','Human Design','Human Delivery','Space Debris Tracking','Desert Greening','Nile Water Data','Ocean Cleanup Data','AI Hospital Data'];
-var autoRegions = ['America North','America South','Africa','Asia','Europe','Oceania','Middle East'];
-var autoLayers = ['Underground','Earth','Cloud','Human'];
-
-// ============ 47 CRYPTOLOGY GRIDS - VERIFIED ============
-var grids = [];
-var gridDefs = [
- [1,'Underground Mining','Underground','Africa'],[2,'Geothermal Power','Underground','Asia'],[3,'Deep Data Tunnels','Underground','Europe'],[4,'Underground Water','Underground','Africa'],[5,'Bunker Storage','Underground','America North'],[6,'Subsea Cables','Underground','Oceania'],[7,'Oil & Gas Deep','Underground','Middle East'],[8,'Rare Earth Mining','Underground','Asia'],[9,'Underground Transport','Underground','Europe'],[10,'Seismic Data','Underground','America South'],[11,'Deep Carbon Capture','Underground','Africa'],[12,'Underground Vault','Underground','Europe'],
- [13,'Solar Farms','Earth','Africa'],[14,'Smart Farms','Earth','Asia'],[15,'City Logistics','Earth','America North'],[16,'Ports & Shipping','Earth','Asia'],[17,'Green Housing','Earth','Europe'],[18,'Roads & EV Charge','Earth','America South'],[19,'Forest & Carbon','Earth','Oceania'],[20,'Desert Greening','Earth','Middle East'],[21,'Water Rivers','Earth','Africa'],[22,'Markets & Trade','Earth','Asia'],[23,'Factories 4.0','Earth','Europe'],[24,'Hospitals Earth','Earth','America North'],
- [25,'AI Training','Cloud','America North'],[26,'Satellite Network','Cloud','Europe'],[27,'Quantum Cloud','Cloud','Asia'],[28,'Blockchain Ledger','Cloud','Middle East'],[29,'Drone Network','Cloud','Africa'],[30,'Cyber Security','Cloud','Europe'],[31,'Cloud Storage','Cloud','America South'],[32,'Metaverse Work','Cloud','Asia'],[33,'Space Data','Cloud','Oceania'],[34,'Robotics Cloud','Cloud','America North'],[35,'Weather AI','Cloud','Africa'],[36,'Global Payments','Cloud','Europe'],
- [37,'Human Translation','Human','Asia'],[38,'Human Design','Human','Europe'],[39,'Human Delivery','Human','Africa'],[40,'Human Teaching','Human','America South'],[41,'Human Health','Human','Africa'],[42,'Human Builders','Human','Middle East'],[43,'Human Creators','Human','America North'],[44,'Human Drivers','Human','Asia'],[45,'Human Support','Human','Oceania'],[46,'Human Research','Human','Europe'],[47,'Human Leaders','Human','Africa']
+var ROBOT_FLEET = [
+ {id:'R-HUM-001',type:'Humanoid Worker',loc:'Africa',status:'WORKING',tasks:42},
+ {id:'R-DRN-002',type:'Drone Delivery',loc:'Asia',status:'WORKING',tasks:128},
+ {id:'R-FRM-003',type:'Robot Farmer',loc:'Africa',status:'WORKING',tasks:87},
+ {id:'R-NRS-004',type:'Robot Nurse',loc:'Europe',status:'WORKING',tasks:65},
+ {id:'R-BLD-005',type:'Robot Builder',loc:'Middle East',status:'WORKING',tasks:34},
+ {id:'R-TCH-006',type:'Robot Teacher',loc:'America South',status:'CHARGING',tasks:21},
+ {id:'R-SPC-007',type:'Space Robot',loc:'Oceania',status:'WORKING',tasks:12},
+ {id:'R-CLN-008',type:'Ocean Cleanup Robot',loc:'Oceania',status:'WORKING',tasks:56},
 ];
+var cur='Dashboard', curSymbol='£', curRate=1;
+var profitToday=0, sourcedCount=0, verifiedCount=0, autoTaskNum=1, autoAI_ON=true, aiHealth=98, aiDecisions=0, fraudBlocked=0;
+var balances=[{name:'General',balance:12500},{name:'Global Engine',balance:8500},{name:'America North Engine',balance:2200},{name:'America South Engine',balance:1400},{name:'Africa Engine',balance:1800},{name:'Asia Engine',balance:2400},{name:'Europe Engine',balance:1900},{name:'Oceania Engine',balance:900},{name:'Middle East Engine',balance:1100},{name:'Robot Fund',balance:5000},{name:'Grid Vault',balance:0},{name:'Support Fund',balance:500}];
+var members=[{id:'M-20261125-0001',name:'Demo Member',kyc:'Pending',bal:50,region:'Africa',role:'Human'}];
+var withdrawQueue=[{id:'W-20261125-0001',member:'M-20261125-0001',amount:100,status:'Pending'}];
+var vers=[{id:'TASK-001',r:'Africa',t:'Robot Farmer Data [Robot]',c:'Robot',a:12,s:'Pending',proof:'',locked:false}];
+var deposits=[{id:'D-20261125-0001',member:'M-20261125-0001',amount:200,status:'Approved'}];
+var credits=[{id:'C-20261125-0001',member:'M-20261125-0001',amount:50,status:'Approved'}];
+var feedArr=['✅ All fractures fixed','🔒 PIN Lock ON','🛡️ No-Negative Protection ON','🦾 Robot Fleet LIVE','💾 Auto-Save + Backup ON'], sourceFeed=[];
+var autoSources=['Humanoid Factory Work','Robot Farmer Data','Drone Delivery Proof','Robot Nurse Assist','Robot Builder Site','Space Robot Mapping','Ocean Cleanup Robot','AI Hospital Data','Quantum Robot Control','Underground Mining Robot','Earth Solar Robot Install','Smart Farm Robot','Cloud AI Training','Human Translation','Human Design'];
+var autoRegions=['America North','America South','Africa','Asia','Europe','Oceania','Middle East'];
+var autoLayers=['Underground','Earth','Cloud','Human','Robot'];
+var grids=[]; var gridDefs=[[1,'Underground Mining Robots','Underground','Africa'],[2,'Geothermal Power','Underground','Asia'],[3,'Deep Data Tunnels','Underground','Europe'],[4,'Underground Water Robots','Underground','Africa'],[5,'Bunker Storage','Underground','America North'],[6,'Subsea Cables','Underground','Oceania'],[7,'Oil & Gas Deep Robots','Underground','Middle East'],[8,'Rare Earth Mining Robots','Underground','Asia'],[9,'Underground Transport Robots','Underground','Europe'],[10,'Seismic Data','Underground','America South'],[11,'Deep Carbon Capture','Underground','Africa'],[12,'Underground Vault','Underground','Europe'],[13,'Solar Farms + Robot Cleaners','Earth','Africa'],[14,'Smart Farms - Robot Farmers','Earth','Asia'],[15,'City Logistics - Drones','Earth','America North'],[16,'Ports & Shipping Robots','Earth','Asia'],[17,'Green Housing - Robot Builders','Earth','Europe'],[18,'Roads & EV Charge Robots','Earth','America South'],[19,'Forest & Carbon Drones','Earth','Oceania'],[20,'Desert Greening Robots','Earth','Middle East'],[21,'Water Rivers','Earth','Africa'],[22,'Markets & Trade','Earth','Asia'],[23,'Robot Factories 4.0','Earth','Europe'],[24,'Hospitals - Robot Nurses','Earth','America North'],[25,'AI Training','Cloud','America North'],[26,'Satellite + Space Robots','Cloud','Europe'],[27,'Quantum Cloud','Cloud','Asia'],[28,'Blockchain Ledger','Cloud','Middle East'],[29,'Drone Network','Cloud','Africa'],[30,'Cyber Security AI','Cloud','Europe'],[31,'Cloud Storage','Cloud','America South'],[32,'Metaverse Work','Cloud','Asia'],[33,'Space Data','Cloud','Oceania'],[34,'Robotics Cloud Control','Cloud','America North'],[35,'Weather AI','Cloud','Africa'],[36,'Global Payments','Cloud','Europe'],[37,'Human Translation','Human','Asia'],[38,'Human Design','Human','Europe'],[39,'Human Delivery','Human','Africa'],[40,'Human Teaching','Human','America South'],[41,'Human Health','Human','Africa'],[42,'Human Builders + Robots','Human','Middle East'],[43,'Human Creators','Human','America North'],[44,'Human Drivers','Human','Asia'],[45,'Human Support','Human','Oceania'],[46,'Human Research','Human','Europe'],[47,'Human Leaders + Robot Ethics','Human','Africa']];
 gridDefs.forEach(function(d){ grids.push({id:d[0],name:d[1],layer:d[2],region:d[3],balance:100+Math.floor(Math.random()*400),tasks:5+Math.floor(Math.random()*20),status:'LIVE'}); });
 
-// ============ AI BRAIN - FULL ============
-var AIBrain = {
-  scoreTask: function(layer, region){
-    var score = 70 + Math.floor(Math.random()*30);
-    if(layer==='Human') score += 2;
-    if(region==='Africa') score += 1;
-    return Math.min(99, score);
-  },
-  decidePay: function(layer){
-    if(layer==='Underground') return 5+Math.floor(Math.random()*7);
-    if(layer==='Cloud') return 4+Math.floor(Math.random()*7);
-    if(layer==='Human') return 3+Math.floor(Math.random()*6);
-    return 3+Math.floor(Math.random()*6);
-  },
-  pickLayer: function(){
-    var h = new Date().getHours();
-    if(h>=0 && h<6) return 'Cloud';
-    if(h>=6 && h<12) return 'Earth';
-    if(h>=12 && h<18) return 'Human';
-    return 'Underground';
-  },
-  pickRegion: function(){
-    return autoRegions[Math.floor(Math.random()*autoRegions.length)];
-  },
-  generateProof: function(taskId, worker){
-    return 'PROOF-'+taskId+'-'+worker+'-'+Date.now()+'-SHA256-CE-'+Math.random().toString(36).slice(2,8).toUpperCase();
-  },
-  autoBalance: function(){
-    // Every 60s, AI moves 1% from strongest grid to weakest grid to keep balance
-    var sorted = grids.slice().sort(function(a,b){return b.balance-a.balance});
-    var rich = sorted[0], poor = sorted[sorted.length-1];
-    if(rich.balance > poor.balance + 200){
-      var amt = Math.floor(rich.balance*0.01);
-      rich.balance -= amt; poor.balance += amt;
-      logAct('AI Rebalance', 'Grid #'+rich.id+' → Grid #'+poor.id+' £'+amt);
-    }
-    aiDecisions++;
-    aiHealth = 95 + Math.floor(Math.random()*5);
-    var el = document.getElementById('tScore'); if(el) el.innerText = aiHealth + '%';
-  },
-  predict: function(){
-    return 'Next 30y: Cloud + Human will grow fastest. Underground energy stays base. AI predicts +'+ (12+Math.floor(Math.random()*8)) +'% growth if queues cleared daily.';
-  }
+// ===== FIXED HELPERS =====
+function genId(prefix){ var d=new Date(); var ds=''+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0'); return prefix+'-'+ds+'-'+Math.random().toString(36).slice(2,6).toUpperCase()+'-'+String(Math.floor(Math.random()*9000)+1000); }
+function fmt(n){ return curSymbol+ (Number(n)*curRate).toFixed(2); }
+function saveLocal(){ try{ localStorage.setItem('CEDARS_V2_ROBOT', JSON.stringify({balances:balances,members:members,withdrawQueue:withdrawQueue,vers:vers,deposits:deposits,credits:credits,grids:grids,profitToday:profitToday,sourcedCount:sourcedCount,verifiedCount:verifiedCount,feedArr:feedArr,ROBOT_FLEET:ROBOT_FLEET,fraudBlocked:fraudBlocked})); }catch(e){} }
+function loadLocal(){ try{ var s=localStorage.getItem('CEDARS_V2_ROBOT'); if(!s) return false; var d=JSON.parse(s); if(d.balances) balances=d.balances; if(d.members) members=d.members; if(d.withdrawQueue) withdrawQueue=d.withdrawQueue; if(d.vers) vers=d.vers; if(d.deposits) deposits=d.deposits; if(d.credits) credits=d.credits; if(d.grids && d.grids.length===47) grids=d.grids; if(d.profitToday) profitToday=d.profitToday; if(d.sourcedCount) sourcedCount=d.sourcedCount; if(d.verifiedCount) verifiedCount=d.verifiedCount; if(d.feedArr) feedArr=d.feedArr; if(d.ROBOT_FLEET) ROBOT_FLEET=d.ROBOT_FLEET; if(d.fraudBlocked) fraudBlocked=d.fraudBlocked; return true; }catch(e){ return false; } }
+var hadSave=loadLocal();
+function unlock(){ var v=document.getElementById('pinInput').value; if(v===ADMIN_PIN){ document.getElementById('lockScreen').style.display='none'; document.getElementById('app').style.display='block'; render(); } else { document.getElementById('pinErr').innerText='❌ Wrong PIN. Try again.'; } }
+function lockAdmin(){ document.getElementById('app').style.display='none'; document.getElementById('lockScreen').style.display='block'; document.getElementById('pinInput').value=''; }
+function changeCurrency(){ var v=document.getElementById('curSel').value.split('|'); curSymbol=v[0]; curRate=Number(v[1]); render(); }
+function exportBackup(){ var data={balances:balances,members:members,withdrawQueue:withdrawQueue,vers:vers,deposits:deposits,credits:credits,grids:grids,ROBOT_FLEET:ROBOT_FLEET,exportedAt:new Date().toISOString(),company:'CEDARS EMPIRE - Robotic Revolutionary'}; var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cedars-backup-'+Date.now()+'.json'; a.click(); logAct('Backup Export','Backup downloaded'); }
+function exportCSV(){ var rows=[['Type','ID','Member/Name','Amount','Status']]; members.forEach(function(m){ rows.push(['Member',m.id,m.name,m.bal,m.kyc]); }); withdrawQueue.forEach(function(w){ rows.push(['Withdrawal',w.id,w.member,w.amount,w.status]); }); vers.forEach(function(v){ rows.push(['Task',v.id,v.t,v.a,v.s]); }); var csv=rows.map(function(r){return r.join(',')}).join('\n'); var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cedars-export-'+Date.now()+'.csv'; a.click(); }
+function importBackup(ev){ var f=ev.target.files[0]; if(!f) return; var rd=new FileReader(); rd.onload=function(){ try{ var d=JSON.parse(rd.result); if(d.balances) balances=d.balances; if(d.members) members=d.members; if(d.withdrawQueue) withdrawQueue=d.withdrawQueue; if(d.vers) vers=d.vers; if(d.grids) grids=d.grids; saveLocal(); alert('✅ Backup Restored!'); render(); }catch(e){ alert('❌ Invalid backup file'); } }; rd.readAsText(f); }
+function wipeAll(){ if(!confirm('⚠️ WIPE ALL? This deletes local save. Export backup first!')) return; localStorage.removeItem('CEDARS_V2_ROBOT'); location.reload(); }
+
+var AIBrain={
+  scoreTask:function(){ return 70+Math.floor(Math.random()*30); },
+  decidePay:function(l){ if(l==='Robot') return 8+Math.floor(Math.random()*10); if(l==='Underground') return 5+Math.floor(Math.random()*7); if(l==='Cloud') return 4+Math.floor(Math.random()*7); return 3+Math.floor(Math.random()*6); },
+  pickLayer:function(){ var h=new Date().getHours(); if(h<6) return 'Cloud'; if(h<12) return 'Robot'; if(h<18) return 'Human'; return 'Underground'; },
+  pickRegion:function(){ return autoRegions[Math.floor(Math.random()*autoRegions.length)]; },
+  generateProof:function(t,w){ return 'PROOF-'+t+'-'+w+'-'+Date.now()+'-CE-ROBOT-'+Math.random().toString(36).slice(2,8).toUpperCase(); },
+  fraudCheck:function(task){ if(task.locked) return false; var dup=vers.filter(function(v){return v.id===task.id && v.s==='Approved'}); if(dup.length>0) return false; if(task.a>50) return false; return true; },
+  autoBalance:function(){ var s=grids.slice().sort(function(a,b){return b.balance-a.balance}); var r=s[0],p=s[s.length-1]; if(r.balance>p.balance+500){ var a=Math.floor(r.balance*0.01); r.balance-=a; p.balance+=a; logAct('AI Rebalance','Grid #'+r.id+' → #'+p.id+' '+fmt(a)); } aiDecisions++; aiHealth=95+Math.floor(Math.random()*5); },
+  predict:function(){ return '2056: Humanoid robots = 40% of heavy work. Humans = 100% of leadership + care + creativity. Robot Fund grows fastest if we clear queues daily.'; }
 };
-
-// ============ SUPABASE SYNC ============
-async function dbSave(table, row){
-  if(!DB_ON || !supabase) return false;
-  try{ var r = await supabase.from(table).insert([row]); if(r.error) return false; return true; }catch(e){ return false; }
-}
-async function dbLoad(){
-  if(!DB_ON) return;
-  try{
-    var m = await supabase.from('members').select('*');
-    if(m.data && m.data.length>0) members = m.data.map(function(x){ return {id:x.id||x.member_id||'M-?', name:x.name||'Member', kyc:x.kyc||'Pending', bal: Number(x.bal||x.balance||0), region:x.region||'Africa'}; });
-  }catch(e){}
-}
-
-// ============ HELPERS ============
-var pages = ['Dashboard','Engines','47 Grids','Approvals','Members','Withdrawals','Deposits','Credits','AI Sourcing','AI Verification','AI Brain','Live Earnings','Support'];
-function navRender(){
-  var h=''; pages.forEach(function(p){ h+='<button class="'+(cur===p?'on':'')+'" onclick="go(\''+p+'\')">'+p+'</button>'; });
-  document.getElementById('nav').innerHTML=h;
-}
+var pages=['Dashboard','Engines','47 Grids','Robots','Approvals','Members','Withdrawals','Deposits','Credits','AI Sourcing','AI Verification','AI Brain','Live Earnings','Support','Backup'];
+function navRender(){ var h=''; pages.forEach(function(p){ h+='<button class="'+(cur===p?'on':'')+'" onclick="go(\''+p+'\')">'+p+'</button>'; }); document.getElementById('nav').innerHTML=h; }
 function go(p){ cur=p; render(); }
-function updTop(){
-  var elM=document.getElementById('tMode'); if(elM) elM.innerText = DB_ON ? 'SUPABASE ✅' : 'LOCAL';
-  document.getElementById('tGlobal').innerText = balances[1].balance.toFixed(2);
-  document.getElementById('tGeneral').innerText = balances[0].balance.toFixed(2);
-  document.getElementById('tProfit').innerText = profitToday.toFixed(2);
-  var appr = withdrawQueue.filter(function(w){return w.status==='Pending'}).length + members.filter(function(m){return m.kyc==='Pending'}).length + vers.filter(function(v){return v.s==='Pending'}).length + deposits.filter(function(d){return d.status==='Pending'}).length;
-  document.getElementById('tAppr').innerText = appr;
-  document.getElementById('tAI').innerText = autoAI_ON ? 'ON' : 'OFF';
-}
-function logAct(a,m){ feedArr.unshift('• '+a+' - '+m); if(feedArr.length>60) feedArr.pop(); }
-function addToFeed(t){ feedArr.unshift(t); }
+function updTop(){ try{ document.getElementById('tMode').innerText=DB_ON?'SUPABASE ✅':'LOCAL + SAVED ✅'; document.getElementById('tGlobal').innerText=fmt(balances[1].balance); document.getElementById('tGeneral').innerText=fmt(balances[0].balance); document.getElementById('tProfit').innerText=fmt(profitToday); var appr=withdrawQueue.filter(function(w){return w.status==='Pending'}).length+members.filter(function(m){return m.kyc==='Pending'}).length+vers.filter(function(v){return v.s==='Pending'}).length; document.getElementById('tAppr').innerText=appr; document.getElementById('tAI').innerText=autoAI_ON?'ON':'OFF'; document.getElementById('tRobots').innerText=ROBOT_FLEET.filter(function(r){return r.status==='WORKING'}).length+'/'+ROBOT_FLEET.length; }catch(e){} }
+function logAct(a,m){ feedArr.unshift('• '+a+' - '+m); if(feedArr.length>60) feedArr.pop(); saveLocal(); }
+function addToFeed(t){ feedArr.unshift(t); saveLocal(); }
 function addToSourceFeed(t){ sourceFeed.unshift(t); if(sourceFeed.length>60) sourceFeed.pop(); }
-function esc(s){ return String(s||'').replace(/</g,'&lt;'); }
-
-// ============ RENDER ============
-function render(){
-  navRender(); updTop();
-  var p=document.getElementById('page'); if(!p) return;
-  if(cur==='Dashboard') return renderDashboard();
-  if(cur==='Engines') return renderEngines();
-  if(cur==='47 Grids') return renderAllGrids();
-  if(cur==='Approvals') return renderApprovals();
-  if(cur==='Members') return renderMembers();
-  if(cur==='Withdrawals') return renderWithdrawals();
-  if(cur==='Deposits') return renderDeposits();
-  if(cur==='Credits') return renderCredits();
-  if(cur==='AI Sourcing') return renderSourcing();
-  if(cur==='AI Verification') return renderVerification();
-  if(cur==='AI Brain') return renderBrain();
-  if(cur==='Live Earnings') return renderLive();
-  if(cur==='Support') return renderSupport();
-  p.innerHTML='<p>Page not found</p>';
-}
-
-function renderDashboard(){
-  var totalGridBal = grids.reduce(function(a,g){return a+g.balance},0);
-  var wPend = withdrawQueue.filter(function(w){return w.status==='Pending'});
-  var html = '<div class="card"><h3>🏠 Admin Home - 90% Approvals + Support | 30-Year Engine</h3><p>Clear queues = Happy members. Every grid feeds Global. Global feeds continents. <span class="badge">DB: '+(DB_ON?'SUPABASE ✅':'LOCAL - Paste keys at top to sync')+'</span></p>'+
-  '<div class="grid4">'+
-  '<div class="card" style="text-align:center"><b>⏳ Total Approvals</b><br><span style="font-size:32px" class="gold">'+(wPend.length+members.filter(function(m){return m.kyc==="Pending"}).length+vers.filter(function(v){return v.s==="Pending"}).length)+'</span><br><button class="btn2" onclick="go(\'Approvals\')">Clear Now →</button></div>'+
-  '<div class="card" style="text-align:center"><b>🔎 Sourced</b><br><span style="font-size:32px" class="green">'+sourcedCount+'</span><br><small>AI Brain decisions: '+aiDecisions+'</small></div>'+
-  '<div class="card" style="text-align:center"><b>✅ Verified</b><br><span style="font-size:32px" class="green">'+verifiedCount+'</span><br><small>Health: '+aiHealth+'%</small></div>'+
-  '<div class="card" style="text-align:center"><b>🌍 47 Grids Value</b><br><span style="font-size:22px" class="gold">£'+totalGridBal.toFixed(0)+'</span><br><button class="btn" onclick="go(\'47 Grids\')">View Grids →</button></div></div>'+
-  '<div class="grid3"><div class="card"><b>⚙️ Global Engine</b><p>£'+balances[1].balance.toFixed(2)+'</p><input id="geAmt" type="number" placeholder="Amount"><button class="btn" onclick="addEngine(1)">+ Add to Global</button><button class="btn2" onclick="distributeGlobal()">🌍 Distribute 20% to 8 Sub-Engines</button><button class="btnG" onclick="AIBrain.autoBalance();render()">🧠 AI Rebalance Grids Now</button></div>'+
-  '<div class="card"><b>🤖 AI Brain - Auto</b><p>Status: '+(autoAI_ON?'🟢 ON - Sourcing 5s / Verify 1s':'🔴 OFF')+'</p><p><small>'+AIBrain.predict()+'</small></p><button class="btn" onclick="toggleAI()">Toggle AI ON/OFF</button><button class="btn2" onclick="manualVerify()">✅ Manual Verify Next</button><div id="aiManualMsg"></div></div>'+
-  '<div class="card"><b>📡 Live Feed</b><div class="feed">'+feedArr.join('<br>')+'</div></div></div>'+
-  '<h3 style="padding:0 10px">🌍 Engines Snapshot</h3><div class="grid4">'+balances.slice(2,9).map(function(b){return '<div class="card"><b>'+b.name+'</b><br><span class="gold">£'+b.balance.toFixed(2)+'</span></div>'}).join('')+'</div>'+
-  '<h3 style="padding:0 10px">🧬 Grids by Layer - 2056</h3><div class="grid4">'+
-  '<div class="card layerU"><b>⛏️ Underground</b><br>Grids 1-12<br>£'+grids.filter(function(g){return g.layer==='Underground'}).reduce(function(a,g){return a+g.balance},0).toFixed(0)+'</div>'+
-  '<div class="card layerE"><b>🌍 Earth</b><br>Grids 13-24<br>£'+grids.filter(function(g){return g.layer==='Earth'}).reduce(function(a,g){return a+g.balance},0).toFixed(0)+'</div>'+
-  '<div class="card layerC"><b>☁️ Cloud</b><br>Grids 25-36<br>£'+grids.filter(function(g){return g.layer==='Cloud'}).reduce(function(a,g){return a+g.balance},0).toFixed(0)+'</div>'+
-  '<div class="card layerH"><b>👥 Human</b><br>Grids 37-47<br>£'+grids.filter(function(g){return g.layer==='Human'}).reduce(function(a,g){return a+g.balance},0).toFixed(0)+'</div></div></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderEngines(){
-  var html='<div class="card"><h3>⚙️ Global + 8 Sub-Engines</h3><p>Global is mother. Sub-engines are children. If one continent sleeps, others carry world.</p><div class="grid3">'+balances.map(function(b,i){
-    return '<div class="card"><b>'+b.name+'</b><p class="gold">£'+b.balance.toFixed(2)+'</p><input id="ba'+i+'" type="number" placeholder="Amount"><button class="btn" onclick="addBal('+i+')">+ Add Balance</button><button class="btn2" onclick="sendToGlobal('+i+')">Send 10% to Global</button><button class="btnG" onclick="withdrawEngine('+i+')">💸 Withdraw from Engine</button></div>';
-  }).join('')+'</div></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderAllGrids(){
-  var filter = window.gridFilter || 'All';
-  var list = grids.filter(function(g){ return filter==='All' || g.layer===filter; });
-  var html='<div class="card"><h3>🧬 All 47 Cryptology Grids - Underground / Earth / Cloud / Human</h3>'+
-  '<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" onclick="setFilter(\'All\')">All 47</button><button class="btn" onclick="setFilter(\'Underground\')">⛏️ Underground 1-12</button><button class="btn" onclick="setFilter(\'Earth\')">🌍 Earth 13-24</button><button class="btn" onclick="setFilter(\'Cloud\')">☁️ Cloud 25-36</button><button class="btn" onclick="setFilter(\'Human\')">👥 Human 37-47</button></div><p>Showing: <b>'+filter+'</b> - '+list.length+' grids | Total: £'+grids.reduce(function(a,g){return a+g.balance},0).toFixed(2)+'</p><div class="grid3">'+
-  list.map(function(g){
-    var cls = g.layer==='Underground'?'layerU':g.layer==='Earth'?'layerE':g.layer==='Cloud'?'layerC':'layerH';
-    return '<div class="card '+cls+'"><b>#'+g.id+' '+g.name+'</b><br><small>'+g.layer+' • '+g.region+' • 🟢 '+g.status+'</small><p>Balance: <b class="gold">£'+g.balance.toFixed(2)+'</b> | Tasks: '+g.tasks+'</p><input id="g'+g.id+'" type="number" placeholder="Amount"><button class="btn" onclick="addGrid('+g.id+')">+ Add to Grid</button><button class="btn2" onclick="gridToEngine('+g.id+')">→ Send 10% to '+g.region+' Engine</button><button class="btnG" onclick="gridToGlobal('+g.id+')">→ Send 5% to Global</button></div>';
-  }).join('')+'</div></div>';
-  document.getElementById('page').innerHTML=html;
-}
+function esc(s){ return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function render(){ try{ navRender(); updTop(); var p=document.getElementById('page'); if(!p) return; if(cur==='Dashboard') return renderDashboard(); if(cur==='Engines') return renderEngines(); if(cur==='47 Grids') return renderAllGrids(); if(cur==='Robots') return renderRobots(); if(cur==='Approvals') return renderApprovals(); if(cur==='Members') return renderMembers(); if(cur==='Withdrawals') return renderWithdrawals(); if(cur==='Deposits') return renderDeposits(); if(cur==='Credits') return renderCredits(); if(cur==='AI Sourcing') return renderSourcing(); if(cur==='AI Verification') return renderVerification(); if(cur==='AI Brain') return renderBrain(); if(cur==='Live Earnings') return renderLive(); if(cur==='Support') return renderSupport(); if(cur==='Backup') return renderBackup(); p.innerHTML='<p>Page not found</p>'; }catch(e){ document.getElementById('page').innerHTML='<div class="card"><h3>⚠️ Render error but data is SAFE</h3><p>'+esc(e.message)+'</p><button class="btn" onclick="location.reload()">Reload</button></div>'; } }
+function renderDashboard(){ var total=grids.reduce(function(a,g){return a+g.balance},0); var html='<div class="card" style="border:2px solid #f5c518"><h3>🏠 Cedars Empire - Robotic Revolutionary Company</h3><p><b>Values:</b> 🤖 Robots Serve Humans • 🔒 Safety First • 🌍 One Earth, One Engine • ⚖️ No One Left Behind • 🧠 Truth Over Hype</p><p><small>'+AIBrain.predict()+'</small></p><div class="grid4"><div class="card" style="text-align:center"><b>⏳ Approvals</b><br><span style="font-size:32px" class="gold">'+(withdrawQueue.filter(function(w){return w.status==="Pending"}).length+members.filter(function(m){return m.kyc==="Pending"}).length+vers.filter(function(v){return v.s==="Pending"}).length)+'</span><br><button class="btn2" onclick="go(\'Approvals\')">Clear Now →</button></div><div class="card" style="text-align:center"><b>🔎 Sourced</b><br><span style="font-size:32px" class="green">'+sourcedCount+'</span></div><div class="card" style="text-align:center"><b>✅ Verified</b><br><span style="font-size:32px" class="green">'+verifiedCount+'</span><br><small>Fraud Blocked: <span class="red">'+fraudBlocked+'</span></small></div><div class="card" style="text-align:center"><b>🌍 47 Grids</b><br><span style="font-size:22px" class="gold">'+fmt(total)+'</span><br><button class="btn" onclick="go(\'47 Grids\')">View →</button></div></div><div class="grid3"><div class="card"><b>⚙️ Global Engine</b><p>'+fmt(balances[1].balance)+'</p><input id="geAmt" type="number" placeholder="Amount"><button class="btn" onclick="addEngine(1)">+ Add to Global</button><button class="btn2" onclick="distributeGlobal()">🌍 Distribute 20% to Engines (Not Vault)</button><button class="btnG" onclick="AIBrain.autoBalance();saveLocal();render()">🧠 AI Rebalance</button></div><div class="card"><b>🦾 Robot Fund</b><p>'+fmt(balances[9].balance)+'</p><p><small>For Humanoid, Drones, Robot Factories. Robots earn, Humans lead.</small></p><input id="robotAmt" type="number" placeholder="Amount"><button class="btn" onclick="addRobotFund()">+ Add to Robot Fund</button><button class="btn2" onclick="go(\'Robots\')">View Fleet →</button></div><div class="card"><b>🤖 AI Brain</b><p>'+(autoAI_ON?'🟢 ON':'🔴 OFF')+' | Health '+aiHealth+'%</p><button class="btn" onclick="toggleAI()">Toggle AI</button><button class="btn2" onclick="manualVerify()">✅ Manual Verify</button><div id="aiManualMsg"></div></div></div><div class="card"><b>📡 Live Feed</b><div class="feed">'+feedArr.join('<br>')+'</div></div><h3 style="padding:0 10px">🌍 Engines</h3><div class="grid4">'+balances.slice(2,9).map(function(b){return '<div class="card"><b>'+b.name+'</b><br><span class="gold">'+fmt(b.balance)+'</span></div>'}).join('')+'</div><h3 style="padding:0 10px">🧬 5 Layers - 2056</h3><div class="grid4"><div class="card layerU"><b>⛏️ Underground 1-12</b><br>'+fmt(grids.filter(function(g){return g.layer==='Underground'}).reduce(function(a,g){return a+g.balance},0))+'</div><div class="card layerE"><b>🌍 Earth 13-24</b><br>'+fmt(grids.filter(function(g){return g.layer==='Earth'}).reduce(function(a,g){return a+g.balance},0))+'</div><div class="card layerC"><b>☁️ Cloud 25-36</b><br>'+fmt(grids.filter(function(g){return g.layer==='Cloud'}).reduce(function(a,g){return a+g.balance},0))+'</div><div class="card layerH"><b>👥 Human 37-47</b><br>'+fmt(grids.filter(function(g){return g.layer==='Human'}).reduce(function(a,g){return a+g.balance},0))+'</div></div><div class="card layerR"><b>🦾 Robot Layer - Across All Grids</b><p>Robots work inside Underground, Earth, Cloud, Human grids. Every grid has a robot partner. Humans supervise, robots execute.</p></div></div>'; document.getElementById('page').innerHTML=html; }
+function renderEngines(){ var html='<div class="card"><h3>⚙️ Global + 7 Sub-Engines + Robot Fund + Vault + Support</h3><p>Global = Mother. Engines = Children. Vault & Support are NOT engines - they are protected.</p><div class="grid3">'+balances.map(function(b,i){ return '<div class="card"><b>'+b.name+'</b><p class="gold">'+fmt(b.balance)+'</p><input id="ba'+i+'" type="number" placeholder="Amount"><button class="btn" onclick="addBal('+i+')">+ Add Balance</button><button class="btn2" onclick="sendToGlobal('+i+')">Send 10% to Global</button><button class="btnG" onclick="withdrawEngine('+i+')">💸 Withdraw (Protected)</button></div>'; }).join('')+'</div></div>'; document.getElementById('page').innerHTML=html; }
+function renderAllGrids(){ var f=window.gridFilter||'All'; var list=grids.filter(function(g){return f==='All'||g.layer===f}); var html='<div class="card"><h3>🧬 All 47 Cryptology Grids + Robot Partners</h3><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" onclick="setFilter(\'All\')">All 47</button><button class="btn" onclick="setFilter(\'Underground\')">⛏️ Underground 1-12</button><button class="btn" onclick="setFilter(\'Earth\')">🌍 Earth 13-24</button><button class="btn" onclick="setFilter(\'Cloud\')">☁️ Cloud 25-36</button><button class="btn" onclick="setFilter(\'Human\')">👥 Human 37-47</button></div><p>Showing: <b>'+f+'</b> - '+list.length+' grids | Total: '+fmt(grids.reduce(function(a,g){return a+g.balance},0))+'</p><div class="grid3">'+list.map(function(g){ var cls=g.layer==='Underground'?'layerU':g.layer==='Earth'?'layerE':g.layer==='Cloud'?'layerC':'layerH'; return '<div class="card '+cls+'"><b>#'+g.id+' '+g.name+'</b><br><small>'+g.layer+' • '+g.region+' • 🦾 Robot Partner: ON</small><p>Balance: <b class="gold">'+fmt(g.balance)+'</b> | Tasks: '+g.tasks+'</p><input id="g'+g.id+'" type="number" placeholder="Amount"><button class="btn" onclick="addGrid('+g.id+')">+ Add to Grid</button><button class="btn2" onclick="gridToEngine('+g.id+')">→ 10% to '+g.region+'</button><button class="btnG" onclick="gridToGlobal('+g.id+')">→ 5% to Global</button></div>'; }).join('')+'</div></div>'; document.getElementById('page').innerHTML=html; }
 function setFilter(f){ window.gridFilter=f; render(); }
-function renderApprovals(){
-  var html='<div class="card"><h3>✅ Approvals Center - 90% Job</h3><p>Approve fast. Support fast. <button class="btn2" onclick="approveAll()">⚡ APPROVE ALL PENDING (One Click)</button></p>'+
-  '<h4>💸 Withdrawals</h4><table><tr><th>ID</th><th>Member</th><th>Amount</th><th>Action</th></tr>'+withdrawQueue.map(function(w,i){return '<tr><td>'+w.id+'</td><td>'+esc(w.member)+'</td><td>£'+w.amount+'</td><td>'+(w.status==='Pending'?'<button class="btn2" onclick="approveW('+i+')">Approve</button> <button class="btnR" onclick="rejectW('+i+')">Reject</button>':'<b class="green">'+w.status+'</b>')+'</td></tr>'}).join('')+'</table>'+
-  '<h4>🪪 KYC</h4><table><tr><th>Member</th><th>Status</th><th>Action</th></tr>'+members.map(function(m,i){return '<tr><td>'+esc(m.name)+' ('+m.id+')</td><td>'+m.kyc+'</td><td>'+(m.kyc==='Pending'?'<button class="btn2" onclick="approveKYC('+i+')">Approve KYC</button> <button class="btnR" onclick="rejectKYC('+i+')">Reject</button>':'<b class="green">Approved</b>')+'</td></tr>'}).join('')+'</table>'+
-  '<h4>💰 Deposits</h4><table><tr><th>ID</th><th>Member</th><th>Amount</th><th>Action</th></tr>'+deposits.map(function(d,i){return '<tr><td>'+d.id+'</td><td>'+esc(d.member)+'</td><td>£'+d.amount+'</td><td>'+(d.status==='Pending'?'<button class="btn2" onclick="approveDeposit('+i+')">Approve</button>':'<b class="green">'+d.status+'</b>')+'</td></tr>'}).join('')+'</table>'+
-  '<h4>📋 Tasks Pending</h4><table><tr><th>Task</th><th>Region</th><th>Pay</th><th>Action</th></tr>'+vers.filter(function(v){return v.s==='Pending'}).map(function(v){return '<tr><td>'+esc(v.id)+' '+esc(v.t)+'</td><td>'+esc(v.r)+'</td><td>£'+v.a+'</td><td><button class="btn2" onclick="manualVerify()">Verify</button></td></tr>'}).join('')+'</table></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderMembers(){
-  var html='<div class="card"><h3>👥 Members</h3><input id="mName" placeholder="New Member Name"><select id="mRegion"><option>Africa</option><option>America North</option><option>America South</option><option>Asia</option><option>Europe</option><option>Oceania</option><option>Middle East</option></select><input id="mBal" type="number" placeholder="Starting Balance"><button class="btn" onclick="addMember()">+ Register Member</button><table><tr><th>ID</th><th>Name</th><th>Region</th><th>KYC</th><th>Balance</th><th>Action</th></tr>'+members.map(function(m,i){return '<tr><td>'+m.id+'</td><td>'+esc(m.name)+'</td><td>'+esc(m.region||'')+'</td><td>'+m.kyc+'</td><td>£'+m.bal+'</td><td><button class="btn2" onclick="approveKYC('+i+')">Approve</button> <button class="btnR" onclick="removeMember('+i+')">Remove</button></td></tr>'}).join('')+'</table></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderWithdrawals(){
-  var html='<div class="card"><h3>💸 Withdrawals</h3><input id="wMem" placeholder="Member ID e.g M-001"><input id="wAmt" type="number" placeholder="Amount"><button class="btn" onclick="addWithdraw()">+ Add Withdraw Request</button><div class="feed">'+withdrawQueue.map(function(w){return w.id+' '+esc(w.member)+' £'+w.amount+' - '+w.status}).join('<br>')+'</div></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderDeposits(){
-  var html='<div class="card"><h3>💰 Deposits</h3><input id="dMem" placeholder="Member ID"><input id="dAmt" type="number" placeholder="Amount"><button class="btn" onclick="addDeposit()">+ Add Deposit</button><table><tr><th>ID</th><th>Member</th><th>Amount</th><th>Status</th></tr>'+deposits.map(function(d){return '<tr><td>'+d.id+'</td><td>'+esc(d.member)+'</td><td>£'+d.amount+'</td><td>'+d.status+'</td></tr>'}).join('')+'</table></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderCredits(){
-  var html='<div class="card"><h3>💳 Credits / Spend / Bills</h3><input id="cMem" placeholder="Member ID"><input id="cAmt" type="number" placeholder="Amount"><button class="btn" onclick="addCredit()">+ Give Credit</button><table><tr><th>ID</th><th>Member</th><th>Amount</th><th>Status</th></tr>'+credits.map(function(c){return '<tr><td>'+c.id+'</td><td>'+esc(c.member)+'</td><td>£'+c.amount+'</td><td>'+c.status+'</td></tr>'}).join('')+'</table></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderSourcing(){
-  var html='<div class="card"><h3>🔎 AI Sourcing - Auto Every 5 Sec</h3><p>Sourced: <b>'+sourcedCount+'</b> | Last: '+(sourceFeed[0]||'None')+'</p><button class="btn" onclick="autoAISourcing()">🔎 Source One Now</button><button class="btn2" onclick="toggleAI()">Toggle AI</button><div class="feed">'+sourceFeed.join('<br>')+'</div></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderVerification(){
-  var html='<div class="card"><h3>✅ AI Verification - Auto Every 1 Sec</h3><p>Verified: <b>'+verifiedCount+'</b> | Pending: '+vers.filter(function(v){return v.s==='Pending'}).length+'</p><button class="btn" onclick="manualVerify()">Manual Verify Next</button><div id="aiManualMsg"></div><table><tr><th>Task</th><th>Pay</th><th>Status</th><th>Proof</th></tr>'+vers.slice(-25).reverse().map(function(v){return '<tr><td>'+esc(v.id)+' '+esc(v.t)+'</td><td>£'+v.a+'</td><td>'+v.s+'</td><td><small>'+esc(v.proof||'-')+'</small></td></tr>'}).join('')+'</table></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderBrain(){
-  var html='<div class="card"><h3>🧠 AI BRAIN - Control Center</h3><p>Health: <b class="green">'+aiHealth+'%</b> | Decisions: '+aiDecisions+' | Sourced: '+sourcedCount+' | Verified: '+verifiedCount+'</p><p><b>30-Year Prediction:</b> '+AIBrain.predict()+'</p><p><b>Smart Layer Now:</b> '+AIBrain.pickLayer()+' (based on time of day)</p><div class="grid3"><div class="card"><b>Auto Sourcing</b><p>Every 5 sec, picks smart layer + region, scores task, creates proof.</p><button class="btn" onclick="autoAISourcing()">Source One Now</button></div><div class="card"><b>Auto Verification</b><p>Every 1 sec, verifies pending with worker ID + SHA proof.</p><button class="btn2" onclick="autoAIVerification()">Verify One Now</button></div><div class="card"><b>Auto Rebalance</b><p>Moves 1% from richest grid to poorest grid.</p><button class="btn" onclick="AIBrain.autoBalance();render()">Rebalance Now</button></div></div><div class="card"><b>AI Log</b><div class="feed">'+feedArr.join('<br>')+'</div></div></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderLive(){
-  var html='<div class="card"><h3>⚡ Live Earnings</h3><input id="leAmt" type="number" placeholder="Amount"><button class="btn" onclick="liveAdd()">+ Add Live Earning</button><div id="leMsg"></div><p><small>Live earning goes 95% General + 5% Global Engine</small></p></div>';
-  document.getElementById('page').innerHTML=html;
-}
-function renderSupport(){
-  var html='<div class="card"><h3>💬 Support Center</h3><p>Support Fund: £'+balances[10].balance.toFixed(2)+'</p><input id="supTo" placeholder="To Member ID"><textarea id="supMsg" placeholder="Support message..."></textarea><button class="btn" onclick="sendSupport()">Send Support Reply</button><button class="btn2" onclick="addSupportFund()">+ Add £100 to Support Fund</button><div class="feed">'+feedArr.join('<br>')+'</div></div>';
-  document.getElementById('page').innerHTML=html;
-}
-
-// ============ ACTIONS - ALL BUTTONS VERIFIED ============
-function addBal(i){ var v=+document.getElementById('ba'+i).value||0; if(v<=0) return alert('Invalid amount'); balances[i].balance+=v; logAct('Add Balance',balances[i].name+' +£'+v); dbSave('balances',{name:balances[i].name,balance:balances[i].balance}); alert('Added £'+v); render(); }
-function addEngine(i){ var v=+document.getElementById('geAmt').value||0; if(v<=0) return alert('Invalid'); balances[i].balance+=v; logAct('Engine Add',balances[i].name+' +£'+v); render(); }
-function withdrawEngine(i){ var v=+document.getElementById('ba'+i).value||0; if(v<=0||v>balances[i].balance) return alert('Invalid / Insufficient'); balances[i].balance-=v; logAct('Engine Withdraw',balances[i].name+' -£'+v); render(); }
-function distributeGlobal(){ var amt=balances[1].balance*0.2; if(amt<=0) return alert('Global empty'); balances[1].balance-=amt; for(var i=2;i<=9;i++) balances[i].balance+=amt/8; logAct('Distribute','Global distributed £'+amt.toFixed(2)+' to 8 engines'); render(); }
-function sendToGlobal(i){ if(i===1) return; var amt=balances[i].balance*0.1; balances[i].balance-=amt; balances[1].balance+=amt; logAct('Send to Global',balances[i].name+' → Global £'+amt.toFixed(2)); render(); }
-function addGrid(id){ var v=+document.getElementById('g'+id).value; if(!v) return alert('Enter amount'); var g=grids.find(function(x){return x.id===id}); g.balance+=v; g.tasks++; balances[9].balance+=v; balances[0].balance+=v*0.1; logAct('Grid Add','Grid #'+id+' '+g.name+' +£'+v); dbSave('grids',{grid_id:id,name:g.name,balance:g.balance}); render(); }
-function gridToEngine(id){ var g=grids.find(function(x){return x.id===id}); var amt=g.balance*0.1; if(amt<=0) return alert('Grid empty'); g.balance-=amt; var map={'America North':2,'America South':3,'Africa':4,'Asia':5,'Europe':6,'Oceania':7,'Middle East':8}; var ei=map[g.region]||1; balances[ei].balance+=amt; balances[1].balance+=amt*0.1; logAct('Grid→Engine',g.name+' → '+balances[ei].name+' £'+amt.toFixed(2)); render(); }
-function gridToGlobal(id){ var g=grids.find(function(x){return x.id===id}); var amt=g.balance*0.05; if(amt<=0) return alert('Grid empty'); g.balance-=amt; balances[1].balance+=amt; logAct('Grid→Global',g.name+' → Global £'+amt.toFixed(2)); render(); }
-function toggleAI(){ autoAI_ON=!autoAI_ON; logAct('AI Toggle', autoAI_ON?'ON':'OFF'); render(); }
-function manualVerify(){ var p=vers.find(function(v){return v.s==='Pending'}); if(!p){ alert('No Pending - AI Will Source In 5 Sec'); return; } var worker='MANUAL-'+String(1+Math.floor(Math.random()*100)).padStart(3,'0'); p.proof=AIBrain.generateProof(p.id,worker); p.s='Approved'; balances[0].balance+=p.a; balances[1].balance+=p.a*0.1; profitToday+=p.a*0.1; verifiedCount++; var el=document.getElementById('aiManualMsg'); if(el) el.innerHTML='✅ Verified '+p.id+' - £'+p.a+'<br><small>'+p.proof+'</small>'; logAct('Manual Verify',p.id); dbSave('tasks',{task_id:p.id,status:'Approved',proof:p.proof}); render(); }
-function autoAISourcing(){ try{ if(!autoAI_ON) return; var layer=AIBrain.pickLayer(); var region=AIBrain.pickRegion(); var title=autoSources[Math.floor(Math.random()*autoSources.length)]; var pay=AIBrain.decidePay(layer); var score=AIBrain.scoreTask(layer,region); var taskId='TASK-AUTO-'+String(autoTaskNum++).padStart(3,'0'); sourcedCount++; var task={id:taskId,r:region,t:title+' ['+layer+' - Score '+score+'%]',c:layer,a:pay,s:'Pending',proof:''}; vers.push(task); addToSourceFeed('🔎 SOURCED '+taskId+' - '+title+' ['+layer+' - '+region+'] £'+pay+' Score '+score+'%'); addToFeed('🔎 SOURCED '+taskId+' - Waiting For Verification...'); logAct('AI Sourcing',taskId); dbSave('tasks',{task_id:taskId,region:region,layer:layer,amount:pay,status:'Pending'}); updTop(); if(['Dashboard','AI Sourcing','AI Verification','Approvals','AI Brain'].indexOf(cur)>-1) render(); }catch(e){} }
-function autoAIVerification(){ try{ if(!autoAI_ON) return; var p=vers.find(function(v){return v.s==='Pending'}); if(!p) return; var worker='AI-'+String(1+Math.floor(Math.random()*2600)).padStart(4,'0'); var proof=AIBrain.generateProof(p.id,worker); p.proof=proof; p.s='Approved'; verifiedCount++; aiDecisions++; balances[0].balance+=p.a; balances[1].balance+=p.a*0.1; profitToday+=p.a*0.1; proofs.push({task:p.id,proof:proof,worker:worker}); addToFeed('✅ VERIFIED '+p.id+' by '+worker+' - £'+p.a+' - '+proof); logAct('AI Verify',p.id); updTop(); if(['Dashboard','AI Verification','Approvals','AI Brain'].indexOf(cur)>-1) render(); }catch(e){} }
-function approveAll(){ var c=0; withdrawQueue.forEach(function(w){ if(w.status==='Pending'){ w.status='Approved'; balances[0].balance-=w.amount; c++; } }); members.forEach(function(m){ if(m.kyc==='Pending'){ m.kyc='Approved'; c++; } }); deposits.forEach(function(d){ if(d.status==='Pending'){ d.status='Approved'; balances[0].balance+=d.amount; c++; } }); var pv=vers.find(function(v){return v.s==='Pending'}); if(pv){ pv.s='Approved'; verifiedCount++; c++; } logAct('Approve All', c+' items approved'); alert('Approved '+c+' items'); render(); }
-function approveW(i){ if(withdrawQueue[i].status!=='Pending') return; withdrawQueue[i].status='Approved'; balances[0].balance-=withdrawQueue[i].amount; logAct('Approve Withdraw',withdrawQueue[i].id); dbSave('withdrawals',{withdraw_id:withdrawQueue[i].id,status:'Approved'}); render(); }
-function rejectW(i){ withdrawQueue[i].status='Rejected'; logAct('Reject Withdraw',withdrawQueue[i].id); render(); }
-function approveKYC(i){ members[i].kyc='Approved'; logAct('Approve KYC',members[i].name); dbSave('members',{name:members[i].name,kyc:'Approved'}); render(); }
-function rejectKYC(i){ members[i].kyc='Rejected'; logAct('Reject KYC',members[i].name); render(); }
-function removeMember(i){ if(!confirm('Remove '+members[i].name+'?')) return; members.splice(i,1); render(); }
-function addMember(){ var n=document.getElementById('mName').value.trim(); var r=document.getElementById('mRegion').value; var b=+document.getElementById('mBal').value||0; if(!n) return alert('Name required'); var nm={id:'M-'+String(members.length+1).padStart(3,'0'),name:n,kyc:'Pending',bal:b,region:r}; members.push(nm); logAct('New Member',n); dbSave('members',{name:n,kyc:'Pending',bal:b,region:r}); render(); }
-function addWithdraw(){ var m=document.getElementById('wMem').value.trim(); var a=+document.getElementById('wAmt').value; if(!m||!a) return alert('Fill all'); var w={id:'W-'+String(withdrawQueue.length+1).padStart(3,'0'),member:m,amount:a,status:'Pending'}; withdrawQueue.push(w); logAct('Withdraw Request',m+' £'+a); dbSave('withdrawals',{member:m,amount:a,status:'Pending'}); render(); }
-function addDeposit(){ var m=document.getElementById('dMem').value.trim(); var a=+document.getElementById('dAmt').value; if(!m||!a) return alert('Fill all'); var d={id:'D-'+String(deposits.length+1).padStart(3,'0'),member:m,amount:a,status:'Pending'}; deposits.push(d); logAct('Deposit Request',m+' £'+a); render(); }
-function approveDeposit(i){ if(deposits[i].status!=='Pending') return; deposits[i].status='Approved'; balances[0].balance+=deposits[i].amount; logAct('Approve Deposit',deposits[i].id); render(); }
-function addCredit(){ var m=document.getElementById('cMem').value.trim(); var a=+document.getElementById('cAmt').value; if(!m||!a) return alert('Fill all'); credits.push({id:'C-'+String(credits.length+1).padStart(3,'0'),member:m,amount:a,status:'Approved'}); balances[0].balance-=a; logAct('Credit Given',m+' £'+a); render(); }
-function liveAdd(){ var a=+document.getElementById('leAmt').value; if(!a) return alert('Enter amount'); balances[0].balance+=a*0.95; balances[1].balance+=a*0.05; profitToday+=a*0.05; document.getElementById('leMsg').innerHTML='✅ Live Earning +£'+a; logAct('Live Earning','£'+a); render(); }
-function sendSupport(){ var t=document.getElementById('supMsg').value.trim(); var to=document.getElementById('supTo').value.trim(); if(!t) return alert('Write message'); logAct('Support Reply','To '+(to||'Member')+': '+t); alert('Support sent to '+(to||'Member')); render(); }
-function addSupportFund(){ balances[10].balance+=100; balances[0].balance-=100; logAct('Support Fund','+£100'); render(); }
-
-// ============ START ============
-render();
-dbLoad();
-setInterval(autoAISourcing, 5000); autoAISourcing();
-setInterval(autoAIVerification, 1000);
-setInterval(function(){ AIBrain.autoBalance(); updTop(); }, 60000);
+function renderRobots(){ var html='<div class="card"><h3>🦾 Robot Fleet - Revolutionary Company Core</h3><p>Robots do dangerous, heavy, repetitive work. Humans do creative, caring, leading work.</p><input id="rType" placeholder="Robot Type e.g Humanoid Worker"><select id="rLoc"><option>Africa</option><option>Asia</option><option>Europe</option><option>America North</option><option>America South</option><option>Oceania</option><option>Middle East</option></select><button class="btn" onclick="addRobot()">+ Deploy New Robot</button><div class="grid3">'+ROBOT_FLEET.map(function(r,i){ return '<div class="card layerR"><b>'+r.id+'</b><br>'+esc(r.type)+'<br><small>'+r.loc+' • '+r.status+' • Tasks: '+r.tasks+'</small><p><button class="btn2" onclick="toggleRobot('+i+')">'+(r.status==='WORKING'?'⏸️ Park Robot':'▶️ Activate Robot')+'</button><button class="btnG" onclick="robotEarn('+i+')">💰 Robot Earn +'+fmt(20)+'</button></p></div>'; }).join('')+'</div><div class="card"><h4>📜 Robot Laws - Our Values</h4><p>1. A robot must never harm a human.<br>2. A robot must obey human leaders, unless it harms safety.<br>3. A robot must protect itself only if it does not harm humans.<br>4. Every robot action must have proof. No proof = No pay.</p></div></div>'; document.getElementById('page').innerHTML=html; }
+function renderApprovals(){ var html='<div class="card"><h3>✅ Approvals Center - Protected</h3><p>System blocks negative balances + double-pay automatically.</p><button class="btn2" onclick="approveAll()">⚡ APPROVE ALL SAFE PENDING (One Click)</button><h4>💸 Withdrawals</h4><table><tr><th>ID</th><th>Member</th><th>Amount</th><th>Action</th></tr>'+withdrawQueue.map(function(w,i){return '<tr><td>'+w.id+'</td><td>'+esc(w.member)+'</td><td>'+fmt(w.amount)+'</td><td>'+(w.status==='Pending'?'<button class="btn2" onclick="approveW('+i+')">Approve</button> <button class="btnR" onclick="rejectW('+i+')">Reject</button>':'<b class="green">'+w.status+'</b>')+'</td></tr>'}).join('')+'</table><h4>🪪 KYC</h4><table><tr><th>Member</th><th>Status</th><th>Action</th></tr>'+members.map(function(m,i){return '<tr><td>'+esc(m.name)+' ('+m.id+')</td><td>'+m.kyc+'</td><td>'+(m.kyc==='Pending'?'<button class="btn2" onclick="approveKYC('+i+')">Approve</button> <button class="btnR" onclick="rejectKYC('+i+')">Reject</button>':'<b class="green">Approved</b>')+'</td></tr>'}).join('')+'</table><h4>💰 Deposits</h4><table><tr><th>ID</th><th>Member</th><th>Amount</th><th>Action</th></tr>'+deposits.map(function(d,i){return '<tr><td>'+d.id+'</td><td>'+esc(d.member)+'</td><td>'+fmt(d.amount)+'</td><td>'+(d.status==='Pending'?'<button class="btn2" onclick="approveDeposit('+i+')">Approve</button>':'<b class="green">'+d.status+'</b>')+'</td></tr>'}).join('')+'</table><h4>📋 Tasks</h4><table><tr><th>Task</th><th>Pay</th><th>Action</th></tr>'+vers.filter(function(v){return v.s==='Pending'}).slice(-20).map(function(v){return '<tr><td>'+esc(v.id)+' '+esc(v.t)+'</td><td>'+fmt(v.a)+'</td><td><button class="btn2" onclick="manualVerify()">Verify</button></td></tr>'}).join('')+'</table></div>'; document.getElementById('page').innerHTML=html; }
+function renderMembers(){ var html='<div class="card"><h3>👥 Members + Workers + Robots Supervisors</h3><input id="mName" placeholder="Name"><select id="mRegion"><option>Africa</option><option>America North</option><option>America South</option><option>Asia</option><option>Europe</option><option>Oceania</option><option>Middle East</option></select><select id="mRole"><option>Human</option><option>Robot Supervisor</option><option>Robot Engineer</option><option>Creator</option><option>Leader</option></select><input id="mBal" type="number" placeholder="Starting Balance"><button class="btn" onclick="addMember()">+ Register Member</button><table><tr><th>ID</th><th>Name</th><th>Role</th><th>Region</th><th>KYC</th><th>Balance</th><th>Action</th></tr>'+members.map(function(m,i){return '<tr><td>'+m.id+'</td><td>'+esc(m.name)+'</td><td>'+esc(m.role||'Human')+'</td><td>'+esc(m.region||'')+'</td><td>'+m.kyc+'</td><td>'+fmt(m.bal)+'</td><td><button class="btn2" onclick="approveKYC('+i+')">Approve</button> <button class="btnR" onclick="removeMember('+i+')">Remove</button></td></tr>'}).join('')+'</table></div>'; document.getElementById('page').innerHTML=html; }
+function renderWithdrawals(){ var html='<div class="card"><h3>💸 Withdrawals - Protected (No Negative)</h3><input id="wMem" placeholder="Member ID"><input id="wAmt" type="number" placeholder="Amount"><button class="btn" onclick="addWithdraw()">+ Add Request</button><div class="feed">'+withdrawQueue.map(function(w){return w.id+' '+esc(w.member)+' '+fmt(w.amount)+' - '+w.status}).join('<br>')+'</div></div>'; document.getElementById('page').innerHTML=html; }
+function renderDeposits(){ var html='<div class="card"><h3>💰 Deposits</h3><input id="dMem" placeholder="Member ID"><input id="dAmt" type="number" placeholder="Amount"><button class="btn" onclick="addDeposit()">+ Add Deposit</button><table><tr><th>ID</th><th>Member</th><th>Amount</th><th>Status</th></tr>'+deposits.map(function(d){return '<tr><td>'+d.id+'</td><td>'+esc(d.member)+'</td><td>'+fmt(d.amount)+'</td><td>'+d.status+'</td></tr>'}).join('')+'</table></div>'; document.getElementById('page').innerHTML=html; }
+function renderCredits(){ var html='<div class="card"><h3>💳 Credits</h3><input id="cMem" placeholder="Member ID"><input id="cAmt" type="number" placeholder="Amount"><button class="btn" onclick="addCredit()">+ Give Credit</button><table><tr><th>ID</th><th>Member</th><th>Amount</th><th>Status</th></tr>'+credits.map(function(c){return '<tr><td>'+c.id+'</td><td>'+esc(c.member)+'</td><td>'+fmt(c.amount)+'</td><td>'+c.status+'</td></tr>'}).join('')+'</table></div>'; document.getElementById('page').innerHTML=html; }
+function renderSourcing(){ var html='<div class="card"><h3>🔎 AI Sourcing</h3><p>Sourced: <b>'+sourcedCount+'</b> | Fraud Blocked: <b class="red">'+fraudBlocked+'</b></p><button class="btn" onclick="autoAISourcing()">🔎 Source One Now</button><div class="feed">'+sourceFeed.join('<br>')+'</div></div>'; document.getElementById('page').innerHTML=html; }
+function renderVerification(){ var html='<div class="card"><h3>✅ AI Verification - Fraud Protected</h3><p>Verified: <b>'+verifiedCount+'</b></p><button class="btn" onclick="manualVerify()">Manual Verify Next</button><div id="aiManualMsg"></div><table><tr><th>Task</th><th>Pay</th><th>Status</th><th>Proof</th></tr>'+vers.slice(-25).reverse().map(function(v){return '<tr><td>'+esc(v.id)+'</td><td>'+fmt(v.a)+'</td><td>'+v.s+'</td><td><small>'+esc(v.proof||'-')+'</small></td></tr>'}).join('')+'</table></div>'; document.getElementById('page').innerHTML=html; }
+function renderBrain(){ var html='<div class="card"><h3>🧠 AI BRAIN - Robotic Revolution</h3><p>Health: <b class="green">'+aiHealth+'%</b> | Decisions: '+aiDecisions+' | Fraud Blocked: '+fraudBlocked+'</p><p><b>Values:</b> '+COMPANY_VALUES.map(function(v){return v.k}).join(' • ')+'</p><p>'+AIBrain.predict()+'</p><button class="btn" onclick="autoAISourcing()">Source One</button><button class="btn2" onclick="autoAIVerification()">Verify One</button><button class="btn" onclick="AIBrain.autoBalance();saveLocal();render()">Rebalance</button><div class="card"><div class="feed">'+feedArr.join('<br>')+'</div></div></div>'; document.getElementById('page').innerHTML=html; }
+function renderLive(){ var html='<div class="card"><h3>⚡ Live Earnings</h3><input id="leAmt" type="number" placeholder="Amount"><button class="btn" onclick="liveAdd()">+ Add Live Earning</button><div id="leMsg"></div><p><small>Split: 90% General + 5% Global + 5% Robot Fund. No double-count.</small></p></div>'; document.getElementById('page').innerHTML=html; }
+function renderSupport(){ var html='<div class="card"><h3>💬 Support</h3><p>Support Fund: '+fmt(balances[11].balance)+'</p><input id="supTo" placeholder="To Member ID"><textarea id="supMsg" placeholder="Message..."></textarea><button class="btn" onclick="sendSupport()">Send Reply</button><button class="btn2" onclick="addSupportFund()">+ Add 100 to Support Fund</button><div class="feed">'+feedArr.join('<br>')+'</div></div>'; document.getElementById('page').innerHTML=html; }
+function renderBackup(){ var html='<div class="card"><h3>💾 Backup - Never Lose Again</h3><p>Export before you wipe. Import to restore. This is your insurance.</p><button class="btn" onclick="exportBackup()">⬇️ Export Backup JSON</button><button class="btn2" onclick="exportCSV()">⬇️ Export CSV (Excel)</button><p><small>Import Backup:</small></p><input type="file" accept=".json" onchange="importBackup(event)"><button class="btnR" onclick="wipeAll()">⚠️ Wipe All Local Data (After Export)</button><div class="card"><h4>📜 Supabase SQL - Run This In Supabase SQL Editor To Create Real Tables</h4><textarea readonly style="height:180px">create table if not exists members (id text primary key, name text, kyc text, bal numeric, region text, role text);\ncreate table if not exists withdrawals (id text primary key, member text, amount numeric, status text);\ncreate table if not exists tasks (id text primary key, region text, layer text, amount numeric, status text, proof text);\n-- Then enable RLS and allow only admin. Never expose service_role key in frontend.</textarea><p><small>With RLS ON, anon key cannot steal money. Only your admin can write.</small></p></div></div>'; document.getElementById('page').innerHTML=html; }
+function addBal(i){ var v=+document.getElementById('ba'+i).value||0; if(v<=0) return alert('Invalid'); balances[i].balance+=v; logAct('Add Balance',balances[i].name+' +'+fmt(v)); alert('Added'); render(); }
+function addEngine(i){ var v=+document.getElementById('geAmt').value||0; if(v<=0) return alert('Invalid'); balances[i].balance+=v; logAct('Engine Add',balances[i].name+' +'+fmt(v)); saveLocal(); render(); }
+function addRobotFund(){ var v=+document.getElementById('robotAmt').value||0; if(v<=0) return alert('Invalid'); if(v>balances[0].balance) return alert('❌ Insufficient General balance'); balances[0].balance-=v; balances[9].balance+=v; logAct('Robot Fund','+'+fmt(v)+' from General'); saveLocal(); render(); }
+function withdrawEngine(i){ var v=+document.getElementById('ba'+i).value||0; if(v<=0) return alert('Invalid'); if(v>balances[i].balance){ alert('❌ BLOCKED: Insufficient - Cannot go negative'); return; } balances[i].balance-=v; logAct('Engine Withdraw',balances[i].name+' -'+fmt(v)); saveLocal(); render(); }
+function distributeGlobal(){ var amt=balances[1].balance*0.2; if(amt<=0) return alert('Global empty'); balances[1].balance-=amt; var targets=[2,3,4,5,6,7,8,9]; targets.forEach(function(idx){ balances[idx].balance+=amt/targets.length; }); logAct('Distribute','Global '+fmt(amt)+' to 8 engines (Vault & Support protected)'); saveLocal(); render(); }
+function sendToGlobal(i){ if(i===1) return; if(i===10||i===11) return alert('Vault / Support are protected - cannot send to Global'); var amt=balances[i].balance*0.1; if(amt<=0) return alert('Empty'); balances[i].balance-=amt; balances[1].balance+=amt; logAct('Send to Global',balances[i].name+' '+fmt(amt)); saveLocal(); render(); }
+function addGrid(id){ var v=+document.getElementById('g'+id).value; if(!v||v<=0) return alert('Enter amount'); if(v>balances[0].balance) return alert('❌ BLOCKED: Insufficient General'); var g=grids.find(function(x){return x.id===id}); g.balance+=v; g.tasks++; balances[0].balance-=v; balances[10].balance+=v*0.9; balances[9].balance+=v*0.1; logAct('Grid Add','Grid #'+id+' +'+fmt(v)); saveLocal(); render(); }
+function gridToEngine(id){ var g=grids.find(function(x){return x.id===id}); var amt=g.balance*0.1; if(amt<=0) return alert('Empty'); if(amt>g.balance) return alert('Blocked'); g.balance-=amt; var map={'America North':2,'America South':3,'Africa':4,'Asia':5,'Europe':6,'Oceania':7,'Middle East':8}; balances[map[g.region]||1].balance+=amt; logAct('Grid→Engine',g.name+' '+fmt(amt)); saveLocal(); render(); }
+function gridToGlobal(id){ var g=grids.find(function(x){return x.id===id}); var amt=g.balance*0.05; if(amt<=0) return alert('Empty'); g.balance-=amt; balances[1].balance+=amt; logAct('Grid→Global',g.name+' '+fmt(amt)); saveLocal(); render(); }
+function toggleAI(){ autoAI_ON=!autoAI_ON; logAct('AI Toggle',autoAI_ON?'ON':'OFF'); render(); }
+function manualVerify(){ var p=vers.find(function(v){return v.s==='Pending' && !v.locked}); if(!p){ alert('No Pending - AI Will Source In 5 Sec'); return; } if(!AIBrain.fraudCheck(p)){ fraudBlocked++; alert('❌ FRAUD BLOCKED'); saveLocal(); render(); return; } p.locked=true; p.proof=AIBrain.generateProof(p.id,'MANUAL'); p.s='Approved'; if(p.a>balances[0].balance){ p.s='Pending'; p.locked=false; alert('❌ BLOCKED: Insufficient General to pay task'); return; } balances[0].balance+=p.a; balances[1].balance+=p.a*0.05; balances[9].balance+=p.a*0.05; profitToday+=p.a*0.05; verifiedCount++; logAct('Manual Verify',p.id); saveLocal(); render(); }
+function autoAISourcing(){ try{ if(!autoAI_ON) return; var layer=AIBrain.pickLayer(); var region=AIBrain.pickRegion(); var title=autoSources[Math.floor(Math.random()*autoSources.length)]; var pay=AIBrain.decidePay(layer); var taskId=genId('TASK'); sourcedCount++; vers.push({id:taskId,r:region,t:title+' ['+layer+']',c:layer,a:pay,s:'Pending',proof:'',locked:false}); if(vers.length>200) vers=vers.slice(-200); addToSourceFeed('🔎 '+taskId+' - '+title+' ['+layer+' - '+region+'] '+fmt(pay)); addToFeed('🔎 SOURCED '+taskId); logAct('AI Sourcing',taskId); saveLocal(); updTop(); if(['Dashboard','AI Sourcing','AI Verification','Approvals','AI Brain'].indexOf(cur)>-1) render(); }catch(e){} }
+function autoAIVerification(){ try{ if(!autoAI_ON) return; var p=vers.find(function(v){return v.s==='Pending' && !v.locked}); if(!p) return; if(!AIBrain.fraudCheck(p)){ fraudBlocked++; p.s='Blocked'; logAct('Fraud Blocked',p.id); saveLocal(); return; } p.locked=true; var w='AI-'+String(1+Math.floor(Math.random()*2600)).padStart(4,'0'); p.proof=AIBrain.generateProof(p.id,w); p.s='Approved'; verifiedCount++; aiDecisions++; if(p.a<=balances[0].balance+1000){ balances[0].balance+=p.a; balances[1].balance+=p.a*0.05; balances[9].balance+=p.a*0.05; profitToday+=p.a*0.05; } addToFeed('✅ VERIFIED '+p.id+' by '+w+' '+fmt(p.a)); logAct('AI Verify',p.id); saveLocal(); updTop(); if(['Dashboard','AI Verification','Approvals','AI Brain'].indexOf(cur)>-1) render(); }catch(e){} }
+function addRobot(){ var t=document.getElementById('rType').value.trim(); var loc=document.getElementById('rLoc').value; if(!t) return alert('Robot type required'); ROBOT_FLEET.push({id:'R-'+genId('BOT').slice(-6),type:t,loc:loc,status:'WORKING',tasks:0}); logAct('Robot Deployed',t+' to '+loc); saveLocal(); render(); }
+function toggleRobot(i){ ROBOT_FLEET[i].status=ROBOT_FLEET[i].status==='WORKING'?'PARKED':'WORKING'; logAct('Robot Toggle',ROBOT_FLEET[i].id+' '+ROBOT_FLEET[i].status); saveLocal(); render(); }
+function robotEarn(i){ if(ROBOT_FLEET[i].status!=='WORKING') return alert('Robot is parked'); ROBOT_FLEET[i].tasks++; var earn=20; balances[9].balance+=earn; balances[0].balance+=earn*0.2; logAct('Robot Earn',ROBOT_FLEET[i].id+' +'+fmt(earn)); saveLocal(); render(); }
+function approveAll(){ var c=0, blocked=0; withdrawQueue.forEach(function(w){ if(w.status==='Pending'){ if(w.amount<=balances[0].balance){ w.status='Approved'; balances[0].balance-=w.amount; c++; } else { blocked++; } } }); members.forEach(function(m){ if(m.kyc==='Pending'){ m.kyc='Approved'; c++; } }); deposits.forEach(function(d){ if(d.status==='Pending'){ d.status='Approved'; balances[0].balance+=d.amount; c++; } }); logAct('Approve All',c+' approved, '+blocked+' blocked (insufficient)'); saveLocal(); alert('Approved '+c+', Blocked '+blocked+' (insufficient)'); render(); }
+function approveW(i){ if(withdrawQueue[i].status!=='Pending') return; if(withdrawQueue[i].amount>balances[0].balance){ alert('❌ BLOCKED: Insufficient General. Cannot go negative.'); return; } withdrawQueue[i].status='Approved'; balances[0].balance-=withdrawQueue[i].amount; logAct('Approve Withdraw',withdrawQueue[i].id); saveLocal(); render(); }
+function rejectW(i){ withdrawQueue[i].status='Rejected'; logAct('Reject',withdrawQueue[i].id); saveLocal(); render(); }
+function approveKYC(i){ members[i].kyc='Approved'; logAct('Approve KYC',members[i].name); saveLocal(); render(); }
+function rejectKYC(i){ members[i].kyc='Rejected'; logAct('Reject KYC',members[i].name); saveLocal(); render(); }
+function removeMember(i){ if(!confirm('Remove?')) return; members.splice(i,1); saveLocal(); render(); }
+function addMember(){ var n=document.getElementById('mName').value.trim(); var r=document.getElementById('mRegion').value; var role=document.getElementById('mRole').value; var b=+document.getElementById('mBal').value||0; if(!n) return alert('Name required'); if(b<0) return alert('Balance cannot be negative'); members.push({id:genId('M'),name:n,kyc:'Pending',bal:b,region:r,role:role}); logAct('New Member',n+' - '+role); saveLocal(); render(); }
+function addWithdraw(){ var m=document.getElementById('wMem').value.trim(); var a=+document.getElementById('wAmt').value; if(!m||!a||a<=0) return alert('Fill all correctly'); withdrawQueue.push({id:genId('W'),member:m,amount:a,status:'Pending'}); logAct('Withdraw Request',m+' '+fmt(a)); saveLocal(); render(); }
+function addDeposit(){ var m=document.getElementById('dMem').value.trim(); var a=+document.getElementById('dAmt').value; if(!m||!a||a<=0) return alert('Fill all'); deposits.push({id:genId('D'),member:m,amount:a,status:'Pending'}); logAct('Deposit',m+' '+fmt(a)); saveLocal(); render(); }
+function approveDeposit(i){ if(deposits[i].status!=='Pending') return; deposits[i].status='Approved'; balances[0].balance+=deposits[i].amount; logAct('Approve Deposit',deposits[i].id); saveLocal(); render(); }
+function addCredit(){ var m=document.getElementById('cMem').value.trim(); var a=+document.getElementById('cAmt').value; if(!m||!a||a<=0) return alert('Fill all'); if(a>balances[0].balance) return alert('❌ BLOCKED: Insufficient'); credits.push({id:genId('C'),member:m,amount:a,status:'Approved'}); balances[0].balance-=a; logAct('Credit',m+' '+fmt(a)); saveLocal(); render(); }
+function liveAdd(){ var a=+document.getElementById('leAmt').value; if(!a||a<=0) return alert('Enter amount'); balances[0].balance+=a*0.9; balances[1].balance+=a*0.05; balances[9].balance+=a*0.05; profitToday+=a*0.05; logAct('Live Earning',fmt(a)); saveLocal(); render(); }
+function sendSupport(){ var t=document.getElementById('supMsg').value.trim(); if(!t) return alert('Write message'); logAct('Support',t); saveLocal(); alert('Support sent'); render(); }
+function addSupportFund(){ if(100>balances[0].balance) return alert('Insufficient General'); balances[10].balance+=0; balances[11].balance+=100; balances[0].balance-=100; logAct('Support Fund','+'+fmt(100)); saveLocal(); render(); }
+setInterval(autoAISourcing,5000); setInterval(autoAIVerification,1000);
+setInterval(function(){ if(document.getElementById('app').style.display!=='none'){ AIBrain.autoBalance(); saveLocal(); updTop(); } },60000);
 </script>
 </body>
 </html>
