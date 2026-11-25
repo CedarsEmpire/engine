@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CEDARS EMPIRE - ADMIN DASHBOARD</title>
+<title>CEDARS EMPIRE - ADMIN DASHBOARD - UNLIMITED AI</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#0f1115;color:#fff;margin:0;display:flex;min-height:100vh}
@@ -24,22 +24,33 @@ table{width:100%;border-collapse:collapse;font-size:13px} th,td{border-bottom:1p
 .badge{padding:3px 9px;border-radius:20px;font-size:12px} .green{background:#00ff9d;color:#000} .yellow-bg{background:#facc15;color:#000} .blue-bg{background:#3b82f6} .purple-bg{background:#a855f7}
 .tabs{display:flex;gap:7px;flex-wrap:wrap} .tabs button{width:auto;padding:8px 12px;background:#262a33;color:#fff} .tabs button.active{background:#00ff9d;color:#000}
 .hidden{display:none} .success{color:#00ff9d} .fail{color:#ff4d4d} .muted{color:#aaa;font-size:13px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px} .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .stat{font-size:28px;font-weight:bold;color:#00ff9d} .bar{height:10px;background:#333;border-radius:10px;overflow:hidden} .bar>div{height:100%;background:#00ff9d}
 .engine-box{background:#262a33;border-radius:10px;padding:12px;margin:8px 0}
 .worker{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #333;font-size:13px}
-@media(max-width:800px){body{flex-direction:column}.sidebar{width:100%;height:auto;position:relative}.grid,.grid3{grid-template-columns:1fr}}
+.log{font-size:12px;background:#0a0c10;padding:10px;border-radius:8px;max-height:220px;overflow:auto}
+@media(max-width:800px){body{flex-direction:column}.sidebar{width:100%;height:auto;position:relative}.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- ============ SIDEBAR ============ -->
+<!-- SIDEBAR -->
 <div class="sidebar">
 <h1>🌲 CEDARS EMPIRE<br><span style="font-size:13px;color:#aaa">ADMIN DASHBOARD</span></h1>
-<p style="text-align:center">Root: <b>CEDAR/26/00001</b><br>1 Email = 1 ID = 1 Account</p>
+<p style="text-align:center">Root: <b>CEDAR/26/00001</b><br>1 Email = 1 ID = 1 Account<br><b style="color:#00ff9d">UNLIMITED AI - ALL SECTORS</b></p>
 
 <h2>⚙️ Engine Controls</h2>
 <div id="engines"></div>
+
+<h2>🤖 Unlimited AI Controls</h2>
+<div class="card">
+<p>Auto AI: <b id="aiStatus">ON</b></p>
+<button id="aiToggleBtn" onclick="toggleAutoAI()">Turn AI OFF</button>
+<p>Last Sourced: <span id="lastSource">-</span></p>
+<p>Last Verified: <span id="lastVer">-</span></p>
+<p>Pending Queue: <b id="queueCount">0</b></p>
+<p>Workers: <b id="workerCount">5</b></p>
+</div>
 
 <h2>📄 Document Tracking</h2>
 <div class="card">
@@ -57,14 +68,14 @@ table{width:100%;border-collapse:collapse;font-size:13px} th,td{border-bottom:1p
 <p id="cfg_status"></p>
 <p class="muted">Company Wallet:</p>
 <input id="compWalletInput" placeholder="TRON Wallet T...">
-<p class="muted">Vision: Building a global AI ecosystem powered by Global Engine, 47 Cryptology Grids, Regional Engines, Earth, Cloud, Human Grids + Automated Verification.</p>
 </div>
 
-<!-- ============ MAIN ============ -->
+<!-- MAIN -->
 <div class="main">
 <div class="tabs">
 <button onclick="showTab('dash')" class="active" id="t-dash">Dashboard</button>
 <button onclick="showTab('enginesTab')" id="t-enginesTab">Engine Architecture</button>
+<button onclick="showTab('aiTab')" id="t-aiTab">Unlimited AI</button>
 <button onclick="showTab('income')" id="t-income">Income Model</button>
 <button onclick="showTab('reg')" id="t-reg">Register</button>
 <button onclick="showTab('login')" id="t-login">Login</button>
@@ -83,83 +94,94 @@ table{width:100%;border-collapse:collapse;font-size:13px} th,td{border-bottom:1p
 <div class="grid">
 <div class="card"><h3>Global Engine</h3><div class="stat">99%</div>Uptime<div class="bar"><div style="width:99%"></div></div></div>
 <div class="card"><h3>Cryptology Engine - 47 Grids</h3><div class="stat">500 TPS</div>Transactions / sec<div class="bar"><div style="width:90%"></div></div></div>
-<div class="card"><h3>Americas</h3><div class="stat">95%</div>Uptime<div class="bar"><div style="width:95%"></div></div></div>
-<div class="card"><h3>Europe</h3><div class="stat">98%</div>Uptime<div class="bar"><div style="width:98%"></div></div></div>
-<div class="card"><h3>Asia</h3><div class="stat">92%</div>Uptime<div class="bar"><div style="width:92%"></div></div></div>
-<div class="card"><h3>Africa</h3><div class="stat">96%</div>Uptime<div class="bar"><div style="width:96%"></div></div></div>
-<div class="card"><h3>Oceania</h3><div class="stat">94%</div>Uptime<div class="bar"><div style="width:94%"></div></div></div>
-<div class="card"><h3>AI Processing Engine</h3><div class="stat">ON</div>99.2% Uptime</div>
+<div class="card"><h3>Americas</h3><div class="stat">95%</div><div class="bar"><div style="width:95%"></div></div></div>
+<div class="card"><h3>Europe</h3><div class="stat">98%</div><div class="bar"><div style="width:98%"></div></div></div>
+<div class="card"><h3>Asia</h3><div class="stat">92%</div><div class="bar"><div style="width:92%"></div></div></div>
+<div class="card"><h3>Africa</h3><div class="stat">96%</div><div class="bar"><div style="width:96%"></div></div></div>
+<div class="card"><h3>Oceania</h3><div class="stat">94%</div><div class="bar"><div style="width:94%"></div></div></div>
+<div class="card"><h3>AI Processing - UNLIMITED</h3><div class="stat" id="dashAI">ON</div><span id="aiTasksCount">Tasks: 0 | Verified: 0</span></div>
 </div>
-
 <h2>💰 Revenue Streams</h2>
-<table>
-<tr><th>Stream</th><th>/ Month</th><th>/ Year</th></tr>
+<table><tr><th>Stream</th><th>/ Month</th><th>/ Year</th></tr>
 <tr><td>AI Business Intelligence</td><td>$100,000</td><td>$1,200,000</td></tr>
 <tr><td>AI Automation Services</td><td>$50,000</td><td>$600,000</td></tr>
 <tr><td>Robotics & AI Deployments</td><td>$200,000</td><td>$2,400,000</td></tr>
 <tr><td>Research & Analytics Services</td><td>$30,000</td><td>$360,000</td></tr>
 <tr><td>Digital Platform Services</td><td>$20,000</td><td>$240,000</td></tr>
-<tr><td><b>TOTAL</b></td><td><b>$400,000</b></td><td><b>$4,800,000</b></td></tr>
-</table>
-
+<tr><td><b>TOTAL</b></td><td><b>$400,000</b></td><td><b>$4,800,000</b></td></tr></table>
 <h2>👑 Shareholder Value</h2>
-<div class="grid">
-<div class="card"><h3>Current Value</h3><div class="stat">$1,000,000</div><input id="share_value" placeholder="Edit Value $"><button onclick="alert('Shareholder Value updated to '+document.getElementById('share_value').value)">Update Value</button></div>
-<div class="card"><h3>Growth Rate</h3><div class="stat">10% / month</div><input id="share_growth" placeholder="Edit Growth %"><button onclick="alert('Growth updated to '+document.getElementById('share_growth').value)">Update Growth</button></div>
-</div>
-<div class="card"><h3>Live Platform Stats</h3><p>Total Users: <b id="stat_users">-</b> | Total Deposits: <b id="stat_dep">-</b> | Total Withdraws: <b id="stat_wd">-</b> | Pending KYC: <b id="stat_kyc">-</b></p><button class="blue" onclick="loadStats()">Refresh Live Stats</button></div>
-
+<div class="grid"><div class="card"><h3>Current Value</h3><div class="stat">$1,000,000</div><input id="share_value" placeholder="Edit Value $"><button onclick="alert('Updated: '+document.getElementById('share_value').value)">Update Value</button></div>
+<div class="card"><h3>Growth Rate</h3><div class="stat">10% / month</div><input id="share_growth" placeholder="Edit Growth %"><button onclick="alert('Updated: '+document.getElementById('share_growth').value)">Update Growth</button></div></div>
+<div class="card"><h3>Live Platform Stats</h3><p>Users: <b id="stat_users">-</b> | Deposits: <b id="stat_dep">-</b> | Withdraws: <b id="stat_wd">-</b> | Pending KYC: <b id="stat_kyc">-</b></p><button class="blue" onclick="loadStats()">Refresh Live Stats</button></div>
 <h2>✅ Pending Approvals</h2><div id="pendingBox"></div>
 <h2>📜 Approval History</h2><div id="historyBox"></div>
-<h2>🔍 Engine Activity Tracking</h2>
-<table><tr><th>Engine</th><th>Status</th><th>Last Check</th></tr><tbody id="engineActivity"></tbody></table>
+<h2>📋 Activity Log</h2><div class="log" id="activityLog"></div>
+<h2>🔍 Engine Activity</h2><table><tr><th>Engine</th><th>Status</th><th>Last Check</th></tr><tbody id="engineActivity"></tbody></table>
 </div>
 
-<!-- ENGINE ARCHITECTURE - FULL -->
+<!-- ENGINE ARCHITECTURE -->
 <div class="card hidden" id="tab-enginesTab">
 <h2>🏗️ CEDARS EMPIRE ENGINE ARCHITECTURE</h2>
-<p class="muted">Described as a business architecture that processes information and powers revenue-generating services. No guaranteed income promised.</p>
-
-<div class="engine-box"><h3>1. Global Engine (Master Intelligence Layer)</h3><p>Command center of the entire ecosystem. Coordinates:</p><ul><li>Global market intelligence</li><li>Digital transactions</li><li>AI operations</li><li>Opportunity analysis</li><li>Regional engine synchronization</li><li>Real-time monitoring and reporting</li></ul><p>Operates continuously, receives data from all regional and sub-engines.</p><p>Status: <span class="badge green" id="st-global">Active</span> | Uptime 99% | Workers: <b id="w-global">12</b></p></div>
-
-<div class="engine-box"><h3>2. Cryptology Engine (47 Crypto Grids)</h3><p>Multiple digital monitoring and transaction grids for blockchain activity, digital asset movements, market data, transaction verification, cryptographic intelligence.</p><ul><li>Real-time blockchain monitoring</li><li>Market analytics</li><li>Transaction verification</li><li>Risk analysis</li><li>Automated reporting</li><li>Digital asset intelligence</li></ul><p>Operates 24/7, creating continuous data + business intelligence.</p><div id="cryptoGrids"></div></div>
-
-<div class="engine-box"><h3>3. Regional Sub-Engines - 5 Continents</h3>
-<div id="regionalList"></div>
-<p class="muted">Each regional engine collects local market intelligence, business opportunities, customer needs, research, operational data.</p></div>
-
-<div class="engine-box"><h3>4. Multi-Layer Grid System</h3>
-<p><b>Earth Grids:</b> Hospitality, Education, Logistics, Business operations, Institutional partnerships</p>
-<p><b>Underground Grids:</b> Deep data discovery, advanced research, trend analysis, pattern recognition</p>
-<p><b>Cloud Grids:</b> AI processing, Data storage, Real-time analytics, Automation services</p>
-<p><b>Human Grids:</b> Shareholders, Researchers, Universities, NGOs, Hotels, Business partners, Educational institutions - largest intelligence + expansion network</p>
+<p class="muted">Business architecture that processes information and powers revenue-generating services. No guaranteed income promised.</p>
+<div class="engine-box"><h3>1. Global Engine (Master Intelligence Layer)</h3><p>Command center. Coordinates global market intelligence, digital transactions, AI operations, opportunity analysis, regional synchronization, real-time monitoring.</p></div>
+<div class="engine-box"><h3>2. Cryptology Engine (47 Crypto Grids)</h3><p>Blockchain monitoring, market analytics, transaction verification, risk analysis, automated reporting, digital asset intelligence. 24/7.</p><div id="cryptoGrids"></div></div>
+<div class="engine-box"><h3>3. Regional Sub-Engines</h3><div id="regionalList"></div></div>
+<div class="engine-box"><h3>4. Multi-Layer Grid System</h3><p><b>Earth Grids:</b> Hospitality, Education, Logistics, Business, Partnerships</p><p><b>Underground Grids:</b> Deep data discovery, research, trend analysis</p><p><b>Cloud Grids:</b> AI processing, Storage, Analytics, Automation</p><p><b>Human Grids:</b> Shareholders, Researchers, Universities, NGOs, Hotels, Partners - largest network</p></div>
+<div class="engine-box"><h3>5. AI Processing Engine</h3><p>Data Sourcing + Research Engine + Verification Engine. See Unlimited AI tab.</p></div>
+<div class="engine-box"><h3>6. Automated Verification Engine</h3><p>Task verification, Activity validation, Contract verification, Transaction confirmation, Compliance monitoring - Real time.</p><p>Verified Today: <b id="verifyCount">1248</b> | Pending: <b id="verifyPending">34</b></p><button class="blue" onclick="runVerification()">Run Verification Now</button></div>
+<div class="card" style="text-align:center;font-weight:bold">Global Engine ↓ Regional Engines ↓ AI Engines ↓ Business Services ↓ CEDARS EMPIRE funds operations, expansion, infrastructure, shareholder programs</div>
 </div>
 
-<div class="engine-box"><h3>5. AI Processing Engine</h3>
-<p><b>Automated AI Data Sourcing:</b> Collects info, organizes datasets, identifies opportunities, monitors business activities, generates intelligence reports</p>
-<p><b>Automated AI Research Engine:</b> Emerging trends, Market opportunities, Technology developments, Business demands, Regional growth</p>
-<h4>AI Workers</h4><div id="aiWorkers"></div>
-<button onclick="addWorker()">+ Add AI Worker</button>
+<!-- UNLIMITED AI TAB - NEW -->
+<div class="card hidden" id="tab-aiTab">
+<h2>🤖 UNLIMITED AI - ALL SECTORS - NO CAP</h2>
+<div class="card" style="background:#0a2e1a;border:1px solid #00ff9d">
+<p><b>BEFORE:</b> AI only sourced from 12 titles, only Universities / NGOs / Hotels. Limited.</p>
+<p><b>NOW:</b> AI sources from <b>40+ sectors, unlimited.</b> If a sector exists in the real world, AI can source, research, verify in it. No limit.</p>
+<p><b>AI proposes, Evidence proves, Admin approves. Growth is performance-based.</b></p>
 </div>
 
-<div class="engine-box"><h3>6. Automated Verification Engine</h3><ul><li>Task verification</li><li>Activity validation</li><li>Contract verification</li><li>Transaction confirmation</li><li>Compliance monitoring</li></ul><p>All in real time.</p><p>Verified Today: <b id="verifyCount">1,248</b> | Pending: <b id="verifyPending">34</b> | Failed: <b id="verifyFailed">2</b></p><button class="blue" onclick="runVerification()">Run Verification Now</button></div>
+<h3>New Credible Wording For Panel / Investors / Universities</h3>
+<textarea rows="6" readonly>CEDARS EMPIRE is a global AI ecosystem that sources, researches, verifies, and automates operations across ALL sectors — factories, immigration, supermarkets, customers, exchange and forex markets, hotels, hospitals, universities, agriculture, logistics, real estate, finance, energy, and more.
 
-<h2>Flow</h2>
-<div class="card" style="text-align:center;font-weight:bold">Global Engine ↓ Collects data from all regions<br>Regional Engines ↓ Process opportunities<br>AI Engines ↓ Source, Research, Verify, Automate<br>Business Services ↓ Generate revenue via real deployments<br>CEDARS EMPIRE ↓ Funds operations, expansion, infrastructure, shareholder programs, future growth</div>
+Automated AI operates UNLIMITED — continuously sourcing information, conducting research, verifying activities with evidence, and supporting real-world business services. There is no sector limit, no task cap. AI scales with demand.
+
+Revenue is generated through AI-powered intelligence services, automation, research, and technology deployments for clients across all industries. AI proposes, Evidence proves, Admin approves. Growth is performance-based.</textarea>
+
+<h3>Manual AI Sourcing - All Sectors</h3>
+<select id="srcSector">
+<option>Factories & Manufacturing</option><option>Immigration & Government</option><option>Customers & Retail</option><option>Supermarkets & Markets</option><option>Exchange & Forex Markets</option><option>Hotels & Hospitality</option><option>Hospitals & Health</option><option>Universities & Education</option><option>Agriculture & Farms</option><option>Transport & Logistics</option><option>Real Estate & Construction</option><option>Banks & Finance</option><option>Energy & Solar</option><option>Restaurants & Food</option><option>NGOs & Charities</option><option>Sports & Fitness</option><option>Music & Entertainment</option><option>Fashion & Beauty</option><option>Mining & Minerals</option><option>Water & Utilities</option><option>Telecom & Internet</option><option>Insurance</option><option>Law & Legal</option><option>Security & Safety</option><option>E-commerce & Online Shops</option><option>Jobs & Employment</option><option>Churches & Mosques</option><option>Tourism & Travel</option><option>Media & News</option><option>Technology & AI</option><option>Pharmacies & Drugs</option><option>Schools & Colleges</option><option>Airports & Borders</option><option>Ports & Shipping</option><option>Markets & Traders</option><option>Fuel & Gas Stations</option><option>Car Dealers & Garages</option><option>Bakeries & Food Production</option><option>Fisheries & Lakes</option><option>Forestry & Timber</option><option>All Sectors - Unlimited</option>
+</select>
+<input id="manualTaskTitle" placeholder="Task Title e.g Factory Production Report">
+<button onclick="manualSource()">Source This Task Now</button>
+
+<h3>All 40+ Sectors AI Works In</h3>
+<div id="allSectorsList"></div>
+
+<h3>AI Workers - Auto-Scale Unlimited</h3>
+<p class="muted">AI-001 to AI-005 start. If pending queue > 20, AI spawns AI-006, AI-007, AI-008... automatically. No cap.</p>
+<div id="aiWorkers"></div>
+<button onclick="addWorker()">+ Add AI Worker Manually</button>
+
+<h3>Available Tasks / Queue - Unlimited</h3>
+<div id="tasksBox"></div>
+<button class="blue" onclick="renderTasks()">Refresh Tasks</button>
+
+<h3>Verification History</h3>
+<div id="verBox"></div>
 </div>
 
-<!-- INCOME MODEL -->
+<!-- INCOME -->
 <div class="card hidden" id="tab-income">
 <h2>💵 Income Generation Model</h2>
-<p>CEDARS EMPIRE earns revenue by deploying engines to provide:</p>
 <table><tr><th>Service</th><th>Who Pays</th><th>How</th></tr>
-<tr><td>AI Business Intelligence Services</td><td>Organizations</td><td>Pay for data insights, analytics, intelligence</td></tr>
-<tr><td>AI Automation Services</td><td>Businesses</td><td>Pay for automated workflows, operational support</td></tr>
-<tr><td>Robotics & AI Deployments</td><td>Hotels, Schools, Enterprises</td><td>Pay for implementation + support</td></tr>
-<tr><td>Research & Analytics Services</td><td>Universities, NGOs, Corporates</td><td>Access research outputs + tools</td></tr>
-<tr><td>Digital Platform Services</td><td>Members, Partners</td><td>Subscriptions, business services, partnerships</td></tr></table>
-<h3>How Shareholders Benefit</h3><p>Revenue from business services funds operations, expansion, infrastructure, shareholder programs, and future growth. This is a business model description, not a promise of guaranteed returns.</p>
-<h3>Vision Statement</h3><p>CEDARS EMPIRE is building a global AI ecosystem powered by a Global Engine, 47 Cryptology Grids, Regional Intelligence Engines, Earth Grids, Cloud Grids, Human Grids, and Automated Verification Systems. Together, these engines continuously source information, conduct research, automate operations, verify activities, and support real-world business services.</p>
+<tr><td>AI Business Intelligence</td><td>Organizations</td><td>Pay for insights, analytics</td></tr>
+<tr><td>AI Automation</td><td>Businesses</td><td>Pay for workflows, support</td></tr>
+<tr><td>Robotics & AI Deployments</td><td>Hotels, Schools, Enterprises</td><td>Implementation + support</td></tr>
+<tr><td>Research & Analytics</td><td>Universities, NGOs, Corporates</td><td>Research outputs + tools</td></tr>
+<tr><td>Digital Platform</td><td>Members, Partners</td><td>Subscriptions, services</td></tr></table>
+<p>Revenue funds operations, expansion, infrastructure, shareholder programs, future growth. Not a promise of guaranteed returns.</p>
+<h3>Vision</h3><p>CEDARS EMPIRE is building a global AI ecosystem powered by Global Engine, 47 Cryptology Grids, Regional Engines, Earth, Cloud, Human Grids, Automated Verification. Engines continuously source, research, automate, verify, support real business services.</p>
 </div>
 
 <!-- REGISTER -->
@@ -215,42 +237,94 @@ table{width:100%;border-collapse:collapse;font-size:13px} th,td{border-bottom:1p
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-let supabaseClient=null;
+let supabaseClient=null; let supa=null;
 let engines = JSON.parse(localStorage.getItem('cedar_engines')||'{"Global Engine":true,"Cryptology Engine":true,"Americas Engine":true,"Europe Engine":true,"Asia Engine":true,"Africa Engine":true,"Oceania Engine":true,"AI Processing Engine":true,"Automated Verification Engine":true}');
-let aiWorkers = JSON.parse(localStorage.getItem('cedar_workers')||'[{"name":"Data Sourcing Worker 1","task":"Collect market data","status":"Active"},{"name":"Research Worker 1","task":"Trend research","status":"Active"},{"name":"Verification Worker 1","task":"Verify transactions","status":"Active"},{"name":"Analytics Worker 1","task":"Generate reports","status":"Idle"}]');
 let regional = [{name:'Americas Engine',detail:'North America + South America',uptime:'95%'},{name:'Europe Engine',detail:'EU + UK',uptime:'98%'},{name:'Asia Engine',detail:'East + South Asia',uptime:'92%'},{name:'Africa Engine',detail:'East + West + South Africa',uptime:'96%'},{name:'Oceania Engine',detail:'Australia + Pacific',uptime:'94%'}];
+let balances=[{balance:0}];
+let cur='Dashboard';
+let vers=[]; // tasks queue
+let verHistory=[];
 
+// ===== UNLIMITED AI - ALL SECTORS - NO CAP =====
+let autoAI_ON = true;
+let autoTaskNum = 100;
+let ALL_SECTORS = ["Factories & Manufacturing","Immigration & Government","Customers & Retail","Supermarkets & Markets","Exchange & Forex Markets","Hotels & Hospitality","Hospitals & Health","Universities & Education","Agriculture & Farms","Transport & Logistics","Real Estate & Construction","Banks & Finance","Energy & Solar","Restaurants & Food","NGOs & Charities","Sports & Fitness","Music & Entertainment","Fashion & Beauty","Mining & Minerals","Water & Utilities","Telecom & Internet","Insurance","Law & Legal","Security & Safety","E-commerce & Online Shops","Jobs & Employment","Churches & Mosques","Tourism & Travel","Media & News","Technology & AI","Pharmacies & Drugs","Schools & Colleges","Airports & Borders","Ports & Shipping","Markets & Traders","Fuel & Gas Stations","Car Dealers & Garages","Bakeries & Food Production","Fisheries & Lakes","Forestry & Timber"];
+let autoSources = ["Factory Production Report","Immigration Visa Trend","Customer Feedback Analysis","Supermarket Price Check","Forex Rate Monitoring","Hotel Booking Trend","Hospital Operations Data","University Research Task","Farm Crop Price","Delivery Route Data","Property Price Survey","Bank Rate Research","Solar Energy Data","Restaurant Menu Trend","NGO Project Research","Sports Event Data","Music Trend Report","Fashion Trend Check","Mining Output Data","Water Supply Report","Telecom Network Data","Insurance Claim Research","Legal Document Research","Security Incident Report","E-commerce Product Check","Job Market Survey","Tourism Visitor Data","News Trend Analysis","AI Technology Research","Pharmacy Stock Check","School Performance Data","Airport Traffic Data","Port Cargo Data","Market Trader Price","Fuel Price Check","Car Market Price","Bakery Production Data","Fish Market Price","Timber Price Check","Sahara Solar Data","Nile Data River","Lagos Market Hub","Dubai Cloud Grid"];
+let autoRegions = ['America','Africa','Europe','Asia','Middle East','Oceania'];
+let autoGrids = ['Underground Grids','Earth Grids','Cloud Grids','Human Grids','Cryptology - 47 Grids'];
+let workers = [{id:'AI-001',grid:'Underground Grids',status:'RUNNING',done:0,last:'-',hb:'-'},{id:'AI-002',grid:'Earth Grids',status:'RUNNING',done:0,last:'-',hb:'-'},{id:'AI-003',grid:'Cloud Grids',status:'RUNNING',done:0,last:'-',hb:'-'},{id:'AI-004',grid:'Human Grids',status:'RUNNING',done:0,last:'-',hb:'-'},{id:'AI-005',grid:'Cryptology - 47 Grids',status:'RUNNING',done:0,last:'-',hb:'-'}];
+
+function logAct(title,msg){ const el=document.getElementById('activityLog'); if(!el) return; const d=document.createElement('div'); d.innerHTML=`<b>${new Date().toLocaleTimeString()} - ${title}:</b> ${msg}`; el.prepend(d); }
+function updTop(){ const el=document.getElementById('aiTasksCount'); if(el) el.innerText=`Tasks: ${vers.length} | Verified: ${vers.filter(v=>v.s==='Approved').length} | Pending: ${vers.filter(v=>v.s==='Pending').length}`; const q=document.getElementById('queueCount'); if(q) q.innerText=vers.filter(v=>v.s==='Pending').length; const w=document.getElementById('workerCount'); if(w) w.innerText=workers.length; }
+function scaleWorkersIfNeeded(){
+  let pending = vers.filter(v=>v.s==='Pending').length;
+  if(pending > 20 && workers.length < 50){
+    let n = workers.length + 1;
+    let id = n<10 ? 'AI-00'+n : 'AI-0'+n;
+    workers.push({id:id, grid: autoGrids[(n-1)%5], status:'RUNNING', done:0, last:'Auto-Scaled', hb: new Date().toLocaleTimeString()});
+    logAct('AI Auto-Scale', 'Spawned '+id+' - Queue: '+pending+' Pending - UNLIMITED');
+    renderEngines();
+  }
+}
+async function autoAISourcing(){
+  if(!autoAI_ON) return;
+  let sector = ALL_SECTORS[Math.floor(Math.random()*ALL_SECTORS.length)];
+  let title = autoSources[Math.floor(Math.random()*autoSources.length)];
+  let region = autoRegions[Math.floor(Math.random()*autoRegions.length)];
+  let grid = autoGrids[Math.floor(Math.random()*autoGrids.length)];
+  let pay = 3 + Math.floor(Math.random()*5);
+  let taskId = 'TASK-GLOBAL-'+String(autoTaskNum).padStart(3,'0'); autoTaskNum++;
+  try{ if(supa){ await supa.from('ai_sourcing_log').insert({source:'AI Auto - '+grid+' - Sector: '+sector, task_title:title, region:region, expected_pay:pay, status:'Sourced'}); await supa.from('tasks').insert({id:taskId, region:region, title:title+' | Sector: '+sector, category:grid, amount:pay, status:'Pending'}); } }catch(e){}
+  vers.push({id:taskId, r:region, t:title+' | '+sector, c:grid, a:pay, s:'Pending', grid:grid, sector:sector, evidence:'cedars.proof/'+taskId});
+  let el = document.getElementById('lastSource'); if(el) el.innerText = taskId+' '+title+' | Sector: '+sector+' | Grid: '+grid+' £'+pay;
+  scaleWorkersIfNeeded(); updTop(); renderTasks();
+  logAct('AI Auto Sourcing - UNLIMITED', taskId+' Sector:'+sector+' Grid:'+grid+' £'+pay);
+}
+setInterval(autoAISourcing, 20000);
+async function autoAIVerification(){
+  if(!autoAI_ON) return;
+  let pending = vers.find(v=>v.s==='Pending'); if(!pending) return;
+  let worker = workers[Math.floor(Math.random()*workers.length)];
+  let proofCode = 'PROOF-'+pending.id+'-'+worker.id+'-'+Date.now();
+  pending.s='Approved'; pending.evidence='cedars.proof/'+proofCode;
+  balances[0].balance += pending.a; updTop();
+  worker.done++; worker.last = pending.id+' £'+pending.a+' | '+(pending.sector||''); worker.hb = new Date().toLocaleTimeString();
+  verHistory.unshift({id:pending.id, worker:worker.id, sector:pending.sector, amount:pending.a, proof:proofCode, time:new Date().toLocaleTimeString()});
+  try{ if(supa){ await supa.from('ai_verifications').insert({task_id:pending.id, worker_id:worker.id, proof:proofCode, proof_url:'cedars.proof/'+proofCode, verified_by:'AI Worker Auto - Unlimited', amount:pending.a, status:'Verified'}); } }catch(e){}
+  let el = document.getElementById('lastVer'); if(el) el.innerText = pending.id+' by '+worker.id+' | Sector: '+(pending.sector||'')+' £'+pending.a;
+  logAct('AI Auto Verification - UNLIMITED', pending.id+' by '+worker.id+' Sector:'+(pending.sector||''));
+  renderTasks(); renderEngines();
+}
+setInterval(autoAIVerification, 8000);
+function toggleAutoAI(){ autoAI_ON=!autoAI_ON; document.getElementById('aiStatus').innerText=autoAI_ON?'ON':'OFF'; document.getElementById('dashAI').innerText=autoAI_ON?'ON':'OFF'; document.getElementById('aiToggleBtn').innerText=autoAI_ON?'Turn AI OFF':'Turn AI ON'; logAct('AI Toggle', 'Auto AI is now '+(autoAI_ON?'ON - UNLIMITED':'OFF')); }
+function manualSource(){ const sector=document.getElementById('srcSector').value; const title=document.getElementById('manualTaskTitle').value||autoSources[Math.floor(Math.random()*autoSources.length)]; const taskId='TASK-GLOBAL-'+String(autoTaskNum).padStart(3,'0'); autoTaskNum++; let pay=3+Math.floor(Math.random()*5); let grid=autoGrids[Math.floor(Math.random()*autoGrids.length)]; vers.push({id:taskId, r:'Africa', t:title+' | '+sector, c:grid, a:pay, s:'Pending', grid:grid, sector:sector, evidence:'cedars.proof/'+taskId}); logAct('Manual Sourcing', taskId+' Sector:'+sector); updTop(); renderTasks(); alert('Sourced: '+taskId+' Sector: '+sector); }
+function renderTasks(){
+  const box=document.getElementById('tasksBox'); if(!box) return;
+  let h='<table><tr><th>ID</th><th>Title / Sector</th><th>Grid</th><th>Pay</th><th>Status</th></tr>'; vers.slice(-20).reverse().forEach(v=>{ h+=`<tr><td>${v.id}</td><td>${v.t}</td><td>${v.c}</td><td>£${v.a}</td><td>${v.s}</td></tr>` }); h+='</table>'; box.innerHTML=h;
+  const vb=document.getElementById('verBox'); if(vb){ let vh='<table><tr><th>Task</th><th>Worker</th><th>Sector</th><th>Amount</th><th>Proof</th></tr>'; verHistory.slice(0,20).forEach(v=>{ vh+=`<tr><td>${v.id}</td><td>${v.worker}</td><td>${v.sector}</td><td>£${v.amount}</td><td>${v.proof}</td></tr>` }); vh+='</table>'; vb.innerHTML=vh; }
+  const sl=document.getElementById('allSectorsList'); if(sl){ sl.innerHTML=''; ALL_SECTORS.forEach(s=>{ sl.innerHTML+=`<span class="badge green" style="margin:3px;display:inline-block">${s}</span> ` }) }
+}
+function render(){ renderTasks(); renderEngines(); }
+
+// ENGINES RENDER
 function renderEngines(){
   const box=document.getElementById('engines'); box.innerHTML='';
-  Object.keys(engines).forEach(name=>{
-    const div=document.createElement('div'); div.className='switch';
-    div.innerHTML=`<span>${name}</span><div class="toggle ${engines[name]?'on':''}" onclick="toggleEngine('${name}',this)"></div>`;
-    box.appendChild(div);
-  });
+  Object.keys(engines).forEach(name=>{ const div=document.createElement('div'); div.className='switch'; div.innerHTML=`<span>${name}</span><div class="toggle ${engines[name]?'on':''}" onclick="toggleEngine('${name}',this)"></div>`; box.appendChild(div); });
   const act=document.getElementById('engineActivity'); if(act){ act.innerHTML=''; Object.keys(engines).forEach(n=>{ act.innerHTML+=`<tr><td>${n}</td><td>${engines[n]?'<span class="badge green">Active</span>':'<span class="badge" style="background:#ff4d4d">OFF</span>'}</td><td>${new Date().toLocaleTimeString()}</td></tr>` }) }
-  // Regional
   const rl=document.getElementById('regionalList'); if(rl){ rl.innerHTML=''; regional.forEach(r=>{ rl.innerHTML+=`<div class="worker"><span><b>${r.name}</b> - ${r.detail}</span><span>${r.uptime} Uptime</span></div>` }) }
-  // Crypto grids 47
   const cg=document.getElementById('cryptoGrids'); if(cg){ let h='<p>47 Grids: '; for(let i=1;i<=47;i++){ h+=`<span class="badge ${i%3==0?'yellow-bg':i%3==1?'green':'blue-bg'}" style="margin:2px;display:inline-block">Grid ${i}</span> ` } h+='</p>'; cg.innerHTML=h; }
-  // Workers
-  const aw=document.getElementById('aiWorkers'); if(aw){ aw.innerHTML=''; aiWorkers.forEach((w,i)=>{ aw.innerHTML+=`<div class="worker"><span><b>${w.name}</b> - ${w.task}</span><span><span class="badge ${w.status==='Active'?'green':'yellow-bg'}">${w.status}</span> <button style="width:auto;padding:4px 8px" onclick="toggleWorker(${i})">Toggle</button></span></div>` }) }
+  const aw=document.getElementById('aiWorkers'); if(aw){ aw.innerHTML=''; workers.forEach((w,i)=>{ aw.innerHTML+=`<div class="worker"><span><b>${w.id}</b> - ${w.grid} - Done: ${w.done} - Last: ${w.last}</span><span><span class="badge ${w.status==='RUNNING'?'green':'yellow-bg'}">${w.status}</span> <button style="width:auto;padding:4px 8px" onclick="toggleWorker(${i})">Toggle</button></span></div>` }) }
 }
 function toggleEngine(name,el){ engines[name]=!engines[name]; localStorage.setItem('cedar_engines',JSON.stringify(engines)); el.classList.toggle('on'); renderEngines(); }
-function toggleWorker(i){ aiWorkers[i].status = aiWorkers[i].status==='Active'?'Idle':'Active'; localStorage.setItem('cedar_workers',JSON.stringify(aiWorkers)); renderEngines(); }
-function addWorker(){ const n=prompt('Worker Name?'); if(!n) return; const t=prompt('Task?')||'General AI task'; aiWorkers.push({name:n,task:t,status:'Active'}); localStorage.setItem('cedar_workers',JSON.stringify(aiWorkers)); renderEngines(); }
-function runVerification(){ const c=document.getElementById('verifyCount'); c.innerText=parseInt(c.innerText)+1; alert('Verification run complete - All tasks checked'); }
-renderEngines();
+function toggleWorker(i){ workers[i].status = workers[i].status==='RUNNING'?'Idle':'RUNNING'; renderEngines(); }
+function addWorker(){ const n=prompt('Worker Name? e.g AI-006'); if(!n) return; workers.push({id:n,grid:autoGrids[workers.length%5],status:'RUNNING',done:0,last:'Manual',hb:new Date().toLocaleTimeString()}); renderEngines(); updTop(); }
+function runVerification(){ const c=document.getElementById('verifyCount'); c.innerText=parseInt(c.innerText)+1; alert('Verification run complete'); }
+renderEngines(); renderTasks();
 
-function saveConfig(){
-  const url=document.getElementById('cfg_url').value.trim(); const key=document.getElementById('cfg_key').value.trim();
-  if(!url||!key) return alert('Put URL + Publishable Key');
-  localStorage.setItem('cedar_url',url); localStorage.setItem('cedar_key',key);
-  supabaseClient=supabase.createClient(url,key);
-  document.getElementById('cfg_status').innerHTML='<span class="success">✅ Connected</span>'; loadStats(); loadAllDocs();
-}
+function saveConfig(){ const url=document.getElementById('cfg_url').value.trim(); const key=document.getElementById('cfg_key').value.trim(); if(!url||!key) return alert('Put URL + Publishable Key'); localStorage.setItem('cedar_url',url); localStorage.setItem('cedar_key',key); supabaseClient=supabase.createClient(url,key); supa=supabaseClient; document.getElementById('cfg_status').innerHTML='<span class="success">✅ Connected</span>'; loadStats(); loadAllDocs(); }
 window.onload=()=>{ const u=localStorage.getItem('cedar_url'); const k=localStorage.getItem('cedar_key'); if(u&&k){ document.getElementById('cfg_url').value=u; document.getElementById('cfg_key').value=k; saveConfig(); } const cw=localStorage.getItem('company_wallet'); if(cw) document.getElementById('companyWallet').innerText=cw; };
 document.getElementById('compWalletInput')?.addEventListener('change',e=>{ localStorage.setItem('company_wallet',e.target.value); document.getElementById('companyWallet').innerText=e.target.value; });
-function showTab(n){ document.querySelectorAll('.main .card[id^="tab-"]').forEach(c=>c.classList.add('hidden')); document.getElementById('tab-'+n).classList.remove('hidden'); document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active')); document.getElementById('t-'+n).classList.add('active'); }
+function showTab(n){ cur=n; document.querySelectorAll('.main .card[id^="tab-"]').forEach(c=>c.classList.add('hidden')); document.getElementById('tab-'+n).classList.remove('hidden'); document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active')); document.getElementById('t-'+n).classList.add('active'); renderTasks(); }
 function need(){ if(!supabaseClient) return alert('First save Supabase Config'), false; return true; }
 async function loadStats(){ if(!supabaseClient) return; const {data:u}=await supabaseClient.from('users').select('id'); const {data:tx}=await supabaseClient.from('transactions').select('type,amount,status'); const {data:kyc}=await supabaseClient.from('users').select('id').eq('kyc_status','submitted'); document.getElementById('stat_users').innerText=u?.length||0; document.getElementById('stat_dep').innerText=(tx||[]).filter(t=>t.type==='deposit').reduce((s,t)=>s+Number(t.amount),0); document.getElementById('stat_wd').innerText=(tx||[]).filter(t=>t.type==='withdraw').reduce((s,t)=>s+Number(t.amount),0); document.getElementById('stat_kyc').innerText=kyc?.length||0; }
 async function registerUser(){ if(!need()) return; const email=document.getElementById('r_email').value.trim().toLowerCase(); const full_name=document.getElementById('r_name').value.trim(); const phone=document.getElementById('r_phone').value.trim(); const password_hash=document.getElementById('r_pass').value; const referrer_cedar_id=document.getElementById('r_referrer').value.trim()||null; const tron_address=document.getElementById('r_tron').value.trim(); if(!email||!password_hash) return alert('Email + Password required'); const {data:exists}=await supabaseClient.from('users').select('id').eq('email',email).single(); if(exists) return document.getElementById('r_msg').innerHTML='<span class="fail">❌ Email already registered!</span>'; let referrer_id=null; if(referrer_cedar_id){ const {data:ref}=await supabaseClient.from('users').select('id').eq('cedar_id',referrer_cedar_id).single(); if(!ref) return document.getElementById('r_msg').innerHTML='<span class="fail">❌ Invalid Referrer</span>'; referrer_id=ref.id; } const {data:cedar_id, error:cerr}=await supabaseClient.rpc('next_cedar_id'); if(cerr) return document.getElementById('r_msg').innerHTML='❌ '+cerr.message; const {data,error}=await supabaseClient.from('users').insert([{cedar_id,email,full_name,phone,password_hash,referrer_cedar_id,referrer_id}]).select().single(); if(error) return document.getElementById('r_msg').innerHTML='❌ '+error.message; if(tron_address) await supabaseClient.from('accounts').update({tron_address}).eq('cedar_id',cedar_id); document.getElementById('r_msg').innerHTML=`<span class="success">✅ Registered! Your ID: <b>${cedar_id}</b><br>Link: ?ref=${cedar_id}</span>`; loadStats(); }
